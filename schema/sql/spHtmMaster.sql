@@ -1,0 +1,12 @@
+--------------------------------------------------------------------------------------
+--  HTM installation instructions
+--     Run 
+--        \SQL2005\SpHtmC#.sql against your database to install  the HTM package.
+--        \SQL2005\spNearby.sql wrapper routines that use the HTM libarary
+--
+-- 2006-05-20  Started the SQL2005 C# HTM branch. 
+----------------------------------------------------------------------------------------
+----------------------------------------------------------
+-- end of install of extended stored procedures in master db.
+---------------------------------------------------------- 
+print 'spHtmMaster is obsolete in the SQL2005 design.'

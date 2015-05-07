@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <title>Procedure for setting up a new load machine</title>
+</head>
+
+<body>
+<h1>Procedure for setting up a new load machine</h1>
+<dl>
+  <dt>Authors</dt>
+    <dd><ul>
+        <li>Vijay Sekhri</li>
+        <li>Eric H. Neilsen, Jr.</li>
+      </ul>
+    </dd>
+  <dt>Date</dt>
+    <dd>2005-03-21</dd>
+  <dt>Version</dt>
+    <dd>DR4</dd>
+  <dt>Revision</dt>
+    <dd>2.1</dd>
+  <dt>State</dt>
+    <dd>Exp</dd>
+</dl>
+
+<h2>Introduction</h2>
+
+<p>This document describes how to move a SDSS loading database from one
+machine to another in preparation for additional loading.</p>
+
+<h2>Instructions</h2>
+<ol>
+  <li>Copy the original <code>Best</code> and <code>Target</code> databases
+    onto the new machine.</li>
+  <li>Rename the MDF and LDF files:
+    <ul>
+      <li><code>BESTDR<em>y</em>Data.MDF</code> to
+        <code>BESTDR<em>x</em>Data.MDF</code></li>
+      <li><code>BESTDR<em>y</em>_log.LDF</code> to
+        <code>BESTDR<em>x</em>_log.LDF</code></li>
+      <li><code>TARGDR<em>y</em>Data.MDF</code> to
+        <code>TARGDR<em>x</em>Data.MDF</code></li>
+      <li><code>TARGDR<em>y</em>_log.LDF</code> to
+        <code>TARGDR<em>x</em>_log.LDF</code></li>
+    </ul>
+    <p>Where <em>x</em> is the new version and <em>y</em> is the old
+    version.</p>
+  </li>
+  <li>Attach new <code>Best</code> and <code>Target</code> databases as, eg
+    <code>BESTDR<em>x</em></code> and and <code>TARGDR<em>x</em></code>.</li>
+  <li>Make sure you change the name to <code>BESTDR<em>x</em></code> and
+    <code>TARGDR<em>x</em></code>. You might need to change the Current File
+    Location column while attaching these databases.</li>
+  <li>Rename <code>DR<em>y</em></code> to <code>DR<em>x</em></code> (where
+    <em>y</em> is the old release number) before clicking on the OK button.
+    It is very important that you increase the size of the
+    <code>tempdb</code> on your loading machine to be set around 500G (for
+    <em>x</em> of 3).</li>
+  <li>Also make sure that you divide the <code>tempdb</code> files into two
+    files, one residing on the C drive and the other residing on the D
+  drive.</li>
+  <li>The one that is on the C drive should be set to fixed size and should
+    not grow or it will fill up your C drive. The one on the D drive should
+    be set to grow indefinitely by 15%. You can do all of this using the
+    Enterprise Manager: right click on your <code>tempdb</code> and change
+    the files.</li>
+  <li>Use the Query Analyzer to check your work:<br />
+
+    <pre><code>USE BESTDR3
+SELECT COUNT(*) FROM Field;
+SELECT TOP 10 objid FROM PhotoTag;
+SELECT TOP 10 objid FROM PhotoObjAll;</code></pre>
+  </li>
+  <li>Drop all the indexes except primary keys:<br />
+
+    <pre><code>USE BESTDR3
+EXEC spIndexDropSelection 'F'
+EXEC spIndexDropSelection 'I'
+USE TARGDR3
+EXEC spIndexDropSelection 'F'
+EXEC spIndexDropSelection 'I'</code></pre>
+  </li>
+  <li>Copy the <code>loadadmin</code> and <code>loadsupport</code> databases
+    on to your machine and attach it using the Enterprise Manager.</li>
+  <li>Change the <code>Constants</code> table entries in the
+    <code>loadadmin</code> databases:<br />
+
+    <pre><code>USE loadadmin
+UPDATE Constants SET name='SDSSSQL<em>new</em>' WHERE name='SDSSSQL<em>old</em>'
+UPDATE Constants SET dataset='DR<em>x</em>' WHERE name='DR<em>y</em>'
+UPDATE Constants SET backuppath='\\SDSSSQL007\backup'</code></pre>
+  </li>
+  <li>Change the <code>Task Table</code> and <code>Server</code> table
+    entries in the <code>loadadmin</code> database:<br />
+
+    <pre><code>UPDATE Task SET hostname='SDSSSQL<em>new</em>'
+UPDATE Task SET publishhost='SDSSSQL<em>new</em>'
+UPDATE Task SET publishdb='BESTDR<em>x</em>' WHERE publishdb='BESTDR<em>y</em>'
+UPDATE Task SET publishdb='TARGDR<em>x</em>' WHERE publishdb='TARGDR<em>y</em>'
+UPDATE Task SET dbname='BESTDR<em>x</em>' WHERE dbname='BESTDR<em>y</em>'
+UPDATE Task SET dbname='TARGDR<em>x</em>' WHERE dbname='TARGDR<em>y</em>'
+UPDATE Task SET id='BESTDR<em>x</em>' WHERE id='BESTDR<em>y</em>'
+UPDATE Task SET id='TARGDR<em>x</em>' WHERE id='TARGDR<em>y</em>'
+UPDATE Task SET dataset='DR<em>x</em>' WHERE dataset='DR<em>y</em>'
+UPDATE ServerState SET srvname='SDSSSQL<em>new</em>'</code></pre>
+  </li>
+  <li>Change the <code>LoadServer</code> table entry in the
+    <code>loadsupport</code> database:</li>
+  <li>Check if the SQL Agent is running; it might be running already.</li>
+  <li>In the Query Analyzer, create two jobs (<code>LOAD</code> and
+    <code>PUB</code>) that will run every minute:<br />
+
+    <pre><code>USE loadsupport
+EXEC spCreateSqlAgentJob 'LOAD'
+EXEC spCreateSqlAgentJob 'PUB'</code></pre>
+  </li>
+  <li>Create the user account and password:<br />
+
+    <pre><code>EXEC sp_addlogin 'webagent', 'test', 'loadsql', 'master'
+USE BESTDR<em>x</em>
+EXEC sp_change_users_login N'UPDATE_ONE', N'webagent', N'webagent'
+EXEC sp_change_users_login N'UPDATE_ONE', N'test', N'test'
+EXEC spGrantAccess 'U', 'webagent'
+EXEC spGrantAccess 'U', 'test'
+USE TARGDR<em>x</em>
+EXEC sp_change_users_login N'UPDATE_ONE', N'webagent', N'webagent'
+EXEC sp_change_users_login N'UPDATE_ONE', N'test', N'test'
+EXEC spGrantAccess 'U', 'webagent'
+EXEC spGrantAccess 'U', 'test'
+USE master
+GRANT EXECUTE ON [dbo].xp_varbinhexstr TO test</code></pre>
+  </li>
+  <li>Create another web interface on the web server serving the web
+    interface to the loader. The contents of this website can be found in the
+    <code>admin</code> subdirectory of the <code>sqlLoader</code>
+    <code>cvs</code> product. Change the connection source in the
+    <code>connection.js</code> file to point to the new server.</li>
+</ol>
+</body>
+</html>

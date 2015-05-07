@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>SDSS SkyServer Operations Guide</title>
+</head>
+<body bgcolor="#ffffff">
+<h1>SDSS SkyServer Operations Guide</h1>
+Some of the servers run <a href="#2000">Windows Server 2000</a>, while
+other run <a href="#2003">Windows 2003 Server Enterprize Edition</a>.
+<hr><a name="2000"></a>
+<h3>How to add server to SDSS SkyServer Cluster WIN2000</h3>
+<ol>
+  <li>Choose KVM address and IP address
+  </li>
+  <li>Physical Hardware install
+  </li>
+  <li>KVM installation
+  </li>
+  <li>RAID configuration
+  </li>
+  <li>disk mirroring
+  </li>
+  <li>Install operating system, Windows 2000 Server
+  </li>
+  <li>edit <a href="boot.ini">boot.ini (click here to see sample)</a>
+to give operator option to boot mirror
+  </li>
+  <li>To work with KVM: Under screensaver,Screen Power Off=Never
+  </li>
+  <li>apply patches
+  </li>
+  <li>Install backup system
+  </li>
+  <li>Do not make member of Domain or Workgroup
+  </li>
+  <li>Base Access Licenseper seat
+  </li>
+  <li>Enable microsoft terminal services, remote=YES, Applications Mode
+= NO
+  </li>
+  <li>DE-SELECT "Internet Information Services" install during Windows
+installation
+  </li>
+  <li>Configure IP address to IP Address 192.168.7.x
+  </li>
+  <li>Physically connect computer to 192.168.7 Ethernet network at FCC
+  </li>
+  <li>Verify with Jan vandenBerg that he can access server via terminal
+services, give him admin password
+  </li>
+  <li>Account administration
+    <ul>
+      <li>while adding computers to fermi domain
+      </li>
+      <li>at admin console: default setting: domain admins -&gt; change
+to sdss_ou_admins
+      </li>
+      <li>allow 5 minutes for domain controllers to sync up
+      </li>
+      <li>AT machine being added:network properties, MORE
+      </li>
+      <li>clean off top line, replace with "FNAL.GOV" for servers
+      </li>
+      <li>turn off: change primary DNS suffix when domain mem changes
+      </li>
+      <li>domain: fermi (or better, "fermi.win.fnal.gov")
+      </li>
+      <li>when it asks authenticate: fermi\inkmann-admin
+      </li>
+      <li> then password
+      </li>
+      <li>will join domain
+      </li>
+      <li>will force reboot
+      </li>
+      <li>following reboot,
+      </li>
+      <li>insert into local group: administrators &lt;-
+sdss-computer-admins
+      </li>
+    </ul>
+  </li>
+  <li>Install/Link new database
+  </li>
+  <li>load/update databases
+  </li>
+  <li>install/configure IIS
+  </li>
+  <li>Update webpage
+http://www-sdss.fnal.gov/edoc/sdsscluster/sdss_skyserver.html
+  </li>
+  <li>ms-win computers running "microsoft terminal services" can be
+accesses via rdesktop e.g. ./rdesktop -u administrator x.x.x.80. See
+http://www.rdesktop.org/ for more information.
+  </li>
+  <li>Announce availabilty to sdss-archive@astro.princeton.edu
+    <hr><a name="2003"></a>
+    <h3>How to add server to SDSS SkyServer Cluster WIN2003</h3>
+    <ol>
+      <li>Choose KVM address and IP address
+      </li>
+      <li>Physical Hardware install
+      </li>
+      <li>KVM installation
+      </li>
+      <li>RAID configuration
+      </li>
+      <li>disk mirroring
+      </li>
+      <li>Install operating system, Windows 2003 Server Enterprize
+Edition from the scratch. Use a floppy with 3 Ware Driver at the boot
+time if required. You can download the driver from the 3 Ware web site.<br>
+      </li>
+      <li>edit <a href="boot.ini">boot.ini (click here to see sample)</a>
+to give operator option to boot mirror
+      </li>
+      <li>To work with KVM: Under screensaver,Screen Power Off=Never
+      </li>
+      <li>Install all security patches from Windows Update <br>
+      </li>
+      <li>Operating System activation if required
+      </li>
+      <li>Install backup system using Computer Managemenet --&gt; Disk
+Management. The C drive should be mirrored so that OS should be
+available on two drives.</li>
+      <li>Also if there are multiple drives in the raid, then combine
+them into one by using Disk Management. Make sure you convert them into
+dynamic first and then select the striped instead of simple option
+while merging the drives. Also do complete format instead of quick.<br>
+      </li>
+      <li>Do not make member of Domain or Workgroup
+      </li>
+      <li>Base Access Licenseper seat. Check the Device instead of User
+box<br>
+      </li>
+      <li>Enable microsoft terminal services, remote=YES, Applications
+Mode = NO
+      </li>
+      <li>DE-SELECT "Internet Information Services" install during
+Windows installation
+      </li>
+      <li>Configure IP address to IP Address 192.168.7.x, example:
+sdsswww @ 131.225.7.180, Network Mask will be: 255.255.255.0, The
+Default Gateway Address will be: 131.225.7.200, The Broadcast Address
+will be: 255.255.255.255, The Primary Name Server will be:
+131.225.8.120, The Secondary Name Server will be: 131.225.17.150,
+Primary WINS Server - 131.225.9.1
+Secondary WINS Server - 131.225.110.15
+      </li>
+      <li>Physically connect computer to 192.168.7 Ethernet network at
+FCC
+      </li>
+      <li>Verify with you can access server via terminal services
+      </li>
+      <li>Account administration
+        <ul>
+          <li>while adding computers to fermi domain
+          </li>
+          <li>at admin console: default setting: domain admins -&gt;
+change to sdss_ou_admins
+          </li>
+          <li>allow 5 minutes for domain controllers to sync up
+          </li>
+          <li>AT machine being added:network properties, MORE
+          </li>
+          <li>clean off top line, replace with "FNAL.GOV" for servers
+          </li>
+          <li>turn off: change primary DNS suffix when domain mem
+changes</li>
+        </ul>
+      </li>
+      <li>Make sure none of the serivices are on that Fermilab
+prohibts. User services from Computer Management to turn off unwanted
+services<br>
+      </li>
+    </ol>
+  </li>
+</ol>
+<br>
+<hr style="width: 100%; height: 2px;">
+<h2>&nbsp;&nbsp;&nbsp; How to install additional Software<br>
+</h2>
+<ol>
+  <li>Install SQL Server EE from \\sdsssql001\appdeploy\sql2kEE</li>
+  <li>Use sql2ksp3.exe to extract the pack on to a local directory. The
+go in that directory and run the setup. This will install service pack
+3 </li>
+  <li>Go sql2k-post-sp3-hotfix-Q816440 and run the exe file. It will
+install this patch. <br>
+  </li>
+  <ol>
+    <li>You dont have to extract the zip file. It will ask you for a
+password. It has already been extracted in the appdeploy directory<br>
+    </li>
+  </ol>
+  <li>Go to 3DM directory to install 3DM software</li>
+  <ol>
+    <li>Use the browser when openning the 3WM client to manage and
+administer the RAID. If any drive is showing degraded and any disk
+as&nbsp; not in service, it means that the disk has died or is bad.</li>
+    <li>&nbsp;Order new disk <br>
+    </li>
+    <li>Make sure thay are of same size and same brand and turn off the
+computer <br>
+    </li>
+    <li>insert the new disk , bring the computer back on <br>
+    </li>
+    <li>Start rebuilding using this browser again.<br>
+    </li>
+  </ol>
+</ol>
+<br>
+<hr style="width: 100%; height: 2px;">
+<h2>&nbsp;&nbsp;&nbsp; How to do incremental load.</h2>
+<h4>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; These steps assumes DR3 being
+loaded on top of DR2<br>
+</h4>
+<ol>
+  <li>Copy the DR2 Best and Target databases on to your machine</li>
+  <li>Rename the MDF and LDF files</li>
+  <ol>
+    <li>BESTDR2_Data.MDF to BESTDR3_Data.MDF</li>
+    <li>BESTDR2_log.LDF to BESTDR3_log.LDF</li>
+    <li>TARGTDR2_Data.MDF to TARGDR3_Data.MDF</li>
+    <li>TARGDR2_log.LDF to TARGDR3_log.LDF</li>
+  </ol>
+  <li>Attach new best and targ DB as BESTDR3 and TARGDR3</li>
+  <li>Make sure to change the name as BESTDR3 and TARGDR3</li>
+  <li>You might need to change the Current File(s) Location coloum
+while attaching these DBs</li>
+  <ol>
+    <li>You just have to rename the DR2 to DR3 before clicking the OK
+button</li>
+  </ol>
+  <li>Double check by using Query Anylizer</li>
+  <ol>
+    <li>USE BESTDR3</li>
+    <li>select count (*) from Field;</li>
+    <li>select top 10 objid from PhotoTag;</li>
+    <li>select top 10 objid from PhotoObjAll;</li>
+  </ol>
+  <li>Copy the loadadmin and loadsupport db on to your machine</li>
+  <li>Attach it using enterprize manager</li>
+  <li>Change the Constants table entries in loadadmin DB</li>
+  <ol>
+    <li>use loadadmin</li>
+    <li>update Constants set loadserver='SDSSSQL006'</li>
+    <li>update Constants set dataset='DR3' where dataset='DR1C'</li>
+    <li>update Constants set backuppath='\\SDSSSQL007\backup\'</li>
+  </ol>
+  <li>Change the Task table, ServerState table entries in loadadmin DB</li>
+  <ol>
+    <li>update Task set hostname='SDSSSQL006'</li>
+    <li>update Task set publishhost='SDSSSQL006'</li>
+    <li>update Task set publishdb='BESTDR3' where publishdb='BESTDR2'</li>
+    <li>update Task set publishdb='TARGDR3' where publishdb='TARGDR2'</li>
+    <li>update Task set dbname='TARGDR3' where dbname='TARGDR2'</li>
+    <li>update Task set dbname='BESTDR3' where dbname='BESTDR2'</li>
+    <li>update Task set id='TARGDR3' where id='TARGDR2'</li>
+    <li>update Task set id='BESTDR3' where id='BESTDR2'</li>
+    <li>update Task set dataset='DR3' where dataset='DR2'</li>
+    <li>update ServerState set srvname='SDSSSQL006'</li>
+  </ol>
+  <li>Change the LoadServer table entrie in loadsupport DB</li>
+  <ol>
+    <li>use loadsupport</li>
+    <li>update LoadServer set name='SDSSSQL006'</li>
+  </ol>
+  <li>Check if SQL Agent is running. It must be running.</li>
+  <ol>
+    <li>In Query Analyser</li>
+    <li>Run the PUB and LOAD jobs</li>
+    <li>Change DB to loadsupport</li>
+    <li>use loadsupport</li>
+    <li>exec spCreateSqlAgentJob 'LOAD'</li>
+    <li>exec spCreateSqlAgentJob 'PUB'</li>
+  </ol>
+  <li>Create useraccount and password</li>
+  <ol>
+    <li>EXEC sp_addlogin 'webagent', 'loadsql', 'master'</li>
+    <li>USE BESTDR3</li>
+    <li>EXEC sp_change_users_login N'UPDATE_ONE', N'webagent',
+N'webagent'</li>
+    <li>EXEC spGrantAccess 'U', 'webagent'</li>
+    <li>USE TARGDR3</li>
+    <li>EXEC sp_change_users_login N'UPDATE_ONE', N'webagent',
+N'webagent'</li>
+    <li>EXEC spGrantAccess 'U', 'webagent'</li>
+    <li>--USE master</li>
+    <li>--GRANT EXECUTE ON [dbo].xp_varbintohexstr to test</li>
+  </ol>
+  <li>Create another web interface</li>
+  <li>admin3 and change the connection.js file</li>
+  <li>source from SDSSSQL003 to SDSSSQL006</li>
+  <li>You might have to change the Database size using Enterprize
+manager</li>
+  <ol>
+    <li>Right click on BESTDR3 or TARGDR3 and properties</li>
+    <li>Increase the size <br>
+    </li>
+  </ol>
+</ol>
+<br>
+<hr style="width: 100%; height: 2px;">
+</body>
+</html>

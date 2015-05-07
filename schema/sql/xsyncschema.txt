@@ -1,0 +1,92 @@
+------------------------------------------------------------------------------
+-- xsyncschema.txt
+------------------------------------------------------------------------------
+-- Ani Thakar 2005-02-05
+------------------------------------------------------------------------------
+-- This is the list of SQL files in the schema which must be
+-- executed for the schema synchronization for an incremental load.
+--****************************************************************************
+--    Please do NOT change the order of the files in this list or
+--    delete any files.  Bad things will happen if you do!  Just 
+--    comment out the ones that should not be run as part of the 
+--    schema sync.  The list of files and their order is identical 
+--    to xschema.txt.  By default, all files here are commented out. 
+--    [Ani Thakar, 10/05]
+--****************************************************************************
+--
+-- History:
+-- 2005-09-13  Ani: Updated for DR4 schema sync prior to sector rerun.
+-- 2005-10-11  Ani: Added FileGroups.sql and commented out everything else
+--                  except spFinish.sql.  This is for BestDR4 update at
+--                  JHU prior to partitioning.
+-- 2005-10-16  Ani: Reverted list and order of files to mimic xschema.txt,
+--                  and added warning at top of file not to mess with it.
+-- 2007-01-09  Ani: Removed GrantAccess.sql and spHtmMaster.sql.
+-- 2010-11-16  Ani: Removed references to spSkyQASupport.sql and 
+--                  spQsoCatalogs.sql.
+-- 2013-03-21  Ani: Added WindowTables.sql, pmTables.sql and 
+--                  ApogeeTables.sql.
+-- 2013-05-02  Ani: Added GalaxyProductTables.sql.
+-- 2014-11-05  Ani: Updates for DR12.
+-- 2014-12-05  Ani: Updates for DR12.
+-- 2015-02-09  Ani: Added PhotoZTables.sql.
+------------------------------------------------------------------------------
+--------------------------
+-- metadata
+--------------------------
+-- FileGroups.sql
+-- DataConstants.sql
+ConstantSupport.sql
+-- MetadataTables.sql
+IndexMap.sql
+-- Versions.sql
+--------------------------
+-- basic schema
+--------------------------
+-- PhotoTables.sql
+-- PhotoZTables.sql
+-- galSpecTables.sql
+-- spPhoto.sql
+-- NeighborTables.sql
+-- SpectroTables.sql
+-- GalaxyProductTables.sql
+-- MarvelsTables.sql
+-- spSpectro.sql
+-- WindowTables.sql
+-- ssppTables.sql
+-- ApogeeTables.sql
+-- TilingTables.sql
+-- RegionTables.sql
+-- FrameTables.sql
+-- Views.sql
+--------------------------
+-- spatial functions
+--------------------------
+-- spSphericalLib.sql
+-- spHtmCSharp.sql
+-- spNearby.sql
+--------------------------
+-- region stuff
+--------------------------
+-- spCoordinate.sql
+-- spRegion.sql
+-- spBoundary.sql
+-- spSector.sql
+--------------------------
+-- finish and doc stuff
+--------------------------
+-- spCheckDB.sql
+-- spTestQueries.sql
+-- spDocSupport.sql
+-- spSQLSupport.sql
+-- spUrlFitsSupport.sql
+-- spNeighbor.sql
+-- spSetValues.sql
+-- spValidate.sql
+-- spPublish.sql
+spFinish.sql
+-- spCopyDBSubset.sql
+-- spCosmology.sql
+--------------------------------
+-- done
+--------------------------------

@@ -1,0 +1,1343 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+                                                                        
+                                                       
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+                                                                        
+                                                       
+  <meta name="GENERATOR"
+ content="Mozilla/4.76 [en] (X11; U; Linux 2.4.3-12 i686) [Netscape]">
+                                <!--
+Authors:	Ani Thakar
+Created:	May 13, 2003
+-->
+  <title>sqlLoader User Guide</title>
+</head>
+  <body text="#111111" bgcolor="#ffffff" link="#333399" vlink="#663366"
+ alink="#cc0000">
+                                               
+<h2> </h2>
+                                                             
+<h1> <img src="sxlogo1.gif">
+                               <font color="#7700ee"> The CAS Loader (sqlLoader)</font></h1>
+                                <img src="rule.gif">
+                            <br>
+                     <br>
+                                  <b>To skip the description sections below 
+ and   go  straight     to  Setting Up the Loader Framework, &nbsp;click the
+ <u>Loader    Setup</u>    link  at the left.</b><br>
+                                         
+<h2> Overview</h2>
+                                The loading framework for the CAS databases 
+ is  in  the   <b>sqlLoader</b>         CVS module. &nbsp;There are several 
+ subdirectories      at the top level   as   listed   below. &nbsp;All but 
+ the <b>admin</b>   subdirectory   are to be  deployed   on  the <b>loadserver</b> 
+ machine.<br>
+                                                           
+<ol>
+                                <li><b>admin</b> - contains the loader admin
+  web   interface      (Load    Monitor) files. &nbsp;The   contents of this
+  subdirectory   should      be copied    to the web tree which will   serve
+  as the loader   web page.    &nbsp;This  needs    to be on a Windows web
+ server.</li>
+                                <li><b>doc</b> - contains the documentation 
+ files    for   the   loader,     including   this file.</li>
+                                <li><b>dts</b> - contains the DTS (Data Transformation
+       Services)      packages    used by the loader.</li>
+                                <li><b>htm</b> - contains the stored procedures 
+   and   DLL   (dynamically       linked  library) for the HTM (Hierarchical 
+   Triangular    Mesh).<br>
+                                </li>
+                                <li><b>loadadmin</b> - contains the back
+end   of  the       <b>admin</b>       web   front  end, i.e., all the files
+and   scripts   that implement the  CAS    loader.&nbsp;</li>
+                                <li><b>schema</b> - contains the schema input 
+  (<i>.sql</i>)        files    for   the CAS databases.</li>
+                                <li><b>vbs</b> - contains Visual Basic scripts
+   (<i>.vbs</i>       files)    used   by the loader.</li>
+                                                           
+</ol>
+                              Each of these directories has a <b>readme</b> 
+ file   to  describe     the   directory    contents. &nbsp;The prominent 
+subdirectories     are described     in  further detail    below.<br>
+                                                       
+<ol>
+                                                                 
+</ol>
+                                                       
+<h2><a name="Admin"></a>Load Monitor or Admin Webpage (admin/ subdir)</h2>
+                            The <b>admin</b> subdirectory contains the web
+ pages    and   associated      files   and scripts for the loader administration
+  web  interface   (the <b>Load     Monitor</b>).  &nbsp;This subdirectory
+  should  be copied   or moved to the    web tree where the load monitor
+is   to be accessed  from.   &nbsp;<u>Note  that    currently the admin web
+pages   must be installed  on   a Windows machine  (running    IIS) since
+they use   ASP (active server  pages)   technology.</u>  &nbsp;The  security
+  setup   is Windows authentication  at   the moment and this  <u>requires
+ that the    pages be accessed also from  a  Windows machine</u>.  &nbsp;The
+web-server      connects  to the loadsupport    DB of the loadserver.<br>
+                            <br>
+                            There are 4 kinds of files in this directory: 
+                              
+<ol>
+                                <li> Active Server Pages (<i>.asp</i> files)
+  that   correspond      to  actual   web pages.</li>
+                              <li>Cascading Style Sheets (<i>.css</i> files)
+  that   are   used   by  the   web  pages to set up the look and feel.</li>
+                              <li>Javascript (<i>.js</i>) files that contain
+  functions      in  jscript     to  perform loader admin procedures.</li>
+                              <li>Include (<i>.inc</i>) files that are included 
+   in  other    files    above.</li>
+                                                           
+</ol>
+                            There is a <b>docs.asp</b> file that contains 
+an  overview     of  the   loading     process and framework. &nbsp;It is 
+the  page linked    to the  "Help"   link on   the admin page. &nbsp;The <b>img</b>
+ subdirectory      contains  the  JPG and GIF   images used in the web pages.<br>
+                            <br>
+                            In order to set up the admin web pages for the
+ SQL   Loader,     you   need   to  do  the following:<br>
+                                                       
+<ol>
+                              <li>Copy/move the <b>admin</b> subdirectory 
+of  sqlLoader      to  the   web   tree  where the admin pages will be served
+  from.</li>
+                              <li>Set up a virtual directory in IIS to point
+  to  this   directory.<br>
+                              </li>
+                              <li>Modify the <b>connection.js</b> file (edit
+  with   Notepad)     to         replace the xxx-ed out password for the
+    <b>webagent</b>     user          with the real password.<br>
+                       </li>
+                                                       
+</ol>
+                                                                
+<h2><a name="Loadadmin"></a>Loader Admin Framework (loadadmin/ subdir)</h2>
+                            The <b>loadadmin</b> subdirectory is where all
+ the   action    is  -  it  contains    all the scripts that actually load
+ the data  and update    the  logs.  &nbsp;There    are 2 kinds of files
+here:<br>
+                                                       
+<ol>
+                              <li>Windows command scripts (<i>.bat</i> files) 
+  that   run   the   loading     framework  and SQL scripts.</li>
+                              <li>SQL scripts (<i>.sql</i> files) that contain
+   the   SQL   code   to  set   up  the loading framework and load the data.</li>
+                                                       
+</ol>
+                            There are two parts to the loading framework: 
+<b>loadadmin</b>         and   <b>loadsupport</b>.    &nbsp;The loadadmin 
+scripts and databases      control    the load framework on  the  <i>master</i>. 
+&nbsp;The loadsupport      scripts   and DBs set up the loading  on the <i>slave</i> 
+loadservers  and    build the   ancillary framework to facilitate  the loading 
+process,  such   as setting up  the webagent user, setting up links  between 
+master  and slave    loadservers   (if applicable), setting up the HTM,  and
+utilities    to manage    units of the  loading process (phase, step, task
+etc.). &nbsp;See    <a href="fig1.jpg">Fig.1</a>  which shows the relationship 
+between the LoadAdmin       and LoadSupport parts  of the framework. &nbsp;Each 
+of the satellite   or   slave  servers links only  to the master, not to each
+other. &nbsp;The   loadsupport     part of the loading  works only with remote
+<i>views</i>   of the loader  tables. &nbsp;<br>
+                     
+<h3><i>Load</i> and <i>Publish</i> Roles<br>
+           </h3>
+           The loadadmin and loadsupport servers also have different roles
+ in  the   current  &nbsp;distributed implementation: &nbsp;the loadadmin
+server  runs   both in  <i>load</i> and <i>publish</i> roles, whereas the
+loadsupport  servers   run  only in the <i>load</i> role. &nbsp;The load
+role corresponds  to the   loading  of the CSV files into the individual
+component databases  (one per   load unit),  whereas the publish role involves
+the validation and transfer   of the component  database contents into the
+publish DB for each dataset.   &nbsp;The loading  is therefore done in parallel,
+and the publishing brings   all the loaded components  together into the
+publish DB on the master server.<a href="#Loadadmin"><img src="fig1.jpg"
+ alt="Schematic of linked master and slave loadservers" width="667"
+ height="442" border="0" align="top">
+                          </a><br>
+                                                       
+<div align="center"><b>Fig 1.</b> Schematic of relationship between the master 
+     (loadadmin) server and the slave (loadsupport) servers.<br>
+           </div>
+                     
+<h3>Loader Command Scripts</h3>
+                                                       
+<ol>
+                              <li><b>build-loadadmin.bat</b> - This builds
+ the   loadadmin      framework      on  the master server. &nbsp;This is
+to be  run     <u>only  once</u>    from the    command  line on the main
+(master)  loadserver  machine.  &nbsp;It    takes no    parameters.  &nbsp;It
+performs  the following  tasks:</li>
+                                                                        
+                                      
+  <ul>
+                                <li>gets the loadserver computer name</li>
+                                <li>creates the path for the loader logs</li>
+                                <li>looks for local <b>log.txt</b> file and 
+ deletes     it</li>
+                                <li>checks if C:\sqldb directory exists and 
+ creates     if  not   -  the   loadadmin   DBs are created there</li>
+                                <li>makes load logs readable for everybody</li>
+                                <li>sets up 2 shares - <b>root</b> and <b>loadlog</b></li>
+                                <li>runs the following SQL scripts:</li>
+                                                                        
+                                                                        
+                     
+    <ul>
+                                  <li><b>loadadmin-build.sql</b></li>
+                                  <li><b>loadadmin-schema.sql</b></li>
+                                  <li><b>loadadmin-local-config.sql</b></li>
+                                                                        
+                                                                        
+                     
+    </ul>
+                                                                        
+                                      
+  </ul>
+                              <li><b>build-loadsupport.bat</b> - This script
+  must   be  run on each of the loadservers in the configuration, including
+  the master.    &nbsp;It builds the loadsupport     part   of  the framework
+  on the current    loadserver (which can be the master     or one  of  the
+  slaves if applicable),    including the <b>loadsupport database</b>,  
+     the  HTM, loadsupport  utilities  etc. &nbsp;<u>Note that the <b>set-loadsupport.bat</b> 
+          script must  be edited before this script is run.</u> &nbsp;This 
+ script      performs   the following functions:</li>
+                                                                        
+                                      
+  <ul>
+                                <li>sets the name of the master loadserver</li>
+                                <li>sets up the logging paths for this loadserver</li>
+                                <li>sets up the load-support environment
+on  this   server</li>
+                                <li>builds the &nbsp;load-support DB and
+schema    on  this   server</li>
+                                <li>sets up the load-support stored procedures
+   and   utlilities</li>
+                                <li>sets up this loadserver's <u>role</u> 
+-        <i><b>loader</b></i>            or        <i><b>publisher</b></i> 
+or  both: a loader only stuffs  the    data     in the  databases, but does 
+not  run the <i>validation</i>  and       <i>publish</i>         steps</li>
+                                <li>sets up the HTM<br>
+                                </li>
+                                                                        
+                                      
+  </ul>
+                                                       
+</ol>
+                                                       
+<h3>Loader SQL Scripts</h3>
+                                                       
+<ol>
+                              <li><b>loadadmin-build.sql</b> - This script
+ performs     the   following      functions:</li>
+                                                                        
+                                      
+  <ul>
+                                <li>deletes the existing loadadmin DB if
+any</li>
+                                <li>turns on the trace flag 1807 - <u>this
+ is  a  secret    Windows     flag   that allows us to mount remote DBs</u></li>
+                                <li>sets a bunch of DB options</li>
+                                <li>turns autoshrink off - this is very important 
+    otherwise      the   performance   bogs down when autoshrink tasks run 
+ in   the background</li>
+                                                                        
+                                      
+  </ul>
+                              <li><b>loadadmin-schema.sql</b> - This performs 
+  the   following      functions:</li>
+                                                                        
+                                      
+  <ul>
+                                <li>creates Task and Step tables in the loadadmin 
+    DB</li>
+                                <li>inserts NULL task and step - this is
+necessary      so  we  can   assign    system errors if everything fails</li>
+                                <li>creates NextStep table - this drives
+the   sequence     of  loading     by  specifying what are the procedures
+for the  next step</li>
+                                <li>creates ServerState table - this allows 
+ us  to  stop   the   server    so  that processing is stopped</li>
+                                <li>creates Constants table and put it in 
+all   the   paths</li>
+                                <li>gets server name from global variable 
+(e.g.    sdssad2)     -  Note:    SQL   name for the server must be the same 
+as the   Windows name</li>
+                                                                        
+                                      
+  </ul>
+                              <li><b>loadadmin-local-config.sql</b> - This
+ script        <u>must     be  adapted     for the local configuration</u>
+ before running   the loader.     &nbsp;This  is   one of the setup steps
+listed in the <a href="#Setup">Setup    section</a>.    &nbsp;This script
+performs the following    functions:</li>
+                                                                        
+                                      
+  <ul>
+                                <li>sets up the paths for the CSV files</li>
+                                <li>sets up backup paths</li>
+                                <li>sets up the <b>loadagent</b> user and 
+domain    so  that   the   SQL           Agent can be started up</li>
+                                                                        
+                                      
+  </ul>
+                              <li><b>loadsupport-build.sql</b> - This script
+  needs    to  be  edited    to  update  the domain account names explicitly.
+  &nbsp;It    does  the following:</li>
+                                                                        
+                                      
+  <ul>
+                                <li>creates a "webagent" user account which 
+ is  used   by  the   load   monitor  web  interface to connect to the loadserver(s) 
+    and run loader   tasks</li>
+                                                                        
+                                                                        
+                     
+    <ul>
+                                  <li>make sure that webagent is a sysadmin 
+ on  the   loadserver<br>
+                                  </li>
+                                  <li>make sure only the master loadserver
+ does   this</li>
+                                                                        
+                                                                        
+                     
+    </ul>
+                                <li>in the future, this script will likely
+ be  reorganized       to  deal   differently  with master and slave loadservers</li>
+                                                                        
+                                      
+  </ul>
+                              <li><b>loadsupport-schema.sql</b> - Creates 
+a  single    table    with   a  single   row which is the name of this loadserver.
+  &nbsp;We    need    to do   it  this way   to allow easy scripted access
+ with SQL.</li>
+                              <li><b>loadsupport-link.sql</b> - This script 
+ sets   up  the   link   between     the master and slave server for this 
+slave.  &nbsp;Specifically,       it does   the  following:</li>
+                                                                        
+                                      
+  <ul>
+                                <li>creates a 2-way link-server relationship
+  between     this   slave    server   and the master server</li>
+                                <li>sets up all the views</li>
+                                <li>enables remote transactions</li>
+                                                                        
+                                      
+  </ul>
+                              <li><b>loadsupport-sp.sql</b> - Sets up the 
+stored    procedures      for   loading   from this server. &nbsp;These include:</li>
+                                                                        
+                                      
+  <ul>
+                                <li>constructors for <b>phase</b>, <b>step</b>, 
+   and         <b>task</b></li>
+                                <li>start/end steps - this is done only on
+ the   loadserver</li>
+                                <li>kill task, ensuring that:</li>
+                                                                        
+                                                                        
+                     
+    <ul>
+                                  <li>log records are kept</li>
+                                  <li>files are cleaned up</li>
+                                  <li>DB is deleted only when the same task 
+ is  re-submitted       (with    new  taskID)</li>
+                                                                        
+                                                                        
+                     
+    </ul>
+                                                                        
+                                      
+  </ul>
+                              <li><b>loadsupport-utils.sql</b> - This is
+the   package     that   contains     all  the pre-load utilities.</li>
+                              <li><b>loadsupport-steps.sql</b> - This controls
+   the   high-level      steps.    &nbsp;Each step has a stored procedure
+with   the   name "sp<i>&lt;name-of-step&gt;</i>step"          associated
+with it  - which   is the meat of the step's logic - and a  "sp&lt;<i>name-of-step</i>&gt;"
+          procedure that is a wrapper that calls  the sp&lt;<i>name-of-step</i>&gt;step
+           procedure.</li>
+                              <li><b>loadsupport-show.sql</b> - This contains 
+  web   procedures      for   the   load monitor admin website which show 
+various    entities on  the    web pages.<br>
+                              </li>
+                                                             
+</ol>
+                                                       
+<h3>Task Management</h3>
+                            This section describes the way tasks are handled
+  in  the   loader    framework.     &nbsp;The basic unit of loading at the
+  top  level   is a <b>task</b>.    &nbsp;Tasks     are further divided into
+  <b>steps</b>,    which are in turn   subdivided into    <b>phases</b>.
+&nbsp;Steps   have a  well-defined <i>start</i>   and <i>end</i>,    whereas
+a phase does   not have  a start or end associated   with it. &nbsp;A   step
+also has a  stored procedure  associated with it.  The tasks display ("Active
+ Tasks"  or "All Tasks") shows  the taskid, the stepid and the phaseid, hence
+ the  granularity of the task  display is a single phase.               
+           
+<h3>Creating a New Task</h3>
+                       The <a href="newTask.htm">New Task</a> link creates
+ a  new   loading     task.     You can select the following parameters of
+ the  task:                         
+<ol>
+                         <li><b>dataset</b> - select between TEST, DR1, DR1C
+  or  DR2;    this   is  the    release that the loading is being done for,
+  with  TEST  being  used   for    testing.</li>
+                         <li><b>export type</b> - the database that this
+is  being    exported     to:   BEST,   RUNS of TARGET for an imaging load, 
+PLATES  for    spectro, TILES    for   tiling,   and a special target FINISH 
+for the last    step that ties  up  all  the loose   ends in publishing a 
+complete  CAS.</li>
+                         <li><b>xroot</b> - this is the root of the exported
+  CSV   directory      tree   on   the LINUX side (Samba-mounted), in Windows
+  notation     (\\<i>hostname</i>\<i>directory</i>\<i>subdir</i>...).</li>
+                        <li><b>xid</b> - the identifier of this load unit,
+ i.e.   the   chunk,    plates   or   tiles that need to be loaded.  This
+is basically    the name  of  the   subdirectory  in the <a
+ href="csvDir.htm">CSV directory    tree</a>  that    contains the runs,
+ plates or tiles that are to be loaded.</li>
+                         <li><b>user</b> - the username of the person who 
+is  running     this   load     task. </li>
+                         <li><b>comment</b> - an optional comment to describe 
+  the   purpose     or  content    of this load.</li>
+                                             
+</ol>
+                                               
+<h3>Killing a Task</h3>
+                        If you are sure something is wrong with a task and
+ want   to  kill   it,   you   can do so by clicking on the last column of
+ the task   display   in the   tasks   table.  You will be prompted for confirmation.
+     The loader   cleans   up when   a task is killed, but some files and
+especially    temp DBs  created   will not   be deleted until the same task
+(with the  same  parameters   but of  course a  different taskID) is run
+again.<br>
+                                                                 
+<h2><a name="Schema"></a>SQL Schema Files &nbsp;(schema/ subdir)</h2>
+                           The schema creation scripts for the CAS databases
+  are   here.    &nbsp;There       are 5 subdirectories at this level:<br>
+                                                   
+<ol>
+                            <li><b>csv</b> - contains CSV (comma-separated
+ values)     outputs     from   the  documentation generation scripts</li>
+                            <li><b>doc</b> - the documentation files (web 
+docs   etc.)    are   here</li>
+                            <li><b>etc</b> - miscellaneous SQL script files 
+ are   here,    for   housekeeping     and utility schema-related functions</li>
+                            <li><b>log</b> - the weblogging stuff is here</li>
+                            <li><b>sql</b> - this is the main subdirectory
+ containing      the   schema    files.  &nbsp;The various schema tables,
+views, stored   procedures     and functions    are  created by the SQL scripts
+in this subdirectory.    &nbsp;The   following    files  are here:</li>
+                                                                        
+                              
+  <ul>
+                              <li>boundary.sql - Creates the tables and funtions
+    related     to  boundaries    and polygons</li>
+                              <li>constantSupport.sql - Creates the support 
+ functions      for   various     constants and enumerated types<br>
+                              </li>
+                              <li>dataConstants.sql - Sets the values of
+the   constants      and   enumerated     types<br>
+                              </li>
+                              <li>metadataTables.sql - Creates the tables 
+that   describe     the   data   tables<br>
+                              </li>
+                              <li>myTimeX.sql - Contains scripts for performance
+    measurements<br>
+                              </li>
+                              <li>nearFunctions.sql - Creates the various 
+functions      that   find   nearby   objects<br>
+                              </li>
+                              <li>photoTables.sql - Creates the <b>imaging</b>
+   (photo)     tables<br>
+                              </li>
+                              <li>spBackup.sql - Creates stored procedures
+ to  back   up  databases<br>
+                              </li>
+                              <li>spectroTables.sql - Creates the <b>spectro</b>
+    and         <b>tiling</b>        tables<br>
+                              </li>
+                              <li>spFinish.sql - Contains the stored procedures 
+   for   the         <b>Finish</b>      step in the loading/publishing<br>
+                              </li>
+                              <li>spGrantAccess.sql - Creates the stored
+procedure      that   sets   the   privileges  correctly for users after
+databases are    loaded<br>
+                              </li>
+                              <li>spHTMmaster.sql - Creates the stored procedures 
+    to  install     HTM   into  the <b>master</b> database<br>
+                              </li>
+                              <li>spHTM.sql - Creates the stored procedures 
+ to  install     HTM   into   other  DBs<br>
+                              </li>
+                              <li>spManageIndices.sql - Creates the stored
+ procedures      for   managing     the index creation<br>
+                              </li>
+                              <li>spPublish.sql - Contains the stored procedures
+    for   the         <b>Publish</b>      step in the loading/publishing<br>
+                              </li>
+                              <li>spSetValues.sql - Contains the stored procedure 
+    that   sets   and   updates  column values after the bulk loading<br>
+                              </li>
+                              <li>spValidate.sql - Contains the stored procedures 
+    for   the         <b>Validate</b>     step in the loading/publishing<br>
+                              </li>
+                              <li>views.sql - Defines and creates the various 
+  views    on  the   data   tables<br>
+                              </li>
+                              <li>webSupport.sql - Creates the stored procedures
+    to  support     the   web  (HTTP) interfaces to the DBs, including those
+   needed  to execute     SQL  queries  submitted via the skyServer and the
+  sdssQA<br>
+                              </li>
+                              <li>zoomTables.sql - Creates the schema for 
+the   Zoom-related       tables<br>
+                              </li>
+                                                                        
+                              
+  </ul>
+                                                   
+</ol>
+                                                       
+<h2><a name="Setup"></a>Setting Up SQL Loader Framework</h2>
+                            To summarize, the following steps must be performed 
+   to  set   up and install the sqlLoader so that data can be loaded into 
+the   databases.      &nbsp;Most of these steps (#1-9) are things that you 
+should   typically  only   have to do <u>once</u>, the first   time you set 
+up the   loader. &nbsp;   <u>If   the loadserver has already been configured, 
+proceed   directly to step  10.<br>
+                    </u>                             
+<ol>
+                           <li>Make sure that the SQL Server security on
+the   master    loadserver   (loadadmin)    machine  is <b>mixed     security</b>,
+  i.e.  not  Windows Only.    This is necessary   for  the webagent     user
+  to be  able  to connect to  the loadadmin server. &nbsp;To check and change 
+  the security,  bring up Enterprise   Manager, select the local SQL Server 
+  group, and go to the Tools menu and  select "SQL Server Configuration Properties...". 
+  &nbsp;Go  to the Security  screen and make sure that "SQL Server and Windows" 
+  authentication  is selected  instead of "Windows Only".</li>
+                            <li>Make sure that the SQL Server Agent is running
+   on  the   master    loadserver  (loadadmin)       </li>
+                                                                        
+           
+  <ul>
+                                                                        
+                                              
+    <ul>
+                                                                        
+                                                          
+    </ul>
+                                                                        
+              
+  </ul>
+                        <li>On the master <i>loadserver</i> machine, check
+ out   a  copy   of  the         <b>sqlLoader</b> module in the C:\ drive.</li>
+                <li>Make sure that the <b>tempDB</b> properties are set correctly.
+     &nbsp;In   Enterprise Manager under the Databases tab, select tempDB
+and    then select   Taskpad from the View menu. &nbsp;This will show the
+DB properties     at a galance.  &nbsp;You need to check/set the following:</li>
+                                                       
+  <ul>
+                  <li>The data file for the DB <u>on the D: drive</u> needs 
+ to  be  set  to grow automatically. &nbsp;To set this:</li>
+                                                                        
+          
+    <ul>
+                    <li>Move the mouse over the little yellow Database button 
+  at  the   top  and select Database Properties. &nbsp;</li>
+                    <li>Once the window comes up, select the Data Files tab.</li>
+                  <li>Click on the data file entry for the D: drive (d:\sql_db\...).<br>
+                  </li>
+                    <li>Click on the "Automatically grow file" button to
+check    it  (turn   it on) if it isn't checked already.</li>
+                    <li>Click on the "By Percent" button below it and enter 
+ 25  in  the   value window. &nbsp;The growth should be at least 10%, preferably 
+   25%  for   best performance.</li>
+                                                                        
+          
+    </ul>
+                  <li>Make sure that the data file for the DB <u>on the C:
+ drive</u>      is <u>not</u> set to grow automatically. &nbsp;To set this:</li>
+                                                                       
+    <ul>
+                  <li>In the Data Files tab, click on the data file entry 
+for   the   C:  drive (c:\sql_db\...).<br>
+                  </li>
+                  <li>Click on the "Automatically grow file" button to&nbsp;
+  turn    it  OFF, <u>only</u> if it <u>is</u> checked.</li>
+                                                                       
+    </ul>
+                <li>The size of the data file should be at least 10GB (10000MB),
+    preferably    20GB (20000MB) if there is room to spare. &nbsp;You can
+only    increase the    size of the data files from the initial size (you
+cannot   decrease the size    below the initial size the DB was created with).
+&nbsp;To   increase the size,</li>
+                                                                        
+          
+    <ul>
+                    <li>Click on the name of the data file name (probably 
+D:\sql_db\tempdb_data*.mdf,       or .ndf) - this will be the largest file. 
+&nbsp;</li>
+                    <li>Click on the Size column for that file, and enter 
+the   new   size   in MD (10000 or 20000). &nbsp;</li>
+                                                                        
+          
+    </ul>
+                                                   
+  </ul>
+                Once you are done, press the Ok button at the bottom to apply 
+  the   changes.   &nbsp;It will take a while to increase the size of the 
+data  file   (few minutes   to half hour).                       <li>Set up
+the  load monitor  web interface   on a Windows  machine    (web  server 
+running  IIS):</li>
+                                                                        
+                                      
+  <ol>
+                                <li>Copy/move the <b>admin</b> subdirectory 
+ of  sqlLoader      to  the   web   tree where the admin pages will be served
+  from.</li>
+                                <li>Set up a virtual directory in IIS to
+point    to  this   directory.<br>
+                                </li>
+                                <li>Modify the <b>connection.js</b> file
+(edit    with   Notepad)     in  the   admin directory to replace the xxx-ed
+out  password    for the       <b>webagent</b>        user with the real
+password,  and change    the Data Source to point to   the master loadserver
+machine.</li>
+                                                                        
+                                      
+  </ol>
+                              <li>Tweak the <b>loadadmin/loadadmin-local-config.sql</b> 
+       file   as  per   the local configuration parameters (see <a
+ href="#Loadadmin">Loader     Admin   Framework</a> section above). &nbsp;<u>Make 
+       sure that all the directory paths that are specified in this file actually
+       exist</u>! &nbsp;For the backup directory path, also make sure that
+ the        <u>Sharing</u>  (not NTFS Security) privileges for the backup
+directory     allow <u>Full Control</u>  for <u>Everyone</u>.</li>
+                              <li>Create a share for the master sqlLoader 
+directory      on  the   web   server    and the slave servers.</li>
+                              <li>Edit <b>loadadmin/set-loadserver.bat</b>
+ to  set   the   name   of  the   master loadserver machine.</li>
+                              <li>Edit the <b>loadadmin/loadsupport-build.sql</b> 
+    file   to  update    the   domain account names, if necessary.</li>
+                      <li>If this is not the first time, and a previous loadadmin/loadsupport
+           environment exists on this machine, delete it by doing the following:</li>
+                                                                        
+      
+  <ul>
+                        <li>Kill any tasks that may be running in the previous
+   Load   Monitor.<br>
+                         </li>
+                        <li>In Enterprise Manager, go to the local SQL Server 
+  Group    and   open    the Databases tab. &nbsp;Then delete each of he following
+   databases    by right-clicking   the mouse on the database and selecting
+        <u>Delete</u>    to delete it:</li>
+                                                                        
+                                              
+    <ul>
+                          <li>The publish DBs, called &lt;<i>export type</i>&gt;&lt;<i>dataset</i>&gt;,
+           e.g., BESTTEST and TARGTEST or BESTDR1 and TARGDR1<br>
+                           </li>
+                          <li>Any temporary load DBs &lt;<i>dataset</i>&gt;_&lt;<i>export 
+        type</i>&gt;&lt;<i>xid</i>&gt;,   e.g. TEST_BEST1_35_471938<br>
+                           </li>
+                                                                        
+                                              
+    </ul>
+                                                                        
+                                              
+    <ul>
+                          <li>The <b>loadadmin</b> DB.<br>
+                           </li>
+                          <li>The <b>loadsupport</b> DB.</li>
+                                                                        
+                                              
+    </ul>
+                                                                        
+      
+  </ul>
+                           <li>Run the following scripts from a command shell 
+  (Start-&gt;Run...-&gt;cmd).    &nbsp;Note that step 4 should be run on each
+  loadserver in the configuration    (including the master), each of which
+ will have the sqlLoader directory  shared.</li>
+                                                                        
+                          
+  <ol>
+                     <li><b>C:</b><br>
+                Make sure you are on the C: drive.     </li>
+                     <li><b>cd C:\sqlLoader\loadadmin</b><br>
+                  Go to the loadadmin subdirectory in the loader.     </li>
+                       <li><b>build-loadadmin.bat</b><br>
+                     	This will create the loadadmin environment and DB.</li>
+                       <li><b>build-loadsupport.bat -LP</b> (on loadadmin/master)<br>
+            	       <b>build-loadsupport.bat -L</b> (on each loadserver/slave 
+  other    than master)<br>
+                     	Run this on each loadserver in the configuration. &nbsp;On
+    all   but the master (loadadmin) server, the sqlLoader directory is shared.
+    &nbsp;This   will create the loadsupport environment and DB and set this
+            loadserver's   role to both LOAD and PUBLISH. &nbsp;If the last
+  message   from running the  above 2 steps says "Access denied..." rather
+ than "1 file(s)   moved", this  means that the log file could not be moved
+ to the loadlog directory.   &nbsp;You  will need to right-click on the C:\loadlog
+    directory, select Properties   or Sharing and Security and go to the
+Sharing     tab. &nbsp;In the Sharing permissions   screen, select Everyone
+and turn    on Full Control. &nbsp;After doing this,   you will have to restart
+the  setup   at step 9 above.&nbsp;</li>
+                          <li>For a BEST and TARGET load (public datasets) run
+                     the command:<dd><b>build-publish-db.bat &lt;<i>dataset</i>&gt;
+    	&lt;<i>db-data-size</i>&gt;       &lt;<i>db-logsize</i>&gt;</b><br>
+			For RUNS loading, run the following command:<dd><b>build-runs-db.bat &lt;<i>dataset</i>&gt;
+    	&lt;<i>db-data-size</i>&gt;       &lt;<i>db-logsize</i>&gt;</b><br>
+                      	These scripts should be run on the master
+                     only. &nbsp;The build-publish-dbs.bat script 
+  will   automatically create publish DBs for the BEST and TARGET  skyversions
+     for each dataset.  &nbsp;This will take some time  	to   run for  multi-GB
+     sizes. &nbsp;The sizes you pick for the DB and log  	files   should
+ be   approximately:<br>
+                      	   <dd><b>&lt;<i>db-data-size</i>&gt;</b> = the total
+  size   of  the    data  (CSV         files) that you want to load + 50%,
+         <u>in MB</u>.    	    </dd>
+                          <dd><b>&lt;<i>db-log-size</i>&gt;</b> = at least
+ 50%   of  the   CSV   data           size, <u>in MB</u>. e.g.,<br>
+                            <br>
+                     	   </dd>
+                          <dd><b>build-publish-db.bat TEST 20000 10000</b>
+                     (for BEST/TARGET loader)<br>
+                          <dd><b>build-runs-db.bat TEST 20000 10000</b>
+                     (for RUNS loader)<br>
+                            <br>
+                     	These are just the initial sizes - SQL Server will
+expand    the   file   	sizes   as needed, but this comes at a performance
+cost so   it's better  	to  allocate   enough space to begin with.  Note that
+there are analogous scripts for BEST and TARGET DBs as for RUNS:
+build-best-db.bat and build-target-db.bat, but you should not need to run them
+separately.</dd> 
+                        </li>
+                                                                        
+                          
+  </ol>
+                                                       
+</ol>
+                                                              
+<h2><a name="Run"></a>Running the Loader</h2>
+                            The loading is launched and controlled from the 
+ <a href="#Admin">Load Monitor web interface</a>.   &nbsp;A  New Task must 
+ be         created and launched for each unit of the loading,   whether 
+it is   an   imaging,   spectro or tiling load. &nbsp;The unit for each 
+ type of    loading   as as  follows:<br>
+                                                       
+<ul>
+                              <li>imaging - a <b>chunk</b>, as resolved by
+ OpDB,    and   corresponding        to  a subdirectory under $chunkRoot/inchunk_*/,
+    e.g.   stripe35_mu629735_1.</li>
+                              <li>spectro - a <b>spectro run</b>, i.e. a
+sequence     of  plates    that   is  considered to be part of the current
+load because     it  corresponds    to the  imaging  unit last loaded (as
+listed in the  corresponding        <b>spPlatesToLoad*.par</b>        file).
+&nbsp;In the      <a href="csvDir.htm">CSV directory tree</a>, there    
+is   separate subdirectory    under spCSV/plates/ for each such run. &nbsp;The
+    name   of the directory    is constructed from the date+time (e.g., 2003-01-28-1800) 
+       of the  spectro  run to avoid collision with a different run that may
+ be   processed    in  the same timeframe.</li>
+                              <li>tiling - a <b>tileRun</b>, e.g. chunk15.<br>
+                              </li>
+                                                       
+</ul>
+                                                
+<h3><a name="Run"></a>Monitoring the Load</h3>
+                        Selecting the <a href="activeTasks.htm">Active Tasks</a>
+    or  <a href="allTasks.htm">All Tasks</a> links in the Load Monitor shows
+   you the       tasks that are currently running.  The color-coding for
+the    task status     is  shown below the task table.  For each task, the
+taskid,    the stepid  and   the  phase number are shown, along with the
+name of the    task and step  that   is  currently being executed.  The task
+display is   updated once every  minute.                            
+<p> For each task, you can select the <a href="steps.htm">Steps</a>, <a
+ href="files.htm">Files</a> or <a href="log.htm">Log</a> links to look at
+           the steps, files and phases logged (completed) for that task.
+ </p>
+                                           
+<p> The PRELOAD step of a loading task usually takes the longest time, as 
+           the CSV files are loaded into the load-DB in this step.  The largest 
+      of   the  CSV files for each run - the PhotoObj*.csv files - each will 
+   take   10-15   mins  each to load, and the preload step for one imaging 
+ chunk  can   take more  than  an hour to complete.  You can monitor the progress
+   of the   preload step  by  selecting the <a href="files.htm">Files</a> 
+display    for   that task.   </p>
+
+<h3><a name="Run"></a>Running FINISH step by step manually</h3>
+Currently the FINISH part of the loading can be run step by step, but only if
+manually invoked from the SQL QA or SQL Agent.
+<p>
+The command to execute shd be:
+<dd>EXEC spFinishStep &lt;taskid&gt, &lt;stepid&gt;[, &lt;step&gt;[, &lt;mode&gt; ] ]
+<p>
+(both &lt;step&gt; and &lt;mode&gt; are optional)
+<p>
+where &lt;taskid&gt; = 1, 2 or 3 for BEST, TARG or RUNS resp.,
+<dd>      &lt;stepid&gt; = 1,
+<dd>      &lt;step&gt; = one of the following:
+<dd><dd>	        'ALL', (default)
+<dd><dd>		'dropIndices',
+<dd><dd>		'syncSchema',
+<dd><dd>		'loadPhotoTag',
+<dd><dd>		'buildPrimaryKeys',
+<dd><dd>		'buildIndices',
+<dd><dd>		'buildForeignKeys',
+<dd><dd>		'computeNeighbors',
+<dd><dd>		'buildMatchTables',
+<dd><dd>		'regionsSectorsWedges',
+<dd><dd>		'loadScienceTables',
+<dd><dd>		'syncSpectro',
+<dd><dd>		'buildFinishIndices',
+<dd><dd>		'matchTargetBest',
+<dd><dd>		'loadPatches'
+<dd>      &lt;mode&gt; = 'resume' (default) or some other string (not 'resume')
+<p>
+The resume mode means keep going with the FINISH step after executing the
+first step indicated, otherwise it stops after that step.
+<p>
+So in most cases, you will be using something like:
+<p>
+<dd>     EXEC spFinishStep 1, 1, 'buildIndices'
+<p>
+whereas
+<p>
+<dd>     EXEC spFinishStep 1, 1
+<p>
+is equivalent to:
+<p>
+<dd>     EXEC spFinishStep 1, 1, 'ALL', 'resume'
+<p>
+(don't bother to specify the 4th parameter because you want resume mode).
+
+                                                
+<h2><a name="Weblog"></a>The WebLog DB</h2>
+          The WebLog database maintains a record of every query submitted 
+to  the   DB  server via the SkyServer web interface. &nbsp;All skyserver 
+queries  are  submitted  to the server through the execution of the spExecuteSQL
+ stored    procedure.  &nbsp; However, the task of getting the query information
+ from    the web server  to the DB server is non-trivial (because Active
+Directory     is not set up),  and ensuring its success requires that the
+following steps    be performed.<br>
+                   
+<ol>
+            <li>Set up the web logging configuration in the IIS running on
+ the   web   server:</li>
+                                       
+  <ul>
+              <li>Right-click on My Computer and select Manage</li>
+              <li>Open the "Services and Applications" tab</li>
+              <li>Open the "Internet Information Services" (IIS) tab</li>
+              <li>Select the "Default Web Site" and right-click on it. &nbsp;Select
+     Properties.</li>
+              <li>Go to the Web Site screen</li>
+              <li>Make sure that "Enable Logging" is checked<br>
+              </li>
+              <li>In the "Active Log Format" window, make sure that "W3C
+Extended     Log File Format" is selected (not "ODBC logging")</li>
+              <li>Click on Properties next to the log format window</li>
+              <li>Select Daily logging</li>
+              <li>Set the log file directory to %WinDir%\System32\LogFiles</li>
+              <li>Open the "Extended Properties" tab, and select the following
+   items   to be logged:</li>
+                                                           
+    <ul>
+                <li>Date</li>
+                <li>Time</li>
+                <li>Client IP Address</li>
+                <li>User Name</li>
+                <li>Server IP Address</li>
+                <li>Server Port</li>
+                <li>URI Stem</li>
+                <li>URI Query</li>
+                <li>Protocol Status</li>
+                <li>User Agent</li>
+                                                           
+    </ul>
+                                       
+  </ul>
+            <li>Once a month, move all the files in the LogFiles folder to
+ a  new   folder  to save them.</li>
+            <li>On the DB server, open Enterprise Manager (EM). &nbsp;The 
+SQL   logging   is driven off of the existence of the WebLog DB. &nbsp;A check
+ for the existence   of this DB is built into the spExecuteSQL stored procedure.
+  &nbsp;This procedure   inserts the query submitted by the user into the
+Weblog  tables. &nbsp; The   tables in the WebLog DB are:</li>
+                                       
+  <ul>
+              <li>The WebLog..WebLog table is the DTS (Data Tranformation 
+Services)     copy of the web logs from the web server. &nbsp;</li>
+              <li>The WebLog..TrafficBase keeps the yearly, monthly, daily
+ distillation     of the logs, i.e. the traffic on the webserver.</li>
+              <li>The WebLog tables SqlStatementLog and SqlPerformanceLog 
+get   populated   by spExecuteSQL.</li>
+                                       
+  </ul>
+            <li>The SQL Agent should have one job to merge new weblogs. &nbsp;The 
+    job should be in the DB Maintenance category. &nbsp;To create this job, 
+  the procedure is as follows:<br>
+                                             
+    <ol>
+             <li> Open the Management tab in EM</li>
+             <li>Open the SQL Server Agent tab under Management</li>
+             <li>Right-click on Jobs and select New Job ...</li>
+             <li>Type in a name for the job, e.g., "Merge in new weblogs"</li>
+             <li>Make sure Enabled is checked</li>
+             <li>Select Database Maintenance in the Category window</li>
+             <li>Make the local DB admin the owner of the task</li>
+             <li>Type in a description, e.g. "Copies last 2 days of logs
+into   skyserver  weblog database"</li>
+             <li>Next, open the Steps tab and select New... to create a new 
+ step</li>
+             <li>Type in a name for the step, e.g. "Do the merge"</li>
+             <li>Select WebLog as the database in the Database window</li>
+             <li>In the Command window, type in "EXEC WebLogMerge"</li>
+             <li>Open the Advanced tab within Steps and make sure that the
+ On  Success  action is "Quit the job reporting success", and On Failure
+action   is "Quit  the job reporting failure"; click Ok to return to main
+Steps screen<br>
+             </li>
+             <li>Open the Schedules tab and select New Schedule... to create
+  a  new schedule</li>
+             <li>Select Recurring, and create a Daily schedule to run the 
+job   every  hour from 1 am until 11:59:59pm.</li>
+             <li>Save all changes by selecting Ok on all screens. &nbsp;The 
+ job   should appear in the Jobs display now.<br>
+             </li>
+                                             
+    </ol>
+        This job invokes the WebLogMerge procedure, which appends the weblog
+  from  the last 2 days each time. &nbsp;This in turn calls UpdateWebLog,
+which  is  where all the work is really done. &nbsp;Both these procedures
+are in  sqlLoader/schema/log/webLogDBCreate.sql,  which is also where the
+WebLog DB creation code is. &nbsp;The way the weblog  appending is done is:</li>
+                                       
+  <ul>
+              <li>The webserver weblog directory is remote-mounted on the 
+DB  server</li>
+              <li>We manually delete the last 2 days of logs before moving
+ the   new   ones in</li>
+              <li>This is scheduled (in the SQL Agent job scheduling) to
+happen    every  hour on the hour.</li>
+              <li>The notification is sent to the Windows Applications Log
+ if  it  fails</li>
+              <li>The DTS script that transfers the weblog from the webserver 
+  to  the  DB server is in sqlLoader/schema/log/bcpWebLog.js (JavaScript). 
+ &nbsp;This   calls the xcopyWebLogFromYesterday.js script that is also in 
+ the same directory.</li>
+                                       
+  </ul>
+                   
+</ol>
+          To Do: <br>
+                   
+<ol>
+            <li>Put the webserver side of weblogging config in the installation 
+   scripts/procedures.</li>
+            <li>Schedule task(s) to clean up weblog directory on webserver
+ every    so  often. &nbsp;Currently this has to be done manually.<br>
+            </li>
+                   
+</ol>
+                                           
+<h2><a name="DocTables"></a>Updating Metadata and Documentation Tables</h2>
+
+ The <i>schema/csv</i> subdirectory contains the files that load
+ the content for the associated metadata tables.  The files  are all SQL
+ scripts that can be run in the SQL QA.  However, it is not  necessary to run
+ them manually, since the <b>spLoadMetaData</b> procedure in the BEST
+ database can be invoked to run them all.   This section lists the files 
+ and the steps necessary to load or update the metadata into the BEST DB.
+
+ <h3>Metadata Loading Scripts </h3>
+ The metadata tables in the BEST database and their corresponding loading
+ scripts and purpose are listed in the table below.  The loading scripts are
+ generated (by the Visual Basic scripts in <i>vbs</i> subdirectory)
+ from the schema (.sql) files in the <i>schema/sql</i> subdirectory. <br>
+ <table border=1>
+    <tr><td>DB Table</td> <td>Loading script (in <i>schema/csv</i>)</td> <td>Purpose/content</td>
+    </tr>
+    <tr><td><b>DBObjects</b></td> <td><b>loaddbobjects.sql</b></td> <td>Name and description of every user Table, View, Function and Stored Procedure in the database. </td>
+    </tr>
+    <tr><td><b>DBColumns</b></td> <td><b>loaddbcolumns.sql</b></td> <td>Name and description of every Column in every user Table in the database. </td>
+    </tr>
+    <tr><td><b>DBViewCols</b></td> <td><b>loaddbviewcols.sql</b></td> <td>Name and descriptio of every Column in every user View in the database. </td>
+    </tr>
+    <tr><td><b>Dependency</b></td> <td><b>loaddependency.sql</b></td> <td>The dependency chart for functions and procedures that gives the parent and child names for each such object. </td>
+    </tr>
+    <tr><td><b>Inventory</b></td> <td><b>loadinventory.sql</b></td> <td>A list of every schema object ordered by the file that contains it. </td>
+    </tr>
+    <tr><td><b>History</b></td> <td><b>loadhistory.sql</b></td> <td>Extracts the change history from each schema file and shows them in chronological order.</td>
+    </tr>
+ </table> 
+<h3>Documentation Files</h3>
+The documentation tables <b>Glossary</b>, <b>Algorithm</b> and
+ <b>TableDesc</b> in the BEST database hold the content for the Glossary,
+ Algorithms and Table Description pages in the SkyServer Help
+ menu. &nbsp;These pages are auto-generated from these tables on the
+ fly.  To modify the content of these Help pages, you need to make the changes
+ in the original context .txt files in the <i>schema/doc</i> subdirectory.
+<p>
+The mappings between the SkyServer Help pages, the corresponding DB tables,
+ the content files and loading scripts are shown in the table below.
+           
+<table border=1>
+ <tr><td>SkyServer Help Page</td> <td>DB Table</td> <td>Content file (in <i>schema/doc</i>)</td> <td>Loading script (in <i>schema/csv</i>)</td>
+ </tr>
+ <tr><td><b>Glossary</b></td> <td><b>Glossary</b></td> <td><b>glossary.txt</b></td> <td><b>loadglossary.sql</b></td>
+ </tr>
+ <tr><td><b>Algorithms</b></td> <td><b>Algorithm</b></td> <td><b>algorithm.txt</b></td> <td><b>loadalgorithm.sql</b></td>
+ </tr>
+ <tr><td><b>Table Descriptions</b></td> <td><b>TableDesc</b></td> <td><b>tabledesc.txt</b></td> <td><b>loadtabledesc.sql</b></td>
+ </tr>
+</table>
+	
+</ul> 
+
+<h3>Loading Metadata and Documentation into BEST DB</h3>
+The following steps are necessary in order to load or update these metadata and
+documentation tables:<br>
+(<b>NOTE</b>: If you are running the spSyncSchema stored procedure,
+you do not need to execute the following steps because spSyncSchema
+runs all of them after running the schema synchronization scripts.)
+           
+<ol>
+        <li>Run a command shell (Start-&gt;Run-(cmd)) on the host that has
+       the sqlLoader installed (loadadmin server).<br>
+       </li>
+       <li>In the <i>sqlLoader/vbs</i> directory, run the <b>runAll.bat</b> 
+       script and it will generate each of the .sql files listed above 
+       into the <i>schema/csv</i> subdirectory. 
+       </li>
+       <li>Open a SQL Query Analyzer in the BEST database for that release
+        (e.g. BESTDR3) and run the following command:<p>
+	<dd> EXEC spLoadMetaData 0,0,'C:\sqlLoader\schema\csv\'
+	<p> where the first 2 parameters (taskid,stepid) are set to 0, and
+        C:\sqlLoader is the location of the sqlLoader directory in
+        which the runAll.bat script was run in step 2.  <u>Remember the last
+        '\' at the end of the sqlLoader path, otherwise it won't work.</u><br>
+	</li>
+</ol>
+                 
+<h2><a name="WebInterface"></a>Setting Up SkyServer Web Interface</h2>
+                             The <b>SkyServer</b> web pages   can be pointed 
+ to the newly published databases as follows:    
+<ol>
+      <li><b>Create the web interface directory on the webserver</b> - On 
+the webserver machine that is running IIS, install the SkyServer web tree 
+under the C:\skyserver directory.   
+There will be one copy of the web interface for each access type that this
+webserver serves. &nbsp;There are 3 types of access possible:</li>
+           
+  <ul>
+       <li><b>collab</b> - this is restricted access for the SDSS collaboration 
+ only; &nbsp;it is a no-frills interface that connects to private SDSS data.<br>
+       </li>
+       <li><b>astro</b> - public access to public data, but with a no-frills 
+ interface that includes educational content.<br>
+       </li>
+       <li><b>public</b> - public access to public data with all the educational 
+ and public information content and fancy interface.<br>
+       </li>
+           
+  </ul>
+   The web tree for each type of access is identical, but one file is modified 
+ at the top level to set the site parameters and access level (see step 2). 
+ &nbsp; The SkyServer web tree is in the CVS <b>skyServer</b> product.  Check
+ the desired (tagged) version of the skyServer product out of CVS as follows:
+<p>
+<dd> > cvs co -r &lt;tag&gt; skyServer
+<p>
+This will check out the version tagged with the given tag into the directory.
+<u>This needs to be a tagged <i>checkout</i> rather than an <i>export</i></u>
+so that changes from CVS can be applied to each web tree using the CVS update
+command, e.g., 
+<p>
+<dd> > cd C:\skyserver\collab.dr3
+<dd> > cvs up -r v3_5
+<p>
+in order to make bug fixes and other updates.  Rename the newly created
+"skyServer" sub-directory under C:\skyserver according to the convention
+"&lt;access-type&gt;.&lt;release&gt;", e.g. C:\skyserver\collab.dr3\, or
+C:\skyserver\public.dr3\, etc., so that it is easy to tell the function and
+release date of a particular skyserver site. &nbsp;The virtual directory (URL)
+for the collaboration CAS should be pointed to the
+C:\skyserver\collab.&lt;release&gt; directory (i.e., the&nbsp;
+C:\skyServer\collab.dr3 directory in the above example), and similarly the
+public site should be pointed to the C:\skyServer\public.&lt;release&gt;
+directory. &nbsp; A similar convention should be followed for an astro site if
+necessary.
+
+<li><b>Set up the site parameters in the <u>globals.inc</u>
+ file</b> - To point the skyserver website to the correct database server
+and set up all the other parameters like the access level etc., you  need
+to modify a single file at the top level of the web interface directory that
+ you created in step 1 - the globals.inc include file.  Note that the CVS
+ export of skyServer will contain a <b>globals.inc.cvs</b> file - <u>do not
+ modify this file, it is just the template for globals.inc that is checked
+ into CVS.</u>  Copy the file to a new file called globals.inc (no
+ .cvs extension).  &nbsp;Open this file in NotePad or your favorite
+ editor. &nbsp;There are comments (instructions) in the file that describe
+ what needs to be set. &nbsp;This includes the following  parameters:<br>
+      </li>
+            
+  <ol>
+      <li><b>Access level</b> - the <i>access</i> variable controls the site
+ look and feel, the timeouts, and the content that is displayed for different
+ classes of users.</li>
+      <li><b>Release</b> - The name of this release, e.g. DR1, DR2 etc. is
+ stored in the <i>release</i> variable. &nbsp;This is used in page titles,
+ default database name (BESTDR1, TARGDR2) as stored in the <i>database</i>
+ variable (next line in file, <u>you don't need to change this</u>).<br>
+      </li>
+      <li><b>Connection to the database server</b> - Set the <i>userid</i>,
+       <i>userpwd</i>, and <i>server</i> variables to control the access
+to  the database server. The userid is "test" for the web user that accesses
+the database. &nbsp;The userid and password are usually set xxx-ed out in
+CVS for security purposes.  Replace the x's by the correct userid and password
+ for the web user. Also on the next line, set the server name to&nbsp; the
+ name of the machine that the  databases reside on.</li>
+      <li><b>Set the URLs for educational services and tools</b> - the rest
+ of the file contains URL settings for various tools and services. &nbsp;The
+       <i>astroCAS</i> and <i>collabCAS</i> URLs are the links to the corresponding
+ CAS for the current release. &nbsp;The <i>wsGetJpegurl</i> and <i>wdCutOut</i>
+ URLs are for the image cutout service.<br>
+      </li>
+       
+  </ol>
+              <li><b>Create a virtual directory if necessary</b> - Next you
+ need to create a virtual directory corresponding to the URL  that will point
+ to this site, if it doesn't already exist. &nbsp;Usually,  the collab site
+ URL is the "collab" virtual directory under the default web  site (e.g.
+http://skyserver2.fnal.gov/collab/),  similarly for the public and astro
+sites. &nbsp;If the virtual directory corresponding to the URL already exists,
+just make sure it points to the correct Windows directory (e.g. C:\skyserver\collab.02-25-2004).
+&nbsp;[To set up or check a virtual directory, right-click on "My Computer"
+ and select "Manage". &nbsp;Open the Services and Applications tab and then
+ the Internet Information Services (IIS) tab. &nbsp;Then open the Default
+Web Site tab. &nbsp;If "collab" or "public" doesnt exist under it, right-click
+ on Default Web Site and select New Virtual Directory. &nbsp;Create the new
+ Virtual directory and set C:\skyServer\collab (or public) as its home directory.
+ &nbsp;If the collab or public virtual directory already exists, right-click
+ on it and view its Properties, &nbsp;and make sure its home directory is
+set to the correct one.]</li>
+  <li><b>Update the SiteConstants table</b> - Part of the SiteConstants table
+is updated automatically, but the WebServerURL and DataServerURL values should
+be updated to reflect the CAS and DAS URLs that this DB server is linked
+to. &nbsp;The underlying assumption here is that each DB server is serving
+a unique SkyServer site, which is not always true. &nbsp;In case the DB server
+is serving more than one SkyServer site, you can just set the WebServerURL
+to one of them - the most stable one. &nbsp;Remember to include the "en/"
+at the end of the CAS URL. &nbsp;These URLs are used by functions like fGetUrlNavExp
+and fGetUrlFits... to build URLs for image cutouts and FITs files &nbsp;(on
+the DAS). &nbsp;The URLs can be updated with commands like:</li>
+ <blockquote>
+    UPDATE SiteConstants SET
+        value='http://skyserver2.fnal.gov/dr2/en/' 
+	WHERE name='WebServerURL'<br>
+    UPDATE SiteConstants SET value='http://das.sdss.org/dr2/data/' 
+	WHERE name='DataServerURL'
+ </blockquote>
+    <li><b>Set up web access user on DB server</b> - If the DB server is
+new  or the databases have been copied to it from somewhere else, you will
+need  to set up the web access user on it ("test" user). &nbsp;Open a Query
+Analyzer  window (on master or BEST DB) on the DB server. &nbsp;Enter the
+following  commands in the QA window (first command only necessary if no
+login exists  for "test", you can check in Security-&gt;Logins):</li>
+   
+</ol>
+   
+<blockquote>      
+  <blockquote>EXEC sp_addlogin 'test', '&lt;pwd&gt;', 'master'&nbsp;&nbsp;&nbsp;
+ &nbsp;&nbsp;&nbsp; {&lt;pwd&gt; = test's password}<br>
+  USE BEST&lt;release&gt;<br>
+  EXEC sp_change_users_login N'UPDATE_ONE', N'test', N'test'<br>
+  EXEC spGrantAccess 'U', 'test'<br>
+  USE TARG&lt;release&gt;<br>
+  EXEC sp_change_users_login N'UPDATE_ONE', N'test', N'test'<br>
+  EXEC spGrantAccess 'U', 'test'<br>
+ USE master<br>
+ GRANT EXECUTE ON [dbo].xp_varbintohexstr to test<br>
+       </blockquote>
+  This should set up the web access (and take care of orphaned users if you
+ copied the DB from elsewhere).<br>
+</blockquote>
+     
+<ol>
+       
+</ol>
+    To switch the database server that a particular skyserver site points 
+to,  perform step 2.3 to edit the globals.inc file and set the server name.<br>
+       
+<h2><a name="Troubleshooting"></a>Troubleshooting</h2>
+                                               
+<ol>
+                         <li><u>Loading stops in CHK (first) step:</u></li>
+                                                                        
+                     
+  <ul>
+                            <li>The CSV directory tree where the CSV input
+ files    are   nay   not   be  accessible (not samba-mounted or privileges
+ lacking).<br>
+                       </li>
+                                                                        
+                     
+  </ul>
+                          <li><u>Loading stops in BLD step with FRAMEWORK_ERROR:</u></li>
+                                                                        
+                     
+  <ul>
+                            <li>The <b>loadadmin/vbs/csvrobot.vbs</b> file
+ may   not   have   the   loadserver  name set correctly in it's connection
+ string.   &nbsp;Look     for  the 'Connect  "Server=..." ' line and make
+sure Server   is set to the    loadserver   (loadadmin)  name.</li>
+                            <li>The backup directory may not be accessible
+ due   permissions       or  share  security not being set right. &nbsp;Look
+ at  the Log for messages       about  the  backup directory and check if
+the sharing/security allows         <u>full    control</u>   for all users
+on the network (or at least  the       <b>mssql</b>   user which the   loadserver
+ connects as.<br>
+                            </li>
+                                                                        
+                     
+  </ul>
+                           <li><u>The CHK step log displays a WARNING status
+  for   the   zoom   files       indicating that the number of zoom files
+in  the  CSV directories     is    less than what the loader expects. </u></li>
+                                                                        
+                     
+  <ul>
+                            <li>Some or all the zoom files for one or more
+ camCols     may   be       missing.  Sometimes the fpC* (corrected frame)
+ files for   some       fields    are legitimately missing.  However in this
+ case there   need       to be links    instead to zoom files from a different
+ run or      skyVersion.     A more serious   problem may be that the zooms
+ did not        get genrated     from the FITS fpC   files because of an
+error  in the        fits2jpeg code    or the pipeline code   that runs it.
+ This  can be       due to a problem  (such   as corruption) with   the source
+FITS       files.</li>
+                            <li>If this warning in the CHK step is ignored, 
+ eventually      the        loader will stop with an error in the PRELOAD 
+step (in the  File         Load  phase).  While this may seem harsh, making 
+the loader      tolerant      to missing  zoom files would be dangerous because 
+ real      problems such     as corruption  in the FITS files could go   
+  undetected,   and frames  with    missing zooms  would get loaded.</li>
+                                                                        
+                     
+  </ul>
+                           <li><u>Loading seems to be stalled at the end
+of  a  step,    and   the      next step will not start:</u></li>
+                                                                        
+                     
+  <ul>
+                            <li>The SQL Server Agent may not be running.
+ In  Enterprise           Manager,  open the Management Tab and right-click 
+on  SQL Server      Agent   and select  Start to restart the agent.</li>
+                 <li>The SQL Agent is running but not picking up new jobs.
+ &nbsp;You      may need to stop and restart the LOAD or PUB job (depending
+ on which task     is stalled and where). &nbsp;Do this by right-clicking
+on the job in the    Jobs screen and selecting first Stop, then Start.<br>
+                 </li>
+                                                                        
+                     
+  </ul>
+                           <li><u>Loading seems to be stalled in the middle 
+ of  the   PRELOAD        step</u></li>
+                                                                        
+                     
+  <ul>
+                            <li>This usually indicates a problem with loading 
+  one   of  the   files,          so looking at the Files table is more informative.
+          </li>
+                            <li>If the loading is stalled after the file
+load   phase,    this   may        still be due to a problem with loading
+one of   the files,    because        sometimes the problem manifests itself 
+in a  later phase.      </li>
+                                                                        
+                     
+  </ul>
+                           <li><u>Corruption of the source CSV file(s)</u></li>
+                                                                        
+                     
+  <ul>
+                            <li>This is actually a special case of the previous 
+   problem,     but        is more insidious and serious so deserves separate 
+   mention.   The       problem will manifest itself as a WARNING during the
+   loading of        the    relevant file, and the message will indicate that
+   the number       of lines    in the file, i.e., the <i>expected</i> number
+   of rows,      is different   (almost always <i>more</i>) than the    
+  <i>actual</i>         number  of rows loaded.       </li>
+                             <li>Debugging a corruption problem is not easy,
+  especially      if  it       occurs (as it almost always does) in the largest
+  PhotoObjAll      CSV       files.  The first step in such cases is to look
+  in the CSV      generation    logs (log files written by the sqlFits2Csv
+ code) for      warnings or errors.     Next you can narrow the problem to
+ a      specific     run within the stripe    in which it occurs, by querying
+      the temporary     load DB for the number    of lines (SELECT count(*)
+       FROM PhotoObjAll     WHERE run=xxx) and comparing    the count with
+ the       number of lines    in the corresponding CSV files.    After that,
+ you      can measure the  length   of PhotoObjAll lines in the  CSV files
+ for       that run by counting  the   commas on each line with a PERL  script.</li>
+                                                                        
+                     
+  </ul>
+                                              
+</ol>
+                        <br>
+                                                       
+<h2><a name="TDL"></a>To-do List</h2>
+                                                       
+<ol>
+                                                                        
+                                             
+  <ul>
+                                                                        
+                           
+  </ul>
+                         <li>Add tiling validation</li>
+                              <li>Add target-&gt;best matching (setting bestObjID)</li>
+                                              <li>Integrate read-only admin 
+ web   tree  (loadstatus) into CVS<br>
+                         </li>
+                                                       
+</ol>
+                            <br>
+                                <img src="rule.gif">
+                                                               
+<h6> <a href="mailto:thakar@pha.jhu.edu">Ani R. Thakar</a>,<br>
+                                Last Modified: June 8, 2005.</h6>
+                                 <br>
+                               <br>
+                               <br>
+                            <br>
+                           <br>
+                          <br>
+                         <br>
+                        <br>
+                       <br>
+                      <br>
+                     <br>
+                    <br>
+                   <br>
+                  <br>
+                 <br>
+                <br>
+               <br>
+              <br>
+             <br>
+            <br>
+           <br>
+          <br>
+         <br>
+         <br>
+      <br>
+     <br>
+    <br>
+   <br>
+  <br>
+ <br>
+</body>
+</html>

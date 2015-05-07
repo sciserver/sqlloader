@@ -1,0 +1,56 @@
+BODY	{BACKGROUND-COLOR:Teal;}
+A	{COLOR: #ffffff;FONT-FAMILY: arial,helvetica,sans-serif}
+P	{COLOR: #ffffff;FONT-FAMILY: arial,helvetica,sans-serif}
+TD	{COLOR: #ffffff;FONT-FAMILY: arial,helvetica,sans-serif}
+H1	{COLOR: #ffffff;FONT-FAMILY: arial,helvetica,sans-serif}
+H2	{COLOR: #ffffff;FONT-FAMILY: arial,helvetica,sans-serif}
+H3	{COLOR: #ffffff;FONT-FAMILY: arial,helvetica,sans-serif}
+H4	{COLOR: #ffffff;FONT-FAMILY: arial,helvetica,sans-serif}
+H5	{COLOR: #ffffff;FONT-FAMILY: arial,helvetica,sans-serif}
+H6	{COLOR: #ffffff;FONT-FAMILY: arial,helvetica,sans-serif}
+SPAN	{COLOR: #ffffff;FONT-FAMILY: arial,helvetica,sans-serif}
+EM	{COLOR: #cccc55;FONT-WEIGHT: 800}
+H1	{FONT-SIZE: 16pt}
+
+#logo		{LEFT:   0px;POSITION: absolute;TOP:   0px}
+#banner	{LEFT:  90px;POSITION: absolute;TOP:   0px}
+#rule		{BACKGROUND-COLOR: #030060;LEFT:  78px;POSITION: absolute;TOP: 0px; 
+		WIDTH:560px; HEIGHT:100px;}
+#navibar	{LEFT: 120px;POSITION: absolute;TOP:  54px; Z-INDEX:1}
+#taskbar	{COLOR: #ffffff;LEFT: 24px;POSITION: absolute;TOP: 110px}
+#title	{COLOR: #ffffff;FONT-FAMILY: arial,helvetica,sans-serif;
+			FONT-SIZE: 30pt;FONT-WEIGHT: bold;Z-INDEX: 1;
+			LEFT: 120px;POSITION: absolute;TOP: 6px;}
+#text		{BACKGROUND-COLOR: #333360;HEIGHT: 90%;
+			LEFT: 140px;POSITION: absolute;TOP: 130px;WIDTH: 640px}
+#transp	{LEFT: 20px;POSITION: absolute;TOP: 125px}
+
+.sml	{FONT-SIZE: 8pt}
+.med	{FONT-SIZE: 10pt}
+.lrg	{FONT-SIZE: 12pt}
+.hi	{COLOR: #ff4444;FONT-SIZE: 10pt}
+.lo	{COLOR: #8888ff;FONT-SIZE: 10pt}
+.thi	{COLOR: #ff4444;FONT-SIZE: 12pt;FONT-WEIGHT: 800}
+.tlo	{COLOR: #8888ff;FONT-SIZE: 12pt;FONT-WEIGHT: 800}
+.s	{BACKGROUND-COLOR: #552255;COLOR: #ddddff}
+.t	{BACKGROUND-COLOR: #333366;COLOR: #ddddff}
+.e	{BACKGROUND-COLOR: #333366;COLOR: #ff0000}
+.w	{BACKGROUND-COLOR: #333366;COLOR: #33ff00}
+.b	{BACKGROUND-COLOR: #000060;COLOR: #ddddff}
+.h	{BACKGROUND-COLOR: #006060;COLOR: #ddddff}
+.tsml	{BACKGROUND-COLOR: #333366;COLOR: #ddddff;FONT-SIZE: 8pt}
+.bsml	{BACKGROUND-COLOR: #000060;COLOR: #ddddff;FONT-SIZE: 8pt}
+.hsml	{BACKGROUND-COLOR: #006060;COLOR: #ddddff;FONT-SIZE: 8pt}
+.r	{BACKGROUND-COLOR: #ff0000;COLOR: #000000;FONT-SIZE: 8pt}
+.y	{BACKGROUND-COLOR: #ffd700;COLOR: #000000;FONT-SIZE: 8pt}
+.g	{BACKGROUND-COLOR: #00ff00;COLOR: #000000;FONT-SIZE: 8pt}
+.x	{BACKGROUND-COLOR: #000000;COLOR: #000000;FONT-SIZE: 8pt}
+.u	{BACKGROUND-COLOR: #30d0f0;COLOR: #000000;FONT-SIZE: 8pt}
+.k	{BACKGROUND-COLOR: #cc00cc;COLOR: #000000;FONT-SIZE: 8pt}
+.d	{BACKGROUND-COLOR: #006060;COLOR: #ffffff;FONT-SIZE: 8pt}
+
+
+.caption	{COLOR: #cccc55;FONT-STYLE: italic;FONT-WEIGHT: bold}
+.question	{BACKGROUND-COLOR: darkred;COLOR: whitesmoke}
+.exercise	{BACKGROUND-COLOR: darkgreen;COLOR: snow}
+

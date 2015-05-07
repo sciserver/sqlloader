@@ -1,0 +1,1286 @@
+<keyword>adaptive_moment</keyword>
+<entry>adaptive moments</entry>
+<def>
+A method of measuring the deviation from the PSF of an object shape. These 
+moments are close to optimal for measuring the shapes of faint galaxies, and 
+have been used for weak lensing studies. <algorithm>adaptive</algorithm>
+</def>
+
+<keyword>APO</keyword>
+<entry>APO</entry>
+<def>
+Apache Point Observatory, located in Sunspot, New Mexico. This is the location of the 2.5m SDSS telescope as well as the Photometric Telescope (PT)<glossary>photo_tel</glossary>, as well as other non-SDSS telescopes. The observatory homepage is <a href="http://www.apo.nmsu.edu">http://www.apo.nmsu.edu</a> .
+</def>
+
+<keyword>ARC</keyword>
+<entry>ARC</entry>
+<def>
+Astrophysical Research Consortium.  Body that owns and operates APO<glossary>apo</glossary>.
+</def>
+
+<keyword>asinh</keyword>
+<entry>asinh magnitude</entry>
+<def> 
+Magnitudes within the SDSS are expressed as inverse 
+hyperbolic sine (or "asinh") magnitudes, sometimes referred to informally as <em>luptitudes</em> .
+The transformation from linear flux measurements to asinh magnitudes
+is designed to be virtually identical to the standard astronomical
+magnitude at high signal-to-noise ratio, but to switch over to linear behavior at low S/N and even at negative values of flux,
+where the logarithm in the Pogson magnitude<glossary>mag_pogson</glossary> fails.  Details can be found  in the <a href="http://www.journals.uchicago.edu/AJ/journal/issues/v118n3/990094/990094.html">Lupton et al. 1999 AJ paper</a>. <algorithm>photometry</algorithm>
+</def>
+
+<keyword>astrans</keyword>
+<entry>asTrans file</entry>
+<def>
+FITS binary table with astrometric transformations for every field in a single imaging run. It transforms frame (row,col) coordinates to great circle (mu,nu) coordinates<glossary>great_circle_coords</glossary> for a given inclination. Available in the DAS<glossary>DAS</glossary>.
+</def>
+
+<keyword>Astrda</keyword>
+<entry>AstroDA</entry>
+<def>
+The data acquisition and analysis system used to collect data from the survey telescope cameras.
+</def>
+
+<keyword>Astrom</keyword>
+<entry>Astrom</entry>
+<def>
+The data processing pipeline that maps CCD pixel coordinates to celestial coordinates. The detailed workings of this pipeline are described in the <a href="http://www.journals.uchicago.edu/AJ/journal/issues/v125n3/202156/202156.html">Pier et al. 2003 AJ paper</a>. <algorithm>astrometry</algorithm>
+</def>
+
+<keyword>astrom_chip</keyword>
+<entry>astrometric chip</entry>
+<def>
+The SDSS camera<glossary>camera</glossary> contains 24 2048x400 pixel CCDs (in addition to the 30 2048x2048 photometric CCDs) which are used for astrometry and focus monitoring. Because they are smaller chips, the effective exposure time is only 11 seconds, allowing the survey to observe brighter stars without saturation. These bright star positions are necessary to match to objects present in astrometric catalogs used by the Astrom pipeline<glossary>Astrom</glossary>. For more details on these chips, please see the <a href="http://www.journals.uchicago.edu/AJ/journal/issues/v116n6/980260/980260.html">AJ imaging camera paper (Gunn et al. 1998)</a>.
+</def>
+
+<keyword>astrometry</keyword>
+<entry>astrometry</entry>
+<def>
+The process by which image coordinates (from the CCD data) are mapped to celestial coordinates. <algorithm>astrometry</algorithm>
+</def>
+
+<keyword>astrotools</keyword>
+<entry>Astrotools</entry>
+<def> 
+Software to perform various useful SDSS-related tasks. It is available only to the collaboration.
+</def>
+
+<keyword>atlas_image</keyword>
+<entry>atlas image</entry>
+<def>
+For each detected object<glossary>object</glossary>, the atlas image comprises the pixels that were detected as part of the object in any filter. These are available through the DAS, as a single file for each field.
+</def>
+
+<keyword>best</keyword>
+<entry>Best</entry>
+<def>
+We maintain multiple versions of the SDSS photometric catalogs in our
+database. The <b>Best</b> version contains a snapshot of the catalogs
+with the highest quality data at the time of the data release.
+</def>
+
+<keyword>binned_frame</keyword>
+<entry>binned frame</entry>
+<def>
+Each file is a FITS image for one filter, 512 x 372 pixels, with WCS information. These are the corrected frames<glossary>corrected_frame</glossary> with detected objects removed and binned 4 pixels by 4 pixels. All pixels that are in atlas images<glossary>atlas_image</glossary> are replaced by the background level before binning, with suitable noise added. All of the header parameters from the original image are inherited as well. Available in the DAS<glossary>DAS</glossary>.
+</def>
+
+<keyword>blackbook</keyword>
+<entry>Black Book</entry>
+<def>
+Similar to the <em>Project Book</em>, this document provides a description of the original science goals of the survey, as well as the hardware and software designs, and was the 1996 proposal to NASA. Please keep in mind that it is <em>not</em> updated, so information within it may no longer be current. Nevertheless, it provides an excellent overview of the survey. The Black Book can be found <a href="http://www.astro.princeton.edu/PBOOK/welcome.htm">here</a>.
+</def>
+
+<keyword>boresight</keyword>
+<entry>boresight</entry>
+<def>
+The telescope control computer keeps track
+of a specific point in the telescope focal plane that is called the <b>boresight</b>. The boresight is not fixed in the array but is at one of two
+places for the two strips<glossary>strip</glossary> that compose a stripe<glossary>stripe</glossary>. It is the boresight that will track great circles<glossary>great_circle_coords</glossary>. Technically, the boresight tracks a path that is a great circle in J2000 coordinates as viewed from the solar system barycenter.
+</def>
+
+<keyword>calibration</keyword>
+<entry>calibration</entry>
+<def>
+The process by which the photometric and spectroscopic observations are calibrated. The goal of calibration is to take the digital camera readouts and convert them to measured quantities, like fluxes. The details of these procedures are described for photometry<algorithm>photometry</algorithm> and spectrophotometry<algorithm>spectrophotometry</algorithm>.
+</def>
+
+<keyword>camcol</keyword>
+<entry>camcol</entry>
+<def>
+A Camcol is the output of one camera column as part of a Run<glossary>run</glossary>. Therefore, 1 Camcol = 1/6 of a Run. It is also a portion of a scanline<glossary>scanline</glossary>.
+</def>
+
+<keyword>camera</keyword>
+<entry>camera</entry>
+<def>
+The instrument used for imaging. It consists of 30 photometric and 24 astrometric CCDs.  The camera is a mosaic of 54 CCD detectors in the focal plane, 30 large devices arranged in 6 columns of 5 each and 24 smaller devices around the periphery. The camera is described in detail in the <a href="http://www.journals.uchicago.edu/AJ/journal/issues/v116n6/980260/980260.html">imaging camera paper (Gunn et al. 1998)</a>.
+</def>
+
+
+<keyword>CAS</keyword>
+<entry>CAS (Catalog Archive Server)</entry>
+<def>
+The <I>Catalog Archive Server</I> contains the measured parameters from all objects in the imaging survey and the spectroscopic survey. 
+</def>
+
+<keyword>central_meridian</keyword>
+<entry>central meridian</entry>
+<def>
+The meridian which passes through the center of the survey area, 12h 20m , defines the central meridian of a scan. The great
+circle perpendicular to it passing through the survey center at dec=32.8deg is the survey equator<glossary>survey_equator</glossary>.
+</def> 
+
+<keyword>child</keyword>
+<entry>child</entry>
+<def>
+A product of the deblending<glossary>deblend</glossary> process. When two objects are near each other on the sky, their images may appear merged. The deblender tries to split this merged image; the resulting sub-images are called children. The initial merged image is called a parent<glossary>parent</glossary>. <algorithm>deblend</algorithm>
+</def>
+
+<keyword>chunk</keyword>
+<entry>chunk</entry>
+<def>
+A <i>primar (resolved)</i>chunk is composed of a set of touching but non-overlapping primary
+segments<glossary>segment</glossary> (or parts of segments) which fills a
+"chunk" of a stave<glossary>stave</glossary>, and is therefore bounded on
+the east and west by lines of constant mu<glossary>mu</glossary>, and
+north-south by lines of constant eta<glossary>eta</glossary> (if in the
+North). Southern chunks have no eta boundary applied.  A chunk may
+also have a lambda<glossary>lambda</glossary> cut if it is at the end of
+the survey region for that stripe. Primary chunks do not overlap, so the union
+of all existing chunks represents the unique sky coverage for the
+survey at any given time. Note that
+the bounds on chunks, if using mu/eta, are a mix of survey coordinates<glossary>survey_coords</glossary> and great circle coordinates<glossary>great_circle_coords</glossary>. <b>Note:</b>
+The term chunk has sometimes been used to describe an area of sky that
+has had tiling<glossary>tiling</glossary> run on it. This is properly
+called a TileRun<glossary>tile_run</glossary>.  In general chunks contain overlapping areas which are 
+counted multiple times unless the <i>primary</i> or <i>resolved</i> area is indicated.
+</def>
+
+<keyword>classification</keyword>
+<entry>classification</entry>
+<def>
+The method by which we assign a type (star or galaxy) to each object<glossary>object</glossary>. <algorithm>classify</algorithm>
+</def>
+
+<keyword>cloud_cam</keyword>
+<entry>Cloud Camera</entry>
+<def>
+A camera at the mountain that takes continuous pictures
+of the sky at 10 microns, a wavelength at which clouds emit.
+It is a sensitive measure of the photometricity of the sky as a
+function of time.
+</def> 
+
+<keyword>CMM</keyword>
+<entry>CMM</entry>
+<def>
+Coordinate Measuring Machine, a device used to measure the positions of holes in the fiber<glossary>fiber</glossary> mount plates<glossary>plate</glossary> for the spectrographic survey.
+</def>
+
+<keyword>convex</keyword>
+<entry>convex</entry>
+<def>
+A convex is the intersection of one or more circles, with a depth (the
+number of circles involved).  If we have two intersection circles, A and B,
+then both (A) and (B) are a convex of depth 1, their intersection (A) (B) is
+also a convex, but of depth 2.  We call these simple convexes <i>wedges</i>
+<algorithm>sector</algorithm>
+</def>
+
+<keyword>coordinates</keyword>
+<entry>coordinates</entry>
+<def>
+The SDSS uses three different coordinate systems. Of course, we use standard astronomical right ascension (RA) and declination (Dec), J2000. There is also the <em>survey coordinate system</em><glossary>survey_coords</glossary>, with coordinates lambda<glossary>lambda</glossary>  and eta<glossary>eta</glossary>. This is just a rotation of the usual RA, Dec system. Finally, there is the <em>great circle coordinate system</em><glossary>great_circle_coords</glossary>, which is actually a separate coordinate system for each stripe<glossary>stripe</glossary>. The coordinates of this system are mu<glossary>mu</glossary> and nu<glossary>nu</glossary>.
+</def> 
+
+<keyword>corrected_frame</keyword>
+<entry>corrected frame</entry>
+<def>
+Each corrected frame is a FITS image for one filter, 2048 columns by 1489 rows, with row number increasing in the scan direction. These are the imaging frames with flat-field, bias, cosmic-ray, and pixel-defect corrections applied. A raw image contains 1361 rows, and a corrected frame has the first 128 rows of the following corrected frame appended to it. The pixels subtend 0".396 square on the sky. Header information using the world coordinate system (WCS)<glossary>wcs</glossary> allows standard astronomical FITS tools to convert pixel position to right ascension and declination. Available in the DAS<glossary>DAS</glossary>.
+</def>
+
+<keyword>CVS</keyword>
+<entry>CVS</entry>
+<def>
+The Concurrent Versions System, used by SDSS software and website developers to maintain versioning control. An open source project available at http://www.cvshome.org/ .
+</def>
+
+<keyword>cx</keyword>
+<entry>cx/cy/cz</entry>
+<def>
+The coordinates on the unit sphere utilized by the HTM<glossary>htm</glossary> code; these are stored in the database.
+</def>
+
+<keyword>DAS</keyword>
+<entry>DAS</entry>
+<def> 
+The Data Archive Server, which provides access to the imaging and spectroscopic products of the survey. The public DAS is located at http://das.sdss.org/.
+</def>
+
+<keyword>data_model</keyword>
+<entry>data model</entry>
+<def>
+The description of the structure and organization of the data in a
+database. The data model tells you all the tables names, their contents,
+and how they are related to, and linked with, one another. The actual
+implementation of a data model is called the database schema. For the
+flat files available in the DAS<glossary>DAS</glossary>, the data model links
+are available in the DAS User Guide.
+</def>
+
+<keyword>deblend</keyword>
+<entry>deblend</entry>
+<def>
+Deblending is the process by which overlapping objects in images are separated. The frames pipeline<glossary>frames_pipeline</glossary> attempts to determine whether each object actually consists of
+more than one object projected on the sky and, if so, to deblend such a parent<glossary>parent</glossary> object into its constituent children<glossary>child</glossary>, self-consistently across the bands (thus, all children have measurements in all bands). For details on how this works, and what flags<glossary>flag</glossary> this procedure may set, read this<algorithm>deblend</algorithm>.
+</def>
+
+<keyword>Dervish</keyword>
+<entry>Dervish</entry>
+<def>
+An FNAL<glossary>FNAL</glossary> software toolkit used by many of the data acquisition and reduction systems.
+</def> 
+
+<keyword>dev</keyword>
+<entry>deVaucouleurs</entry>
+<def>
+Also know as the r<sup>1/4</sup> law, it describes the radial light profile of a typical elliptical galaxy. Defined as<br><b>I(r) = I<sub>0</sub>exp{-7.67[(r/r<sub>e</sub>)<sup>1/4</sup>]}</b>. An elliptical version of this profile is fit to every detected object, yielding the <code>deV</code> parameters. <algorithm>mag_model</algorithm>
+</def> 
+
+<keyword>DR1</keyword>
+<entry>DR1</entry>
+<def>
+Data Release 1. The first major release of SDSS data to the public, occurring in March, 2003. A small portion of the data was released earlier as part of the Early Data Release (EDR)<glossary>EDR</glossary>.
+</def>
+
+<keyword>EDR</keyword>
+<entry>EDR</entry>
+<def>
+Early Data Release. The first public release of SDSS data occurred in June of 2001. This current release (DR1) includes the area present in the EDR, and more. The data has also been reprocessed with improved software. The EDR is described in an <a href="http://www.journals.uchicago.edu/AJ/journal/issues/v123n1/201415/201415.html">AJ paper</a>.
+</def>
+
+<keyword>ellipticity</keyword>
+<entry>ellipticity</entry>
+<def>
+Measures how elliptical an object is. In the SDSS, we have numerous methods to measure this, including the Stokes parameters<glossary>stokes</glossary>, the adaptive moments<glossary>adaptive_moment</glossary>, the De Vaucouleurs profiles<glossary>dev</glossary>, the exponential profiles<glossary>exp</glossary>, and the isophotal parameters. 
+</def>
+
+<keyword>eta</keyword>
+<entry>eta</entry>
+<def>
+Latitude in the survey coordinate system<glossary>survey_coords</glossary>. Eta is the angle between the survey equator and the great circle passing through the point perpendicular to the survey meridian, positive to the north.
+Constant latitude curves are great circles.
+</def>
+
+<keyword>exp</keyword>
+<entry>exponential model</entry>
+<def>
+The radial light distribution of a disk galaxy can often be fit by an exponential profile:<br>
+<b>I(r) = I<sub>0</sub>exp(-1.68r/r<sub>e</sub>)</b><br>
+The number 1.68 is chosen so that the
+model radius is a half-light radius. An elliptical version of
+this profile is fit to every detected object, yielding the <code>exp</code> parameters.<algorithm>mag_model</algorithm>
+</def> 
+
+<keyword>false</keyword>
+<entry>False color pipeline</entry>
+<def>
+A pipeline to produce 3-color JPG files of zoomed-down SDSS images.
+</def>  
+
+<keyword>family</keyword>
+<entry>family objects</entry>
+<def>
+These are objects that are generated when photometric objects are neither
+primary<glossary>primary</glossary> nor
+secondary<glossary>secondary</glossary> survey objects but a composite object 
+that has been deblended or the part of an object that has been
+deblended<glossary>deblend</glossary> wrongfully (like the spiral arms of a
+galaxy). These objects are kept to track how the deblender is working.
+</def>
+
+<keyword>fiber</keyword>
+<entry>fiber</entry>
+<def>
+The SDSS spectrograph uses optical fibers to direct the light from individual objects to the slithead. Each object is assigned a corresponding <b><font face="arial black, monaco, chicago">fiberID</b></font>. The fibers are 3 arcsec in diameter in the source plane. Each fiber is surrounded by a large sheath which prevents any pair of fibers from being placed closer than 55 arcsec on the same plate<glossary>plate</glossary>.
+</def>
+
+
+<keyword>fiberMag</keyword>
+<entry>fiberMag</entry>
+<def>
+The fiber magnitude.<glossary>mag_fiber</glossary>.
+</def> 
+
+<keyword>field</keyword>
+<entry>field</entry>
+<def>
+A field is a part of a camcol<glossary>camcol</glossary> that is processed by the Photo pipeline<glossary>photo</glossary> at one time. Fields are 2048x1489 pixels; a field consists of the frames<glossary>frame</glossary> in the 5 filters for the same part of the sky. Fields overlap each other by 128 rows; primaries<glossary>primary</glossary> are decided when Chunks<glossary>chunk</glossary> are resolved<glossary>resolve</glossary> (using objects between rows 64 and1425 as primaries). A field at the edge of a Chunk may in fact be included in 2 (or more) Chunks.
+</def>
+
+<keyword>filter</keyword>
+<entry>filter</entry>
+<def>
+A piece of material used to allow only specific colors (or wavelengths) of light to pass through. The SDSS uses five filters: <em>u,g,r,i,z</em>. However, defining standards and absolute calibration for these filters has been difficult. Please read the <a href="http://www.sdss.org/dr1/instruments/imager/index.html">Camera Page</a> for details.
+</def> 
+
+<keyword>FITS</keyword>
+<entry>FITS</entry>
+<def>
+The Flexible Image Transport System, a standard method of storing astonomical data. The FITS format has a home page at <a href="http://fits.gsfc.nasa.gov/">fits.gsfc.nasa.gov</a>.
+</def>
+
+<keyword>flag</keyword>
+<entry>flag</entry>
+<def>
+A bitmask used in the database to specify various properties of an object. There are many flags in the SDSS catalogs which tell the user extremely important and useful pieces of information, such as whether the object was deblended<glossary>deblend</glossary> or saturated, for instance. There are status flags set by PSP, and by survey operations, on a frame-by-frame basis, describing the quality of the PSF, and the quality of the data overall.  Each object is given status flags that sort out overlaps.  And the spectra have flags at two levels as well: pixel-by-pixel flags, and warning flags accompanying the redshifts and classification to indicate trouble.
+<algorithm>flags</algorithm>
+</def>
+
+<keyword>FNAL</keyword>
+<entry>FNAL</entry>
+<def>
+Fermi National Accelerator Laboratory, one of the participating institutions in SDSS. Their homepage is <a href="http://www.fnal.gov">here</a>.
+</def>
+
+<keyword>footprint</keyword>
+<entry>footprint</entry>
+<def>
+The area on the sky covered by the SDSS. The footprint for a given data
+release is described on the Sky Coverage page at <a
+href="http://www.sdss.org/" target="new">the main SDSS site</a> (click
+on the latest data release page).
+</def>
+
+<keyword>fpAtlas</keyword>
+<entry>fpAtlas file</entry>
+<def>
+A FITS binary table containing the atlas images<glossary>atlas_image</glossary> for all objects detected in all five filters in a single field<glossary>field</glossary>. Requires special software to decode into individual FITS images for each object. The FITS images are available in the DAS<glossary>DAS</glossary>.
+</def>
+
+<keyword>fpBin</keyword>
+<entry>fpBin file</entry>
+<def>
+See binned frame<glossary>binned_frame</glossary>.
+</def>
+
+<keyword>fpC</keyword>
+<entry>fpC file</entry>
+<def>
+See corrected frame<glossary>corrected_frame</glossary>.
+</def>
+
+<keyword>fpFieldStat</keyword>
+<entry>fpFieldStat file</entry>
+<def>
+A binary FITS table containing a statistical summary of the results of the frames pipeline<glossary>frames_pipeline</glossary> for one field<glossary>field</glossary> for a single frames pipeline run. This information is also found in the Field table in the CAS<glossary>CAS</glossary> database. Available in the DAS<glossary>DAS</glossary>.
+</def>
+
+<keyword>fpM</keyword>
+<entry>fpM file</entry>
+<def>
+See mask frame<glossary>mask_frame</glossary>.
+</def>
+
+<keyword>fpObjc</keyword>
+<entry>fpObjc file</entry>
+<def>
+These are FITS binary tables containing catalogs of detected objects output by the frames pipeline<glossary>frames_pipeline</glossary>. These are <em>uncalibrated</em>, as opposed to the tsObj<glossary>tsobj</glossary> files, with no targeting<glossary>target</glossary> information. Available in the DAS<glossary>DAS</glossary>.
+</def>
+
+<keyword>frame</keyword>
+<entry>frame</entry>
+<def>
+The data stream from a single CCD in a scanline is cut into a series of frames which measure 2048 x 1489 pixels and overlap 10% with the adjacent frame. The frames in the 5 filters for the same part of the sky are called a field<glossary>field</glossary>.
+</def> 
+
+<keyword>frames_pipeline</keyword>
+<entry>frames pipeline</entry>
+<def>
+In this pipeline, the images are  bias-subtracted and flat-fielded, and bad columns, cosmic rays, and bleed trails are interpolated over. This yields corrected frames<glossary>corrected_frame</glossary>. Then objects are found by running a PSF-matched filter over the image, and matched up between the five frames making up a field.  A deblender<glossary>deblend</glossary> is run to resolve overlaps, and the properties of each object are written to the fpObjc<glossary>fpObjc</glossary> files. Atlas images are written to the fpAtlas<glossary>fpAtlas</glossary> files.
+</def>
+
+<keyword>fundamental_standard</keyword>
+<entry>fundamental standard</entry>
+<def>
+The photometry of the primary standard stars
+is ultimately tied to the SED of the star BD 17 +4708, which is the
+fundamental standard for the SDSS photometric system.  See the Smith et al. 2002 AJ paper for more details. 
+</def>
+
+<keyword>gnats</keyword>
+<entry>GNATS</entry>
+<def>
+The system used to report and track bugs and issues with SDSS hardware and software; for collaboration use only.
+</def> 
+
+<keyword>great_circle_coords</keyword>
+<entry>great circle coordinates</entry>
+<def>
+One of the two main coordinate systems 
+utilized by the SDSS. In this system, mu<glossary>mu</glossary> and nu<glossary>nu</glossary> are spherical coordinates (corresponding to ra and dec) in a system whose equator is along the center of the stripe<glossary>stripe</glossary> in question. The stripes of the survey are great circles which all cross at (RA, Dec) = (95, 0). The stripes are defined by their inclination with respect to the equator, and are indexed by integers <em>n</em> such that the inclination of a stripe is -25 + 2.5<em>n</em>. Thus, stripe <em>n</em>=10 corresponds to the Equator. Astrotools<glossary>astrotools</glossary> provides utilities to convert to and from these, such as GSCToSurvey. The design is that the area covered by the imaging on a given stripe (the so-called OK_SCANLINE area in the north) is a 2.5 degree wide rectangle centered on nu=0 in Great Circle coordinates.
+</def> 
+
+<keyword>htm</keyword>
+<entry>HTM</entry>
+<def>
+The Hierarchical Triangular Mesh (HTM) is a partitioning scheme to divide the surface of the unit sphere into spherical triangles. It is a hierarchical scheme and the subdivisions have not exactly, but roughly equal areas. HTM is used to index the coordinates in the object databases for faster querying speeds. For more details, and downloadable software, see the HTM Website at http://www.sdss.jhu.edu/htm/.
+</def> 
+
+<keyword>hoggpt</keyword>
+<entry>HoggPT</entry>
+<def>
+A program which runs on the mountain, which uses information
+from the photometric telescope<glossary>photo_tel</glossary> and the cloud camera<glossary>cloud_cam</glossary> to determine the
+photometricity of a given night.  It was written by David Hogg and
+colleagues, thus its name.
+</def>
+
+<keyword>hole</keyword>
+<entry>hole</entry>
+<def>
+A field<glossary>field</glossary> or set of fields which is missing from the data, either because of non-photometric conditions, tracking problems, very poor seeing, or simply because that area has not been surveyed yet. This is encoded in the status flags.<algorithm>flags</algorithm>
+</def>
+
+<keyword>IOP</keyword>
+<entry>IOP</entry>
+<def>
+Imaging Observers Program. The software that runs the imaging camera<glossary>camera</glossary> on the survey telescope.
+</def> 
+
+<keyword>JHU</keyword>
+<entry>JHU</entry>
+<def>
+Johns Hopkins University, one of the participating institutions in SDSS. The SDSS JHU homepage is <a href="http://www.sdss.jhu.edu">www.sdss.jhu.edu</a>.
+</def>
+
+<keyword>JPG</keyword>
+<entry>JPG</entry>
+<def>
+Japan Participation Group, one of the participating institutions in SDSS. Their homepage is <a href="http://indus.astron.s.u-tokyo.ac.jp/works/SDSS/sdss.html">here</a>.
+</def>
+
+<keyword>lambda</keyword>
+<entry>lambda</entry>
+<def>
+One of the coordinates of the survey coordinate system<glossary>survey_coords</glossary>. The stripe longitude lambda is measured from the survey
+central meridian positive to the east along the great circles perpendicular to that meridian. Constant longitude curves are circles centered on the survey poles<glossary>poles</glossary>.
+</def>
+
+<keyword>luptitude</keyword>
+<entry>luptitude</entry>
+<def>
+An informal name for the asinh magnitude<glossary>asinh</glossary>.
+</def>
+
+<keyword>maggie</keyword>
+<entry>maggie</entry>
+<def>
+A <em>maggie</em> is a linear
+measure of flux; one maggie has an AB magnitude of 0 (thus a surface
+brightness of 20 mag/square arcsec corresponds to 10<sup>-8</sup> maggies
+per square arcsec). This unit is used for object radial profiles<glossary>profile</glossary>, where we provide the azimuthally averaged object surface brightness in a series of annuli.
+</def>
+
+<keyword>mag_fiber</keyword>
+<entry>magnitude, fiber</entry>
+<def>
+The flux contained within the aperture of a spectroscopic fiber<glossary>fiber</glossary>
+(3" in diameter) is calculated in each band and stored in <b><font face="arial black, monaco, chicago">
+fiberMag</b></font>.<algorithm>mag_fiber</algorithm>
+</def>
+
+<keyword>mag_model</keyword>
+<entry>magnitude, model</entry>
+<def>
+Just as the PSF magnitudes<glossary>mag_psf</glossary> are optimal measures of the fluxes of
+stars, the optimal measure of the flux of a galaxy would use a matched galaxy
+model.  With this in mind, the code fits two models to the
+two-dimensional image of each object in each band:<br>
+1. a pure deVaucouleurs profile, and<br>
+2. a pure exponential profile.<br>
+The best-fit model in the
+  r-band is fit to the other four bands; the results are stored as the
+  model magnitudes. 
+Details, <font color="red"> including a very important warning</font>, can be found here<algorithm>mag_model</algorithm>.
+</def>
+
+<keyword>mag_petro</keyword>
+<entry>magnitude, Petrosian</entry>
+<def>
+Stored as <b><font face="arial black, monaco, chicago">petroMag</b></font>. For galaxy photometry, measuring flux is more difficult than for stars, because galaxies do not all have the same radial surface
+brightness profile, and have no sharp edges.  In order to avoid
+biases, we wish to measure a constant fraction of the total light,
+independent of the position and distance of the object. To satisfy these
+requirements, the SDSS has adopted a modified form of the
+Petrosian (1976) system, measuring galaxy fluxes within a circular
+aperture whose radius is defined by the shape of the azimuthally
+averaged light profile.<algorithm>mag_petro</algorithm>
+</def>
+
+<keyword>mag_pogson</keyword>
+<entry>magnitude, Pogson</entry>
+<def>
+The Pogson magnitude is the standard astronomical magnitude system, where one 
+increment in magnitude is an increase in brightness by the fifth root of 100.
+A star of 1st magnitude is therefore 100 times as bright as a star of 6th magnitude. Mathematically this is expressed as<br>
+<code>M1 - M2 = -2.5log(F1/F2)</code><br>
+where M1 and M2 are the magnitudes of two objects, and F1 and F2 are their luminous fluxes.
+</def>
+
+<keyword>mag_psf</keyword>
+<entry>magnitude, PSF</entry>
+<def>
+Stored as <b><font face="arial black, monaco, chicago">psfMag</b></font>. For isolated stars, which are well-described by the point spread function 
+(PSF), the optimal
+measure of the total flux is determined by fitting a PSF model to the
+object. <algorithm>mag_psf</algorithm>
+</def>
+
+<keyword>mask</keyword>
+<entry>mask</entry>
+<def>
+Need definition
+</def>
+
+<keyword>mask_frame</keyword>
+<entry>mask frame</entry>
+<def>
+Each file is a binary FITS table for one filter. Each row of the table describes a set of pixels in the corrected frame, using mask values described in Table 8 of the EDR paper. Available in the DAS<glossary>DAS</glossary>.
+</def>
+
+<keyword>MAST</keyword>
+<entry>MAST</entry>
+<def>
+The Multimission Archive at Space Telescope. Data from a variety of space missions and ground-based telescopes is provided, including the Sloan EDR<glossary>EDR</glossary>.
+</def> 
+
+<keyword>modelMag</keyword>
+<entry>modelMag</entry>
+<def>
+The model magnitude. See magnitude, model<glossary>mag_model</glossary>.
+</def>
+
+<keyword>monitor</keyword>
+<entry>Monitor Telescope (MT)</entry>
+<def>
+The previous incarnation of the Photometric Telescope (PT)<glossary>photo_tel</glossary>.
+</def>
+
+<keyword>MT_field</keyword>
+<entry>MT_field</entry>
+<def>
+See secondary patch<glossary>secondary_patch</glossary>.
+</def>
+
+<keyword>mtpipe</keyword>
+<entry>mtpipe</entry>
+<def>
+The pipeline for processing data from the Photometric Telescope<glossary>photo_tel</glossary>. A description can be found in the <a href="http://www.sdss.org/dr1/algorithms/EDRpaper.html#sw-photocal-mtpipe">appropriate section of the EDR paper</a>.
+</def>
+ 
+<keyword>mu</keyword>
+<entry>mu</entry>
+<def>
+One of the coordinates in the SDSS great circle coordinate system<glossary>great_circle_coords</glossary>. Mu corresponds to RA, or longitude.
+</def> 
+
+<keyword>nfcalib</keyword>
+<entry>nfCalib</entry>
+<def>
+The pipeline that uses the results of MTPipe<glossary>mtpipe</glossary> and 
+astrom<glossary>astrom</glossary> to apply the photometric
+   and astrometric calibration to each object in the imaging data.
+</def>  
+
+<keyword>nu</keyword>
+<entry>nu</entry>
+<def>
+One of the coordinates in the SDSS great circle coordinate system<glossary>great_circle_coords</glossary>. Nu corresponds to Dec, or latitude.
+</def> 
+
+<keyword>object</keyword>
+<entry>object</entry>
+<def>
+Enumerates photometric objects within a given field<glossary>field</glossary>. Thus, multiple fields may have objects with the same object number.
+</def>
+
+<keyword>objectivity</keyword>
+<entry>Objectivity</entry>
+<def>
+A brand of object-oriented database used to initially serve the EDR<glossary>EDR</glossary> and to run OpDB<glossary>OpDB</glossary>.
+</def>
+
+
+<keyword>ObjID</keyword>
+<entry>ObjID</entry>
+<def>
+The long object identification, which is a 
+bit-encoded integer of run<glossary>run</glossary>,rerun<glossary>rerun</glossary>,
+camcol<glossary>camcol</glossary>, field<glossary>field</glossary>, object<glossary>object</glossary>.  When the data is reprocessed (rerun), this number will change! <b>IMPORTANT NOTE:</b> For spectroscopic objects, there are two possible choices for the matching photometric measurement: <b><font face="arial black, monaco, chicago">TargetObjID</b></font> is the photometric object identification number of the corresponding photometric object <em>when targeting<glossary>target</glossary> was run</em>, and  <b><font face="arial black, monaco, chicago">BestObjID</b></font>, which points to the best<glossary>best</glossary> imaging and processing of the photometry.
+</def>
+
+<keyword>OpDB</keyword>
+<entry>OpDB</entry>
+<def>
+The Operations Database. This database at FNAL<glossary>FNAL</glossary> keeps track of all operational aspects of the survey. It is not available to the public.
+</def>
+
+<keyword>par_file</keyword>
+<entry>par file</entry>
+<def>
+Also known as a Yanny parameter file. This is a simple ascii file format developed to store lists of parameters for the SDSS, such as the survey coverage description.
+</def> 
+
+<keyword>parent</keyword>
+<entry>parent</entry>
+<def>
+A product of the deblending<glossary>deblend</glossary> process. When two objects are near each other on the sky, their images may appear merged. The deblender tries to split this merged image; the initial merged image is called a parent, while the resulting sub-images are called children<glossary>child</glossary>.<algorithm>deblend</algorithm>
+</def>
+
+<keyword>particip</keyword>
+<entry>participating institution</entry>
+<def>
+One of the institutions involved in the survey. These institutions have contributed hardware, software, manpower, or financial support to the survey, and thus have pre-public access to data.
+</def>
+
+<entry>petroMag</entry>
+<def>
+The Petrosian magnitude. See Magnitude, Petrosian<glossary>mag_petro</glossary>.
+</def>
+
+<keyword>photo</keyword>
+<entry>Photometric Pipeline (<code>Photo</code>)</entry>
+<def>
+A series of linked pipelines (Serial Stamp Collecting pipeline, SSC<glossary>ssc</glossary>; Postage Stamp Pipeline, PSP<glossary>psp</glossary>, and
+ Frames<glossary>frames_pipeline</glossary>) which analyze the raw image data, including bias
+   subtraction, sky and PSF determination, flat-fielding, and finding
+   and measuring the properties of objects.  The astrometric and
+   photometric calibration is carried out with the astrometric
+   pipeline<glossary>astrom</glossary>, and nfCalib<glossary>nfcalib</glossary>.
+</def> 
+
+<keyword>photo_tel</keyword>
+<entry>Photometric Telescope</entry>
+<def>
+Also abbreviated PT. An  0.5-meter telescope used for monitoring subtle changes in the atmosphere during the course of the survey. Its principal function is to aid astronomers in accurately calibrating an object's brightness, as measured with the main telescope.
+</def>
+
+<keyword>plate</keyword>
+<entry>plate</entry>
+<def>
+SDSS has the largest multi-fiber spectrograph in operation in the world, observing 640 objects simultaneously. This is done by drilling holes in round aluminum plates at the positions of objects of interest, and plugging optical fibers<glossary>fiber</glossary> into each hole.
+</def>
+
+<keyword>plate_map</keyword>
+<entry>plate mapper</entry>
+<def>
+An instrument that maps which plugged fiber<glossary>fiber</glossary> corresponds to which target object. The 640 fibers of the spectrograph<glossary>spectrograph</glossary> are placed by hand without regard as to which fiber corresponds to which position. An automated fiber mapper resolves this object-to-fiber match-up by scanning lasers across the terminal ends of the fibers and observing where they "light up" on the focal plane.
+</def> 
+
+<keyword>psf</keyword>
+<entry>Point Spread Function (PSF)</entry>
+<def>
+The detailed shape of the response of the
+telescope plus instrument to a star.  It varies with position, filter,
+and time, due to changes in the atmosphere and the optics of the
+telescope.  It is calculated by the PSP<glossary>psp</glossary>.
+</def>
+
+<keyword>poles</keyword>
+<entry>poles</entry>
+<def>
+need definition
+</def>
+
+<keyword>psp</keyword>
+<entry>Postage Stamp pipeline (PSP)</entry>
+<def>
+This pipeline determines for a run<glossary>run</glossary>
+   the background sky, the flat-field, and the spatially varying Point
+   Spread Function (PSF) in each chip, all of which will be used by
+   the Frames pipeline<glossary>frames_pipeline</glossary>.
+</def>
+
+<keyword>primary</keyword>
+<entry>Primary</entry>
+<def>
+The "main" observation of an object. Because there are overlaps at many levels of the imaging (runs<glossary>run</glossary>, stripes<glossary>stripe</glossary>), an object may be observed two or more times. Whether or not a specific observation of an object is the primary is 
+decided when chunks<glossary>chunk</glossary> are resolved<glossary>resolve</glossary>. Whether an object is primary or not depends on a large number of factors.<algorithm>resolve</algorithm>
+</def>
+
+
+<keyword>primary_standard</keyword>
+<entry>primary standard</entry>
+<def>
+One of the 158 stars on the SDSS photometric
+  system that is observed by the PT to measure the extinction of a
+  given night, and which is used to calibrate the magnitudes of the
+  secondary standards (qv).  The primary standard system is described
+  in the <a href="http://www.journals.uchicago.edu/AJ/journal/issues/v123n4/201445/201445.html">Smith et al. 2002 AJ paper</a>.
+</def>
+
+<keyword>profile</keyword>
+<entry>profile</entry>
+<def>
+An azimuthally-averaged radial
+surface brightness profile. In the catalogs, it is given as the
+average surface brightness in a series of annuli.  This quantity is in 
+units of maggies<glossary>maggie</glossary> per square arcsec. The number of annuli for which there is a
+measurable signal is listed as <b><font face="arial black, monaco, chicago"> nprof</b></font>, the mean surface
+brightness is listed as <b><font face="arial black, monaco, chicago"> profMean</b></font>, and the error is listed as
+<b><font face="arial black, monaco, chicago"> profErr</b></font>.  This error includes both photon noise, and the
+small-scale "bumpiness" in the counts as a function of azimuthal
+angle.
+<br>
+When converting the <b><font face="arial black, monaco, chicago">profMean</b></font> values to a local surface
+brightness, it is <b>not</b> the best approach to assign the mean
+surface brightness to some radius within the annulus and then linearly
+interpolate between radial bins.  Do not use smoothing
+splines, as they will not go through the points in the cumulative
+profile and thus (obviously) will not conserve flux. What frames pipeline<glossary>frames_pipeline</glossary>
+does, e.g., in determining the Petrosian ratio<glossary>mag_petro</glossary>, is to fit a taut spline to the
+<em>cumulative</em> profile and then differentiate that spline fit,
+after transforming both the radii and cumulative profiles with asinh
+functions.  We recommend doing the same here.
+</def>
+
+<keyword>psField</keyword>
+<entry>psField file</entry>
+<def>
+A FITS binary table with preliminary photometric calibration, as well as final point-spread-function fit, for a single field<glossary>field</glossary> in an imaging run<glossary>run</glossary>. Available in the DAS<glossary>DAS</glossary>.
+</def>
+
+
+<keyword>psfMag</keyword>
+<entry>psfMag</entry>
+<def>
+The PSF magnitude. See Magnitude, PSF<glossary>mag_psf</glossary>.
+</def>
+
+
+<keyword>QA</keyword>
+<entry>Quality Assurance (QA)</entry>
+<def>
+Generally speaking, the process by which data
+are confirmed to be of survey quality.  Each pipeline carries out QA,
+whose results are available for examination. After
+the imaging data are calibrated, they are run through a comprehensive
+set of tests (runQA) that confirm that the various photometric
+measures are consistent, and that, e.g., the Zhed point<glossary>zhed</glossary> is
+well-behaved.  Overlap QA looks for consistency in the photometry and
+astrometry of objects in overlaps between adjacent scanlines<glossary>scanline</glossary> and stripes<glossary>stripe</glossary>.
+</def> 
+
+<keyword>QA_hole</keyword>
+<entry>QA hole</entry>
+<def>
+need definition
+</def>
+
+
+<keyword>reconst</keyword>
+<entry>Reconstructed Frame</entry>
+<def>
+Images of SDSS fields constructed by "pasting" atlas image<glossary>atlas_image</glossary> cutouts into the field<glossary>field</glossary> and filling the rest of the image with simulated sky noise.</def> 
+
+<keyword>redden</keyword>
+<entry>reddening</entry>
+<def>
+Reddening corrections in magnitudes at the position of each object, called
+<b><font face="arial black, monaco, chicago">extinction</b></font> in the database, are computed following Schlegel, Finkbeiner & Davis (1998).  These
+corrections are <em><b>not</em></b> applied to the magnitudes in the 
+databases.
+Conversions from <em>E(B-V)</em> to total extinction <em>A<sub>lambda</sub></em>, assuming a
+<em>z=0</em> elliptical galaxy spectral energy distribution, are
+tabulated in Table 22 of the EDR Paper.
+</def>
+
+<keyword>region</keyword>
+<entry>Region</entry>
+<def>
+A region is the union of convex<glossary>convex</glossary> areas.<algorithm>sector</algorithm>
+</def>
+
+<keyword>rerun</keyword>
+<entry>rerun</entry>
+<def>
+A reprocessing of an imaging run<glossary>run</glossary>. The underlying imaging data is the same, just the software version and calibration may have changed.
+</def>
+
+<keyword>resolve</keyword>
+<entry>resolve</entry>
+<def>
+A term describing the assignments of subsets of data (fields<glossary>field</glossary>, segments<glossary>segment</glossary>, runs<glossary>run</glossary>) to fill a chunk<glossary>chunk</glossary>. A chunk is "resolved" when there is sufficient data to fill a contiguous length of a stripe<glossary>stripe</glossary>. At that time, decisions are made on the best data to use (seeing, photometric conditions) to fill the desired area. A chunk can be resolved multiple times, as new data is acquired or data is reprocessed. This is why we now have multiple snapshots of the data in the database (see Target<glossary>target</glossary> and Best<glossary>best</glossary>).
+</def>
+ 
+<keyword>run</keyword>
+<entry>Run</entry>
+<def> 
+A Run is just a length of a strip<glossary>strip</glossary> observed in a single contiguous observing pass scan<glossary>scan</glossary>, bounded by lines of mu<glossary>mu</glossary> and nu<glossary>nu</glossary>. A strip covers a great circle region from pole to pole; this cannot be observed in one pass. The fraction of a strip observed at one time (limited by observing conditions) is a Run. Runs can (and usually do) overlap at the ends. Like strips, it takes a pair of runs to fill in a length of a stripe<glossary>stripe</glossary>.  This is why you may read about data taken from "Runs 752/756" or some similar terminology. However, each individual run does contain 6 camcols<glossary>camcol</glossary> spanning the same range of nu, but not delimited by eta<glossary>eta</glossary>. These run pairs might not have the same starting and ending nu<glossary>nu</glossary> coordinates.
+</def>
+
+<keyword>scanline</keyword>
+<entry>scanline</entry>
+<def>
+A subdivision of a strip<glossary>strip</glossary>. Each strip is covered by 6 "scanlines".  Scanlines are defined in
+great circle coordinates<glossary>great_circle_coords</glossary>. The great circle coordinate
+system is different for each strip, and is defined by setting the
+equator of the coordinate system to be the center line of constant eta
+for the stripe<glossary>stripe</glossary> to which the strip belongs.  A scanline is then bounded on the top and bottom by
+lines of constant nu<glossary>nu</glossary>, with no east or west boundaries. 
+Scanlines touch but don't overlap, and thus are a unique mapping on the
+sky for that stripe only.  Scanlines for different stripes DO overlap. This is because the scanlines come from the camera columns, or camcols<glossary>camcol</glossary>, which 
+have a fixed physical width, while the spherical coordinates converge at the poles. <b>Note:</b> At times, the term scanline has been used interchangeably (and improperly) with camcol<glossary>camcol</glossary>.
+</def>
+ 
+<keyword>schema</keyword>
+<entry>schema</entry>
+<def>
+The implementation of a data model<glossary>data_model</glossary> in a database.
+</def> 
+
+<keyword>science_archive</keyword>
+<entry>science archive</entry>
+<def>
+Also known as the SX, this was the prior incarnation of the database containing the object catalogs for the SDSS (for the EDR<glossary>EDR</glossary>).
+</def> 
+
+<keyword>scienceprimary</keyword>
+<entry>sciencePrimary</entry>
+<def>
+Spectra that are considered good enough for science are marked as <b>sciencePrimary</b> spectra and included in the SpecObj<tableref>SpecObj</tableref> view of the SpecObjAll<tableref>SpecObjAll</tableref> table.  There are several criteria used to
+determine whether the sciencePrimary flag should be set to 1 for an object in the SpecObjAll table.  These are described in the <a href="cas_faq.asp#scienceprimary">FAQ entry for sciencePrimary</a>.</def> 
+
+<keyword>sdss</keyword>
+<entry>SDSS</entry>
+<def>
+The Sloan Digital Sky Survey. The survey will map in detail one-quarter of the entire sky, determining the positions and absolute brightnesses of more than 100 million celestial objects. It will also measure the distances to more than a million galaxies and quasars. For more, visit our <a href="http://www.sdss.org">homepage</a>.
+</def>
+
+<keyword>sdssqa</keyword>
+<entry>sdssQA</entry>
+<def>
+The SDSS Query Analyzer. A Java-based Graphical User Interface (GUI) that provides the functionality necessary for SDSS users to prepare and submit queries to the SQL server database. 
+</def>
+
+<keyword>sdssqt</keyword>
+<entry>sdssQT</entry>
+<def>
+Obsolete. This was the SDSS Query Tool, used for the Early Data Release<glossary>EDR</glossary>. It is a Graphical User Interface (GUI) that provides the functionality necessary for SDSS users to prepare and submit queries to the Science Archive, the "end product" of the SDSS, where all publicly available scientific data products are stored and
+ready for access. 
+</def>
+
+<keyword>secondary</keyword>
+<entry>secondary object</entry>
+<def>
+The best observation of an object with multiple observation is called the
+primary<glossary>primary</glossary> object, and other observations are stored
+in the PhotoObjAll<tableref>PhotoObjAll</tableref> table and
+PhotoObj<tableref>PhotoObj</tableref> view as secondary objects.
+</def>
+
+<keyword>secondary_patch</keyword>
+<entry>secondary patch</entry>
+<def>
+The PT<glossary>photo_tel</glossary> observes a series of
+  secondary patches on a given night, calibrated to the system of
+  primary standards<glossary>primary_standard</glossary>.  These patches overlap the 2.5m survey stripes<glossary>stripe</glossary>;  with the photometry determined for these, we can set the zeropoints
+  of the 2.5m runs<glossary>run</glossary>.
+</def> 
+
+<keyword>sector</keyword>
+<entry>Sector</entry>
+<def>
+A sector is basically an intersection of
+TileRegions<glossary>tile_region</glossary>. 
+It is a plate wedge modified by intersections with overlapping
+<b>tile boundaries</b><glossary>tibound</glossary>.  If the TilingBoundary
+regions are complex (multiple convexes) or if they are holes (isMask=1), then
+the resulting sector is also complex (a region of multiple convexes). As such
+a sector is just a single convex.  Tiling boundaries do not add any depth to
+the sectors; they just truncate them to fit in the
+boundary. <algorithm>sector</algorithm>
+</def>
+
+<keyword>segment</keyword>
+<entry>segment</entry>
+<def>
+A segment is a piece of a given frames<glossary>frames</glossary> pipeline
+reduction (run<glossary>run</glossary> : rerun<glossary>rerun</glossary> : camcol<glossary>camcol</glossary>), covering a piece of a scanline<glossary>scanline</glossary>, bounded on the east and west by lines
+of constant mu<glossary>mu</glossary>.  Because segments are defined before
+the primary<glossary>primary</glossary> area of a stripe<glossary>stripe</glossary>, segments can actually go beyond the eta<glossary>eta</glossary> limits of a stave<glossary>stave</glossary> (and a chunk<glossary>chunk</glossary>). Indeed, near the very end of a stripe (near
+the poles), a segment may fall completely outside a stave.
+</def>
+
+
+<keyword>ssc</keyword>   
+<entry>Serial Stamp Collecting Pipeline (SSC)</entry>
+<def>
+The first stage of the
+   Photometric pipeline<glossary>photo</glossary>.  It collects for further analysis the atlas
+   images of stars to be used in astrometric calibration and PSF
+   determination.</def>
+
+<keyword>skyserver</keyword>
+<entry>SkyServer</entry>
+<def>
+A <a href="http://skyserver.sdss.org/">website</a> for distribution of SDSS data. Includes tools to get images, spectra, and catalog info, as well as educational and fun materials.
+</def>
+
+<keyword>skyversion</keyword>
+<entry>sky version</entry>
+<def>
+The SkyVersion is a numerical designator of whether photometric data is Target<glossary>target</glossary> (SkyVersion=0), Best<glossary>best</glossary> (SkyVersion=1), or one of the repeated scans of the Southern Survey<glossary>southern_survey</glossary> (SkyVersions 2 through 14).
+</def> 
+
+<keyword>small_circle</keyword>
+<entry>small_circle</entry>
+<def>
+A section of a sphere which does not contain a diameter of the sphere. Lines of constant latitude are small circles.</def>
+
+<keyword>sos</keyword>
+<entry>Son-of-Spectro</entry>
+<def>
+A pared-down version of spec2d<glossary>spec2d</glossary> that runs on the
+mountain, and gives feedback to the observers about the S/N of each
+spectroscopic exposure and any possible problems in the data.
+</def>
+
+<keyword>sop</keyword>
+<entry>SOP (spectroscopic observing program)</entry>
+<def>
+This is the program which
+operates the spectrographs, including guiding the telescope and
+controlling the calibrations.
+</def>
+
+<keyword>southern_survey</keyword>
+<entry>Southern Survey</entry>
+<def>
+In the Southern Galactic Cap region, the SDSS will not observe the entire available area. Instead, selected stripes<glossary>stripe</glossary> will be observed repeatedly for variability studies and to coadd for deeper images.</def>
+
+<keyword>spec1d</keyword>
+<entry>Spec1D</entry>
+<def>
+The second half of the spectroscopic pipeline, also known as Spectro 1D, which
+classifies the spectra and
+performs various scientific analyses on them, including obtaining the
+redshifts. The operational goals of the 1D SPECTRO pipeline are:<br>
+To fit the continuum of the spectrum.<br>
+To determine an emission-line redshift and classify all detected emission
+lines.  A flag will also be set to identify any expected emission
+lines (on the basis of the spectral classification) which were not seen.<br>
+To classify the spectrum by cross-correlating with a set of
+template spectra ranging from
+stars to quasars.  A principal component
+analysis similar to that of Connolly et al. (1995)
+has also been implemented for further galaxy spectral classification <algorithm>redshift_type</algorithm>.<br>
+To cross-correlate the spectrum with the a set of templates and
+obtain redshifts <algorithm>redshift_type</algorithm>.<br>
+  To fit a set of emission/absorption lines as a Gaussian <algorithm>speclinefits</algorithm>.<br>
+ To measure the velocity dispersion of galaxies <algorithm>veldisp</algorithm>.<br>
+To measure various absorption line indices, as outlined in the EDR AJ paper.
+</def>
+
+<keyword>spec2d</keyword>
+<entry>Spec2D</entry>
+<def>
+The first half of the spectroscopic pipeline (also sometimes referred
+to as idlspec2d), which reduces the raw 2D spectral frames to 1D calibrated
+spectra. The operational goals of the 2D SPECTRO pipeline are:
+<br>
+To interpolate over bad pixels<br>
+To mask all bad pixels and pixels contaminated by strong sky emission.<br>
+To bias and dark subtract the raw 2D data frames<br>
+To trim the frame<br>
+To flat-field  using calibration frames taken at the same telescope pointing position before and after an exposure on the sky.<br>
+To optimally extract 1D spectra from this 2D frame.<br>
+To apply wavelength calibration, rebin to a common wavelength solution, and sky subtract. <br>
+To coadd the three or more individual exposures for each
+object. <br>
+To put the red and blue halves of the spectrum together.<br>
+To flux calibrate the spectrum to obtain 
+spectrophotometry good to roughly 15%, using the measured photometry
+of spectrophotometric standards on each plate. <br>
+</def>
+
+<keyword>specbs</keyword>
+<entry>SpecBS</entry>
+<def>
+An alternative 1-d spectroscopic pipeline developed by David Schlegel. The data and documentation for this pipeline are available <a 
+="http://spectro.princeton.edu/">here</a> .
+</def>
+
+<keyword>specobj</keyword>
+<entry>SpecObjID</entry>
+<def>
+A unique bit-encoded 64-bit ID used for spectroscopic objects. It is generated from plateid<glossary>plate</glossary>, mjd,  and fiberid<glossary>fiber</glossary>. Completely independent of any photometric enumeration system.
+</def>
+
+<keyword>spectro</keyword>
+<entry>Spectro</entry>
+<def>
+The spectroscopic data reduction pipeline. See Spec2D<glossary>spec2d</glossary> and Spec1D<glossary>spec1d</glossary> for details.
+</def>
+
+<keyword>spectrograph</keyword>
+<entry>spectrograph</entry>
+<def>
+The instrument used to obtain spectra of objects. SDSS actually uses two identical spectrographs, each receiving as input 320 of the fibers<glossary>fiber</glossary> from a plate<glossary>plate</glossary>.
+</def>
+
+<keyword>spectrophotometry</keyword>
+<entry>spectrophotometry</entry>
+<def>
+The procedure for absolute flux calibration of spectra.<algorithm>spectrophotometry</algorithm>
+</def>
+
+<keyword>spPlate</keyword>
+<entry>spPlate file</entry>
+<def>
+A FITS image containing the wavelength- and flux-calibrated combined spectrum over all exposures (potentially spanning multiple nights) for a given mapped plate<glossary>plate</glossary>. Output as part of spec2d<glossary>spec2d</glossary>, it does <em>not</em> contain redshift information. Available in the DAS<glossary>DAS</glossary>.
+</def>
+
+<keyword>spSpec</keyword>
+<entry>spSpec file</entry>
+<def>
+A FITS image containing the line measurements and redshift determinations, as well as the 1-d spectrum, for a single object, summing over all of its exposures through a given mapped plate<glossary>plate</glossary>. Available in the DAS<glossary>DAS</glossary>.
+</def>
+
+<keyword>sql</keyword>
+<entry>SQL</entry>
+<def>
+The <em><b>S</b>tructured <b>Q</b>uery <b>L</b>anguage</em>, a standard means of asking for data from databases. For more, see our SQL help page.
+</def>
+
+<keyword>stave</keyword>
+<entry>stave</entry>
+<def>
+A unique region of sky, bounded by two lines of constant eta<glossary>eta</glossary>. A stave is a portion of a stripe<glossary>stripe</glossary> that is tapered near the poles so that it does not overlap with the neighboring stave. This term is used analogously to the meaning of stave in barrelmaking.
+</def>
+
+<keyword>stokes</keyword>
+<entry>Stokes Parameters</entry>
+<def> 
+These quantities are related to object ellipticities.  Define the flux-weighted second moments of the object as:<br>
+<b>M<sub>xx</sub> = &lt;x<sup></sup>/r<sup>2</sup>&gt; ,M<sub>yy</sub> = &lt;y<sup>2</sup>/r<sup>2</sup>&gt; , M<sub>xy</sub> = &lt;xy/r<sup>2</sup>&gt;</b><br>
+In the case that the object's isophotes are self-similar ellipses, one can show that: <br>
+<b>Q = M<sub>xx</sub>-M<sub>yy</sub> = [(a-b)/(a+b)]&times;cos2&phi; <br> U = M<sub>xy</sub> = [(a-b)/(a+b)]&times;sin2&phi;</b><br>
+where a and b are the semimajor and semiminor axes and &phi; is the position angle. Q and U are <b><font face="arial black, monaco, chicago">Q</b></font> and <b><font face="arial black, monaco, chicago">U</b></font> in the table
+<b><font face="arial black, monaco, chicago">PhotoObj</b></font> and are referred to as "Stokes parameters." They can be used to reconstruct the axis ratio and position
+angle, measured relative to row and column of the CCDs. This is equivalent to the normal definition of position
+angle (east of north), for the scans on the equator. The performance of the Stokes parameters are not ideal at low
+signal-to-noise ratio, in which case the adaptive moments<glossary>adaptive_moment</glossary> will be more useful.
+</def>
+
+<keyword>strip</keyword>
+<entry>strip</entry>
+<def>
+A strip is a scan along a line of constant survey latitude eta<glossary>eta</glossary>. The center of a stripe is set at a given eta; centers of strips have a boresight<glossary>boresight</glossary> offset added. Because the columns of CCDs have gaps between them, it is necessary to take two offset but overlapping observations to fill in a stripe<glossary>stripe</glossary>. These two scans<glossary>scan</glossary> are called strips. Note that while strips are centered on a given eta, THEY ARE NOT BOUND BY ETA LINES. Thus they are rectangular regions. and can overlap at the poles.
+</def>
+
+<keyword>stripe</keyword>
+<entry>stripe</entry>
+<def>
+Stripes are the sum of two strips, defined in survey coordinates<glossary>survey_coords</glossary> (lambda<glossary>lambda</glossary>, eta<glossary>eta</glossary>).  A "stripe" is
+defined by a line of constant eta, bounded on the north and south by
+the edges of the two strips that make up the stripe, and bounded on
+the east and west by lines of constant lambda. Because both strips and
+stripes are defined in "observed" space, they are rectangular areas
+which overlap as one approaches the poles. <b>NOTE</b>: You may see the term stripe used to mean an area
+bounded by eta lines, which would be a unique part of the sky. That is
+a common use of the term, as some of the target selection
+documentation uses it that way. The proper (and relatively new) term
+for the unique, eta-bound portion of a stripe is a stave<glossary>stave</glossary>.
+</def>
+
+<keyword>surface_brightness</keyword>
+<entry>surface brightness</entry>
+<def>
+The frames pipeline<glossary>frames_pipeline</glossary> also reports the radii containing 50% and 90% of the Petrosian flux<glossary>mag_petro</glossary> for each band, <b><font face="arial black, monaco, chicago">petroR50</b></font> and <b><font face="arial black, monaco, chicago">petroR90</b></font> respectively. The usual
+characterization of surface-brightness in the target selection pipeline of the SDSS is the mean surface brightness within petroR50. 
+<br>
+It turns out that the ratio of petroR50 to petroR90, the so-called "inverse concentration index", is correlated with morphology (Shimasaku et al. 2001,
+Strateva et al. 2001). Galaxies with a de Vaucouleurs profile have an inverse concentration index of around 0.3; exponential galaxies have an inverse
+concentration index of around 0.43. Thus, this parameter can be used as a simple morphological classifier. 
+<br>
+An important caveat when using these quantities is that they are not corrected for seeing. This causes the surface brightness to be underestimated, and
+the inverse concentration index to be overestimated, for objects of size comparable to the PSF. The amplitudes of these effects, however, are not yet well
+characterized. 
+</def>
+
+<keyword>survey_coords</keyword>
+<entry>survey coordinates</entry>
+<def>
+One of the two main coordinate systems used by the 
+survey, with coordinates eta<glossary>eta</glossary> and lambda<glossary>lambda</glossary>. 
+This is simply another spherical coordinate system, where (eta,lambda)=(0,90.) corresponds to (ra,dec)=(275.,0.) and (eta,lambda)=(57.5,0.) corresponds to 
+(ra,dec)=(0.,90.). Note also that at (eta, lambda)=(0.,0.), 
+(ra,dec)=(185.,32.5). So, this is a pure rotation of the usual RA/Dec system, as opposed to the great circle system<glossary>great_circle_coords</glossary>, which is defined relative to each individual stripe<glossary>stripe</glossary>.
+For some reason, although "eta" is constant along great 
+circles, it is referred to as "survey latitude," while "lambda" is referred to
+ as "survey longitude." Also, "eta" runs only from -90. to 90.; the back of 
+the sphere is covered by "lambda", which runs from -180. to 180. The Survey 
+coordinates are defined such that the "primary" area of a stripe<glossary>stripe>
+</glossary> (otherwise known as a stave<glossary>stave</glossary>) in the north 
+is defined by a rectangle in Survey coordinates which is 2.5 degrees wide in 
+eta (coordinate width). You may be interested in SM routines which convert 
+between Equatorial, Survey, and Great Circle coordinates.
+Again, Astrotools<glossary>astrotools</glossary> has routines to do this as well.
+</def>
+
+<keyword>survey_equator</keyword>
+<entry>survey equator</entry>
+<def>
+The great circle perpendicular to the central meridian<glossary>central_meridian</glossary>,  passing through the survey center at delta=32.8deg is the survey equator. 
+</def>
+
+<keyword>survey_poles</keyword>
+<entry>survey poles</entry>
+<def>
+The locations of the poles in the survey coordinate system<glossary>survey_coords</glossary>. Due to the unusual nature of this system, there is an east pole and a west one, at delta = 0 , alpha = 18h 20m and 6h 20m.
+</def>
+
+<keyword>sx</keyword>
+<entry>SX</entry>
+<def>
+An abbreviation for the old Science Archive. This was the prior incarnation of the database containing the object catalogs. utilizing Objectivity<glossary>objectivity</glossary> software.
+</def>
+
+<keyword>table</keyword>
+<entry>Table</entry>
+<def> 
+A specific set of objects and their measured quantities stored in a database.
+</def>
+
+<keyword>target</keyword>
+<entry>Target</entry>
+<def>
+<b>1.</b> An object select as a candidate for spectroscopy.<br>
+<b>2.</b> The pipleine used to select candidates for spectroscopy. The procedures and various type of targets are described in the the Target algorithm page<algorithm>target</algorithm>. <br>
+<b>3.</b>The database containing photometric measurements for objects at the time <code>Target</code><algorithm>target</algorithm> was run. If newer observations or improved calibration or software becomes available, the imaging data may be reprocessed, but <em>not</em> re-<code>Target</code>ed. The improved photometry is placed in the <code>Best</code><glossary>best</glossary> database.
+</def>
+
+<keyword>tdi</keyword>
+<entry>TDI</entry>
+<def>
+The SDSS imaging data are taken in time-delay-and-integrate (TDI) mode at the sidereal rate almost simultaneously in five bands. The sky tracks through 5 CCD detectors in succession, each located behind a different filter.
+</def>
+
+<keyword>tilable</keyword>
+<entry>tilable target</entry>
+<def>
+These are spectroscopic targets <glossary>target</glossary> which are assigned to tiles<glossary>tile</glossary> by tiling<glossary>tiling</glossary. The significance of this is that tilable targets are supposed to have as close to uniform completeness as possible and it should be possible to define well-defined samples of such targets. The bitmasks <b>primTarget</b> and <b>secTarget</b> described in  the description of the target selection<algorithm>target</algorithm> contain the target assignments of each object<glossary>object</glossary>. Tilable targets for the survey proper are those with the <b>primTarget</b> flags QSO_HIZ, QSO_CAP, QSO_SKIRT, QSO_FIRST_CAP, QSO_FIRST_SKIRT, GALAXY_RED, GALAXY, GALAXY_BIG, GALAXY_BRIGHT_CORE, or STAR_BROWN_DWARF, and those with the <b>secTarget</b> flag HOT_STD.
+</def>
+
+<keyword>tile</keyword>
+<entry>tile</entry>
+<def>
+A 1.49 deg radius circle on the sky determined by
+tiling<glossary>tiling</glossary> and which contains the locations of up to
+592 tilable targets<glossary>tilable</glossary> and other science targets.
+This circle will become the plates into which fibers are plugged to observe
+spectra.  For each tile one or more plates<glossary>plate</glossary> will be
+created.  Only the part of the Tile that is within the union of the
+TilingBoundaries<glossary>tibound</glossary> for the
+TileRun<glossary>tile_run</glossary> and outside the union of the TilingMasks
+for the TileRun and the global TilingMasks<glossary>timask</glossary> may
+actually have targets. If less than the maximum of 592 tilable targets can be
+assigned to that tile, the spare fibers are assigned to other spectroscopic
+targets. The 48 remaining fibers<glossary>fiber</glossary> will be assigned to
+calibration targets.
+</def>
+
+<keyword>tile_run</keyword>
+<entry>TileRun</entry>
+<def>
+A TileRun represents a single run of the tiling software.  It is a
+logical unit of geometrical information that consists of a set of
+TilingBoundaries<glossary>tibound</glossary>,
+TilingMasks<glossary>timask</glossary>, and Tiles<glossary>tile</glossary>
+that are associated with exactly one TileRun (ie each TilingBoundary,
+TilingMask, and Tile is associated with exactly one TileRun, with one
+exception that will be noted later).  Sometimes this is also called a tiling
+chunk, although that is incorrect usage of the term and it should not be
+confused with an imaging chunk<glossary>chunk</glossary>.
+</def>
+
+<keyword>tile_region</keyword>
+<entry>TileRegion</entry>
+<def>
+TileRegion is a term used to indicate the portion of a Tile that may
+have targets (i.e. within the union of the TilingBoundaries for a TileRun
+and outside the union of the TilingMasks for the TileRun and the global
+TilingMasks).  These are not necessarily convex because of the TilingMasks.
+</def>
+
+<keyword>tibound</keyword>
+<entry>TilingBoundary</entry>
+<def>
+A TilingBoundary is a set of "rectangles" that defines the area of the sky that
+may be tiled in a TileRun<glossary>tile_run</glossary>.  Only targets from
+within the union of the TilingBoundaries<glossary>tibound</glossary> for a
+TileRun may be assigned to Tiles<glossary>tile</glossary> created during a 
+TileRun.  A single TilingBoundary must be contained within a single chunk.
+</def>
+
+<keyword>timask</keyword>
+<entry>TilingMask</entry>
+<def>
+TilingMasks are "rectangles" that should not be considered part of
+the tileable area during a TileRun<glossary>tile_run</glossary>.  I do not
+know what other rules govern TilingMasks.  There should be some "global"
+TilingMasks that apply to ALL TileRuns.
+</def>
+
+<keyword>tiling</keyword>
+<entry>tiling</entry>
+<def>
+The process of designing tiles<algorithm>tiling</algorithm> for spectroscopy.
+</def> 
+
+<keyword>tpm</keyword>
+<entry>TPM</entry>
+<def>
+Telescope Performance Monitor. Software that reports on the physical parameters of the survey telescope.
+</def>
+
+<keyword>tsfield</keyword>
+<entry>tsField</entry>
+<def>
+The tsField files are FITS binary tables containing the information about each imaging field<glossary>field</glossary> that is exported to the Field tables in the CAS<glossary>CAS</glossary>. Available in the DAS<glossary>DAS</glossary>, in both Best<glossary>best</glossary> and Target<glossary>target</glossary> versions.
+</def>
+
+<keyword>tsobj</keyword>
+<entry>tsObj</entry>
+<def>
+<keyword>tsobj</keyword>
+The tsObj files are FITS binary tables containing calibrated object catalogs output by the frames pipeline<glossary>frames_pipeline</glossary>, one per field<glossary>field</glossary>. They are available from the DAS<glossary>DAS</glossary>, in both Best<glossary>best</glossary> and Target<glossary>target</glossary> versions, and form the basis for the photometric data found in the PhotoObj table in CAS<glossary>CAS</glossary>.
+</def>
+
+<keyword>tsobjfrommap</keyword>
+<entry>tsObjFromMap</entry>
+<def>
+A tsObj file<glossary>tsobj</glossary> containing the calibrated information only for those objects which have been targeted<glossary>target</glossary>. Available in the DAS<glossary>DAS</glossary>.
+</def>
+
+<keyword>view</keyword>
+<entry>View</entry>
+<def>
+In a database, a way of looking at a subset of the data in a given CAS Table<glossary>table</glossary>. Views are treated just like Tables in SQL<glossary>sql</glossary> queries. For example, in the CAS<glossary>CAS</glossary>, the Galaxy view shows only the subset of PhotoObj table that are classified as galaxies.
+</def> 
+
+<keyword>wcs</keyword>
+<entry>WCS</entry>
+<def>
+World Coordinate System. The FITS standard for defining 
+astrometric calibrations in the image header. 
+</def>
+
+<keyword>zhed</keyword>
+<entry>zhed point</entry>
+<def>
+The stellar locus in SDSS color-color space is essentially one-dimensional.  Various canonical positions in color-color space can be defined from bends in the stellar locus; we call these positions the Zhed Points.  The constancy of these positions is a very useful test of the uniformity of our photometry. 
+</def>

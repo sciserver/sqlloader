@@ -1,0 +1,1549 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+                                                                        
+                                   
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+                                                                        
+                                   
+  <meta name="GENERATOR"
+ content="Mozilla/4.76 [en] (X11; U; Linux 2.4.3-12 i686) [Netscape]">
+                           <!--
+Authors:	Ani Thakar
+Created:	May 13, 2003
+-->
+  <title>sqlLoader Steps</title>
+                         
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+           
+  <style type="text/css">
+body
+{
+	font-family: "Times New Roman";
+	font-style: normal;
+	text-indent: 0in;
+	font-weight: normal;
+	font-variant: normal;
+	color: #000000;
+	text-decoration: none;
+	text-align: left;
+	font-size: 12pt;
+	widows: 2;
+	font-stretch: normal;
+	background-color: #ffffff;
+}
+
+@media print
+{
+	body
+	{
+		padding-top: 1.0000in; padding-bottom: 1.0000in;
+		padding-left: 1.2500in; padding-right: 1.2500in;
+	}
+}
+
+  </style>
+</head>
+  <body text="#111111" bgcolor="#ffffff" link="#333399" vlink="#663366"
+ alink="#cc0000">
+                                     
+<h2> </h2>
+                                                   
+<h1> <img src="sxlogo1.gif">
+                          <font color="#7700ee">Processing steps in the CAS
+ Loader (sqlLoader)</font></h1>
+                           <img src="rule.gif">
+                       <br>
+                    
+<div>       
+<p dir="ltr" style="text-align: left;"><a name="FlowDiagram"><img
+ src="loaderFlow.jpg" alt="SQL Loader flow diagram" width="720"
+ height="540" border="2">
+  </a><br>
+     </p>
+         
+<p dir="ltr" style="text-align: left; margin-top: 12pt;"><span
+ style="font-weight: bold; text-decoration: underline; color: rgb(0,0,255); font-family: 'Arial'; font-size: 16pt;"><a
+ name="TaskLoadFlow"></a>LOAD Workflow for a TASK Database</span></p>
+         
+<ol class="Normal">
+      <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">Export</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Start
+  Step</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Verify
+  that task does not exist</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Create
+  new entry in loadadmin.Task</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	End
+  Step</span></li>
+                         
+    </ol>
+     </li>
+       <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">Check</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Start
+  Step</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Check
+  for the existence of root directory</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Compare
+  root path to export-type</span>                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Verify existence
+  of csv_ready</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Check each CSV
+  file vs csv_ready</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Insert each CSV
+  filename into loadadmin.Files</span></li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Check
+  each subdirectory (Run or Plate)</span>                               
+     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Verify existence
+  of csv_ready file</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Check each CSV
+  file vs csv_ready</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Insert each CSV
+  filename into loadadmin.Files</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Check for Zoom
+  or Gif subdirectories</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Count the number
+  of files</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Insert subdirectory
+  name, if Zoom into loadadmin.Files</span></li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">End
+  Step</span></li>
+                         
+    </ol>
+     </li>
+       <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">Build</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Start
+  step</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Create
+  TaskDB</span>                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Drop database if
+  already exists</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Delete DB files,
+  if they exist</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Create the database</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Configure DB options</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Schema</span> 
+                                                   
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">&nbsp;</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;"> Execute 'dataConstants.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'constantSupport.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'metadataTables.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'photoTables.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'spectroTables.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'views.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'spHTM.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'nearFunctions.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'zoomTables.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'webSupport.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'boundary.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'myTimeX.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'spSetValues.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'spValidate.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'spManageIndices.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'spBackup.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'spPublish.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'spFinish.sql'</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Execute 'spGrantAccess.sql'</span></li>
+                                                         
+            </ol>
+     </li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">End
+  Step</span></li>
+                         
+    </ol>
+     </li>
+       <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">Preload</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Start
+  step</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	spFileLoop</span> 
+                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Load each CSV file</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Load each Zoom
+  directory</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Load each plate</span></li>
+             <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;"></span>Load each 
+ tileRun<br>
+             </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Test if all files
+  loaded</span></li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Test 
+ row count against total number of lines listed in csv_ready file(s)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Set
+  Values</span>                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Get Task type</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Set loadVersion</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">for PlateX</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	for HoleObj</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	for Tile</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	for TileBoundary</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	for TiledTarget</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	for TileInfo</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	for TileRegion</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	for Chunk</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	for Segment</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	for Field</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	for Target</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	for TargetInfo</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">SetValues (Plates)</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">Update SpecObjAll(objType,
+  loadVersion)</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Set Values (Photo)</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Set simplified
+  mags (u,g,r,i,z, Err_*, dered_*, loadVersion)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Remove ObjMask
+  rows in hole fields</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Exec spComputeFrameHTM</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Exec spTargetInfoTargetObjId</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Update Mask(cx,cy,cz)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Update Mask(htmId)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 10pt;">--
+  Compute Boundaries&nbsp; should move to Finish</span></li>
+                                                         
+            </ol>
+     </li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Check
+  that each file/directory in Files is DONE</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Check
+  that the number of lines for each file adds up</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	End
+  Step</span></li>
+                         
+    </ol>
+     </li>
+        <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">Validate</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Start
+  Step</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Validate
+  Photo</span>                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Test unique keys&nbsp;</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">Chunk(chunkId)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Segment(segmentID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	StripeDefs(stripe)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Field(FieldID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	FieldProfile(fieldID,
+  bin, band)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Frame(FieldID,Zoom)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(objID)</span><span
+ style="background: rgb(0,255,0) none repeat scroll 50% 0%; font-family: 'Times New Roman'; font-size: 10pt;">-
+  this takes pretty long (20mins-half hour ballpark)!!</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoProfile(objID,
+  bin, band) </span><span
+ style="background: rgb(0,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 10pt;">-
+  this takes even longer (nearly an hour or more)!!</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoZ(objID,rank,
+  pid)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	First(objID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Rosat(objID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	USNO(objID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Mask(maskID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="color: rgb(0,0,0); font-family: 'Times New Roman'; font-size: 10pt;">ObjMask(objID)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Target (targetID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TargetInfo(skyVersion,targetID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TargetInfo(targetObjID)
+  (not valid for South)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TargetParam(targetVersion,paramName)</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Test Foreign keys</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">Chunk(stripe)&nbsp;	-&gt;	StripeDefs(stripe)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Segment(stripe)&nbsp;	-&gt;	StripeDefs(stripe)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Segment(ChunkID)	-&gt;&nbsp;	Chunk(chunkID)&nbsp;&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Field(segmentID)	-&gt;&nbsp;	Segment(segmentID)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Frame(fieldID)&nbsp;	-&gt;&nbsp;	Field(fieldID)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	FieldProfile(fieldID)
+  -&gt;&nbsp;	Field(fieldID)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(fieldID)&nbsp;	-&gt;&nbsp;	Field(fieldID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoProfile(ObjID)
+  -&gt;&nbsp;	PhotoObj(ObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoZ(ObjID)&nbsp;	-&gt;&nbsp;	PhotoObj(ObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	ObjMask(ObjID)	-&gt;	PhtoObj(ObjID)&nbsp;&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	First(ObjID)&nbsp;	-&gt;&nbsp;	PhotoObj(ObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Rosat(ObjID)&nbsp;	-&gt;&nbsp;	PhotoObj(ObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	USNO(ObjID)&nbsp;	-&gt;	PhotoObj(ObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TargetInfo(targetID)
+  -&gt;	Target(targetID)</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Test cardinalities,
+  also against the files table</span>                                   
+                 
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">Mask(run, rerun,
+  camcol, field)&nbsp; -&gt;&nbsp; Field(run, rerun, camcol, field)&nbsp;&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Segment(nFields)
+  = count(Fields) on segmentID&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Field(nObjects)&nbsp;
+  = count(PhotoObj) on fieldID</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	count(Field) *
+  7 = count(Frame)&nbsp;&nbsp;&nbsp; on fieldID&nbsp; (tests zoom levels)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(nProf_ugriz)
+  = count(PhotoProfile)&nbsp;&nbsp; on objID</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Test HTM id's</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">Frame(HTM)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Mask(HTM)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(HTM)</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Test parents (nChild
+  consistency)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Write summary</span></li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Validate
+  Plates</span>                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Test unique keys&nbsp;</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">PlateX(plateID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SpecObjAll(specObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	ELRedshift(ELRedshiftID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SpecLineAll(SpecLineID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SpecLineIndex(SpecLineIndexID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	XCRedshift(XCRedshiftID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	HoleObj(holeID)</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Test Foreign keys</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">SpecObjAll(plateID)&nbsp;&nbsp;	-&gt;	PlateX(plateID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	ElRedshift(specObjID)&nbsp;	-&gt;	SpecObjAll(specObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SpecLineAll(specObjID)	-&gt;	SpecObjAll(specObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SpecLineIndex(specObjID)	-&gt;	SpecObjAll(specObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	XCredshift(specObjID)&nbsp;	-&gt;	SpecObjAll(specObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	HoleObj(plateID)&nbsp;	-&gt;	PlateX(plateID)</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Test HTM id's</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">SpecObjAll(HTM)</span></li>
+                                                         
+            </ol>
+     </li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Validate
+  Tiles</span>                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Test unique keys</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">Tile(tile)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileBoundary(tileBoundID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TiledTarget(targetID,tile)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileInfo(tileRun,
+  tid)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileNotes(tileNoteID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileRegion(tileRun)</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Test Foreign keys</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">Tile(tileRun)&nbsp;	-&gt;&nbsp;	TileRegion(tileRun)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileBoundary(tileRun)	-&gt;	TileRegion(tileRun)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileBoundary(Stripe)	-&gt;	StripeDefs(stripe)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileInfo(tileRun)&nbsp;	-&gt;&nbsp;	TileRegion(tileRun)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileNotes(tileRun)&nbsp;	-&gt;	TileRegion(tileRun)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TiledTarget(tile)&nbsp;	-&gt;&nbsp;	Tile(tile)</span></li>
+                                                         
+            </ol>
+     </li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Write
+  summary</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	End
+  Step</span></li>
+                         
+    </ol>
+     </li>
+        <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">Backup</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Begin
+  Step</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Backup
+  TaskDB to brick for archival storage</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	End
+  Step&nbsp;&nbsp;</span></li>
+                         
+    </ol>
+     </li>
+        <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">Detach</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Begin
+  Step</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Detach
+  TaskDB</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	End
+  Step&nbsp; </span></li>
+                         
+    </ol>
+     </li>
+         
+</ol>
+         
+<p dir="ltr" style="text-align: left; margin-top: 12pt;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 16pt;"><br>
+    </span><span
+ style="font-weight: bold; text-decoration: underline; color: rgb(0,0,255); font-family: 'Arial'; font-size: 16pt;"><a
+ name="TaskPubFlow"></a>PUB Workflow for a TASK Database</span></p>
+         
+<ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">Publish</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Start
+  Step</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Start
+  Step in PubDB</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Attach
+  TaskDB to publish server</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Insert/transform
+  each table into destination</span>                                    
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Publish Photo</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">publish Chunk</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish Segment</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish Field</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish Frame</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish FieldProfile</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish PhotoObj</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish PhotoProfile</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish PhotoZ</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish First</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish Rosat</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish USNO</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish Mask</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish ObjMask</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish Target</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish TargetInfo</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish TargetParam</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Publish Plates</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">publish PlateX</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish specObjAll</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish Elredshift</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish specLineAll</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish specLineIndex</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish Xcredshift</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish HoleObj</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Tiling Publish&nbsp;</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">publish Tile</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish TileBoundary</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish TiledTarget</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish TileInfo</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish TileNotes</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	publish TileRegion&nbsp;</span></li>
+                                                         
+            </ol>
+     </li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Detach
+  TaskDB</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Update
+  LoadHistory</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	End
+  Step in PubDB</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	End
+  Step</span></li>
+                         
+    </ol>
+     </li>
+        <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">Cleanup</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Begin
+  Step</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Delete
+  TaskDB</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	End
+  Step</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">&nbsp;</span></li>
+                         
+    </ol>
+     </li>
+         
+</ol>
+         
+<p dir="ltr" style="text-align: left; margin-left: 0.25in;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;"> </span><br>
+     </p>
+         
+<p dir="ltr" style="text-align: left; margin-top: 12pt;"><span
+ style="font-weight: bold; text-decoration: underline; color: rgb(0,0,255); font-family: 'Arial'; font-size: 16pt;"><a
+ name="PubFlow"></a>Workflow for a PUB Database</span></p>
+            
+<ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">&nbsp;
+  Build PubDB</span>                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Start
+  Step</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Create
+  PubDB</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Build
+  schema (See TaskDB.Build.Schema)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Load
+  metadata tables</span>                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">DBColumns</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	DBObjects</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	DBViewcols</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">Glossary??</span></li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">End
+  Step</span></li>
+                         
+    </ol>
+     </li>
+        <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">Publish</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">See
+  TaskDB.Publish&acirc;&#8364;&brvbar;</span></li>
+                         
+    </ol>
+     </li>
+        <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	Finish</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Begin
+  Step in PubDB</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Get
+  DB parameters</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Drop
+  all indices</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Build
+  all indices</span>                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Build Primary keys</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">Chunk(chunkId)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Segment(segmentID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	StripeDefs(stripe)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Field(FieldID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Frame(FieldID,Zoom)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	FieldProfile(fieldID,
+  bin, band)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(objID</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoProfile(objID,
+  bin, band)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoZ(objID,rank,
+  pid)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	First(objID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Rosat(objID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	USNO(objID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Mask(maskID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="color: rgb(0,0,0); font-family: 'Times New Roman'; font-size: 10pt;">ObjMask(objID)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Target (targetID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TargetInfo(skyVersion,targetID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TargetParam(targetVersion,
+  paramName)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PlateX(plateID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SpecObjAll(specObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	ELRedshift(ELRedshiftID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SpecLineIndex(SpecLineIndexID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SpecLineAll(SpecLineID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	XCRedshift(XCRedshiftID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	HoleObj(holeID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Tile(tile)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileBoundary(tileBoundID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileInfo(tileRun,
+  tid)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileNotes(tileNoteID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileRegion(tileRun)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 10pt;">TiledTarget(targetID)
+  *** no key known yet</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">Globe(globeId)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Frame(fieldID,zoom)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Glossary(key)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	History(version)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	DbObjects(name)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	DBColumns(tableName,name)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	DBViewCols(viewName,name)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	DataConstants(field,name)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Diagnostics(name)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SDSSConstants(name)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SiteConstants(name)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SiteDiagnostics(name)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	LoadHistory(loadVersion,
+  tStart)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	ProfileDefs(bin)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Area(areaID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+Neighbors(objID, NeighborObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+Zone(ZoneID, ra, objID)&nbsp;&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+TiBound2tsChunk(tileBoundID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+Sector(SectorID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+Best2Sector(bestObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+Target2Sector(targetID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+Sector2Tile(SectorID, tile)</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Build the other
+  indices</span>                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">ELRedShift(specObjID,elRedShiftID)&nbsp;&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Field(field,camcol,run,rerun)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Frame(field,camcol,run,zoom,rerun)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Frame(htmID,zoom,cx,cy,cz,a,b,c,d,e,f,node,incl)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(mode,cy,cx,cz,htmID,type,flags,status,ra,dec,u,g,r,i,z,rho)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(htmID,cx,cy,cz,type,mode,flags,status,ra,dec,u,g,r,i,z,rho)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(field,run,rerun,camcol,type,mode,flags,rowc,colc,ra,dec,u,g,r,i,z)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(fieldID,objID,ra,dec,r,type,status,flags)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(SpecObjID,cx,cy,cz,mode,type,flags,status,ra,dec,u,g,r,i,z,rho)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(parentID,cx,cy,cz,mode,type,flags,status,ra,dec,u,g,r,i,z,rho)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(cx,cy,cz,htmID,mode,type,flags,status,ra,dec,u,g,r,i,z,rho)&nbsp;&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(run,mode,type,status,flags,u,g,r,i,z,Err_u,Err_g,Err_r,Err_i,Err_z)&nbsp;&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(run,camcol,rerun,type,mode,status,flags,ra,dec,fieldID,field,u,g,r,i,z)&nbsp;&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(run,camcol,field,mode,parentID,q_r,q_g,u_r,u_g,isoA_r,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; isoB_r,fiberMag_u, fiberMag_g,fiberMag_r,fiberMag_i,fiberMag_z)&nbsp;&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	unique SpecLineAll(specobjID,specLineID)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	unique SpecLineIndex(specobjID,speclineindexID)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 10pt;">unique
+  SpecObjAll(TargetObjID,objType,objTypeName,sciencePrimary,<br>
+    specClass, htmID,ra,dec,fiberMag_u,fiberMag_g,fiberMag_r,fiberMag_i,
+fiberMag_z)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">SpecObjAll(BestObjID,objType,objTypeName,sciencePrimary,specClass,htmID,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; ra,dec, fiberMag_u,fiberMag_g,fiberMag_r,fiberMag_i,fiberMag_z)&nbsp;&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SpecObjAll(specClass,zStatus,zWarning,z,sciencePrimary,primTarget,secTarget,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp; plateId,bestObjID,targetObjId,htmID,ra,dec)&nbsp;&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	unique XCRedshift(specObjID,xcRedShiftID)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	DataConstants(value)</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Build foreign keys</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">Chunk(stripe)&nbsp;&nbsp;	-&gt;	StripeDefs(stripe)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Segment(stripe)&nbsp;&nbsp;	-&gt;	StripeDefs(stripe)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Segment(ChunkID)&nbsp;	-&gt;&nbsp;	Chunk(chunkID)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Field(segmentID)&nbsp;	-&gt;&nbsp;	Segment(segmentID)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Frame(fieldID)&nbsp;&nbsp;	-&gt;&nbsp;	Field(fieldID)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	FieldProfile(fieldID)&nbsp;	-&gt;&nbsp;	Field(fieldID)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoObj(fieldID)&nbsp;&nbsp;	-&gt;&nbsp;	Field(fieldID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoZ(ObjID)&nbsp;&nbsp;	-&gt;&nbsp;	PhotoObj(ObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PhotoProfile(ObjID)&nbsp;	-&gt;&nbsp;	PhotoObj(ObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	ObjMask(ObjID)&nbsp;	-&gt;	PhtoObj(ObjID)&nbsp;&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	First(ObjID)&nbsp;&nbsp;	-&gt;&nbsp;	PhotoObj(ObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Rosat(ObjID)&nbsp;&nbsp;	-&gt;&nbsp;	PhotoObj(ObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	USNO(ObjID)&nbsp;&nbsp;	-&gt;&nbsp;	PhotoObj(ObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TargetInfo(targetID)&nbsp;&nbsp;	-&gt;&nbsp;	Target(targetID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SpecObjAll(plateID)&nbsp;	-&gt;	PlateX(plateID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	ElRedshift(specObjID)	-&gt;	SpecObjAll(specObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SpecLineAll(specObjID)&nbsp;	-&gt;	SpecObjAll(specObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	SpecLineIndex(specObjID)	-&gt;	SpecObjAll(specObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	XCredshift(specObjID)&nbsp;	-&gt;	SpecObjAll(specObjID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	HoleObj(plateID)&nbsp;	-&gt;	PlateX(plateID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Tile(tileRun)&nbsp;	-&gt;&nbsp;	TileRegion(tileRun)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileBoundary(tileRun)	-&gt;	TileRegion(tileRun)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileBoundary(Stripe)	-&gt;	StripeDefs(stripe)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileInfo(tileRun)&nbsp;	-&gt;&nbsp;	TileRegion(tileRun)&nbsp;</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TileNotes(tileRun)&nbsp;	-&gt;	TileRegion(tileRun)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	TiledTarget(tile)&nbsp;	-&gt;&nbsp;	Tile(tile)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	PlateX(tile)&nbsp;&nbsp;	-&gt;&nbsp;	Tile(tile)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+Neighbors(objId)-&gt;	PhotoObh(objId)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 10pt;">if
+  Build all: Target(BestObj) will be computed at finish</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 10pt;">	if
+  Build all: TileBoundary(tileBoundID) -&gt;	TiBound2tsChunk (tileBoundID)
+ ** TiBound2tsChunk is empty</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">if Build all: Target2Sector(sectorID)	-&gt;&nbsp;	Sector(sectorID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+Target2Sector(targetID)	-&gt;	Target(TargetID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+TiBound2tsChunk (tileBoundID)-&gt;	TileBoundary(tileBoundID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+TiBound2tsChunk (chunkID)-&gt;	Chunk(chunkID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+Best2Sector(SectorID)	-&gt;	Sector(SectorID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+Sector2Tile(SectorID)	-&gt;&nbsp;	Sector(SectorID)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	if Build all:
+Sector2Tile(tile)&nbsp;	-&gt;&nbsp;	Tile(tile)</span></li>
+                                                         
+            </ol>
+     </li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">If
+  BEST-PUB: Finish Plates</span>                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Get TARGET-PUB
+name</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">Drop
+  Target* indices</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Copy Target into
+  BEST-PUB </span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">(incremental)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Copy TargetInfo
+  into BEST-PUB </span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">(incremental)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Copy TargetParam
+  into BEST-PUB </span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">(incremental)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Mark TiledTarget
+  duplicates</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">Set
+  Target(bestObjId) with nearest PhotoObj in BEST-PUB</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">	Rebuild
+  Target* indices</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Set SpecObjAll(targetObjid)
+  to TargetInfo(targetObjid)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Set SpecObjAll(sciencePrimary)
+  flag</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Run SpectroPhoto
+  matchup</span>                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">Create TAB variable
+  using fGetNearestObjIdEq</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Update distance</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Delete orphans
+  (no match)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Update SpecObjAll(bestObjid)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Update PhotoObj(specObjId)</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">Do
+  Sector computations</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">	Build
+  Sector indices</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">	Compute
+  sampling probabilities for Sectors</span></li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Finish
+  Photo</span>                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Compute Neighbors</span> 
+                                                     
+            <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">Set radius according
+  to type (30 arcsec if BEST, 3 arcsec else)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Build zone table
+  (30 arcsecond zones)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Build Primary
+Key for Zone</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Truncate Neighbors
+  table</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Compute -1, 0,
+  1 zone</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Add in neighbor
+  mirrors</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	Build Primary
+Key index on Neighbors(objid, neighborObjid)</span></li>
+                                                         
+            </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 10pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">Compute
+  Chain table</span></li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Update
+  Statistics: *** commented out for now</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">End
+  Step in PubDB</span></li>
+                         
+    </ol>
+     </li>
+         
+</ol>
+         
+<p dir="ltr" style="text-align: left; margin-left: 0.25in;"><br>
+     </p>
+         
+<p dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;"><br>
+    </span></p>
+         
+<p dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; text-decoration: underline; color: rgb(0,0,255); font-family: 'Arial'; font-size: 16pt;"><a
+ name="FinishFlow"></a>Workflow to Synchronize the PUB Databases</span></p>
+         
+<p dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,0,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Arial'; font-size: 14pt;">I
+  think this is what we should be doing</span></p>
+            
+<ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">FINISH
+  - run on each PubDB</span>                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Begin
+  Step in PubDB</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Drop
+  all indices</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Build
+  (almost) all indices</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Compute
+  Neighbors (instead of FinishPhoto)</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Compute
+  Chains</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Compute
+  inMask stuff</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">End
+  Step in PubDB</span></li>
+                         
+    </ol>
+     </li>
+        <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">LINK RUNS</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Compute
+  RUNS-BEST cross-links into RUNS</span>                                
+    
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">link
+  the heads of chains together</span></li>
+                                         
+        </ol>
+     </li>
+                         
+    </ol>
+     </li>
+        <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">LINK TARGET</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Compute
+  BEST-TARGET cross-links into BEST</span>                              
+      
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">link
+  the heads of chains together</span></li>
+                                         
+        </ol>
+     </li>
+                         
+    </ol>
+     </li>
+        <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">SYNC BEST</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Update
+  from Target</span>                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">Copy Target</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Copy TargetInfo</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	Copy TargetParam</span></li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Update
+  SpecObjAll</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	SpectroPhoto
+  matchup</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Sector
+  computations</span>                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">Compute
+  sector boundaries</span></li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Build
+  remaining indices</span>                                     
+        <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">Build
+  Target* indices</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">	Build
+  Sector* indices&nbsp;</span></li>
+                                         
+        </ol>
+     </li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Compute
+  Sampling Probabilities</span></li>
+                         
+    </ol>
+     </li>
+        <li dir="ltr" style="text-align: left;"><span
+ style="font-family: 'Times New Roman'; font-size: 12pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">REPARTITION</span></li>
+                 
+  <p dir="ltr" style="text-align: left; margin-left: 0.5in;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">Should
+  this not be done at publish already?</span></p>
+        <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">REORG</span> 
+                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">Run
+  spReorg</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Update
+  statistics</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Times New Roman'; font-size: 12pt;">	Run
+  Checksum, insert into SiteDiagnostics</span></li>
+                         
+    </ol>
+     </li>
+               
+  <p dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;"> </span></p>
+        <li dir="ltr" style="text-align: left;"><span
+ style="font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Arial'; font-size: 14pt;">TABLES
+  THAT WE ARE IGNORING NOW</span>                     
+    <ol class="Normal">
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-weight: bold; font-family: 'Arial'; font-size: 14pt;">	</span><span
+ style="background: rgb(0,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">Area	--
+  needed for the boundary stuff</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(0,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">	Edge</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(0,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">	Rmatrix</span></li>
+     <li dir="ltr" style="text-align: left;"><span
+ style="background: rgb(0,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">	Chain&nbsp;
+  need to create it</span></li>
+                         
+    </ol>
+     </li>
+         
+</ol>
+           
+<p dir="ltr" style="text-align: left;"><span
+ style="background: rgb(255,255,0) none repeat scroll 0% 50%; font-family: 'Times New Roman'; font-size: 12pt;">We
+  will need to deal with MOSAIC stuff</span></p>
+         
+<p dir="ltr" style="text-align: left;"><br>
+     </p>
+     </div>
+     <br>
+    <br>
+   <img src="rule.gif">
+                                                     
+<h6> <a href="mailto:szalay@jhu.edu">Alex Szalay</a>, Jim Gray, <a
+ href="mailto:thakar@pha.jhu.edu">Ani R. Thakar</a><br>
+          Last Modified: July 8, 2003.</h6>
+         <br>
+      <br>
+   <br>
+  <br>
+ <br>
+</body>
+</html>

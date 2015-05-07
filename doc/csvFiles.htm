@@ -1,0 +1,211 @@
+<!DOCTYPE doctype PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+            
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=iso-8859-1">
+            
+  <meta name="Author" content="Ani Thakar">
+            
+  <meta name="GENERATOR"
+ content="Mozilla/4.76 [en] (X11; U; Linux 2.4.3-12 i686) [Netscape]">
+  <title>SDSS CSV File Structure</title>
+             <!--
+Authors:	Ani R. Thakar
+Created:	August 07, 2008
+-->
+</head>
+  <body text="#111111" bgcolor="#ffffff" link="#333399" vlink="#663366"
+ alink="#cc0000">
+      
+<h1> <img src="sxlogo1.gif">
+
+  &nbsp; <font color="#7700ee">CSV File Structure</font></h1> This
+   document describes the CSV file structure for the CSV files that will
+   be used as inputs to the loader <b><a
+   href="loadDataFlow.gif">Robot</a></b> that will&nbsp; <a
+   href="sQLLoading.gif">queue the loading directives</a> for the
+   data to be loaded into the SQL Server tables for the <a
+   href="dbLayout.gif">various databases.</a>
+
+ <p>
+The CSV file directory structure is described in a separate
+  document, <a href="csvDir.htm">csvDir.htm</a>.
+ 
+<h2> CSV File Structure</h2>
+
+<h3> Photo CSV Files </h3>
+These are the files in the phCSV subdirectory.  The first 3 CSV files
+are present per chunk, whereas the rest of them are generated for each
+run in the chunk.
+<p>
+<ol>
+<li>sqlChunk.csv</li>
+<li>sqlTarget.csv</li>
+<li>sqlTargetInfo.csv</li>
+<li>sqlField.csv</li>
+<li>sqlFieldProfile.csv</li>
+<li>sqlFirst.csv</li>
+<li>sqlPhotoObjAll.csv</li>
+<li>sqlPhotoProfile.csv</li>
+<li>sqlRosat.csv</li>
+<li>sqlSegment.csv</li>
+<li>sqlUSNO.csv</li>
+</ol>
+The columns in each of these files are listed below.  Unless otherwise
+indicated, each column is a straight copy from the CSV to the
+destination table in the database.
+
+<p><b>sqlChunk.csv</b><br>
+This is the Chunk table CSV file, the columns in this file are:
+<br>
+<i>
+chunkID,skyVersion,targetVersion,startMu,endMu,stripe,exportVersion,loadVersion
+</i>
+
+<p><b>sqlSegment.csv</b><br>
+This is the CSV file for the Segment table, and the columns are:
+<br>
+<i>
+segmentID,run,camCol,rerun,field0,nFields,dscale,chunkNumber,startMu,endMu,stripe,strip,status,resolved,exported,families,equinox,node,incl,cObs,tracking,raMin,raMax,decMin,decMax,lMin,lMax,bMin,bMax,lambdaMin,lambdaMax,etaMin,etaMax,photoId,photoVersion,targetAstroId,targetAstroVersion,exportAstroId,exportAstroVersion,targetFCalibId,targetFCalibVersion,exportFCalibID,exportFCalibVersion,loaderVersion,objectSource,targetSource,targetVersion,loadVersion
+</i>
+
+<p><b>sqlField.csv</b><br>
+The Field table CSV file contains in all 422 columns:
+<br>
+<i>
+fieldID,run,rerun,camcol,field,nObjects,nChild,nGalaxy,nStars,numStars_u,numStars_g,numStars_r,numStars_i,numStars_z,nCR_u,nCR_g,nCR_r,nCR_i,nCR_z,nBrightObj_u,nBrightObj_g,nBrightObj_r,nBrightObj_i,nBrightObj_z,nFaintObj_u,nFaintObj_g,nFaintObj_r,nFaintObj_i,nFaintObj_z,quality,mjd_u,mjd_g,mjd_r,mjd_i,mjd_z,a_u,a_g,a_r,a_i,a_z,b_u,b_g,b_r,b_i,b_z,c_u,c_g,c_r,c_i,c_z,d_u,d_g,d_r,d_i,d_z,e_u,e_g,e_r,e_i,e_z,f_u,f_g,f_r,f_i,f_z,dRow0_u,dRow0_g,dRow0_r,dRow0_i,dRow0_z,dRow1_u,dRow1_g,dRow1_r,dRow1_i,dRow1_z,dRow2_u,dRow2_g,dRow2_r,dRow2_i,dRow2_z,dRow3_u,dRow3_g,dRow3_r,dRow3_i,dRow3_z,dCol0_u,dCol0_g,dCol0_r,dCol0_i,dCol0_z,dCol1_u,dCol1_g,dCol1_r,dCol1_i,dCol1_z,dCol2_u,dCol2_g,dCol2_r,dCol2_i,dCol2_z,dCol3_u,dCol3_g,dCol3_r,dCol3_i,dCol3_z,csRow_u,csRow_g,csRow_r,csRow_i,csRow_z,csCol_u,csCol_g,csCol_r,csCol_i,csCol_z,ccRow_u,ccRow_g,ccRow_r,ccRow_i,ccRow_z,ccCol_u,ccCol_g,ccCol_r,ccCol_i,ccCol_z,riCut_u,riCut_g,riCut_r,riCut_i,riCut_z,airmass_u,airmass_g,airmass_r,airmass_i,airmass_z,raMin,raMax,decMin,decMax,scanlineArea,stripeArea,seqId,aa_u,aa_g,aa_r,aa_i,aa_z,aaErr_u,aaErr_g,aaErr_r,aaErr_i,aaErr_z,bb_u,bb_g,bb_r,bb_i,bb_z,bbErr_u,bbErr_g,bbErr_r,bbErr_i,bbErr_z,cc_u,cc_g,cC_r,cc_i,cc_z,ccErr_u,ccErr_g,ccErr_r,ccErr_i,ccErr_z,kk_u,kk_g,kk_r,kk_i,kk_z,kkErr_u,kkErr_g,kkErr_r,kkErr_i,kkErr_z,framesStatus,rowOffset_u,rowOffset_g,rowOffset_r,rowOffset_i,rowOffset_z,colOffset_u,colOffset_g,colOffset_r,colOffset_i,colOffset_z,saturationLevel_u,saturationLevel_g,saturationLevel_r,saturationLevel_i,saturationLevel_z,nEffPsf_u,nEffPsf_g,nEffPsf_r,nEffPsf_i,nEffPsf_z,skyPsp_u,skyPsp_g,skyPsp_r,skyPsp_i,skyPsp_z,skyFrames_u,skyFrames_g,skyFrames_r,skyFrames_i,skyFrames_z,skyFramesSub_u,skyFramesSub_g,skyFramesSub_r,skyFramesSub_i,skyFramesSub_z,sigPix_u,sigPix_g,sigPix_r,sigPix_i,sigPix_z,deVApCorrection_u,deVApCorrection_g,deVApCorrection_r,deVApCorrection_i,deVApCorrection_z,deVApCorrectionErr_u,deVApCorrectionErr_g,deVApCorrectionErr_r,deVApCorrectionErr_i,deVApCorrectionErr_z,expApCorrection_u,expApCorrection_g,expApCorrection_r,expApCorrection_i,expApCorrection_z,expApCorrectionErr_u,expApCorrectionErr_g,expApCorrectionErr_r,expApCorrectionErr_i,expApCorrectionErr_z,deVModelApCorrection_u,deVModelApCorrection_g,deVModelApCorrection_r,deVModelApCorrection_i,deVModelApCorrection_z,deVModelApCorrectionErr_u,deVModelApCorrectionErr_g,deVModelApCorrectionErr_r,deVModelApCorrectionErr_i,deVModelApCorrectionErr_z,expModelApCorrection_u,expModelApCorrection_g,expModelApCorrection_r,expModelApCorrection_i,expModelApCorrection_z,expModelApCorrectionErr_u,expModelApCorrectionErr_g,expModelApCorrectionErr_r,expModelApCorrectionErr_i,expModelApCorrectionErr_z,medianFiberColor_u,medianFiberColor_g,medianFiberColor_r,medianFiberColor_i,medianFiberColor_z,medianPsfColor_u,medianPsfColor_g,medianPsfColor_r,medianPsfColor_i,medianPsfColor_z,q_u,q_g,q_r,q_i,q_z,u_u,u_g,u_r,u_i,u_z,pspStatus,culled,badMask,acceptableMask,goodMask,holeMask,status_u,status_g,status_r,status_i,status_z,sky_u,sky_g,sky_r,sky_i,sky_z,skySig_u,skySig_g,skySig_r,skySig_i,skySig_z,skyErr_u,skyErr_g,skyErr_r,skyErr_i,skyErr_z,skySlope_u,skySlope_g,skySlope_r,skySlope_i,skySlope_z,lbias_u,lbias_g,lbias_r,lbias_i,lbias_z,rbias_u,rbias_g,rbias_r,rbias_i,rbias_z,psfNStar_u,psfNStar_g,psfNStar_r,psfNStar_i,psfNStar_z,psfApCorrectionErr_u,psfApCorrectionErr_g,psfApCorrectionErr_r,psfApCorrectionErr_i,psfApCorrectionErr_z,psfSigma1_u,psfSigma1_g,psfSigma1_r,psfSigma1_i,psfSigma1_z,psfSigma2_u,psfSigma2_g,psfSigma2_r,psfSigma2_i,psfSigma2_z,psfB_u,psfB_g,psfB_r,psfB_i,psfB_z,psfP0_u,psfP0_g,psfP0_r,psfP0_i,psfP0_z,psfBeta_u,psfBeta_g,psfBeta_r,psfBeta_i,psfBeta_z,psfSigmaP_u,psfSigmaP_g,psfSigmaP_r,psfSigmaP_i,psfSigmaP_z,psfWidth_u,psfWidth_g,psfWidth_r,psfWidth_i,psfWidth_z,psfPsfCounts_u,psfPsfCounts_g,psfPsfCounts_r,psfPsfCounts_i,psfPsfCounts_z,psf2GSigma1_u,psf2GSigma1_g,psf2GSigma1_r,psf2GSigma1_i,psf2GSigma1_z,psf2GSigma2_u,psf2GSigma2_g,psf2GSigma2_r,psf2GSigma2_i,psf2GSigma2_z,psf2GB_u,psf2GB_g,psf2GB_r,psf2GB_i,psf2GB_z,psfCounts_u,psfCounts_g,psfCounts_r,psfCounts_i,psfCounts_z,gain_u,gain_g,gain_r,gain_i,gain_z,darkVariance_u,darkVariance_g,darkVariance_r,darkVariance_i,darkVariance_z,nProf_u,nProf_g,nProf_r,nProf_i,nProf_z,loadVersion,segmentID
+</i>
+
+<p><b>sqlFieldProfile.csv</b><br>
+The FieldProfile table CSV file contains the following columns:
+<br>
+<i>
+bin,band,profMean,profMed,profSig,fieldID
+</i>
+
+<p><b>sqlPhotoObjAll.csv</b><br>
+This is the biggest CSV file, for the PhotoObjAll table.  There are 454
+columns in all:
+<br>
+<i>
+objID,skyVersion,run,rerun,camcol,field,obj,mode,nChild,type,clean,probPSF,insideMask,flags,rowc,rowcErr,colc,colcErr,rowv,rowvErr,colv,colvErr,rowc_u,rowc_g,rowc_r,rowc_i,rowc_z,rowcErr_u,rowcErr_g,rowcErr_r,rowcErr_i,rowcErr_z,colc_u,colc_g,colc_r,colc_i,colc_z,colcErr_u,colcErr_g,colcErr_r,colcErr_i,colcErr_z,sky_u,sky_g,sky_r,sky_i,sky_z,skyErr_u,skyErr_g,skyErr_r,skyErr_i,skyErr_z,psfMag_u,psfMag_g,psfMag_r,psfMag_i,psfMag_z,psfMagErr_u,psfMagErr_g,psfMagErr_r,psfMagErr_i,psfMagErr_z,fiberMag_u,fiberMag_g,fiberMag_r,fiberMag_i,fiberMag_z,fiberMagErr_u,fiberMagErr_g,fiberMagErr_r,fiberMagErr_i,fiberMagErr_z,petroMag_u,petroMag_g,petroMag_r,petroMag_i,petroMag_z,petroMagErr_u,petroMagErr_g,petroMagErr_r,petroMagErr_i,petroMagErr_z,petroRad_u,petroRad_g,petroRad_r,petroRad_i,petroRad_z,petroRadErr_u,petroRadErr_g,petroRadErr_r,petroRadErr_i,petroRadErr_z,petroR50_u,petroR50_g,petroR50_r,petroR50_i,petroR50_z,petroR50Err_u,petroR50Err_g,petroR50Err_r,petroR50Err_i,petroR50Err_z,petroR90_u,petroR90_g,petroR90_r,petroR90_i,petroR90_z,petroR90Err_u,petroR90Err_g,petroR90Err_r,petroR90Err_i,petroR90Err_z,q_u,q_g,q_r,q_i,q_z,qErr_u,qErr_g,qErr_r,qErr_i,qErr_z,u_u,u_g,u_r,u_i,u_z,uErr_u,uErr_g,uErr_r,uErr_i,uErr_z,mE1_u,mE1_g,mE1_r,mE1_i,mE1_z,mE2_u,mE2_g,mE2_r,mE2_i,mE2_z,mE1E1Err_u,mE1E1Err_g,mE1E1Err_r,mE1E1Err_i,mE1E1Err_z,mE1E2Err_u,mE1E2Err_g,mE1E2Err_r,mE1E2Err_i,mE1E2Err_z,mE2E2Err_u,mE2E2Err_g,mE2E2Err_r,mE2E2Err_i,mE2E2Err_z,mRrCc_u,mRrCc_g,mRrCc_r,mRrCc_i,mRrCc_z,mRrCcErr_u,mRrCcErr_g,mRrCcErr_r,mRrCcErr_i,mRrCcErr_z,mCr4_u,mCr4_g,mCr4_r,mCr4_i,mCr4_z,mE1PSF_u,mE1PSF_g,mE1PSF_r,mE1PSF_i,mE1PSF_z,mE2PSF_u,mE2PSF_g,mE2PSF_r,mE2PSF_i,mE2PSF_z,mRrCcPSF_u,mRrCcPSF_g,mRrCcPSF_r,mRrCcPSF_i,mRrCcPSF_z,mCr4PSF_u,mCr4PSF_g,mCr4PSF_r,mCr4PSF_i,mCr4PSF_z,isoRowc_u,isoRowc_g,isoRowc_r,isoRowc_i,isoRowc_z,isoRowcErr_u,isoRowcErr_g,isoRowcErr_r,isoRowcErr_i,isoRowcErr_z,isoRowcGrad_u,isoRowcGrad_g,isoRowcGrad_r,isoRowcGrad_i,isoRowcGrad_z,isoColc_u,isoColc_g,isoColc_r,isoColc_i,isoColc_z,isoColcErr_u,isoColcErr_g,isoColcErr_r,isoColcErr_i,isoColcErr_z,isoColcGrad_u,isoColcGrad_g,isoColcGrad_r,isoColcGrad_i,isoColcGrad_z,isoA_u,isoA_g,isoA_r,isoA_i,isoA_z,isoAErr_u,isoAErr_g,isoAErr_r,isoAErr_i,isoAErr_z,isoB_u,isoB_g,isoB_r,isoB_i,isoB_z,isoBErr_u,isoBErr_g,isoBErr_r,isoBErr_i,isoBErr_z,isoAGrad_u,isoAGrad_g,isoAGrad_r,isoAGrad_i,isoAGrad_z,isoBGrad_u,isoBGrad_g,isoBGrad_r,isoBGrad_i,isoBGrad_z,isoPhi_u,isoPhi_g,isoPhi_r,isoPhi_i,isoPhi_z,isoPhiErr_u,isoPhiErr_g,isoPhiErr_r,isoPhiErr_i,isoPhiErr_z,isoPhiGrad_u,isoPhiGrad_g,isoPhiGrad_r,isoPhiGrad_i,isoPhiGrad_z,deVRad_u,deVRad_g,deVRad_r,deVRad_i,deVRad_z,deVRadErr_u,deVRadErr_g,deVRadErr_r,deVRadErr_i,deVRadErr_z,deVAB_u,deVAB_g,deVAB_r,deVAB_i,deVAB_z,deVABErr_u,deVABErr_g,deVABErr_r,deVABErr_i,deVABErr_z,deVPhi_u,deVPhi_g,deVPhi_r,deVPhi_i,deVPhi_z,deVPhiErr_u,deVPhiErr_g,deVPhiErr_r,deVPhiErr_i,deVPhiErr_z,deVMag_u,deVMag_g,deVMag_r,deVMag_i,deVMag_z,deVMagErr_u,deVMagErr_g,deVMagErr_r,deVMagErr_i,deVMagErr_z,expRad_u,expRad_g,expRad_r,expRad_i,expRad_z,expRadErr_u,expRadErr_g,expRadErr_r,expRadErr_i,expRadErr_z,expAB_u,expAB_g,expAB_r,expAB_i,expAB_z,expABErr_u,expABErr_g,expABErr_r,expABErr_i,expABErr_z,expPhi_u,expPhi_g,expPhi_r,expPhi_i,expPhi_z,expPhiErr_u,expPhiErr_g,expPhiErr_r,expPhiErr_i,expPhiErr_z,expMag_u,expMag_g,expMag_r,expMag_i,expMag_z,expMagErr_u,expMagErr_g,expMagErr_r,expMagErr_i,expMagErr_z,modelMag_u,modelMag_g,modelMag_r,modelMag_i,modelMag_z,modelMagErr_u,modelMagErr_g,modelMagErr_r,modelMagErr_i,modelMagErr_z,texture_u,texture_g,texture_r,texture_i,texture_z,lnLStar_u,lnLStar_g,lnLStar_r,lnLStar_i,lnLStar_z,lnLExp_u,lnLExp_g,lnLExp_r,lnLExp_i,lnLExp_z,lnLDeV_u,lnLDeV_g,lnLDeV_r,lnLDeV_i,lnLDeV_z,fracDeV_u,fracDeV_g,fracDeV_r,fracDeV_i,fracDeV_z,flags_u,flags_g,flags_r,flags_i,flags_z,type_u,type_g,type_r,type_i,type_z,probPSF_u,probPSF_g,probPSF_r,probPSF_i,probPSF_z,status,ra,dec,cx,cy,cz,raErr,decErr,raDecCorr,b,l,offsetRa_u,offsetRa_g,offsetRa_r,offsetRa_i,offsetRa_z,offsetDec_u,offsetDec_g,offsetDec_r,offsetDec_i,offsetDec_z,primTarget,secTarget,seguePrimTarget,segueSecTarget,extinction_u,extinction_g,extinction_r,extinction_i,extinction_z,priority,rho,nProf_u,nProf_g,nProf_r,nProf_i,nProf_z,loadVersion,htmID,fieldID,parentID,SpecObjID,u,g,r,i,z,Err_u,Err_g,Err_r,Err_i,Err_z,dered_u,dered_g,dered_r,dered_i,dered_z
+</i>
+
+<p><b>sqlPhotoProfile.csv</b><br>
+The PhotoProfile table CSV file contains the following columns:
+<br>
+<i>
+bin,band,profMean,profErr,objID
+</i>
+
+<p><b>sqlObjMask.csv</b><br>
+The ObjMask table CSV file contains the columns:
+<br>
+<i>
+objID,size,nspan,row0,col0,rmin,rmax,cmin,cmax,npix,span
+</i>
+
+<p><b>sqlFirst.csv</b><br>
+The FIRST table CSV file contains the columns:
+<br>
+<i>
+delta,match,peak,integr,rms,major,minor,pa,id,lambda,eta,objID
+</i>
+
+<p><b>sqlRosat.csv</b><br>
+The ROSAT table CSV file contains the columns:
+<br>
+<i>
+delta,match,cps,hard1,hard2,extent,exposure,posErr,cpsErr,hard1Err,hard2Err,extentLike,detectLike,objID
+</i>
+
+<p><b>sqlUSNO.csv</b><br>
+The USNO table CSV file contains the columns:
+<br>
+<i>
+delta,match,propermotion,angle,blue,red,objID
+</i>
+
+<p><b>sqlTarget.csv</b><br>
+This is the Target table CSV file, the 18 columns in this file are:
+<br>
+<i>
+targetID,run,rerun,camcol,field,obj,regionID,ra,dec,duplicate,htmID,cx,cy,cz,bestObjID,specObjID,bestMode,loadVersion
+</i>
+
+<p><b>sqlTargetInfo.csv</b><br>
+This is the TargetInfo table CSV file, the 10 columns in this file are:
+<br>
+<i>
+targetObjID,targetID,skyVersion,primTarget,secTarget,priority,programType,programName,targetMode,loadVersion
+</i>
+
+<h3>Spectro CSV Files</h3>
+These are in the <b>spCSV/plates</b> directory for each spectro "run".
+The following CSV files are present for each run:
+
+<ol>
+<li>sqlELRedshift.csv</li>
+<li>sqlSpecLineAll.csv</li>
+<li>sqlXCRedshift.csv</li>
+<li>sqlPlate.csv</li>
+<li>sqlSpecLineIndex.csv</li>
+<li>sqlSpecObjAll.csv</li>
+</ol>
+
+<p><b>sqlSpecObjAll.csv</b><br>
+This is the CSV file for the SpecObjAll table.  All columns except for
+the last one are direct copies from the CSV file.  The last column, <b>img</b>,
+is a ReadFile transformation using DTS in SQL Server.  This column
+contains the path to a spectro GIF file whose contents are copied into
+the DB column as a binary string.  The 63 columns in this file are:
+<br>
+<i>
+specObjID,mjd,plate,tile,xFocal,yFocal,fiberID,z,zErr,zConf,zStatus,specClass,zWarning,velDisp,velDispErr,eCoeff_0,eCoeff_1,eCoeff_2,eCoeff_3,eCoeff_4,eClass,nGood,sn_0,sn_1,sn_2,mag_0,mag_1,mag_2,ra,dec,cx,cy,cz,htmID,fiberMag_u,fiberMag_g,fiberMag_r,fiberMag_i,fiberMag_z,primTarget,secTarget,seguePrimTarget,segueSecTarget,otherPrimTarget,otherSecTarget,pixMin,pixMax,sci_sn,smear_sn,sm_leg_0,sm_leg_1,sm_leg_2,sciencePrimary,loadVersion,plateID,spectrographID,throughput,objType,objTypeName,targetID,targetObjID,bestObjID,img
+</i>
+
+<p><b>sqlPlateX.csv</b><br>
+This is the CSV file for the PlateX table.  The 77 columns in this file are:
+<br>
+<i>
+plateID,spRerun,mjd,plate,tile,mapMjd,nExp,tai,raBoresight,decBoresight,taiHMS,expTime,expTimeB1,expTimeB2,expTimeR1,expTimeR2,helioRV,ra,dec,cx,cy,cz,htmID,sn1_0,sn1_1,sn1_2,sn2_0,sn2_1,sn2_2,dateObs,timeSys,quality,name,program,version,observer,camVer,spec2DVer,utilsVer,spec1DVer,readVer,combVer,extinction_u,extinction_g,extinction_r,extinction_i,extinction_z,roffset1,rsigma1,groff1,grsigma1,roffset2,rsigma2,groff2,grsigma2,sfd_used,xygrsig1,xygrsig2,mpgrsig1,mpgrsig2,mpgroff1,mpgroff2,isPrimary,cartridgeID,plateVersion,haMin,haMax,mjdDesign,theta,fscanVersion,fmapVersion,fscanMode,fscanSpeed,programType,programName,loadVersion,expID
+</i>
+
+<p><b>sqlELRedshift.csv</b><br>
+The ELRedshift table CSV file has the following columns:
+<br>
+<i>
+elRedShiftID,z,zErr,zConf,nFit,wtFit,specObjID
+</i>
+
+<p><b>sqlSpecLineAll.csv</b><br>
+The 27 columns in the SpecLineAll table CSV file are:
+<br>
+<i>
+specLineID,wave,waveErr,waveMin,waveMax,sigma,sigmaErr,sigmaMin,sigmaMax,height,heightErr,continuum,ew,ewErr,ewMin,specIndex,nSigma,chisq,nu,restWave,lineID,weight,z,zErr,lineMask,category,specobjID
+</i>
+
+<p><b>sqlXCRedshift.csv</b><br>
+The XCRedshift table CSV file has the following 14 columns:
+<br>
+<i>
+xcRedShiftID,tempNo,peakNo,shift,z,zErr,r,zConf,height,width,widthErr,delta,rms,specObjID
+</i>
+
+<p><b>sqlSpecLineIndex.csv</b><br>
+The SpecLineIndex table CSV file has the following 11 columns:
+<br>
+<i>
+speclineindexID,name,ew,ewErr,mag,magErr,waveMin,waveMax,z,sn,specobjID
+</i>
+
+
+<p><img src="rule.gif">
+   </p>
+   
+<h6> <a href="mailto:thakar@pha.jhu.edu">Ani R. Thakar<br>
+   </a>Last Modified: August 07, 2008.</h6>
+<br>
+</body>
+</html>

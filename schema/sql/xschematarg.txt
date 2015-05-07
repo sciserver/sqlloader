@@ -1,0 +1,67 @@
+--------------------------
+-- xschematarg.txt
+--------------------------
+-- Ani Thakar 2006-11-22
+--------------------------
+-- This is the list of SQL files (clone of xschema.txt)
+-- in the schema for the TARG DB which must be
+-- executed for the schema creation.
+-- They MUST be executed in this order.
+--****************************************************************************
+-- History:
+-- 2007-01-09  Ani: Removed GrantAccess.sql and spHtmMaster.sql.
+--------------------------
+-- metadata
+--------------------------
+FileGroups.sql
+DataConstants.sql
+ConstantSupport.sql
+MetadataTables.sql
+IndexMap.sql
+Versions.sql
+--------------------------
+-- basic schema
+--------------------------
+PhotoTablesTarg.sql
+spPhoto.sql
+NeighborTables.sql
+SpectroTables.sql
+spSpectro.sql
+TilingTables.sql
+RegionTables.sql
+FrameTables.sql
+ViewsTarg.sql
+--------------------------
+-- spatial functions
+--------------------------
+-- spHTM.sql
+--spHTM_C#.sql
+spHtmCSharp.sql
+spNearby.sql
+--------------------------
+-- region stuff
+--------------------------
+spCoordinate.sql
+spRegion.sql
+spBoundary.sql
+spSector.sql
+--------------------------
+-- finish and doc stuff
+--------------------------
+spCheckDB.sql
+spTestQueries.sql
+-- spWebSupport.sql
+spDocSupport.sql
+spSQLSupport.sql
+spSkyQASupport.sql
+spUrlFitsSupport.sql
+spNeighbor.sql
+spSetValues.sql
+spValidate.sql
+spPublish.sql
+spFinish.sql
+spCopyDBSubset.sql
+--------------------------
+-- done
+--------------------------------
+

@@ -1,0 +1,109 @@
+<html>
+<head>
+   <title>sqlLoader Contents</title>
+<META name="description" content="">
+<META name="keywords" content="">
+<META name="generator" content="Koala HTML">
+<!--Insert the following script into the <head> section of your page-->
+
+<style>
+<!--
+.menulines{
+border:1px solid white;
+}
+-->
+
+.menulines a{
+text-decoration:none;
+color:lightblue;
+}
+</style>
+
+<script language="JavaScript1.2">
+
+function borderize(what,color){
+what.style.borderColor=color
+}
+
+function borderize_on(e){
+if (document.all)
+source3=event.srcElement
+else if (document.getElementById)
+source3=e.target
+if (source3.className=="menulines"){
+borderize(source3,"black")
+}
+else{
+while(source3.tagName!="TABLE"){
+source3=document.getElementById? source3.parentNode : source3.parentElement
+if (source3.className=="menulines")
+borderize(source3,"black")
+}
+}
+}
+
+function borderize_off(e){
+if (document.all)
+source4=event.srcElement
+else if (document.getElementById)
+source4=e.target
+if (source4.className=="menulines")
+borderize(source4,"white")
+else{
+while(source4.tagName!="TABLE"){
+source4=document.getElementById? source4.parentNode : source4.parentElement
+if (source4.className=="menulines")
+borderize(source4,"white")
+}
+}
+}
+</script>
+
+</HEAD>
+<BODY bgcolor = "#000000" LEFTMARGIN=0 TOPMARGIN=0 MARGINWIDTH="0" MARGINHEIGHT="0" framespacing=0 frameborder="no" border=0 WIDTH="200">
+<center>
+<IMG SRC="SDSS_logo.gif" BORDER=0 ></A>
+</center>
+   
+<TABLE border="0" width="150" cellspacing="10" cellpadding="0"
+onMouseover="borderize_on(event)" onMouseout="borderize_off(event)"> 
+
+<TR><td width="100%" class="menulines"><font face="Times" size="3"><a
+href="txtLoader.htm#Admin" target="top"><b>Load Monitor</b></a></font></TD></TR>
+
+<TR><td width="100%" class="menulines"><font face="Times" size="3"><a
+href="txtLoader.htm#Loadadmin" target="top"><b>Loader Framework</b>
+</a></font></TD></TR>
+
+<TR><td width="100%" class="menulines"><font face="Times" size="3"><a
+href="txtLoader.htm#Schema" target="top"><b>SQL Schema</b></a></font></TD></TR>
+
+<TR><td width="90%" class="menulines"><font face="Times" size="3"><a
+href="txtLoader.htm#Setup" target="top"><b>Loader Setup</b></a></font></TD></TR><br>
+
+<TR><td width="90%" class="menulines"><font face="Times" size="3"><a
+href="txtLoader.htm#Run" target="top"><b>Running the Loader</b></a></font></TD></TR><br>
+
+<TR><td width="100%" class="menulines"><font face="Times" size="3"><a
+href="txtLoader.htm#Weblog" target="top"><b>WebLog DB</b></a> </font></TD></TR>
+
+<TR><td width="100%" class="menulines"><font face="Times" size="3"><a
+href="txtLoader.htm#DocTables" target="top"><b>Updating Metadata & Documentation</b></a></font></TD></TR>
+
+<TR><td width="100%" class="menulines"><font face="Times" size="3"><a
+href="txtLoader.htm#WebInterface" target="top"><b>Setting Up Web Interface</b></a></font></TD></TR>
+
+<TR><td width="100%" class="menulines"><font face="Times" size="3"><a
+href="txtLoader.htm#Troubleshooting" target="top"><b>Troubleshooting</b></a></font></TD></TR>
+
+<TR><td width="100%" class="menulines"><font face="Times" size="3"><a
+href="txtLoader.htm#TDL" target="top"><b>To Do List</b></a></font></TD></TR>
+
+</TABLE>
+
+
+</body>
+</html>
+
+
+

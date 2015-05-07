@@ -1,0 +1,425 @@
+BODY
+{
+    COLOR: #FFFFFF;
+    BACKGROUND-COLOR: #252525;
+}
+A
+{
+    COLOR: #cde5ad;
+    FONT-FAMILY: verdana,helvetica,sans-serif
+}
+A:hover
+{
+    COLOR: #FFFFFF
+}
+P
+{
+    FONT-SIZE: 10pt;
+    COLOR: #ffffff;
+    FONT-FAMILY: verdana,helvetica,sans-serif
+}
+TD
+{
+    FONT-SIZE: 10pt;
+    COLOR: #ffffff;
+    FONT-FAMILY: verdana,helvetica,sans-serif
+}
+H1
+{
+    COLOR: #c3c3c3;
+    FONT-FAMILY: verdana,helvetica,sans-serif
+}
+H2
+{
+    COLOR: #ffffff;
+    FONT-FAMILY: verdana,helvetica,sans-serif
+}
+H3
+{
+    COLOR: #ffffff;
+    FONT-FAMILY: verdana,helvetica,sans-serif
+}
+H4
+{
+    COLOR: #ffffff;
+    FONT-FAMILY: verdana,helvetica,sans-serif
+}
+H5
+{
+    COLOR: #ffffff;
+    FONT-FAMILY: verdana,helvetica,sans-serif
+}
+H6
+{
+    COLOR: #ffffff;
+    FONT-FAMILY: verdana,helvetica,sans-serif
+}
+SPAN
+{
+    COLOR: #ffffff;
+    FONT-FAMILY: verdana,helvetica,sans-serif
+}
+EM
+{
+    FONT-WEIGHT: 800;
+    COLOR: #ffff00
+}
+H1
+{
+    FONT-SIZE: 16pt
+}
+H2
+{
+    FONT-SIZE: 13pt
+}
+H3
+{
+    FONT-SIZE: 12pt
+}
+A
+{
+    FONT-WEIGHT: bold;
+    COLOR: #cde5ad;
+    TEXT-DECORATION: none
+}
+#logo
+{
+    LEFT: 0px;
+    POSITION: absolute;
+    TOP: 0px
+}
+#banner
+{
+    LEFT: 90px;
+    POSITION: absolute;
+    TOP: 0px
+}
+#gutter
+{
+    LEFT: 15px;
+    POSITION: absolute;
+    TOP: 125px
+}
+#hgutter
+{
+    LEFT: 15px;
+    POSITION: absolute;
+    TOP: 125px;
+    BACKGROUND-COLOR: #252525
+}
+#sgutter
+{
+    LEFT: 0px;
+    POSITION: absolute;
+    TOP: 540px
+}
+#title
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 18pt;
+    Z-INDEX: 1;
+    LEFT: 200px;
+    COLOR: #cde5ad;
+    FONT-FAMILY: verdana,helvetica,sans-serif;
+    POSITION: absolute;
+    TOP: 120px
+}
+#text
+{
+    LEFT: 200px;
+    WIDTH: 640px;
+    POSITION: absolute;
+    TOP: 155px;
+    HEIGHT: 90%;
+    BACKGROUND-COLOR: #333360
+}
+#transp
+{
+    LEFT: 80px;
+    POSITION: absolute;
+    TOP: 155px
+}
+.sml
+{
+    FONT-SIZE: 8pt
+}
+.med
+{
+    FONT-SIZE: 10pt
+}
+.lrg
+{
+    FONT-SIZE: 12pt
+}
+.hi
+{
+    FONT-WEIGHT: normal;
+    FONT-SIZE: 9pt;
+    COLOR: #ffffff;
+    LINE-HEIGHT: 20px;
+    FONT-FAMILY: Verdana, Palladio, Helvetica,sans-serif;;
+    BACKGROUND-COLOR: #555555
+}
+.hi A:hover
+{
+    COLOR: #ffffff
+}
+.lo
+{
+    FONT-WEIGHT: normal;
+    FONT-SIZE: 9pt;
+    COLOR: #cde5ad;
+    LINE-HEIGHT: 20px;
+    FONT-FAMILY: Verdana, Palladio, Helvetica,sans-serif;
+}
+.lo A:hover
+{
+    COLOR: #ffffff
+}
+.thi
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 14pt;
+    COLOR: #cde5ad;
+    FONT-FAMILY: Times New Roman
+}
+.tlo
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 13pt;
+    COLOR: #cde5ad;
+    FONT-FAMILY: Times New Roman
+}
+.s
+{
+    COLOR: #ddddff;
+    BACKGROUND-COLOR: #552255
+}
+.t
+{
+    COLOR: #ddddff;
+    BACKGROUND-COLOR: #333366
+}
+.b
+{
+    COLOR: #ddddff;
+    BACKGROUND-COLOR: #000060
+}
+.tm
+{
+    FONT-SIZE: 8pt;
+    COLOR: #ddddff;
+    BACKGROUND-COLOR: #335566
+}
+.bm
+{
+    FONT-SIZE: 8pt;
+    COLOR: #ddddff;
+    BACKGROUND-COLOR: #000060
+}
+.h
+{
+    COLOR: #ddddff;
+    BACKGROUND-COLOR: #006060
+}
+.ok
+{
+    COLOR: #ddddff;
+    BACKGROUND-COLOR: #00aa00
+}
+.bad
+{
+    COLOR: #ddddff;
+    BACKGROUND-COLOR: #aa0000
+}
+.prob
+{
+    COLOR: #ddddff;
+    BACKGROUND-COLOR: #aaaa00
+}
+.tsml
+{
+    FONT-WEIGHT: normal;
+    FONT-SIZE: 8pt;
+    COLOR: #ddddff;
+    BACKGROUND-COLOR: #333366
+}
+.bsml
+{
+    FONT-WEIGHT: normal;
+    FONT-SIZE: 8pt;
+    COLOR: #ddddff;
+    BACKGROUND-COLOR: #000060
+}
+.hsml
+{
+    FONT-WEIGHT: normal;
+    FONT-SIZE: 8pt;
+    COLOR: #ddddff;
+    BACKGROUND-COLOR: #006060
+}
+
+.formLabel
+{
+	color: #FFFFFF; 
+	font-size: 11pt;
+	font-weight: bold;
+}
+
+.formLabelSmall
+{
+	color: #FFFFFF; 
+	font-size: 10pt;
+	font-weight: bold;
+}
+
+.helplink
+{
+	color: orange; 
+	font-size: 12pt;
+	font-weight: bold;
+    BACKGROUND-COLOR: #006060
+}
+
+.bindent2 { margin-left: 32px}
+.bindent1 { margin-left: 16px }
+
+.caption
+{
+    FONT-WEIGHT: bold;
+    COLOR: #cde5ad;
+    FONT-STYLE: italic
+}
+.question
+{
+    COLOR: whitesmoke;
+    BACKGROUND-COLOR: darkred
+}
+.exercise
+{
+    COLOR: snow;
+    BACKGROUND-COLOR: darkgreen
+}
+.rchallenge
+{
+    COLOR: white;
+    BACKGROUND-COLOR: #550b4f
+}
+.kids
+{
+    FONT-WEIGHT: normal;
+    FONT-SIZE: 16pt
+}
+.kidsheader
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: x-large
+}
+.title
+{
+    FONT-WEIGHT: 600;
+    FONT-SIZE: 14pt;
+    COLOR: #bbbbff;
+    FONT-FAMILY: arial,helvetica,sans-serif
+}
+.bodytext
+{
+    FONT-WEIGHT: normal;
+    FONT-SIZE: 10pt;
+    COLOR: #c3c3c3;
+    FONT-FAMILY: Verdana, Palladio, Helvetica,sans-serif;
+}
+.midbodytext
+{
+    FONT-SIZE: 8pt
+}
+.smallbodytext
+{
+    FONT-SIZE: 7pt
+}
+.newstext
+{
+    COLOR:#B15353;
+    COLOR:#FF0B63;
+    FONT-SIZE: 8pt
+}
+.newstext A:hover
+{
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 7.75pt;
+    COLOR: #ffffff
+}
+.infotext
+{
+    COLOR:#198DCF;
+    FONT-SIZE: 8pt
+}
+.infotext A:hover
+{
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 7.75pt;
+    COLOR: #ffffff
+}
+.menulink
+{
+    FONT-WEIGHT: normal;
+    FONT-SIZE: 8pt;
+    COLOR: #cccc99;
+    LINE-HEIGHT: 20px;
+    FONT-FAMILY: Verdana, Palladio, Helvetica,sans-serif;
+}
+.menulink A:hover
+{
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 7.75pt;
+    COLOR: #ffffff
+}
+.menuheadlink
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 13pt;
+    COLOR: #cccc99;
+    FONT-FAMILY: Times New Roman, Times;
+}
+.menuheadlink A:hover
+{
+    COLOR: #ffffff
+}
+.navlink
+{
+    FONT-WEIGHT: normal;
+    FONT-SIZE: 8pt;
+    COLOR: #c3c3c3;
+    FONT-FAMILY: Verdana, Palladio, Helvetica,sans-serif;
+}
+.navlink A:hover
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 8pt;
+    COLOR: #ffffff
+}
+.imgborder
+{
+    BORDER-RIGHT: #cde5ad 1px solid;
+    BORDER-TOP: #cde5ad 1px solid;
+    BORDER-LEFT: #cde5ad 1px solid;
+    BORDER-BOTTOM: #cde5ad 1px solid
+}
+.imgnoborder
+{
+    BORDER-RIGHT: 0px ;
+    BORDER-TOP: 0px ;
+    BORDER-LEFT: 0px solid;
+    BORDER-BOTTOM: 0px solid
+}
+.button
+{
+    BACKGROUND: #d5d5d5;
+    COLOR: #000000
+}
+
+TH
+{
+    COLOR: yellow
+}
+.m	{color:#ffffff;background-color:#555566;line-height:50px;}

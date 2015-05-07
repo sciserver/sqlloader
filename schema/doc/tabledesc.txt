@@ -1,0 +1,839 @@
+<keyword>Algorithm</keyword>
+<entry>Meta</entry>
+<def>
+This table provides descriptive text for each of the algorithms used in SDSS
+data processing.  It is interlinked with the Glossary and Table Descriptions
+pages.
+</def>
+
+<keyword>Ap7Mag</keyword>
+<entry>Photo</entry>
+<def>
+The Ap7Mag table contains the r-band aperture magnitudes in bin 7 for all the
+<tableref>PhotoObjAll</tableref> objects.  See also the functions
+fGetPhotoApMag, fPhotoApMag and fPhotoApMagErr.
+</def>
+
+<keyword>Best2Sector</keyword>
+<entry>Geometry</entry>
+<def>
+This table places the Best<glossary>best</glossary> photometric objects into sectors, which are used to divide the sky into geometric regions. Each object appears once, and only once, in this table because a given ra and dec belong to a unique sector.
+</def>
+
+<keyword>Chunk</keyword>
+<entry>Geometry</entry>
+<def>
+This table contains some very basic information for each chunk<glossary>chunk</glossary> loaded in the database. 
+</def>
+
+
+<keyword>Convex</keyword>
+<entry>Geometry</entry>
+<def>
+</def>
+
+<keyword>DataConstants</keyword>
+<entry>Meta</entry>
+<def>
+The table DataConstants contains most of the bit-flags and enumerated quantities relevant to the SDSS. DO NOT confuse this with SDSSConstants<tableref>SDSSConstants</tableref>, which contains actual constants used in data processing.
+</def>
+
+<keyword>DBColumns</keyword>
+<entry>Meta</entry>
+<def>
+This table contains an extremely brief description of every column in every table in the database. Because some quantities appear in multiple tables with multiple meanings, a quantity is uniquely defined only within a single table.
+</def>
+
+<keyword>DBObjectDescription</keyword>
+<entry>Meta</entry>
+<def>
+This table contains the long descriptions for every table and view in the database.
+</def>
+
+<keyword>DBObjects</keyword>
+<entry>Meta</entry>
+<def>
+This table contains names and descriptions of all the tables and views in the database.
+</def>
+
+<keyword>DBViewCols</keyword>
+<entry>Meta</entry>
+<def>
+This table stores the names and descriptions of all columns in all views<glossary>view</glossary> in the database. This is used by the auto-documentation.
+</def>
+
+<keyword>Dependency</keyword>
+<entry>Meta</entry>
+<def>
+The Dependency table tracks dependencies between the tables, functions and
+stored procedures in the database.  It is aid to the schema designers.
+</def>
+
+<keyword>Diagnostics</keyword>
+<entry>Meta</entry>
+<def>
+This table contains the type and number of rows (if applicable) for each
+object in the database.  The type field can have one of the following values:
+<table align=center>
+<tr><td>F</td><td>Foreign Key</td></tr>
+<tr><td>FN</td><td>Scalar Function</td></tr>
+<tr><td>I</td><td>Index</td></tr>
+<tr><td>P</td><td>Stored Procedure</td></tr>
+<tr><td>TF</td><td>Table-valued Function</td></tr>
+<tr><td>U</td><td>Table</td></tr>
+<tr><td>V</td><td>View</td></tr>
+</table>
+</def>
+
+<keyword>DR3QuasarCatalog</keyword>
+<entry>Spectro</entry>
+<def>
+The list of all confirmed quasars found in Data Release 3 of SDSS, along with
+their parameters and cross-matches with other major catalogs.  The algorithm
+used to extract quasars from SDSS data is described in Schneider et al. 2005.
+</def>
+
+<keyword>DR5QuasarCatalog</keyword>
+<entry>Spectro</entry>
+<def>
+The list of all confirmed quasars found in Data Release 5 of SDSS, along with
+their parameters and cross-matches with other major catalogs.  The algorithm
+used to extract quasars from SDSS data is described in Schneider et al. 2007
+(AJ).  Note that the parameters are somewhat different from the DR3 catalog.
+</def>
+
+<keyword>ELRedShift</keyword>
+<entry>Spectro</entry>
+<def>
+This table contains ALL of the measured emission lines<algorithm>redshift_type</algorithm>, along with their redshifts and related information, for ALL spectroscopic objects.
+</def>
+
+<keyword>Field</keyword>
+<entry>Meta</entry>
+<def>
+This table contains all the measured parameters of each imaging field<glossary>field</glossary>, along with relevant summary statistics, and astrometric and photometric information.
+</def>
+
+<keyword>FieldProfile</keyword>
+<entry>Photo</entry>
+<def>
+Need description.
+</def>
+
+<keyword>FileGroupMap</keyword>
+<entry>Meta</entry>
+<def>
+The File Group Map describes the database partitioning scheme, and it is
+usually empty when the database is not partitioned.  It is an internal table
+used for schema design.
+</def>
+
+<keyword>First</keyword>
+<entry>External</entry>
+<def>
+This table stores measurements from the FIRST radio survey for those FIRST objects which are matched to SDSS photometric objects. ????
+</def>
+
+<keyword>Frame</keyword>
+<entry>Photo</entry>
+<def>
+This table actually contains false color JPEG images of the fields<glossary>field</glossary>, and their most relevant parameters, in particular the coefficients of the astrometric transformation<algorithm>astrometry</algorithm>, and position info. The images are stored at several zoom levels. 
+</def>
+
+<keyword>Glossary</keyword>
+<entry>Meta</entry>
+<def>
+The Glossary table holds the contents of the Glossary Help page, which is
+loaded dynamically with a query to the database.
+</def>
+
+<keyword>HalfSpace</keyword>
+<entry>Geometry</entry>
+<def>
+This table contains constraints on the boundaries of different Regions.  See
+also the <tableref>Region</tableref> and <tableref>RegionConvex</tableref>
+tables.
+</def>
+
+<keyword>History</keyword>
+<entry>Meta</entry>
+<def>
+This is a history of changes to the database.
+</def>
+
+<keyword>HoleObj</keyword>
+<entry>Spectro</entry>
+<def>
+This table stores information for non-OBJECT holes<glossary>hole</glossary> on spectroscopic plates<glossary>plate</glossary>, and for OBJECT holes that were not mapped by the fiber mapper. 
+</def>
+
+<keyword>IndexMap</keyword>
+<entry>Meta</entry>
+<def>
+This table drives the creation of database indexes in the database.  It
+contains the name, table name, type (primary key, foreign key or covering
+index) and description of every index in the database.  
+</def>
+
+<keyword>Inventory</keyword>
+<entry>Meta</entry>
+<def>
+A detailed inventory of every object in the database tracked my DDL module
+(file name).
+</def>
+
+<keyword>LoadHistory</keyword>
+<entry>Meta</entry>
+<def>
+This table contains a record of every data loading step that this database has
+experienced.   This is helpful in tracking provenance and data errors.
+</def>
+
+<keyword>Mask</keyword>
+<entry>Geometry</entry>
+<def>
+This table contains information about each photometric mask<glossary>mask</glossary>. 
+</def>
+
+<keyword>MaskedObject</keyword>
+<entry>Geometry</entry>
+<def>
+This is a list of all masked<glossary>mask</glossary> photometric objects. These objects were detected but are within the boundaries of a masked area (see the Mask table) and thus unreliable. Each object may appear multiple times, if it is masked for multiple reasons. 
+</def>
+
+<keyword>Match</keyword>
+<entry>Photo</entry>
+<def>
+This table contains pairs of photometric objects from different runs<glossary>run</glossary> (times) that probably are the same object.  These must be SDSS primary<glossary>primary</glossary> or secondary<glossary>secondary</glossary> objects, of type STAR, GALAXY, and UNKNOWN, within 1 arcsec of one another, and from different runs. The table also holds type, mode and distance information. Also see the MatchHead table<tableref>MatchHead</tableref><algorithm>match</algorithm>.
+</def>
+
+<keyword>MatchHead</keyword>
+<entry>Photo</entry>
+<def>
+When photometric objects from different runs<glossary>run</glossary> are matched (see the Match table), they form a cluster named by
+ the minimum objID in the cluster. MatchHead has summary information (mean position, number in cluster) about each of these clusters, keyed by the objID.<algorithm>match</algorithm>
+</def>
+
+<keyword>Neighbors</keyword>
+<entry>Photo</entry>
+<def>
+This table contains ALL pairs of photometric objects within 0.5 arcminutes, regardless of their status (primary, secondary, family, outside). This table is very useful for finding objects near each other but care must be taken to select only those objects with the appropriate status.
+</def>
+
+<keyword>ObjMask</keyword>
+<entry>Photo</entry>
+<def>
+This table contains the outlines of each detected photometric object over a 4x4 pixel grid, and the bounding rectangle of the object within the frame.<glossary>frame</glossary> This table should not be confused with the similarly named Mask table, which describes regions excluded from the object catalogs.</def>
+
+<keyword>PhotoObjAll</keyword>
+<entry>Photo</entry>
+<def>
+This table contains all measured parameters for all photometric objects. Because this table is huge, a variety of Views<glossary>view</glossary> have been created:
+<ul>
+<li><b>PhotoPrimary</b><tableref>PhotoPrimary</tableref>: all photo objects that are primary (the best version of the object)</li> 
+	<ul>
+          <li><b>Star</b><tableref>Star</tableref>: Primary objects that are classified<algorithm>classify</algorithm> as stars.</li>  
+          <li><b>Galaxy</b><tableref>Galaxy</tableref>: Primary objects that are classified<algorithm>classify</algorithm> as galaxies.</li>  
+          <li><b>Sky</b><tableref>Sky</tableref>: Primary objects which are sky samples.</li>  
+          <li><b>Unknown</b><tableref>Unknown</tableref>: Primary objects which are none of the above</li> 
+	</ul>
+<li><b>PhotoSecondary</b><tableref>PhotoSecondary</tableref>: all photo objects that are secondary (secondary detections).
+<li><b>PhotoFamily</b><tableref>PhotoFamily</tableref>:: all photo objects which are neither primary nor secondary. These are the parents<glossary>parent</glossary> of deblended<algorithm>deblend</algorithm> objects. 
+</ul>
+</def>
+
+<keyword>PhotoAuxAll</keyword>
+<entry>Photo</entry>
+<def>
+This table contains the extra parameters for all photometric objects that did not make it into the PhotoObjall table.  These are added as a separate table because adding columns to the very large PhotoObjAll table is prohibitively expensive unless the table is reloaded from scratch.  In a future release, these columns will be added to the PhotoObjAll table.  In the meantime, to access these columns, you may join with the PhotoObjAll table on the objid: <dd> SELECT p.objid, p.ra, q.raErr, p.dec, q.decErr <dd> FROM PhotoObjAll p, PhotoAuxAll q <dd> WHERE p.objid = q.objid <br> Similarly you may join the PhotoObj and PhotoAux views.  PhotoAux is the view of this table analogous to PhotoObj for PhotoObjAll.
+</def>
+
+<keyword>PhotoProfile</keyword>
+<entry>Photo</entry>
+<def>
+This table contains the radial profiles for each photometric object, as the mean flux in each annulus. The radii of the annuli are given in the ProfileDefs table<tableref>ProfileDefs</tableref>. 
+</def>
+
+<keyword>PhotoTag</keyword>
+<entry>Photo</entry>
+<def>
+This table contains a subset of the parameters for all of the photometric objects. It has all of the objects that are in the PhotoObjAll table<tableref>PhotoObjAll</tableref>, but only the most popular parameters for each.
+</def>
+
+<keyword>Photoz</keyword>
+<entry>Photo</entry>
+<def>
+The Photoz table contains a set of photometric redshifts that has been
+obtained with the template fitting method <algorithm>photoz</algorithm>.
+</def>
+
+<keyword>Photoz2</keyword>
+<entry>Photo</entry>
+<def>
+The photometric redshifts in the Photoz2 table are a second set of
+photometric redshifts for galaxy objects, calculated using a Neural Network
+method<algorithm>photoz</algorithm>.
+</def>
+
+<keyword>PlateX</keyword>
+<entry>Spectro</entry>
+<def>
+This table contains overview data for each plate used for spectroscopic observations. 
+</def>
+
+<keyword>ProfileDefs</keyword>
+<entry>Photo</entry>
+<def>
+This table provides the definitions of the radii used in computing the radial profiles for photometric objects, which are stored in the PhotoProfile table<tableref>PhotoProfile</tableref>.
+</def>
+
+<keyword>QsoBest</keyword>
+<entry>QsoBest</entry>
+<def>
+Contains a record describing the attributes of each QSO Base object and also
+best Surrogates to fill in the QsoConcordanceAll view.
+</def>
+
+<keyword>QsoBunch</keyword>
+<entry>QsoBunch</entry>
+<def>
+Describes each bunch of matching QSO candidate objects from Target, Spec, and
+Best databases using a search radius of 1.5 arcseconds.
+</def>
+
+<keyword>QsoCatalogAll</keyword>
+<entry>QsoCatalogAll</entry>
+<def>
+A catalog of all objects that "smell like a "QSO" - this is the source table
+of candidates for the QuasarCatalog table, which contains the list of
+confirmed quasars<algorithm>qsocat</algorithm>.
+</def>
+
+<keyword>QsoConcordanceAll</keyword>
+<entry>QsoConcordanceAll</entry>
+<def>
+A concordance of all the objects from Spectro, Best, or Target that "smell"
+like a QSO<algorithm>qsocat</algorithm>.
+</def>
+
+<keyword>QsoSpec</keyword>
+<entry>QsoSpec</entry>
+<def>
+Contains a record describing the attributes of each QSO Spec object and also
+Spectroscopic Surrogates to fill in the QsoConcordanceAll view.
+</def>
+
+<keyword>QsoTarget</keyword>
+<entry>QsoTarget</entry>
+<def>
+Contains a record describing the attributes of each QSO Target object and also
+Target Surrogates to fill in the QsoConcordanceAll view.
+</def>
+
+<keyword>RC3</keyword>
+<entry>RC3</entry>
+<def>
+This table contains objects from the RC3 catalog.  The objid is just a unique
+number for the RC3 object in the table (not a match to SDSS photoobj objid).
+</def>
+
+<keyword>Region</keyword>
+<entry>Geometry</entry>
+<def>
+This table stores the descriptions of regions which describe various
+boundaries in the survey. These are represented by equations of 3D planes,
+intersecting the unit sphere, describing great and small circles,
+respectively. <algorithm>sector</algorithm>
+</def>
+
+<keyword>RegionConvex</keyword>
+<entry>Geometry</entry>
+<def>
+This table defines the attributes of a given convex of a given region
+Regions are the union of convex hulls and are defined in the Region table.
+Convexes are the intersection of halfspaces defined by the HalfSpace table. 
+Each convex has a string representation and has some geometry properties.
+See also the <tableref>Region</tableref> and <tableref>Halfspace</tableref>
+tables.
+</def>
+
+<keyword>Rmatrix</keyword>
+<entry>Geometry</entry>
+<def>
+Contains various rotation matrices between spherical coordinate systems.
+</def>
+
+<keyword>Rosat</keyword>
+<entry>External</entry>
+<def>
+This table contains objects from the publicly available ROSAT catalogs which 
+match an SDSS object inside the data release boundary. The matching radius used is 60 arcseconds.
+</def>
+
+<keyword>RunQA</keyword>
+<entry>Photo</entry>
+<def>
+The RunQA table provides information relevant to the average data quality
+for the objects in each field<tableref>field</tableref>.  This table may be
+joined to the rest of your query to sub-select only fields of the very highest
+quality, for instance, with seeing below a certain threshold, if that is
+desired.  If you want just one number that describes the overall quality of a
+field, your best bet is the fieldQall number (0=bad, 1=acceptable, 2=good,
+3=excellent).  This overall quality determination is based on the
+(dereddened) principal colors of all the stars in the field vs. the
+Galactic value of this quantity, the PSF quality, the difference between
+Aperture and PSF magnitudes<algorithm>mag_psf</algorithm> for the same stars
+in the field, and the seeing.
+</def>
+
+<keyword>TargRunQA</keyword>
+<entry>Photo</entry>
+<def>
+The TargRunQA table provides information relevant to the average data quality
+for the objects in each field<tableref>field</tableref> for the TARGET
+skyVersion (see the RunQA table for the BEST skyVersion).  This table may be
+joined to the rest of your query to sub-select only fields of the very highest
+quality, for instance, with seeing below a certain threshold, if that is
+desired.  If you want just one number that describes the overall quality of a
+field, your best bet is the fieldQall number (0=bad, 1=acceptable, 2=good,
+3=excellent).  This overall quality determination is based on the
+(dereddened) principal colors of all the stars in the field vs. the
+Galactic value of this quantity, the PSF quality, the difference between
+Aperture and PSF magnitudes<algorithm>mag_psf</algorithm> for the same stars
+in the field, and the seeing.
+</def>
+
+<keyword>RunShift</keyword>
+<entry>Geometry</entry>
+<def>
+In early runs<glossary>run</glossary> the telescope was sometimes not tracking correctly. The boundaries of some of the runs had thus to be shifted by a small
+ amount, determined by hand. This table contains these manual corrections. These should be applied to the nu<glossary>nu</glossary> values derived for these runs.
+ Only those runs for which such a correction needs to be applied are in this table. 
+</def>
+
+<keyword>SDSSConstants</keyword>
+<entry>Meta</entry>
+<def>
+This table contains most relevant survey constants and their physical units. DO NOT confuse this with the table DataConstants<tableref>DataConstants</tableref>, which contains most of the bit-flags and enumerated quantities relevant to the SDSS. 
+</def>
+
+<keyword>Sector</keyword>
+<entry>Geometry</entry>
+<def>
+This table stores the information about set of unique tile overlaps, produced
+as part of the tiling<algorithm>tiling</algorithm> algorithm. <algorithm>sector</algorithm> 
+</def>
+
+<keyword>Sector2Tile</keyword>
+<entry>Geometry</entry>
+<def>
+This table matches tiles to sectors, and vice versa. It is table is designed to be queried in either direction - one can get all the tiles associated with a sector, or one can find all the sectors to
+ which a tile belongs.
+</def>
+
+<keyword>Segment</keyword>
+<entry>Geometry</entry>
+<def>
+This table contains the basic parameters associated with a Segment<glossary>segment</glossary> 
+</def>
+
+<keyword>SpecLineAll</keyword>
+<entry>Spectro</entry>
+<def>
+This table contains the measured parameters for every detected spectral line<algorithm>speclinefits</algorithm> in every spectroscopic object.
+</def>
+
+<keyword>SpecLineIndex</keyword>
+<entry>Spectro</entry>
+<def>
+This table contains pre-computed spectral line
+indices<algorithm>speclinefits</algorithm>.  These are combinations of
+spectral line intensities used to determine various properties of galaxies,
+like age or metallicity.  Note: The D4000 index is called "4000Abreak" in this
+table.
+</def>
+
+<keyword>SpecObjAll</keyword>
+<entry>Spectro</entry>
+<def>
+This table contains ALL the spectroscopic information for all spectroscopic objects, including a lot of duplicate and bad data. Most users will want to use the SpecObj view<tableref>SpecObj</tableref>, which contains only objects we denote sciencePrimary<glossary>scienceprimary</glossary>.
+</def>
+
+<keyword>SpecPhotoAll</keyword>
+<entry>Spectro</entry>
+<def>
+This is a pre-computed join between the PhotoObjAll<tableref>PhotoObjAll</tableref> and SpecObjAll<tableref>SpecObjAll</tableref> tables. There are several criteria used for the join between these two tables, including some tiling and targeting information.  Please see the FAQ entry for SpecPhotAll for more information.   The photo attributes included are similar to those in PhotoTag<tableref>PhotoTag</tableref>.
+ The table also includes certain attributes from Tiles. Many users will want to query the SpecPhoto view<tableref>SpecPhoto</tableref>, which contains only those objects which are spectroscopically sciencePrimary<glossary>scienceprimary</glossary> and photometrically Primary<glossary>primary</glossary>.
+</def>
+
+<keyword>QuasarCatalog</keyword>
+<entry>Spectro</entry>
+<def>
+This is a table containing all the quasars identified in the SDSS
+data.  It is a derived table that is usually published after the
+main SDSS data is released.  The paper describing the contents of
+this table is usually found in the Expert Background page of the
+SkyServer SDSS section.
+</def>
+
+<keyword>Stetson</keyword>
+<entry>Stetson</entry>
+<def>
+This table contains objects from the Stetson dataset.  The objid column
+contains matches to SDSS photoobj objids as applicable (the value is
+NULL if no SDSS match is found).
+</def>
+
+<keyword>StripeDefs</keyword>
+<entry>Geometry</entry>
+<def>
+This table gives the definitions of the stripes<glossary>stripe</glossary> in the survey layout as originally planned.
+The lower and upper limits of the actual observed stripes may differ from these values. The actual numbers are found in the Segment<tableref>Segment</tableref> and Chunk<tableref>Chunk</tableref> tables. 
+</def>
+
+<keyword>Target</keyword>
+<entry>Spectro</entry>
+<def>
+This table keeps keeps track of objects chosen by target selection<algorithm>target</algorithm>,  and which therefore will be fed to the tiling algorithm<algorithm>tiling</algorithm>. Objects are added whenever target selection is run on a new chunk<glossary>chunk</glossary>. Objects are also added when southern target selection is run. In the case
+ where an object (meaning run,rerun,camcol,field,id) is targeted more than once, there will be only one row in Target for that object, but there
+ will be multiple entries for that Target in the TargetInfo<tableref>TargetInfo</tableref> table. 
+</def>
+
+
+<keyword>TargetInfo</keyword>
+<entry>Spectro</entry>
+<def>
+This table contains unique information for an object every time it is targeted<algorithm>target</algorithm>. If an object is targeted more than once, there
+ will be multiple entries for that Target in this table.
+</def>
+
+<keyword>TargetParam</keyword>
+<entry>Spectro</entry>
+<def>
+This table contains the parameters used for a version of the target selection code.
+</def>
+
+<keyword>TileAll</keyword>
+<entry>Spectro</entry>
+<def>
+This table contains information about an individual tile<glossary>tile</glossary> on the sky. Every tile ever created is in this table. The view Tile<tableref>Tile</tableref> contains only the main science tiles for the northern survey.
+</def>
+
+<keyword>TiledTargetAll</keyword>
+<entry>Spectro</entry>
+<def>
+This table Keeps track of why a Target<glossary>target</glossary> was assigned to a Tile<glossary>tile</glossary>. 
+This table is designed to be searched both ways - one can find the Targets assigned to a Tile or one can find all the Tiles a Target has been
+ assigned to (objects can be assigned to more than one tile if they are QA objects). Information comes from plPlugMapP files, but only
+ OBJECT hole info is stored. HoleObj<tableref>HoleObj</tableref> can be used to find other holetypes that made it to a Plate<glossary>plate</glossary>. 
+</def>
+
+<keyword>TilingGeometry</keyword>
+<entry>Spectro</entry>
+<def>
+This table contains geometric information about TilingRegions, including 
+both tiling boundary and generic information. </def>
+
+<keyword>TilingInfo</keyword>
+<entry>Spectro</entry>
+<def>
+Contain info on what happened to a TargetObj in a run of tiling<algorithm>tiling</algorithm> software. </def>
+
+<keyword>TilingNote</keyword>
+<entry>Spectro</entry>
+<def>
+Contains human readable notes for a run of tiling<algorithm>tiling</algorithm>. This includes information on why specific tiles may be empty or problems with a given tile. 
+</def>
+
+<keyword>TilingRun</keyword>
+<entry>Spectro</entry>
+<def>
+Contains basic information for a run of tiling<algorithm>tiling</algorithm>. 
+</def>
+
+<keyword>USNO</keyword>
+<entry>External</entry>
+<def>
+This table contains all of the objects in the USNO-B catalog which
+match an SDSS object inside the data release boundary. However, because this
+matching was originally done with USNO-A, many new fields from the newer
+USNO-B are NOT in this table (such as the POSS-II matches), see the USNOB table.
+</def>
+
+<keyword>USNOB</keyword>
+<entry>External</entry>
+<def>
+This table contains all of the objects in the newer USNO-B catalog which
+match an SDSS object inside the data release boundary. 
+</def>
+
+<keyword>XCRedshift</keyword>
+<entry>Spectro</entry>
+<def>
+This table contains the cross-correlation redshifts<algorithm>redshift_type</algorithm> for all spectroscopic objects.
+</def>
+
+<keyword>Zone</keyword>
+<entry>Geometry</entry>
+<def>
+This table is mostly for internal database mechanics.  In order to speed up all-sky cross-correlations, this table organizes the PhotoObjs into 0.5 arcmin declination zones, indexed by the zone number and ra. 
+</def>
+
+
+<keyword>CoordType</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the CoordType enumerated values from DataConstants<tableref>DataConstants</tableref> as integers. 
+</def>
+
+<keyword>FieldMask</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the FieldMask flag values from DataConstants<tableref>DataConstants</tableref> as binary(4). 
+</def>
+
+<keyword>FieldQuality</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the FieldQuality enumerated values from DataConstants<tableref>DataConstants</tableref> as integers. 
+</def>
+
+<keyword>FramesStatus</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the FramesStatus enumerated values from DataConstants<tableref>DataConstants</tableref> as integers. 
+</def>
+
+<keyword>Galaxy</keyword>
+<entry>Photo</entry>
+<def>
+This view contains only those primary<glossary>primary</glossary> photometric objects classified<algorithm>classify</algorithm> as galaxies. As such, it is a view of PhotoPrimary<tableref>PhotoPrimary</tableref>, which is itself a view of PhotoObjAll<tableref>PhotoObjAll</tableref>.
+</def>
+
+<keyword>HoleType</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the HoleType enumerated values from DataConstants<tableref>DataConstants</tableref> as integers. 
+</def>
+
+<keyword>ImageMask</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the ImageMask flag values from DataConstants<tableref>DataConstants</tableref> as binary(2). 
+</def>
+
+<keyword>InsideMask</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the InsideMask flag values from DataConstants<tableref>DataConstants</tableref> as binary(1). 
+</def>
+
+<keyword>MaskType</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the MaskType enumerated values from DataConstants<tableref>DataConstants</tableref> as integers. 
+</def>
+
+<keyword>ObjType</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the ObjType enumerated values from DataConstants<tableref>DataConstants</tableref> as integers. 
+</def>
+
+<keyword>PhotoFamily</keyword>
+<entry>Photo</entry>
+<def>
+This view contains objects which are in PhotoObjAll<tableref>PhotoObjAll</tableref>, but neither PhotoPrimary<tableref>PhotoPrimary</tableref> nor PhotoSecondary<tableref>PhotoSecondary</tableref>. These objects are generated if they are neither primary<glossary>primary</glossary> nor secondary<glossary>secondary</glossary> survey objects but a composite object that has been deblended or the
+ part of an object that has been deblended<glossary>deblend</glossary> wrongfully (like the spiral arms of a galaxy). These objects are kept to track how the deblender is working. 
+</def>
+
+<keyword>PhotoFlags</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the PhotoFlags flag values from DataConstants<tableref>DataConstants</tableref> as binary(8). 
+</def>
+
+<keyword>PhotoMode</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the PhotoMode enumerated values from DataConstants<tableref>DataConstants</tableref> as integers. 
+</def>
+
+<keyword>PhotoObj</keyword>
+<entry>Photo</entry>
+<def>
+This view contains objects which are in PhotoObjAll<tableref>PhotoObjAll</tableref>, which are either PhotoPrimary<tableref>PhotoPrimary</tableref> or PhotoSecondary<tableref>PhotoSecondary</tableref>.  These objects are generated if they are either primary<glossary>primary</glossary> or secondary<glossary>secondary</glossary> survey objects.
+</def>
+
+<keyword>PhotoPrimary</keyword>
+<entry>Photo</entry>
+<def>
+This view contains objects from PhotoObjAll<tableref>PhotoObjAll</tableref> which are primary<glossary>primary</glossary>. As such, this view is itself a view of PhotoObj<tableref>PhotoObj</tableref>.
+</def>
+
+<keyword>PhotoSecondary</keyword>
+<entry>Photo</entry>
+<def>
+This view contains objects from PhotoObjAll<tableref>PhotoObjAll</tableref> which are secondary<glossary>secondary</glossary>. As such, this view is itself a view of PhotoObj<tableref>PhotoOb</tableref>.
+</def>
+
+<keyword>PhotoStatus</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the PhotoStatus flag values from DataConstants<tableref>DataConstants</tableref> as binary(4). 
+</def>
+
+<keyword>PhotoType</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the PhotoMode enumerated values from DataConstants<tableref>DataConstants</tableref> as integers. 
+</def>
+
+<keyword>PrimTarget</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the PrimTarget flag values from DataConstants<tableref>DataConstants</tableref> as binary(4). 
+</def>
+
+<keyword>ProgramType</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the ProgramType enumerated values from DataConstants<tableref>DataConstants</tableref> as integers. 
+</def>
+
+<keyword>PspStatus</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the PspStatus enumerated values from DataConstants<tableref>DataConstants</tableref> as integers. 
+</def>
+
+
+<keyword>SecTarget</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the SecTarget flag values from DataConstants<tableref>DataConstants</tableref> as binary(4). 
+</def>
+
+<keyword>Sky</keyword>
+<entry>Photo</entry>
+<def>
+This view contains only those primary<glossary>primary</glossary> photometric objects which are sky samples used for background measurement. As such, it is a view of PhotoPrimary<tableref>PhotoPrimary</tableref>, which is itself a view of PhotoObjAll<tableref>PhotoObjAll</tableref>.
+</def>
+
+<keyword>SpecClass</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the SpecClass enumerated values from DataConstants<tableref>DataConstants</tableref> as integers. 
+</def>
+
+<keyword>SpecLine</keyword>
+<entry>Spectro</entry>
+<def>
+This view contains all actually measured spectroscopic lines from SpecLineAll<tableref>SpecLineAll</tableref>. The view excludes those SpecLineAll objects which have category=1, and thus have not been measured. This is the view you should use to access the SpecLine data. 
+</def>
+
+<keyword>SpecLineNames</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the SpecLineNames enumerated values from DataConstants<tableref></tableref> as integers. 
+</def>
+
+<keyword>SpecObj</keyword>
+<entry>Spectro</entry>
+<def>
+This view includes only those objects from SpecObjAll<tableref>SpecObjAll</tableref> that have clean spectra. The view excludes QA and Sky and duplicates. Use this as the main way to access the spectroscopic objects. 
+</def>
+
+<keyword>SpecPhoto</keyword>
+<entry>Spectro</entry>
+<def>
+A view of joined Spectro and Photo objects that have clean spectra and photometry. The view includes only those pairs where the SpecObj<tableref>SpecObj</tableref> is a sciencePrimary<glossary>scienceprimary</glossary>, and the BEST<glossary>best</glossary> PhotoObj<tableref>PhotoObj</tableref> is a PRIMARY<glossary>primary</glossary>. (mode=1). </def>
+
+<keyword>SpecZStatus</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the SpecZStatus enumerated values from DataConstants<tableref>DataConstants</tableref> as integers.
+</def>
+
+<keyword>SpecZWarning</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the SpecZWarning flag values from DataConstants<tableref>DataConstants</tableref> as binary(4).
+</def>
+
+<keyword>sppLines</keyword>
+<entry>Spectro</entry>
+<def>
+This table contains line indices for a wide range of common features at the
+radial velocity of the star for over 250,000 Galactic stars as computed by the
+Spectro Parameter Pipeline (spp).  See the sppLines entry in Algorithms
+<algorithm>spplines</algorithm> and the <a href="realquery.asp#spplines">Sample
+Queries</a> for how to use this table.
+</def>
+
+<keyword>sppParams</keyword>
+<entry>Spectro</entry>
+<def>
+Standard stellar atmospheric parameters such as  [Fe/H], log g and Teff 
+for over 250,000 Galactic stars (by a variety of methods) as computed by the
+Spectro Parameter Pipeline (spp).  See the sppParams entry in Algorithms
+<algorithm>sppparams</algorithm> and the <a
+href="realquery.asp#sppparams">Sample Queries</a> for how to use this
+table.
+</def>
+
+<keyword>Star</keyword>
+<entry>Photo</entry>
+<def>
+This view contains only those primary<glossary>primary</glossary> photometric objects classified<algorithm>classify</algorithm> as stars. As such, it is a view of PhotoPrimary<tableref>PhotoPrimary</tableref>, which is itself a view of PhotoObjAll<tableref>PhotoObjAll</tableref>.
+</def>
+
+<keyword>Tile</keyword>
+<entry>Geometry</entry>
+<def>
+This view of TileAll<tableref>TileAll</tableref> excludes those Tiles<glossary>tile</glossary> that have been untiled<algorithm>tiling</algorithm>. Thus, it contains those tiles useful for determining spectroscopic survey completeness and geometry.
+</def>
+
+<keyword>TiledTarget</keyword>
+<entry>Spectro</entry>
+<def>
+This view of TiledTargetAll<tableref>TiledTargetAll</tableref> excludes those targets that are on tiles<glossary>tile</glossary> which have been untiled<algorithm>tiling</algorithm>. 
+</def>
+
+<keyword>TilingBoundary</keyword>
+<entry>Geometry</entry>
+<def>
+A view of TilingGeometry<tableref>TilingGeometry</tableref> objects that have isMask = 0 
+ The view excludes those TilingGeometry objects that have isMask = 1. See also TilingMask<tableref>TilingMask</tableref>. 
+</def>
+
+<keyword>TilingMask</keyword>
+<entry>Geometry</entry>
+<def>
+A view of TilingGeometry<tableref>TilingGeometry</tableref> objects that have isMask = 1 
+The view excludes those TilingGeometry objects that have isMask = 0. See also TilingBoundary<tableref>TilingBoundary</tableref>. 
+</def>
+
+<keyword>TiMask</keyword>
+<entry>Meta</entry>
+<def>
+This view contains the TiMask flag values from DataConstants<tableref>DataConstants</tableref> as binary(4).
+</def>
+
+
+<keyword>UberCal</keyword>
+<entry>Photo</entry>
+<def>
+The uber-calibration corrections and corrected magnitudes for PhotoObjAll.
+Please see the <b>UberCalibration</b> entry in
+Algorithms<algorithm>photometry#ubercal</algorithm>  for more information
+about the uber-calibration corrections, and also see the <a
+href="realquery.asp#ubercal">Sample Queries</a> for how to use the table.
+</def>
+
+<keyword>Unknown</keyword>
+<entry>Photo</entry>
+<def>
+This view contains only those primary<glossary>primary</glossary> photometric objects classified<algorithm>classify</algorithm> as unknown (not a star,galaxy,or sky). As such, it is a view of PhotoPrimary<tableref>PhotoPrimary</tableref>, which is itself a view of PhotoObjAll<tableref>PhotoObjAll</tableref>.
+</def>
+
