@@ -8,6 +8,7 @@
 --* 2009-12-29  Ani: Adapted from sas-sql.
 --* 2011-09-27  Ani: Fixed inst_res and chisq units in galSpecLine
 --*             as per PR#1404.
+--* 2015-06-11  Ani: Updated description of galSpecExtra table (PR #2329).
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -27,9 +28,11 @@ GO
 CREATE TABLE galSpecExtra (
 -------------------------------------------------------------------------------
 --/H Estimated physical parameters for all galaxies in the MPA-JHU spectroscopic catalogue.
---/T These parameters give the probability distribution of each parameter in terms
---/T of its percent quantiles. These estimates are derived in the manner described
---/T in Brinchmann et al. 2004
+--/T The estimates for stellar mass are derived using the methodology described in Kauffmann
+--/T et al (2003), applied to photometric data as described in Salim et al (2007). The star
+--/T formation rates are derived as discussed in Brinchmann et al (2004), but the aperture
+--/T corrections are done by estimating SFRs from SED fits to the photometry outside the
+--/T fiber following the methodology in Salim et al (2007).
 -------------------------------------------------------------------------------
 specObjID       bigint NOT NULL, --/D Unique ID --/K ID_CATALOG
 bptclass			smallint  NOT NULL,  --/D Emission line classification based on the BPT diagram using the methodology described in Brinchmann et al (2004). -1 means unclassifiable, 1 is star-forming, 2 means low S/N star-forming, 3 is composite, 4 AGN (excluding liners) and 5 is a low S/N LINER.  
