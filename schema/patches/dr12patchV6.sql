@@ -73,12 +73,12 @@ BEGIN
 	SET @curtime=CAST( GETDATE() AS VARCHAR(64) );
 
 	-- update SiteConstants table
-	UPDATE siteconstants SET value='http://dr'+@release+'.sdss.org/' WHERE name='DataServerURL'
-	UPDATE siteconstants SET value='http://skyserver.sdss.org/dr'+@release+'/en/' WHERE name='WebServerURL'
-	UPDATE siteconstants SET value=@release+@vnum WHERE name='DB Version'
-	UPDATE siteconstants SET value=@dbversion WHERE name='Schema Version'
-	UPDATE siteconstants SET value='DR'+@release+' SkyServer' WHERE name='DB Type'
-	UPDATE siteconstants SET comment='from Data Release '+@release+' of the Sloan Digital Sky Survey (http://www.sdss.org/dr'+@release+'/).' WHERE name='Description'
+        UPDATE siteconstants SET value='http://dr'+@release+'.sdss3.org/' WHERE name='DataServerURL'
+        UPDATE siteconstants SET value='http://skyserver.sdss.org/dr'+@release+'/en/' WHERE name='WebServerURL'
+        UPDATE siteconstants SET value=@release+@vnum WHERE name='DB Version'
+        UPDATE siteconstants SET value=@dbversion WHERE name='Schema Version'
+        UPDATE siteconstants SET value='DR'+@release+' SkyServer' WHERE name='DB Type'
+        UPDATE siteconstants SET comment='from Data Release '+@release+' of the Sloan Digital Sky Survey (http://www.sdss.org/dr'+@release+'/).' WHERE name='Description'
 
 	-- get checksum from site constants and add new entry to Versions
 	DECLARE @checksum VARCHAR(64)
@@ -99,7 +99,7 @@ EXECUTE spSetVersion
   0
   ,0
   ,'12'
-  ,'161628'
+  ,'162560'
   ,'Update DR'
   ,'.6'
   ,'DR12 patch for v6'
