@@ -281,7 +281,8 @@
 --* 2015-03-12 Ani: Fixed typo in spSynchronize.
 --* 2015-03-18 Ani: Updated spSetVersion to include DB description in
 --*                 SiteConstants.
---====================================================================
+--* 2015-05-28 Ani: Updated DataServerURL template in spSetVersion.             
+---====================================================================
 SET NOCOUNT ON;
 GO
 
@@ -447,12 +448,17 @@ BEGIN
 	SET @curtime=CAST( GETDATE() AS VARCHAR(64) );
 
 	-- update SiteConstants table
-	UPDATE siteconstants SET value='http://dr'+@release+'.sdss.org/' WHERE name='DataServerURL'
-	UPDATE siteconstants SET value='http://skyserver.sdss.org/dr'+@release+'/en/' WHERE name='WebServerURL'
-	UPDATE siteconstants SET value=@release+@vnum WHERE name='DB Version'
-	UPDATE siteconstants SET value=@dbversion WHERE name='Schema Version'
-	UPDATE siteconstants SET value='DR'+@release+' SkyServer' WHERE name='DB Type'
-	UPDATE siteconstants SET comment='from Data Release '+@release+' of the Sloan Digital Sky Survey (http://www.sdss.org/dr'+@release+'/).' WHERE name='Description'
+        UPDATE siteconstants SET value='http://dr'+@release+'.sdss3.org/' WHERE name='DataServerURL'
+        UPDATE siteconstants SET value='http://skyserver.sdss.org/dr'+@release+'/en/' WHERE name='WebServerURL'
+        UPDATE siteconstants SET value=@release+@vnum WHERE name='DB Version'
+        UPDATE siteconstants SET value=@dbversion WHERE name='Schema Version'
+        UPDATE siteconstants SET value='DR'+@release+' SkyServer' WHERE name='DB Type'
+        UPDATE siteconstants SET comment='from Data Release '+@release+' of the Sloan Digital Sky Survey (http://www.sdss.org/dr'+@release+'/).' WHERE name='Description'
+
+        -- get checksum from site constants and add new entry to Versions       
+        DECLARE @checksum VARCHAR(64)
+        SELECT @checksum=value FROM siteconstants WHERE [name]='Checksum'
+        SELECT TOP 1 @prev=version from Versions order by convert (datetime,[when]) desc
 
 	-- get checksum from site constants and add new entry to Versions
 	DECLARE @checksum VARCHAR(64)
