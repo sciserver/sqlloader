@@ -167,7 +167,7 @@ IF EXISTS (SELECT name FROM   sysobjects
 	DROP PROCEDURE spExecuteSQL
 GO
 --
-CREATE PROCEDURE spExecuteSQL (@cmd VARCHAR(8000), @limit INT = 1000, 
+CREATE PROCEDURE [dbo].[spExecuteSQL] (@cmd VARCHAR(8000), @limit INT = 1000, 
         @webserver      VARCHAR(64) = '',   -- the url
 	@winname	VARCHAR(64) = '',   -- the windows name of the server
         @clientIP       VARCHAR(16)  = 0,   -- client IP address 
@@ -254,7 +254,8 @@ AS
                 SET @cmd =      replace(@cmd, '  ' ,   ' '); -- discard duplicate spaces 
                 SET @cmd =      replace(@cmd, '  ' ,   ' '); -- discard duplicate spaces 
                 SET @cmd=       replace(@cmd,0x0D0A,   0x200A);     -- replace cr/lf with space/lf 
-                SET @cmd=       replace(@cmd,  0x09,   ' ');     -- discard tabs
+                SET @cmd=       replace(@cmd,  0x09,   ' ');     -- discard tabs				
+				SET @cmd =      replace(@cmd,   ' ; ',    '#'); -- discard semicolon
                 SET @cmd =      replace(@cmd,   ';',    '#'); -- discard semicolon 
                 END 
         IF (@cmd != @oldCmd) GOTO UNTIL; 
@@ -314,10 +315,12 @@ bottom:
                         set @startTime = getUtcDate();
                         set @busyTime = @@CPU_BUSY+@@IO_BUSY 
                         set @IOs = cast(@@TOTAL_READ as bigint)+cast(@@TOTAL_WRITE as bigint)
+						execute as login = 'logger'
                         insert WebLog.dbo.SqlStatementLogUTC 
 			values(@startTime,@webserver,@winName, @clientIP, 
 			       @serverName, @dbName, @access, @inputCmd, @isVisible) 
-                        end 
+                        revert;
+						end 
 
                 --======================================================== 
                 -- EXECUTE THE COMMAND 
@@ -328,12 +331,14 @@ bottom:
                 if (@startTime is not null) 
                         begin 
                         set @endTime = getUtcDate();
+						EXECUTE AS login = 'logger'
                         insert WebLog.dbo.SqlPerformanceLogUTC 
 			  values (@startTime,@webserver,@winName, @clientIP,
                                 datediff(ms, @startTime, @endTime)/1000.0,      -- elapsed time 
                                 ((@@CPU_BUSY+@@IO_BUSY)-@busyTime)/1000.0,      -- busy time 
                                 @rows, @@procid, 0,'')                                          -- rows returned                
-                        end 
+                        revert;
+						end 
                    
                 end             -- end of good command case 
 	-------------------------------------------------------------------------
@@ -343,6 +348,7 @@ bottom:
               	IF (0 != (select count(*) from master.dbo.sysdatabases where name = 'weblog')) 
                         begin 
                         set @startTime = getUtcDate(); 
+			EXECUTE AS login = 'logger'
 			insert WebLog.dbo.SqlStatementLogUTC 
 				values(@startTime,@webserver,@winName, @clientIP,  
 			       		@serverName, @dbName, @access, @inputCmd, @isVisible) 
@@ -351,8 +357,11 @@ bottom:
 				0,0,0,@@procid, -1, @errorMsg)  
                         end 
                  SELECT @errorMsg + @cmd as error_message; -- return the error message 
+			revert;
 		END
         END 
+-------------------------------------------------------------------------------------- 
+
 -------------------------------------------------------------------------------------- 
 GO
 --
@@ -364,7 +373,7 @@ IF EXISTS (SELECT name FROM   sysobjects
 	DROP PROCEDURE spExecuteSQL2
 GO
 --
-CREATE PROCEDURE spExecuteSQL2(
+CREATE PROCEDURE [dbo].[spExecuteSQL2](
 	@cmd varchar(8000),
 	@webserver varchar(64) = '',   -- the url
 	@winname varchar(64)   = '',   -- the windows name of the server
@@ -408,9 +417,11 @@ BEGIN
 			set @startTime = getUtcDate();
 			set @busyTime = @@CPU_BUSY+@@IO_BUSY
                         set @IOs = cast(@@TOTAL_READ as bigint)+cast(@@TOTAL_WRITE as bigint)
+			EXECUTE AS login = 'logger'
 			insert WebLog.dbo.SqlStatementLogUTC 
 				Values(@startTime,@webserver,@winName, @clientIP,
 				@serverName, @dbName, @access, @cmd, @isVisible)
+			revert;
 		  end
 		------------------------
 		-- execute the command
@@ -423,12 +434,14 @@ BEGIN
 		if (@startTime is not null)
                     begin
 			set @endTime = getUtcDate();
+			EXECUTE AS login = 'logger'
 			insert WebLog.dbo.SqlPerformanceLogUTC
 				values (@startTime,@webserver,@winName, @clientIP,
 				datediff(ms, @startTime, @endTime)/1000.0,      -- elapsed time
 				((@@CPU_BUSY+@@IO_BUSY)-@busyTime)/1000.0,      -- busy time
 				@rows, @@procid, 0,'')				-- rows returned
-		    end
+		    revert;
+			end
 	    END            -- end of good command case
 	-------------------------------------------------------------------------
 	-- bad input command case
@@ -437,6 +450,7 @@ BEGIN
 		IF (0 != (select count(*) from master.dbo.sysdatabases where name = 'weblog'))
 		    begin
 			set @startTime = getUtcDate();
+			EXECUTE AS login = 'logger'
 			insert WebLog.dbo.SqlStatementLogUTC
 				values(@startTime,@webserver,@winName, @clientIP,
 				@serverName, @dbName, @access, @cmd, @isVisible)
@@ -445,9 +459,11 @@ BEGIN
 				0,0,0,@@procid, -1, @errorMsg)
 		    end
                SELECT @errorMsg + @cmd as error_message; -- return the error message
-	    END
+				revert;
+		END
 	-------------------------------------------------------------------
 END
+
 GO
 
 
