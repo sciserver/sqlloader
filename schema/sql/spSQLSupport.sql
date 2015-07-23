@@ -46,6 +46,9 @@
 --*            the max #queries/min limit.
 --* 2008-04-21 Ani: Added "maxQueries" parameter to spExecuteSQL so that
 --*            the client can pass the throttle value to it.
+--* 2015-07-21 Sue: updated spExecuteSql and spExecuteSql2 to use "logger"
+--*			   user to log queries to weblog db
+--*            updated spExecuteSQL to remove ; when surrounded by spaces
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 
@@ -253,6 +256,8 @@ AS
                 SET @cmd = dbo.fReplace(@cmd, ' dt_',   '#'); -- discard microsoft extensions 
                 SET @cmd =      replace(@cmd, '  ' ,   ' '); -- discard duplicate spaces 
                 SET @cmd =      replace(@cmd, '  ' ,   ' '); -- discard duplicate spaces 
+				set @cmd = dbo.fReplace(@cmd, CHAR(13),  ' '); --discard carraige return
+				set @cmd = dbo.fReplace(@cmd, CHAR(10),  ' '); --discard line feed
                 SET @cmd=       replace(@cmd,0x0D0A,   0x200A);     -- replace cr/lf with space/lf 
                 SET @cmd=       replace(@cmd,  0x09,   ' ');     -- discard tabs				
 				SET @cmd =      replace(@cmd,   ' ; ',    '#'); -- discard semicolon
