@@ -1,8 +1,6 @@
 ---------
 -- run in BestDRxxx dbs
 
-use BESTDR1
-go
 
 
 
@@ -11,6 +9,66 @@ begin
 	print 'Creating logger user...'
 	create user [logger] for login [logger] with default_schema = [dbo]
 end
+
+print 'adding dbo.fReplace if neccessary'
+
+
+/****** Object:  UserDefinedFunction [dbo].[fReplace]    Script Date: 07/27/2015 15:36:42 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[fReplace]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [dbo].[fReplace]
+GO
+
+
+
+/****** Object:  UserDefinedFunction [dbo].[fReplace]    Script Date: 07/27/2015 15:36:42 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER OFF
+GO
+
+--
+CREATE FUNCTION [dbo].[fReplace](@oldstr VARCHAR(8000), @pattern VARCHAR(1000), @replacement VARCHAR(1000))
+------------------------------------------------
+--/H Case-insensitve string replacement
+------------------------------------------------
+--/T Used by the SQL parser stored procedures.
+------------------------------------------------
+RETURNS varchar(8000) 
+AS
+BEGIN 
+	-------------------------------------
+	DECLARE @newstr varchar(8000);
+	SET @newstr = '';
+	IF (LTRIM(@pattern) = '') GOTO done;
+	-----------------------------------
+	DECLARE @offset int,
+			@patlen int,
+			@lowold varchar(8000),
+			@lowpat varchar(8000);
+	SET @lowold = LOWER(@oldstr);
+	SET @lowpat = LOWER(@pattern);
+	SET @patlen = LEN(@pattern);
+	SET @offset = 0
+	--
+	WHILE (CHARINDEX(@lowpat,@lowold, 1) != 0 )
+	BEGIN
+		SET @offset	= CHARINDEX(@lowpat, @lowold, 1);
+		SET @newstr	= @newstr + SUBSTRING(@oldstr,1,@offset-1) + @replacement;
+		SET @oldstr	= SUBSTRING(@oldstr, @offset+@patlen, LEN(@oldstr)-@offset+@patlen);
+		SET @lowold	= SUBSTRING(@lowold, @offset+@patlen, LEN(@lowold)-@offset+@patlen);
+	END
+	-----------------------------------------
+done:	RETURN( @newstr + @oldstr);
+END
+
+GO
+
+
+
+
+
+
 print 'updating spExecuteSQL....'
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[spExecuteSQL]') AND type in (N'P', N'PC'))
@@ -65,6 +123,13 @@ AS
 		DECLARE @ret INT, @nQueries INT
 		SET @maxQueries = 60	-- max queries per minute limit.
 
+		
+		
+		--check to see if RecentQueries exists (compatibility with older DR's)
+		if (exists (
+			select * from information_schema.tables 
+			where table_name = 'RecentQueries' ))
+		begin
 		-- first delete elements that are older than the window sampled.
 		-- RecentRequests will typically have 4 * @maxQueries at peak
 		-- times (at a peak rate of 4 queries/second).
@@ -74,16 +139,17 @@ AS
 		-- now check how many queries this IP submitted within the last minute.
 		-- if more than @maxQueries, reject the query with an error message
 		-- if not, insert IP into recent requests log and run query
-		SELECT @nQueries=count(*) FROM RecentQueries WHERE ipAddr=@clientIP
-		IF (@nQueries > @maxQueries)
-		    BEGIN
+			SELECT @nQueries=count(*) FROM RecentQueries WHERE ipAddr=@clientIP
+				IF (@nQueries > @maxQueries)
+				BEGIN
 	                SET @errorMsg = 'ERROR: Maximum ' + cast(@maxQueries as varchar(3))
 				+ ' queries allowed per minute. Rejected query: '; 
 	                GOTO bottom; 
-		    END 
-		ELSE
-		    INSERT RecentQueries VALUES (@clientIP, CURRENT_TIMESTAMP)
-	    END  -- IF (@system = 0)    -- not a system query
+				END 
+			ELSE
+				INSERT RecentQueries VALUES (@clientIP, CURRENT_TIMESTAMP)
+			END  -- IF (@system = 0)    -- not a system query
+		end
 
         DECLARE @top varchar(20); 
         SET @top = ' top '+cast(@limit as varchar(20))+' ';                          
@@ -315,5 +381,6 @@ END
 GO
 
 print 'Updated spExecuteSQL2!'
+
 
 print DB_NAME() + ' updated successfully!'
