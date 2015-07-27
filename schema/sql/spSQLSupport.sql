@@ -193,6 +193,7 @@ CREATE PROCEDURE [dbo].[spExecuteSQL] (@cmd VARCHAR(8000), @limit INT = 1000,
 --/T <samp>EXEC dbo.spExecuteSQL('Select count(*) from PhotoObj')</samp> 
 ------------------------------------------------------------------------------- 
 AS 
+ AS 
         BEGIN 
         SET NOCOUNT ON 
         DECLARE @inputCmd varchar(8000)                 -- safe copy of command for log 
@@ -218,6 +219,13 @@ AS
 		DECLARE @ret INT, @nQueries INT
 		SET @maxQueries = 60	-- max queries per minute limit.
 
+		
+		
+		--check to see if RecentQueries exists (compatibility with older DR's)
+		if (exists (
+			select * from information_schema.tables 
+			where table_name = 'RecentQueries' ))
+		begin
 		-- first delete elements that are older than the window sampled.
 		-- RecentRequests will typically have 4 * @maxQueries at peak
 		-- times (at a peak rate of 4 queries/second).
@@ -227,16 +235,17 @@ AS
 		-- now check how many queries this IP submitted within the last minute.
 		-- if more than @maxQueries, reject the query with an error message
 		-- if not, insert IP into recent requests log and run query
-		SELECT @nQueries=count(*) FROM RecentQueries WHERE ipAddr=@clientIP
-		IF (@nQueries > @maxQueries)
-		    BEGIN
+			SELECT @nQueries=count(*) FROM RecentQueries WHERE ipAddr=@clientIP
+				IF (@nQueries > @maxQueries)
+				BEGIN
 	                SET @errorMsg = 'ERROR: Maximum ' + cast(@maxQueries as varchar(3))
 				+ ' queries allowed per minute. Rejected query: '; 
 	                GOTO bottom; 
-		    END 
-		ELSE
-		    INSERT RecentQueries VALUES (@clientIP, CURRENT_TIMESTAMP)
-	    END  -- IF (@system = 0)    -- not a system query
+				END 
+			ELSE
+				INSERT RecentQueries VALUES (@clientIP, CURRENT_TIMESTAMP)
+			end  -- if RecentQueries exists
+		end -- IF (@system = 0)    -- not a system query
 
         DECLARE @top varchar(20); 
         SET @top = ' top '+cast(@limit as varchar(20))+' ';                          
