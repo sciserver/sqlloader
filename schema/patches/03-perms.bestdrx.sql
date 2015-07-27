@@ -1,13 +1,16 @@
 ---------
 -- run in BestDRxxx dbs
 
-use BESTDR12
+use BESTDR1
 go
 
-print 'Creating logger user...'
 
-create user [logger] for login [logger] with default_schema = [dbo]
 
+if (select COUNT(*) from sys.database_principals where name='logger') = 0
+begin
+	print 'Creating logger user...'
+	create user [logger] for login [logger] with default_schema = [dbo]
+end
 print 'updating spExecuteSQL....'
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[spExecuteSQL]') AND type in (N'P', N'PC'))
@@ -210,7 +213,7 @@ bottom:
 		END
         END 
 -------------------------------------------------------------------------------------- 
-
+GO
 print 'Updated spExecuteSQL!'
 
 print 'Updating spExecuteSQL2...'
@@ -309,8 +312,8 @@ BEGIN
 		END
 	-------------------------------------------------------------------
 END
+GO
 
-Print 'Updated spExecuteSQL2!'
+print 'Updated spExecuteSQL2!'
 
-
-
+print DB_NAME() + ' updated successfully!'

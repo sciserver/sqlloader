@@ -41,3 +41,5 @@ begin
 end
 go
 
+print 'master db successfully updated!'
+
