@@ -116,6 +116,7 @@ AS
 	SET @isVisible = 1;
 	IF (UPPER(@access) LIKE '%COLLAB%') SET @isVisible = 0;  -- collab is invisible
 
+	/* throttle disabled because new load balancer does not give distinct clientIP [ART, 1/23/15]
 	IF (@system = 0)	-- if not a system (internal) query from skyserver
 	    BEGIN
 		-- Restrict users to a certain number of queries per minute to
@@ -150,6 +151,7 @@ AS
 				INSERT RecentQueries VALUES (@clientIP, CURRENT_TIMESTAMP)
 			end  -- if RecentQueries exists
 		end -- IF (@system = 0)    -- not a system query
+		*/
 
         DECLARE @top varchar(20); 
         SET @top = ' top '+cast(@limit as varchar(20))+' ';                          
