@@ -24,6 +24,7 @@ grant insert on SqlPerformanceLogUTC to logger
 
 grant insert on SqlStatementLogUTC to logger
 
+/* actually, run this after updating spExecSQL
 ---remove skyuser and webuser from weblog db if neccessary
 print 'removing unneeded users from weblog db'
 if (select count(*) from sys.database_principals where name = 'skyuser') != 0
@@ -42,7 +43,7 @@ begin
 	end
 drop user webuser;
 end
-
+*/
 print 'weblog db successfully updated!'
 
 
