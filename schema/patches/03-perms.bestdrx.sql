@@ -222,6 +222,27 @@ AS
                 END     
            END 
         --------------------------------------------------------------------------- 
+        -- preventing the execution of more than one select statement (with the exception of select statements that are inside nested queries)
+
+			declare @j int
+		    SET @j = CHARINDEX('select ',LOWER(@cmd),7) -- point just past the first select
+			if( @j > 0)
+			begin
+				UNTIL2:  
+				BEGIN 
+					if (SUBSTRING(@cmd,@j-2,2) = '( ' or SUBSTRING(@cmd,@j-1,1) = '(' )
+					begin
+						SET @j = CHARINDEX('select ',LOWER(@cmd),@j+7)
+					end
+					else
+					begin
+						set @cmd = stuff(@cmd,@j-1,1,'#')
+						SET @j = CHARINDEX('select ',LOWER(@cmd),@j+7)
+					end
+					IF (@j > 0) GOTO UNTIL2; 
+				END
+			end
+        --------------------------------------------------------------------------- 
         -- execute the command, returning the rows. 
 bottom: 
         IF (@errorMsg is null)                          -- if good, 
