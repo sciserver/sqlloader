@@ -49,6 +49,9 @@
 --* 2015-07-21 Sue: updated spExecuteSql and spExecuteSql2 to use "logger"
 --*			   user to log queries to weblog db
 --*            updated spExecuteSQL to remove ; when surrounded by spaces
+--*
+--* 2015-11-05 Sue: updated spExecuteSQL to add optional parameters for
+--*	           controlling logging, filtering, and throttling behavior.			
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 
