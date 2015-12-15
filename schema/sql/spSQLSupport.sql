@@ -176,7 +176,7 @@ GO
 CREATE PROCEDURE [dbo].[spExecuteSQL] (@cmd VARCHAR(8000), @limit INT = 1000, 
     @webserver      VARCHAR(64) = '',   -- the url
 	@winname	VARCHAR(64) = '',   -- the windows name of the server
-    @clientIP   VARCHAR(16)  = 0,   -- client IP address 
+    @clientIP   VARCHAR(50)  = 0,   -- client IP address 
 	@access		VARCHAR(64) = '',    -- subsite of site,  if 'collab' statement 'hidden'
 	@system		TINYINT = 0,         -- 1 if this is a system query from a skyserver page 
 	@maxQueries	SMALLINT = 60,		-- maximum number of queries per minute
@@ -375,6 +375,16 @@ bottom:
 	--==============================================================================
 	if (@log = 1) 
 	begin	
+							-- Insist that command is a SELECT statement or a syntax check
+ 			IF (CHARINDEX('set parseonly',LOWER(@cmd),1) = 1)
+	 			BEGIN
+					-- run the syntax check command and return
+					EXEC (@cmd)
+					IF (@errorMsg is null)
+						SELECT 'Syntax is OK'
+					RETURN
+				END
+			
 			IF (@errorMsg is null) -- if good 
 			begin
  
