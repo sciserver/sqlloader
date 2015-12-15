@@ -63,6 +63,9 @@
 --* 2006-06-19 Ani: Moved spLogSqlStatement and spLogSqlPerformance here
 --*                 from ../sql/spWebSupport.sql.
 --* 2011-01-11 Ani: Updates for SDSS-III servers, changed test to skyuser.
+--*
+--* 2015-12-15 Sue: Update SqlStatementLogUTC and SqlPerformanceLogUTC columns for 
+--* access and clientIP -- increase size to varchar(64) and varchar(50)
 --==================================================
 -- Create WebLog DB
 CREATE DATABASE [weblog]  ON 
@@ -260,11 +263,11 @@ CREATE TABLE SqlStatementLogUTC (
 	theTime 	datetime 	NOT NULL DEFAULT (getUTCdate()),--/D the timestamp
         webserver       varchar(64) 	NOT NULL DEFAULT(''),   	-- the url
 	winname		varchar(64) 	NOT NULL DEFAULT(''),   	-- the windows name of the server
-        clientIP       	varchar(16) 	NOT NULL DEFAULT(''),    	-- client IP address 
+        clientIP       	varchar(50) 	NOT NULL DEFAULT(''),    	-- client IP address 
 	seq		int		identity(1,1) NOT NULL,		-- sequence number to guarantee uniqueness of PK
 	server		varchar(32)	NOT NULL DEFAULT(''),		--/D the name of the database server
 	dbname		varchar(32)	NOT NULL DEFAULT(''),		--/D the name of the database 
-	access		varchar(32)	NOT NULL DEFAULT(''),		--/D The website DR1, collab,...
+	access		varchar(64)	NOT NULL DEFAULT(''),		--/D The website DR1, collab,...
 	sql 		varchar(7800) 	NOT NULL DEFAULT(''), 		--/D the SQL statement
 	isVisible	int		NOT NULL DEFAULT(1),		--/D flag says statement visible on intenet
 									--/D collab activity is logged but not public
@@ -287,7 +290,7 @@ CREATE TABLE SqlPerformanceLogUTC (
 	theTime 	datetime 	NOT NULL DEFAULT (getUTCdate()),	--/D the timestamp
         webserver       varchar(64) 	NOT NULL DEFAULT(''),   	-- the url
 	winname		varchar(64) 	NOT NULL DEFAULT(''),   	-- the windows name of the server
-        clientIP       	varchar(16) 	NOT NULL DEFAULT(''),    	-- client IP address
+        clientIP       	varchar(50) 	NOT NULL DEFAULT(''),    	-- client IP address
 	seq		int		identity(1,1) NOT NULL,		-- sequence number to guarantee uniqueness of PK
 	elapsed 	real 		NOT NULL DEFAULT (0.0),		--/D the lapse time of the query
 	busy 		real 		NOT NULL DEFAULT (0.0),		--/D the total CPU time of the query
