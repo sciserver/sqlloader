@@ -476,11 +476,11 @@ CREATE TABLE Field (
 	nStarsOffset_r		[int] NOT NULL, --/D number of stars used for fieldOffset determination
 	nStarsOffset_i		[int] NOT NULL, --/D number of stars used for fieldOffset determination
 	nStarsOffset_z		[int] NOT NULL, --/D number of stars used for fieldOffset determination
-	fieldOffset_u		[int] NOT NULL, --/U mag --/D offset of field from initial calibration (final minus initial magnitudes)
-	fieldOffset_g		[int] NOT NULL, --/U mag --/D offset of field from initial calibration (final minus initial magnitudes)
-	fieldOffset_r		[int] NOT NULL, --/U mag --/D offset of field from initial calibration (final minus initial magnitudes)
-	fieldOffset_i		[int] NOT NULL, --/U mag --/D offset of field from initial calibration (final minus initial magnitudes)
-	fieldOffset_z		[int] NOT NULL, --/U mag --/D offset of field from initial calibration (final minus initial magnitudes)
+	fieldOffset_u		[real] NOT NULL, --/U mag --/D offset of field from initial calibration (final minus initial magnitudes)
+	fieldOffset_g		[real] NOT NULL, --/U mag --/D offset of field from initial calibration (final minus initial magnitudes)
+	fieldOffset_r		[real] NOT NULL, --/U mag --/D offset of field from initial calibration (final minus initial magnitudes)
+	fieldOffset_i		[real] NOT NULL, --/U mag --/D offset of field from initial calibration (final minus initial magnitudes)
+	fieldOffset_z		[real] NOT NULL, --/U mag --/D offset of field from initial calibration (final minus initial magnitudes)
 	calibStatus_u		[int] NOT NULL, --/D calibration status bitmask --/R CalibStatus
 	calibStatus_g		[int] NOT NULL, --/D calibration status bitmask --/R CalibStatus
 	calibStatus_r		[int] NOT NULL, --/D calibration status bitmask --/R CalibStatus
