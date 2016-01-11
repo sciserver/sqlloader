@@ -80,6 +80,7 @@
 --* 2013-07-03  Ani: Added apogeeObject PK test to spValidateApogee,
 --*                  and removed reduction_id from apogeeStar test.
 --* 2013-07-09 Ani: Added apogeeStarVisit and apogeeStarAllVisit.
+--^ 2016-01-11 Ani: Commented out Target tables in spValidatePhoto.
 --====================================================================
 SET NOCOUNT ON;
 GO
@@ -715,6 +716,7 @@ AS BEGIN
 	set @summary = @summary + @error;
 	exec dbo.spTestUniqueKey  @taskid , @stepid,  'AtlasOutline',        'objID',	@error OUTPUT
 	set @summary = @summary + @error;
+/* Commented out tests for Target tables - these tables are empty or deleted.
 	exec dbo.spTestUniqueKey  @taskid , @stepid,  'Target',         'targetID',	@error OUTPUT
 	set @summary = @summary + @error;
 	-- remove the next if Southern Imaging
@@ -724,6 +726,7 @@ AS BEGIN
 	set @summary = @summary + @error;
 	exec dbo.spTestUniqueKey  @taskid , @stepid,  'TargetParam',    'targetVersion,name',	@error OUTPUT
 	set @summary = @summary + @error;
+ */
  
 	--select 'Photo uniqueness summary is ' + cast(@summary as varchar(20)) 
   
