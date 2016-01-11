@@ -56,6 +56,9 @@
 --*                  dereddening index for APOGEE target selection (PR #1909). 
 --* 2014-02-10  Ani: Added glat, glon columns to WISE_allsky (PR #1913).
 --* 2015-02-09  Ani: Moved Photoz tables to new PhotoZTables.sql file.
+--* 2016-01-11  Ani: Added history entry for previous change: modified Field
+--*                  tables to change fieldOffset_[ugriz] columns from INT to
+--*                  REAL.
 --=============================================================================
 SET NOCOUNT ON
 GO
