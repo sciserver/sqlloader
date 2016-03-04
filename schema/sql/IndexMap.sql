@@ -228,6 +228,9 @@
 --*            to SpecObjAll.BestObjID... index (to speed up default qry).
 --* 2014-11-26 Ani: Added apogeeVisit index on plate,mjd,fiberid.
 --* 2015-02-09 Ani: Updated Photoz indices for DR12.
+--* 2016-02-22 Ani: Added covering index on PhotoObjAll.b (galactic latitude),
+--*                 and moved WISE_AllSky.rjce index to FINISH group because it
+--*                 is an index on a computed column.
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -615,6 +618,7 @@ INSERT IndexMap Values('I','index', 'PhotoObjAll', 	 'run,camcol,rerun,type,mode
 INSERT IndexMap Values('I','index', 'PhotoObjAll', 	 'run,camcol,field,mode,parentID,q_r,q_g,u_r,u_g,fiberMag_u,fiberMag_g,fiberMag_r,fiberMag_i,fiberMag_z'	 ,'','PHOTO');
 INSERT IndexMap Values('I','index', 'PhotoObjAll', 	 'run,camcol,type,mode,cx,cy,cz'					,'','PHOTO')
 INSERT IndexMap Values('I','index', 'PhotoObjAll',       'ra,[dec],type,mode,flags,u,g,r,i,z,psfMag_u,psfMag_g,psfMag_r,psfMag_i,psfMag_z','','PHOTO');
+INSERT IndexMap Values('I','index', 'PhotoObjAll',       'b,l,type,mode,flags,u,g,r,i,z,psfMag_u,psfMag_g,psfMag_r,psfMag_i,psfMag_z','','PHOTO');
 INSERT IndexMap Values('I','index', 'PhotoObjAll', 	 'phototag'					,'','SCHEMA')
 INSERT IndexMap Values('I','index', 'PhotoObjAll', 	 'parentid,mode,type'					,'','PHOTO')
 INSERT IndexMap Values('I','index', 'PhotoObjDR7', 	 'dr7objID'					,'','PHOTO')
@@ -644,7 +648,6 @@ INSERT IndexMap Values('I','index', 'WISE_allsky',	 'w1cc_map'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'WISE_allsky',	 'w2cc_map'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'WISE_allsky',	 'w3cc_map'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'WISE_allsky',	 'w4cc_map'			,'','PHOTO');
-INSERT IndexMap Values('I','index', 'WISE_allsky',	 'rjce'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'WISE_xmatch',	 'wise_cntr'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'zooNoSpec', 	 'objID'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'zooVotes', 	 'objID'			,'','PHOTO');
@@ -698,8 +701,9 @@ INSERT IndexMap Values('I','index', 	  	'RegionPatch',   'htmID,ra,dec,x,y,z,typ
 -----------------------------------------------------
 -- Indexes on FINISH
 -----------------------------------------------------
-INSERT IndexMap Values('I','index', 		'SpecPhotoAll',  'objID,sciencePrimary,class,z,targetObjid', '','FINISH');
-INSERT IndexMap Values('I','index', 		'SpecPhotoAll',  'targetObjID,sciencePrimary,class,z,objid', '','FINISH');
+INSERT IndexMap Values('I','index', 		'WISE_allsky',	 'rjce'						,'','FINISH');
+INSERT IndexMap Values('I','index', 		'SpecPhotoAll',  'objID,sciencePrimary,class,z,targetObjid'	,'','FINISH');
+INSERT IndexMap Values('I','index', 		'SpecPhotoAll',  'targetObjID,sciencePrimary,class,z,objid'	,'','FINISH');
 -----------------------------------------------------
 -- Index on META
 -----------------------------------------------------
