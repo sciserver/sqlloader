@@ -1,0 +1,2 @@
+IF SCHEMA_ID('sph') IS NULL
+EXEC('CREATE SCHEMA sph')

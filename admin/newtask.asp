@@ -35,20 +35,16 @@
 				<option value="BEST" selected>BEST
 				<option value="RUNS">RUNS
 				<option value="TARGET">TARGET
-				<option value="SSPP">SSPP
-				<option value="GALPROD">GALPROD
-				<option value="GALSPEC">GALSPEC
+                        <option value="SSPP">SSPP
+                        <option value="GALSPEC">GALSPEC
+				<option value="MASK">MASK
 				<option value="PLATES">PLATES
 				<option value="TILES">TILES
 				<option value="WINDOW">WINDOW
 				<option value="WISE">WISE
-				<option value="RESOLVE">RESOLVE
-				<option value="PM">PM
-				<option value="APOGEE">APOGEE
 				<option value="FINISH">FINISH			
 				</option>
 		</select></td></tr>
-
     <tr><td class='med'>xroot*</td>
 		<td><select name=xroot>
 <%
@@ -71,10 +67,11 @@
 %>		
 				</option>
 		</select></td></tr>
-<tr><td class='med'>taskdatapath*</td>
+
+<tr><td class='med'>task path*</td>
 		<td><select name=taskdatapath>
 <%
-	var cmd = "select value from Constants where name='Taskdatapath'";
+	var cmd = "select value from Constants where name='taskdatapath'";
 	oCmd.CommandText = cmd;
 	try	{
 		var oRs = oCmd.Execute();
@@ -111,5 +108,7 @@
 </div>
 </body>
 </html>
+
+
 
 

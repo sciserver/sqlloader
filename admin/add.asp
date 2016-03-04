@@ -70,6 +70,8 @@
 		path = xroot+ "reCSV"+sep+xtype+sep+xid+sep;
 	if (xtype=="pm")
 		path = xroot+ "pmCSV"+sep+xtype+sep+xid+sep;
+	if (xtype=="mask")
+		path = xroot+ "msCSV"+sep+xtype+sep+xid+sep;
 	if (xtype=="apogee")
 		path = xroot+ "apCSV"+sep+xtype+sep+xid+sep;
 	if (xtype=="finish")

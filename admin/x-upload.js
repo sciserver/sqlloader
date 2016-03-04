@@ -29,7 +29,6 @@ function parseLine(s) {
 	var xtype	= c[1].toUpperCase();
 	var path	= c[2];
 	var user	= c[3];
-      var datapath = c[4];
 	var comment	= s;
 	comment = translateforbiddenchars(comment);
 
@@ -42,16 +41,16 @@ function parseLine(s) {
 
 	if (xtype.match(/^FINISH$/)!=null) path = "\\\\\\\\";
 
-	if (dataset.match(/^(TEST|DR8|DR9|DR10|DR11|DR12)$/)==null)
-		return Error("dataset "+dataset+" not one of (TEST|DR8|DR9|DR10|DR11|DR12)");
-	if (xtype.match(/^(BEST|TARGET|RUNS|PLATES|GALPROD|GALSPEC|TILES|WINDOW|WISE|SSPP|RESOLVE|PM|APOGEE|FINISH)$/) == null)
-		return Error("xtype "+xtype +" not one of (BEST|TARGET|RUNS|PLATES|GALPROD|GALSPEC|TILES|WINDOW|WISE|SSPP|RESOLVE|PM|APOGEE|FINISH)");
+	if (dataset.match(/^(TEST|DR1|DR1C|DR2|DR3|DR4|DR5|DR6)$/)==null)
+		return Error("dataset "+dataset+" not one of (TEST|DR1|DR1C|DR2|DR3|DR4|DR5|DR6|DR7|DR8|DR9|DR10|DR11|DR12)");
+	if (xtype.match(/^(BEST|TARGET|RUNS|MASK|PLATES|GALSPEC|TILES|WINDOW|WISE|SSPP|FINISH)$/) == null)
+		return Error("xtype "+xtype +" not one of (BEST|TARGET|RUNS|MASK|PLATES|GALSPEC|TILES|WINDOW|WISE|SSPP|FINISH)");
 	if (path.match(/^\\\\.*\\$/)==null)
 		return Error(path+" is not a valid UNC path like \\\\host\\dir\\");
 	if (user=="")
 		return Error("user must be specified");
 		
-	return [xid,dataset,xtype,path,user,datapath,comment];	
+	return [xid,dataset,xtype,path,user,comment];	
 }
 
 
@@ -104,7 +103,7 @@ function uploadFinishTask(oCmd, taskid, q) {
 	cmd += " '"+q[4]+"',";
 	cmd += " '"+q[2]+"',";
 	cmd += " '"+q[3]+"',";
-	cmd += " '"+q[6]+"'";
+	cmd += " '"+q[5]+"'";
 	
 	showLine("<tr><td colspan=2 class='t'>Uploading the task "+q[0]+"</td></tr>");
 	showLine("taskid="+taskid+","+cmd);
@@ -135,7 +134,8 @@ function taskExists(oCmd, xid, dataset, xtype) {
 
 	var dbname = "%"+dataset.toUpperCase()+"_"
 		+xtype.toUpperCase().substr(0,4)
-		+xid.toUpperCase() +"%";
+		+xid.toUpperCase();
+// +"%";
 	dbname = dbname.replace(/-/g,'_');	
 
 	var cmd	= "SELECT taskid from Task where dbname like '"+dbname;
@@ -282,10 +282,9 @@ function showTask(v) {
 	showLine("<tr><td class='b'>xid     </td><td class='b'>"+v[0]+"</td></tr>");
 	showLine("<tr><td class='b'>dataset </td><td class='b'>"+v[1]+"</td></tr>");
 	showLine("<tr><td class='b'>xtype   </td><td class='b'>"+v[2]+"</td></tr>");
-	showLine("<tr><td class='b'>path  </td><td class='b'>"+v[3]+"</td></tr>");
-	showLine("<tr><td class='b'>Taskdatapath    </td><td class='b'>"+v[5]+"</td></tr>");
+	showLine("<tr><td class='b'>path    </td><td class='b'>"+v[3]+"</td></tr>");
 	showLine("<tr><td class='b'>user    </td><td class='b'>"+v[4]+"</td></tr>");
-	showLine("<tr><td class='b'>comment </td><td class='b'>"+v[6]+"</td></tr>");
+	showLine("<tr><td class='b'>comment </td><td class='b'>"+v[5]+"</td></tr>");
 	//-----------------------------------------------
 }
 

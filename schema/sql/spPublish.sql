@@ -65,6 +65,7 @@
 --* 2013-07-04  Ani: Added apogeeObject, apogeeField and apogeeDesign to
 --*             spPublishApogee.
 --* 2013-07-09 Ani: Added apogeeStarVisit and apogeeStarAllVisit.
+--* 2016-03-03 Ani: Added spPublishMask.
 ----------------------------------------------------------------------
 -- We are not copying 
 -- DBcolumns, DBObjects, DBViewCols, DataConstants, Globe,Glossary, 
@@ -619,6 +620,54 @@ AS BEGIN
 	--
 	return @summary
 END
+GO
+
+
+--=============================================================
+IF EXISTS (SELECT name FROM   sysobjects 
+    WHERE  name = N'spPublishMask' AND  type = 'P')
+    DROP PROCEDURE spPublishMask
+GO
+--
+CREATE PROCEDURE spPublishMask(
+	@taskID int, 
+	@stepID int,
+	@fromDB varchar(100), 
+	@toDB varchar(100), 
+	@firstTime int) 
+---------------------------------------------------------------
+--/H Publishes the Mask tables of one DB to another 
+--/A
+--/T <p> parameters:   
+--/T <li> taskid int,   		-- Task identifier
+--/T <li> stepid int,   		-- Step identifier
+--/T <li> fromDB varchar(100),   	-- source DB (e.g. verify.photo)
+--/T <li> toDB varchar(100),   		-- destination DB (e.g. dr1.best)
+--/T <li> firstTime int 		-- if 1, creates target table.
+--/T <li> returns  0 if OK, non zero if something wrong  
+--/T <samp> spPublishMask 1,1,'SkyServerV4','tempDB', 1 </samp>
+---------------------------------------------------------------
+AS BEGIN
+	set nocount on
+	declare @err int, @summary int 
+	declare @message varchar(1000) 
+	declare @status  varchar(16) 
+	set @summary = 0 
+
+	set @message = 'Starting spPublishMask';
+	exec spNewPhase @taskID, @stepID, 'spPublishMask', 'OK', @message;
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'Mask', @firstTime 
+	set @summary = @summary + @err 
+
+	--------------------------------------------------
+	set @message = 'Publish of database ' + @fromDB + ' to database ' + @toDB + ' found ' + str(@summary) + ' errors.' 
+	if  @summary = 0 set @status = 'OK' else set @status = 'ABORTING' 
+	--
+	exec spNewPhase @taskID, @stepID, 'spPublishMask', @status, 'Published Mask Tables';
+	--
+	return @summary
+END   -- END spPublishMask
 GO
 
 
@@ -1474,6 +1523,25 @@ BEGIN
                 begin 
                 set @stepMsg =  'Failed to publish pm ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
                 set @phaseMsg = 'Failed to publish pm ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        goto commonExit 
+        end 
+
+
+    --------------------------------------------------------------------------------------------- 
+    -- Handle mask databases 
+    IF @type in ('mask') 
+        begin 
+        exec @err = spPublishMask @taskID, @stepID, @DBname, @publishDB, @firstTime 
+        if @err = 0 
+                begin 
+                set @stepMsg =  'Published mask ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Published mask ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        else 
+                begin 
+                set @stepMsg =  'Failed to publish mask ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Failed to publish mask ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
                 end 
         goto commonExit 
         end 

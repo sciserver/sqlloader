@@ -50,6 +50,9 @@
 ' 2013-07-09    Ani Thakar: added apogeeStarVisit and apogeeStarAllVisit.
 ' 2013-12-11    Ani Thakar: fixed typo in iDebug check and removed
 '               call to FatalError.
+' 2016-03-03    Replaced theExportType" with skyvsersion (2) in
+'               photo batch file names, and added new export 
+'               type "mask".
 '==============================================================
 
 Option Explicit
@@ -69,7 +72,7 @@ sep		= "','"
 	'
 	GetArgs			' get the taskid and server from the command line
 	'
-	Connect "Server=" & dbserver & ";Driver=SQL Server;Database=loadsupport;UID=webagent;Password=xxxxxx;"
+	Connect "Server=" & dbserver & ";Driver=SQL Server;Database=loadsupport;UID=webagent;Password=loadsql;"
 	'
 	GetTask			' get the parameters of the task
 	'
@@ -163,6 +166,8 @@ Public Sub CheckDir (root,level)
 		s = s & "(^sql(Plate2Target|SppLines|SppParams|SppTargets|SegueTargetAll)" & "_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "pm" ) Then
 		s = s & "(^sqlProperMotions" & "-" & theid & "-[0-9]*-[0-9]*\.csv$)"
+	ElseIf ( theexporttype = "mask" ) Then
+		s = s & "(^sqlMask" & "-2-" & rootname & "-[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "resolve" ) Then
 		s = s & "(^sql(ThingIndex|DetectionIndex).csv" & "_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "apogee" ) Then
@@ -171,7 +176,7 @@ Public Sub CheckDir (root,level)
 		s = s & "(^sqlWise(XMatch|AllSky)" & "_[0-9]*\.csv$)"
 	Else
 			s = s & "(^sql(AtlasOutline|Field|FieldProfile|PhotoObjAll|PhotoProfile|Run|2MASS|2MASSXSC|First|RC3|ROSAT|USNOB)"
-			s = s & "-" & theid & "-" & rootname & "-[0-9]*_*[0-9]*\.csv$)"
+			s = s & "-2-" & rootname & "-[0-9]*_*[0-9]*\.csv$)"
 	End If
 '	s = s & "-" & theexporttype & "-" & rootname & "-[0-9]*_*[0-9]*\.csv$)"
 	s = s & ")"

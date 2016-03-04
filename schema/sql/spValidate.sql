@@ -81,6 +81,7 @@
 --*                  and removed reduction_id from apogeeStar test.
 --* 2013-07-09 Ani: Added apogeeStarVisit and apogeeStarAllVisit.
 --^ 2016-01-11 Ani: Commented out Target tables in spValidatePhoto.
+--^ 2016-01-11 Ani: Added spValidateMask.
 --====================================================================
 SET NOCOUNT ON;
 GO
@@ -1430,6 +1431,81 @@ END		-- End spValidatePm()
 --======================================
 go
 
+
+
+IF EXISTS (SELECT [name]FROM sysobjects 
+	WHERE [name]= N'spValidateMask' ) 
+	drop procedure spValidateMask
+GO
+--
+CREATE PROCEDURE spValidateMask (
+	@taskid int, 
+	@stepid int,
+	@destinationDB varchar(16)
+)
+-------------------------------------------------------------
+--/H  Validate Mask tables  
+--/A 
+--/T <p> parameters:   
+--/T <li> taskid int,   		-- Task identifier
+--/T <li> stepid int,   		-- Step identifier
+--/T <li> destinationDB int,   		-- Name of destination DB 
+--/T <li> returns  0 if OK, non zero if something wrong  
+--/T <br>
+--/T Sample call:<br>
+--/T <samp> 
+--/T <br> exec  spValidateMask @taskid , @stepid, 'targetDB'  
+--/T </samp> 
+--/T <br>  
+------------------------------------------------------------- 
+AS BEGIN
+    	--
+    	SET NOCOUNT ON
+
+    	--- Globals
+    	DECLARE	@start datetime,
+		@summary bigint,
+		@error bigint,
+		@errorMsg varchar(1000),
+		@verb varchar(16)
+
+    -- Put out step greeting
+    EXEC spNewPhase @taskid, @stepid, 'spValidateMask', 'OK', 'spValidateMask called'; 
+
+    -------------------------------------
+    SET @start  = current_timestamp
+    SET @summary = 0
+
+	---------------------
+	-- test unique keys
+	---------------------
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'Mask',          	'maskID',	@error OUTPUT
+	set @summary = @summary + @error;
+ 
+	-- generate completion message.
+
+	IF @summary = 0 
+	    BEGIN
+		SET @errorMsg =   'mask tables validated in '  
+			+ cast(dbo.fDatediffSec(@start, current_timestamp) as varchar(30))+ ' seconds'
+		SET @verb = 'OK'
+	    END
+	ELSE 	
+	    BEGIN
+		SET @errorMsg =   'mask tables validation found ' +str(@summary) + ' errors in ' 
+			+ cast(dbo.fDatediffSec(@start, current_timestamp) as varchar(30)) + ' seconds'
+		SET @verb = 'ERROR'
+	    END
+
+	EXEC spNewPhase @taskid, @stepid, 'spValidateMask', @verb, @errorMsg ;
+	
+	RETURN @summary
+END		-- End spValidateMask()
+--======================================
+go
+
+
+
 IF EXISTS (SELECT [name]FROM sysobjects 
 	WHERE [name]= N'spValidateResolve' ) 
 	drop procedure spValidateResolve
@@ -1875,6 +1951,23 @@ BEGIN
 		    BEGIN
 		   	SET @stepMsg = 'Failed to validate pm ' + @id
 			SET @phaseMsg = 'Failed to validate pm ' + @id
+		    END
+		GOTO commonExit
+	    END
+
+
+	IF @type = 'mask'
+	    BEGIN
+		EXEC @err = spValidateMask @taskID, @stepID, @destinationDBbname 
+	        IF @err = 0
+		    BEGIN 
+	   		set @stepMsg = 'Validated mask ' + @id
+			set @phaseMsg = 'Validated mask ' + @id
+		    END
+		ELSE
+		    BEGIN
+		   	SET @stepMsg = 'Failed to validate mask ' + @id
+			SET @phaseMsg = 'Failed to validate mask ' + @id
 		    END
 		GOTO commonExit
 	    END

@@ -5,8 +5,13 @@
 -- Drops the HTM and Spherical SQL/CLR routines and assemblies
 -------------------------------------------------------------------
 -- History:
+--		2013-10-22: Added fSphGetVersions, fSphGrowAdvanced
+--                          and fSphGrowArc.
 -------------------------------------------------------------------
 
+PRINT '*** DROP ***'
+PRINT 'Dropping SQL routines...'
+--
 --====================================================================
 BEGIN TRY DROP FUNCTION fHtmVersion END TRY BEGIN CATCH END CATCH
 BEGIN TRY DROP FUNCTION fHtmEq END TRY BEGIN CATCH END CATCH
@@ -27,6 +32,7 @@ BEGIN TRY DROP FUNCTION fHtmCoverRegionAdvanced END TRY BEGIN CATCH END CATCH
 BEGIN TRY DROP FUNCTION fHtmCoverBinaryAdvanced END TRY BEGIN CATCH END CATCH
 --
 BEGIN TRY DROP FUNCTION fSphGetVersion END TRY BEGIN CATCH END CATCH
+BEGIN TRY DROP FUNCTION fSphGetVersions END TRY BEGIN CATCH END CATCH
 --
 BEGIN TRY DROP FUNCTION fSphGetArea END TRY BEGIN CATCH END CATCH
 BEGIN TRY DROP FUNCTION fSphGetArcs END TRY BEGIN CATCH END CATCH
@@ -47,6 +53,7 @@ BEGIN TRY DROP FUNCTION fSphSimplifyString END TRY BEGIN CATCH END CATCH
 BEGIN TRY DROP FUNCTION fSphSimplifyStringAdvanced END TRY BEGIN CATCH END CATCH
 --
 BEGIN TRY DROP FUNCTION fSphGrow END TRY BEGIN CATCH END CATCH
+BEGIN TRY DROP FUNCTION fSphGrowArc END TRY BEGIN CATCH END CATCH
 BEGIN TRY DROP FUNCTION fSphGrowAdvanced END TRY BEGIN CATCH END CATCH
 BEGIN TRY DROP FUNCTION fSphUnion END TRY BEGIN CATCH END CATCH
 BEGIN TRY DROP FUNCTION fSphUnionAdvanced END TRY BEGIN CATCH END CATCH
@@ -67,6 +74,7 @@ BEGIN TRY DROP FUNCTION fSphGetHtmRangesAdvanced END TRY BEGIN CATCH END CATCH
 BEGIN TRY DROP PROCEDURE spSphSyncRegion END TRY BEGIN CATCH END CATCH
 BEGIN TRY DROP PROCEDURE Sph.spSyncRegion END TRY BEGIN CATCH END CATCH
 --
+PRINT 'Dropping Assemblies...'
 BEGIN TRY
 	DROP ASSEMBLY [SphericalSql]
 	PRINT 'Dropped assembly SphericalSql'
@@ -103,3 +111,4 @@ BEGIN TRY
 END TRY
 BEGIN CATCH END CATCH
 --
+PRINT 'Done dropping SQL routines and assemblies...'
