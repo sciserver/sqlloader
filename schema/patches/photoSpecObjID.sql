@@ -62,3 +62,20 @@ drop table #specresolve
 
 -- select COUNT(*) from SpecObj s join Galaxy g on g.specObjID=s.specObjID		-- 2324547
 -- select COUNT(*) from SpecObj s join Galaxy g on g.objID=s.bestObjID			-- 2324582
+
+-- Now update the DB version
+
+EXECUTE spSetVersion
+  0
+  ,0
+  ,'12'
+  ,'d08043f87c52c2e9595835aa95d4181e77fcfeb8'
+  ,'Update DR'
+  ,'.7'
+  ,'SEGUE counts and spec-photo counts fix'
+  ,'Fixed SEGUE spectra (PR#2520) and photo.specobjid count inconsistencies (PR#2521)'
+  ,'A.Thakar'
+GO
+
+
+SELECT * FROM Versions

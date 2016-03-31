@@ -43,8 +43,8 @@ function parseLine(s) {
 
 	if (dataset.match(/^(TEST|DR1|DR1C|DR2|DR3|DR4|DR5|DR6)$/)==null)
 		return Error("dataset "+dataset+" not one of (TEST|DR1|DR1C|DR2|DR3|DR4|DR5|DR6|DR7|DR8|DR9|DR10|DR11|DR12)");
-	if (xtype.match(/^(BEST|TARGET|RUNS|MASK|PLATES|GALSPEC|TILES|WINDOW|WISE|SSPP|FINISH)$/) == null)
-		return Error("xtype "+xtype +" not one of (BEST|TARGET|RUNS|MASK|PLATES|GALSPEC|TILES|WINDOW|WISE|SSPP|FINISH)");
+	if (xtype.match(/^(BEST|TARGET|RUNS|MASK|MaNGA|PLATES|GALSPEC|TILES|WINDOW|WISE|FORCED|SSPP|FINISH)$/) == null)
+		return Error("xtype "+xtype +" not one of (BEST|TARGET|RUNS|MASK|MaNGA|PLATES|GALSPEC|TILES|WINDOW|WISE|FORCED|SSPP|FINISH)");
 	if (path.match(/^\\\\.*\\$/)==null)
 		return Error(path+" is not a valid UNC path like \\\\host\\dir\\");
 	if (user=="")

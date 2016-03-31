@@ -66,6 +66,11 @@
 --*             spPublishApogee.
 --* 2013-07-09 Ani: Added apogeeStarVisit and apogeeStarAllVisit.
 --* 2016-03-03 Ani: Added spPublishMask.
+--^ 2016-03-22 Ani: Added wiseForced in spPublishWise, and added type 
+--*                "forced" in  spPublish.
+--* 2016-03-25 Ani: Fixed typo in spPublishStep, changed duplicate
+--*                "sspp" case to "resolve".
+--* 2016-03-29 Ani: Added spPublishManga.
 ----------------------------------------------------------------------
 -- We are not copying 
 -- DBcolumns, DBObjects, DBViewCols, DataConstants, Globe,Glossary, 
@@ -673,6 +678,57 @@ GO
 
 --=============================================================
 IF EXISTS (SELECT name FROM   sysobjects 
+    WHERE  name = N'spPublishMask' AND  type = 'P')
+    DROP PROCEDURE spPublishManga
+GO
+--
+CREATE PROCEDURE spPublishManga(
+	@taskID int, 
+	@stepID int,
+	@fromDB varchar(100), 
+	@toDB varchar(100), 
+	@firstTime int) 
+---------------------------------------------------------------
+--/H Publishes the MaNGA tables of one DB to another 
+--/A
+--/T <p> parameters:   
+--/T <li> taskid int,   		-- Task identifier
+--/T <li> stepid int,   		-- Step identifier
+--/T <li> fromDB varchar(100),   	-- source DB (e.g. verify.photo)
+--/T <li> toDB varchar(100),   		-- destination DB (e.g. dr1.best)
+--/T <li> firstTime int 		-- if 1, creates target table.
+--/T <li> returns  0 if OK, non zero if something wrong  
+--/T <samp> spPublishManga 1,1,'SkyServerV4','tempDB', 1 </samp>
+---------------------------------------------------------------
+AS BEGIN
+	set nocount on
+	declare @err int, @summary int 
+	declare @message varchar(1000) 
+	declare @status  varchar(16) 
+	set @summary = 0 
+
+	set @message = 'Starting spPublishManga';
+	exec spNewPhase @taskID, @stepID, 'spPublishManga', 'OK', @message;
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mangaDrpAll', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mangaTarget', @firstTime 
+	set @summary = @summary + @err 
+
+	--------------------------------------------------
+	set @message = 'Publish of database ' + @fromDB + ' to database ' + @toDB + ' found ' + str(@summary) + ' errors.' 
+	if  @summary = 0 set @status = 'OK' else set @status = 'ABORTING' 
+	--
+	exec spNewPhase @taskID, @stepID, 'spPublishManga', @status, 'Published MaNGA Tables';
+	--
+	return @summary
+END   -- END spPublishManga
+GO
+
+
+--=============================================================
+IF EXISTS (SELECT name FROM   sysobjects 
     WHERE  name = N'spPublishPlates' AND  type = 'P')
     DROP PROCEDURE spPublishPlates
 GO
@@ -1251,6 +1307,9 @@ AS BEGIN
 	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'WISE_allsky', @firstTime 
 	set @summary = @summary + @err
 
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'wiseForced', @firstTime 
+	set @summary = @summary + @err
+
 	---------------------------------------------------------
 	set @message = 'Publish of WISE database ' + @fromDB + ' to database ' + @toDB + ' found ' + str(@summary) + ' errors.' 
 	if @summary = 0 set @status = 'OK' else set @status = 'FAILED' 
@@ -1548,8 +1607,27 @@ BEGIN
 
 
     --------------------------------------------------------------------------------------------- 
+    -- Handle mask databases 
+    IF @type in ('manga') 
+        begin 
+        exec @err = spPublishManga @taskID, @stepID, @DBname, @publishDB, @firstTime 
+        if @err = 0 
+                begin 
+                set @stepMsg =  'Published MaNGA ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Published MaNGA ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        else 
+                begin 
+                set @stepMsg =  'Failed to publish MaNGA ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Failed to publish MaNGA ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        goto commonExit 
+        end 
+
+
+    --------------------------------------------------------------------------------------------- 
     -- Handle resolve databases 
-    IF @type in ('sspp') 
+    IF @type in ('resolve') 
         begin 
         exec @err = spPublishResolve @taskID, @stepID, @DBname, @publishDB, @firstTime 
         if @err = 0 
@@ -1587,7 +1665,7 @@ BEGIN
 
     --------------------------------------------------------------------------------------------- 
     -- Handle WISE databases 
-    IF @type in ('wise') 
+    IF @type in ('wise','forced') 
         begin 
         exec @err = spPublishWise @taskID, @stepID, @DBname, @publishDB, @firstTime 
         if @err = 0 

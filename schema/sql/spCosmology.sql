@@ -40,7 +40,8 @@
 --       OmegaM*h_0^2=0.1369+-0.0037 -> OmegaM=0.2785912117... ->
 --       OmegaM~1-0.721-8.493e-5 =  0.27891507
 --
---   The parameter "omega0" that defines the Dark Energy equation of state at z=0 is set to -1
+--   The parameter "omega0" that defines the Dark Energy equation of state at
+--   z=0 is set to -1
 --
 -----------------------------------------------------------------
 --* 2008-10-30 Ani: Incorporated into sqlLoader2k5.
@@ -49,6 +50,7 @@
 --* 2010-08-24 Ani: Deleted actualy assembly binary string from commented out
 --*            ALTER ASSEMBLY command.  This was causing an error in loader.
 --* 2010-12-10 Ani: Deleted spMath* functions due to problems creating them.
+--* 2016-03-22 Ani: Deleted commented out text and added completion message.
 -----------------------------------------------------------------
 
 ----------------------------------------------------------------------------------------------
@@ -60,37 +62,9 @@ FROM 0x4D5A90000300000004000000FFFF0000B8000000000000004000000000000000000000000
 WITH PERMISSION_SET = SAFE
 go
 
-/*
-----
-----If we want instead to upload the assembly from a dll:
----- 
-DECLARE @dir nvarchar(1024), @fname nvarchar(1024)
-SET @dir = 'D:\backup\ManuDll\'
-SET @fname = N'' + @dir + 'CosmologyCASJOBS.dll'
-CREATE ASSEMBLY [CosmologyCASJOBS]
-FROM @fname
-WITH PERMISSION_SET = SAFE
-go
-*/
 
 ----------------------------------------------------------------------------------------------
--- UPDATING THE ASSEMBLY:
------------------------------------------------------------------------------------------------
-/*
-ALTER ASSEMBLY CosmologyCASJOBS
-FROM 0x00000...
-
---- or  from a file:
-DECLARE @dir nvarchar(1024), @fname nvarchar(1024)
-SET @dir = 'D:\backup\ManuDll\'
-SET @fname = N'' + @dir + 'CosmologyCASJOBS.dll'
-ALTER ASSEMBLY CosmologyCASJOBS
-from @fname
-
-*/
-
-----------------------------------------------------------------------------------------------
--- DROPING THE ASSEMBLY:
+-- DROPPING THE ASSEMBLY:
 -----------------------------------------------------------------------------------------------
 
 --drop assembly  CosmologyCASJOBS
@@ -663,6 +637,12 @@ AS EXTERNAL NAME [CosmologyCASJOBS].[SQLMathCLR.SQLMathFunctions].[GetBin]
 GO
 
 -------------------------------------------------------------------------------------
+
+EXEC spSetDefaultFileGroup 'PrimaryFileGroup';
+GO
+
+PRINT '[spCosmology.sql]: Cosmology functions and procedures created'
+GO
 
 ----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------

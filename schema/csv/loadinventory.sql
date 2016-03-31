@@ -179,6 +179,7 @@ INSERT Inventory VALUES('PhotoTables','ROSAT','U');
 INSERT Inventory VALUES('PhotoTables','USNO','U');
 INSERT Inventory VALUES('PhotoTables','WISE_xmatch','U');
 INSERT Inventory VALUES('PhotoTables','WISE_allsky','U');
+INSERT Inventory VALUES('PhotoTables','wiseForced','U');
 INSERT Inventory VALUES('PhotoZTables','Photoz','U');
 INSERT Inventory VALUES('PhotoZTables','PhotozErrorMap','U');
 INSERT Inventory VALUES('galSpecTables','galSpecExtra','U');
@@ -269,6 +270,8 @@ INSERT Inventory VALUES('ApogeeTables','apogeePlate','U');
 INSERT Inventory VALUES('ApogeeTables','apogeeDesign','U');
 INSERT Inventory VALUES('ApogeeTables','apogeeField','U');
 INSERT Inventory VALUES('ApogeeTables','apogeeObject','U');
+INSERT Inventory VALUES('MangaTables','mangaDrpAll','U');
+INSERT Inventory VALUES('MangaTables','mangatarget','U');
 INSERT Inventory VALUES('FrameTables','Frame','U');
 INSERT Inventory VALUES('FrameTables','spComputeFrameHTM','P');
 INSERT Inventory VALUES('FrameTables','spMakeFrame','P');
@@ -460,8 +463,8 @@ INSERT Inventory VALUES('spDocSupport','spDocEnum','P');
 INSERT Inventory VALUES('spDocSupport','spDocKeySearch','P');
 INSERT Inventory VALUES('spSQLSupport','fReplace','F');
 INSERT Inventory VALUES('spSQLSupport','fIsNumbers','F');
-INSERT Inventory VALUES('spSQLSupport','spExecuteSQL','P');
-INSERT Inventory VALUES('spSQLSupport','spExecuteSQL2','P');
+INSERT Inventory VALUES('spSQLSupport','dbo.[spExecuteSQL]','P');
+INSERT Inventory VALUES('spSQLSupport','dbo.[spExecuteSQL2]','P');
 INSERT Inventory VALUES('spSQLSupport','spLogSqlStatement','P');
 INSERT Inventory VALUES('spSQLSupport','spLogSqlPerformance','P');
 INSERT Inventory VALUES('spUrlFitsSupport','fGetUrlExpEq','F');
@@ -504,6 +507,8 @@ INSERT Inventory VALUES('spValidate','spValidateTiles','P');
 INSERT Inventory VALUES('spValidate','spValidateWindow','P');
 INSERT Inventory VALUES('spValidate','spValidateSspp','P');
 INSERT Inventory VALUES('spValidate','spValidatePm','P');
+INSERT Inventory VALUES('spValidate','spValidateMask','P');
+INSERT Inventory VALUES('spValidate','spValidateManga','P');
 INSERT Inventory VALUES('spValidate','spValidateResolve','P');
 INSERT Inventory VALUES('spValidate','spValidateApogee','P');
 INSERT Inventory VALUES('spValidate','spValidateWise','P');
@@ -514,6 +519,8 @@ INSERT Inventory VALUES('spPublish','spShrinkDB','P');
 INSERT Inventory VALUES('spPublish','spReorg','P');
 INSERT Inventory VALUES('spPublish','spCopyATable','P');
 INSERT Inventory VALUES('spPublish','spPublishPhoto','P');
+INSERT Inventory VALUES('spPublish','spPublishMask','P');
+INSERT Inventory VALUES('spPublish','spPublishManga','P');
 INSERT Inventory VALUES('spPublish','spPublishPlates','P');
 INSERT Inventory VALUES('spPublish','spPublishGalProd','P');
 INSERT Inventory VALUES('spPublish','spPublishTiling','P');
@@ -525,6 +532,7 @@ INSERT Inventory VALUES('spPublish','spPublishResolve','P');
 INSERT Inventory VALUES('spPublish','spPublishApogee','P');
 INSERT Inventory VALUES('spPublish','spPublishWise','P');
 INSERT Inventory VALUES('spPublish','spPublishStep','P');
+INSERT Inventory VALUES('spFinish','spFixDetectionIndex','P');
 INSERT Inventory VALUES('spFinish','spRunSQLScript','P');
 INSERT Inventory VALUES('spFinish','spLoadScienceTables','P');
 INSERT Inventory VALUES('spFinish','spSetVersion','P');
@@ -575,6 +583,6 @@ INSERT Inventory VALUES('spCosmology','fMathGetBin','F');
 GO
 
 ------------------------------------
-PRINT '565 lines inserted into Inventory'
+PRINT '573 lines inserted into Inventory'
 ------------------------------------
 GO

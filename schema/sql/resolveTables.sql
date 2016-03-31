@@ -10,6 +10,9 @@
 --* 2012-07-18  Ani: Added note about DR8 ra,dec to thingIndex
 --*             description.
 --* 2013-07-23  Ani: Added isPrimary column to detectionIndex.
+--* 2016-03-28  Ani: Removed isPrimary column from detectionIndex
+--*                  so it can be added later in FINISH step. This
+--*                  allows the table to be loaded from CSV.
 --=========================================================
 
 --=========================================================
@@ -30,7 +33,6 @@ CREATE TABLE detectionIndex (
 -------------------------------------------------------------------------------
 thingId		bigint NOT NULL,	--/D thing ID number
 objId		bigint NOT NULL,	--/D object ID number (from run, camcol, field, id, rerun)
-isPrimary	tinyint NOT NULL,	--/D 1 if object is primary, 0 if not
 loadVersion	int	NOT NULL	--/D Load Version --/K ID_VERSION --/F NOFITS
 )
 GO

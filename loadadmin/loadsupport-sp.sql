@@ -27,6 +27,8 @@
 -- 2013-04-02   Ani: Added spSetFinishPhase to update FinishPhase.
 -- 2013-05-02   Ani: Added cases for GALPROD (galaxy product tables)
 --              and WISE xmatch tables.
+-- 2016-03-22   Ani: Added MASK and (WISE) FORCED to spNewTask
+-- 2016-03-26   Ani: Added MaNGA to spNewTask.
 --=============================================================
 
 
@@ -213,7 +215,7 @@ BEGIN
 	RETURN
 	END
 
-    IF UPPER(@type) IN ('BEST', 'PLATES', 'TILES', 'WINDOW', 'WISE', 'SSPP', 'GALPROD', 'GALSPEC', 'RESOLVE', 'PM', 'APOGEE')
+    IF UPPER(@type) IN ('BEST', 'PLATES', 'TILES', 'MASK', 'WINDOW', 'WISE', 'SSPP', 'GALPROD', 'GALSPEC', 'RESOLVE', 'PM', 'APOGEE', 'FORCED', 'MaNGA')
 	SET @pubtype='BEST-PUB'
     ELSE
 	SET @pubtype=UPPER(@type)+'-PUB'

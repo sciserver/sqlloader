@@ -75,6 +75,8 @@ INSERT Dependency VALUES('spFinish','spFinishStep','spSynchronize');
 INSERT Dependency VALUES('spFinish','spFinishStep','spSyncSchema');
 INSERT Dependency VALUES('spFinish','spFinishStep','spTruncateFileGroupMap');
 INSERT Dependency VALUES('spFinish','spFinishStep','spUpdateStatistics');
+INSERT Dependency VALUES('spFinish','spFixDetectionIndex','spNewPhase');
+INSERT Dependency VALUES('spFinish','spFixDetectionIndex','spSetFinishPhase');
 INSERT Dependency VALUES('spFinish','spFixTargetVersion','spNewPhase');
 INSERT Dependency VALUES('spFinish','spLoadMetaData','spIndexBuildSelection');
 INSERT Dependency VALUES('spFinish','spLoadMetaData','spIndexDropSelection');
@@ -213,6 +215,10 @@ INSERT Dependency VALUES('spPublish','spPublishGalProd','spCopyATable');
 INSERT Dependency VALUES('spPublish','spPublishGalProd','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishGalSpec','spCopyATable');
 INSERT Dependency VALUES('spPublish','spPublishGalSpec','spNewPhase');
+INSERT Dependency VALUES('spPublish','spPublishManga','spCopyATable');
+INSERT Dependency VALUES('spPublish','spPublishManga','spNewPhase');
+INSERT Dependency VALUES('spPublish','spPublishMask','spCopyATable');
+INSERT Dependency VALUES('spPublish','spPublishMask','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishPhoto','spCopyATable');
 INSERT Dependency VALUES('spPublish','spPublishPhoto','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishPlates','spCopyATable');
@@ -228,6 +234,8 @@ INSERT Dependency VALUES('spPublish','spPublishStep','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishApogee');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishGalProd');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishGalSpec');
+INSERT Dependency VALUES('spPublish','spPublishStep','spPublishManga');
+INSERT Dependency VALUES('spPublish','spPublishStep','spPublishMask');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishPhoto');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishPlates');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishPm');
@@ -312,8 +320,8 @@ INSERT Dependency VALUES('spSphericalLib','sph.fGetPatches','SphericalSql.[Spher
 INSERT Dependency VALUES('spSphericalLib','sph.fRegionContainsXYZ','SphericalSql.[Spherical.Sql.UserDefinedFunctions.ContainsXYZ');
 INSERT Dependency VALUES('spSphericalLib','sph.fSimplify','sph.fSimplifyAdvanced');
 INSERT Dependency VALUES('spSphericalLib','sph.fSimplifyAdvanced','sph.fSimplifyQueryAdvanced');
-INSERT Dependency VALUES('spSQLSupport','spExecuteSQL','fIsNumbers');
-INSERT Dependency VALUES('spSQLSupport','spExecuteSQL','fReplace');
+INSERT Dependency VALUES('spSQLSupport','dbo.[spExecuteSQL]','fIsNumbers');
+INSERT Dependency VALUES('spSQLSupport','dbo.[spExecuteSQL]','fReplace');
 INSERT Dependency VALUES('spTestQueries','spTestQueries','fGetNearbyObjEq');
 INSERT Dependency VALUES('spTestQueries','spTestQueries','fHtmCoverRegion');
 INSERT Dependency VALUES('spTestQueries','spTestQueries','fPhotoFlags');
@@ -337,6 +345,12 @@ INSERT Dependency VALUES('spValidate','spValidateGalProd','spTestUniqueKey');
 INSERT Dependency VALUES('spValidate','spValidateGalSpec','fDatediffSec');
 INSERT Dependency VALUES('spValidate','spValidateGalSpec','spNewPhase');
 INSERT Dependency VALUES('spValidate','spValidateGalSpec','spTestUniqueKey');
+INSERT Dependency VALUES('spValidate','spValidateManga','fDatediffSec');
+INSERT Dependency VALUES('spValidate','spValidateManga','spNewPhase');
+INSERT Dependency VALUES('spValidate','spValidateManga','spTestUniqueKey');
+INSERT Dependency VALUES('spValidate','spValidateMask','fDatediffSec');
+INSERT Dependency VALUES('spValidate','spValidateMask','spNewPhase');
+INSERT Dependency VALUES('spValidate','spValidateMask','spTestUniqueKey');
 INSERT Dependency VALUES('spValidate','spValidatePhoto','fDatediffSec');
 INSERT Dependency VALUES('spValidate','spValidatePhoto','spComputePhotoParentID');
 INSERT Dependency VALUES('spValidate','spValidatePhoto','spGenericTest');
@@ -364,6 +378,8 @@ INSERT Dependency VALUES('spValidate','spValidateStep','spStartStep');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateApogee');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateGalProd');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateGalSpec');
+INSERT Dependency VALUES('spValidate','spValidateStep','spValidateManga');
+INSERT Dependency VALUES('spValidate','spValidateStep','spValidateMask');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidatePhoto');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidatePlates');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidatePm');
@@ -385,6 +401,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '375 lines inserted into Dependency'
+PRINT '391 lines inserted into Dependency'
 ------------------------------------
 GO

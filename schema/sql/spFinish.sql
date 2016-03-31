@@ -281,11 +281,87 @@
 --* 2015-03-12 Ani: Fixed typo in spSynchronize.
 --* 2015-03-18 Ani: Updated spSetVersion to include DB description in
 --*                 SiteConstants.
---* 2015-05-28 Ani: Updated DataServerURL template in spSetVersion.             
+--* 2015-05-28 Ani: Updated DataServerURL template in spSetVersion.
+--* 2016-03-22 Ani: Deleted duplicate declaration of @checksum from
+--*                 spSetVersion.
+--* 2016-03-28 Ani: Created spFixDetectionIndex to add isPrimary column
+--*                 to detectionIndex table and set its value.
 ---====================================================================
 SET NOCOUNT ON;
 GO
 
+
+
+--===================================================================
+IF EXISTS (select * from dbo.sysobjects 
+	where id = object_id(N'[dbo].[spFixDetectionIndex]') 
+	and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+	DROP PROCEDURE [dbo].[spFixDetectionIndex]
+GO
+--
+CREATE PROCEDURE spFixDetectionIndex(@taskid int, @stepid int, @phase varchar(64))
+---------------------------------------------------
+--/H Adds isPrimary column to detectionIndex table and sets its value.
+--/A -------------------------------------------------
+--/T Adds the new TINYINT column isPrimary to the detectionIndex table 
+--/T and sets its value depending on whether the detection is the primary
+--/T detection of the object or not.
+---------------------------------------------------
+AS
+BEGIN
+	--
+	SET NOCOUNT ON;
+	--
+	DECLARE @msg varchar(8000), 
+		@cmd nvarchar(2048), 
+		@status varchar(16), 
+		@ret int;
+	--
+	EXEC loadsupport.dbo.spSetFinishPhase 'detectionIndex'
+	SET @msg = 'Adding isPrimary to detectionIndex ';
+
+	IF EXISTS (SELECT name FROM DBColumna WHERE tablename = 'detectionIndex' AND name = 'isPrimary')
+	   SET @ret = 0
+	ELSE
+	   BEGIN
+	   	ALTER TABLE detectionIndex ADD isPrimary TINYINT NOT NULL DEFAULT 0
+
+		UPDATE d
+      		   SET d.isPrimary = 1
+		FROM detectionIndex d 
+	   	   LEFT OUTER JOIN thingIndex t 
+		   	ON d.thingid=t.thingid AND d.objid=t.objid
+		WHERE
+		   t.objid is not null  
+		IF (@@ROWCOUNT > 0)
+		   @ret = 0
+		ELSE 
+		   @ret = 1
+	   END
+
+        IF (@ret = 0) 
+	   BEGIN
+		SET @status = 'OK'
+		SET @msg = @msg + ' completed successfully '
+	   END
+        ELSE
+	   BEGIN
+		SET @status ='WARNING'
+		SET @msg = @msg + ' set isPrimary for 0 rows '
+	   END
+
+	INSERT DBColumns VALUES('detectionIndex','isPrimary','','','','1 if object is primary, 0 if not')
+
+	-------------------------------
+	-- write log message
+	-------------------------------
+	SET @msg = LEFT(@msg,2048);
+	EXEC spNewPhase @taskid,@stepid,@phase,@status,@msg;
+	--
+	--
+	RETURN(@ret);
+END
+GO
 
 
 --===================================================================
@@ -461,7 +537,6 @@ BEGIN
         SELECT TOP 1 @prev=version from Versions order by convert (datetime,[when]) desc
 
 	-- get checksum from site constants and add new entry to Versions
-	DECLARE @checksum VARCHAR(64)
 	SELECT @checksum=value FROM siteconstants WHERE [name]='Checksum'
 	SELECT TOP 1 @prev=version from Versions order by convert (datetime,[when]) desc
 

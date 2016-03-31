@@ -70,7 +70,8 @@ privileges to write files in the default (C:\sql_db\) directory.</span>
 		<span class='t'>The New Task submission fails, with the error message
 		"Upload has failed.".</span>
 		<br>
-		The dataset may not be recognized by x_upload.js (make sure it is 
+		The export type needs to be added to the spNewTask procedure in loadsupport db. 
+		Either that or dataset/export-type may not be recognized by x_upload.js (make sure it is 
 		included in the list of datasets) or the publish task (taskid=1) may
 		not have its dataset column set to this dataset.
 	</li>

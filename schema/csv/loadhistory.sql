@@ -311,6 +311,9 @@ INSERT History VALUES('IndexMap','2014-11-05','Ani','Added MARVELS DR12 PKs. ');
 INSERT History VALUES('IndexMap','2014-11-06','Ani','Added apogeeStar.htmID index and additional columns to SpecObjAll.BestObjID... index (to speed up default qry). ');
 INSERT History VALUES('IndexMap','2014-11-26','Ani','Added apogeeVisit index on plate,mjd,fiberid. ');
 INSERT History VALUES('IndexMap','2015-02-09','Ani','Updated Photoz indices for DR12. ');
+INSERT History VALUES('IndexMap','2016-02-22','Ani','Added covering index on PhotoObjAll.b (galactic latitude), and moved WISE_AllSky.rjce index to FINISH group because it is an index on a computed column. ');
+INSERT History VALUES('IndexMap','2016-03-22','Ani','Added indices for wiseForced. ');
+INSERT History VALUES('IndexMap','2016-03-29','Ani','Added PK and FK for MaNGA tables in SPECTRO group. ');
 INSERT History VALUES('PhotoTables','2009-04-27','Ani','Swapped in updated schema for photo tables for SDSS-III. Added new table Run. ');
 INSERT History VALUES('PhotoTables','2009-05-05','Ani','Added loadVersion to Field table. ');
 INSERT History VALUES('PhotoTables','2009-06-11','Ani','Added nProf_[ugriz] to Field table. ');
@@ -347,9 +350,12 @@ INSERT History VALUES('PhotoTables','2013-08-16','Ani','Updated descriptions of 
 INSERT History VALUES('PhotoTables','2013-10-30','Ani','Added computed column rjce to WISE_allsky to get the dereddening index for APOGEE target selection (PR #1909).  ');
 INSERT History VALUES('PhotoTables','2014-02-10','Ani','Added glat, glon columns to WISE_allsky (PR #1913). ');
 INSERT History VALUES('PhotoTables','2015-02-09','Ani','Moved Photoz tables to new PhotoZTables.sql file. ');
+INSERT History VALUES('PhotoTables','2016-01-11','Ani','Added history entry for previous change: modified Field tables to change fieldOffset_[ugriz] columns from INT to REAL. ');
+INSERT History VALUES('PhotoTables','2016-03-22','Ani','Added wiseForced table definition (for DR13). ');
 INSERT History VALUES('PhotoZTables','2015-02-09','Ani','Moved photo-z tables here from PhotoTables.sql. Swapped in schema changes for DR12 from R.Beck. ');
 INSERT History VALUES('galSpecTables','2009-12-29','Ani','Adapted from sas-sql. ');
 INSERT History VALUES('galSpecTables','2011-09-27','Ani','Fixed inst_res and chisq units in galSpecLine as per PR#1404. ');
+INSERT History VALUES('galSpecTables','2015-06-11','Ani','Updated description of galSpecExtra table (PR #2329). ');
 INSERT History VALUES('spPhoto','2004-12-17','Ani','Moved sps and functions here from PhotoTables.sql. ');
 INSERT History VALUES('spPhoto','2005-01-02','Ani','Added ''top 1'' to fStrip[e]OfRun so they wont bomb on runs that have multiple entries in Segment (fix for PR #6289).  ');
 INSERT History VALUES('spPhoto','2005-04-08','Ani','Added fObjID. ');
@@ -372,6 +378,7 @@ INSERT History VALUES('resolveTables','2010-11-12','Ani','Copied in schema for t
 INSERT History VALUES('resolveTables','2010-11-24','Ani','Changed thingIndex.objID to bigint. ');
 INSERT History VALUES('resolveTables','2012-07-18','Ani','Added note about DR8 ra,dec to thingIndex description. ');
 INSERT History VALUES('resolveTables','2013-07-23','Ani','Added isPrimary column to detectionIndex. ');
+INSERT History VALUES('resolveTables','2016-03-28','Ani','Removed isPrimary column from detectionIndex so it can be added later in FINISH step. This allows the table to be loaded from CSV. ');
 INSERT History VALUES('NeighborTables','2003-05-15','Alex','split off from the photoTables.sql ');
 INSERT History VALUES('NeighborTables','2003-05-19','Jim','added Match and MatchHead tables ');
 INSERT History VALUES('NeighborTables','2003-07-08','Ani','Removed references to MatchMiss table from Match/MatchHead text (PR 5464). ');
@@ -566,6 +573,8 @@ INSERT History VALUES('ApogeeTables','2014-11-06','Ani','Applied DR12 updates - 
 INSERT History VALUES('ApogeeTables','2014-11-06','Ani','Increased length of id strings in apogeeObject to 64. ');
 INSERT History VALUES('ApogeeTables','2014-11-13','Ani','Increased length of target_id everywhere to 64. ');
 INSERT History VALUES('ApogeeTables','2014-11-25','Ani','Incorporated schema changes for DR12 (new columns param_m_h_err and param_alpha_m_err in aspcapStar) and changed http bitmask help links to internal info links. ');
+INSERT History VALUES('MangaTables','2016-03-29','Ani','Adapted from sas-sql/mangadrp.sql. ');
+INSERT History VALUES('MangaTables','2016-03-29','Ani','Increased length of mangaTarget.nsa_subdir to 128. ');
 INSERT History VALUES('FrameTables','2001-04-10','Jim','Moved index creation to happen after load. ');
 INSERT History VALUES('FrameTables','2001-05-15','Alex','changed spMakeFrame to join to Segment ');
 INSERT History VALUES('FrameTables','2001-11-06','Alex','added bunch of comments, plus separate PRIMARYKEYs ');
@@ -834,6 +843,8 @@ INSERT History VALUES('spSQLSupport','2006-03-10','Ani','Added spLogSqlStatement
 INSERT History VALUES('spSQLSupport','2007-01-01','Alex','separated out spSQLSupport ');
 INSERT History VALUES('spSQLSupport','2007-08-27','Ani','Added "system" parameter to spExecuteSQL to allow it to distinuguish queries submitted by CAS tools from user queries.  Without this, system queries often run into the max #queries/min limit. ');
 INSERT History VALUES('spSQLSupport','2008-04-21','Ani','Added "maxQueries" parameter to spExecuteSQL so that the client can pass the throttle value to it. ');
+INSERT History VALUES('spSQLSupport','2015-07-21','Sue','updated spExecuteSql and spExecuteSql2 to use "logger" user to log queries to weblog db updated spExecuteSQL to remove ; when surrounded by spaces ');
+INSERT History VALUES('spSQLSupport','2015-11-05','Sue','updated spExecuteSQL to add optional parameters for controlling logging, filtering, and throttling behavior.			 ');
 INSERT History VALUES('spUrlFitsSupport','2001-11-07','Alex','changed names for fGetFieldsObjects to spGet...  and fGetFiberList to spGetFiberList ');
 INSERT History VALUES('spUrlFitsSupport','2001-12-02','Alex','moved Globe table to ZoomTables.sql, now this is functions and procedures only, also fixed bug in spGetFiberList ');
 INSERT History VALUES('spUrlFitsSupport','2001-12-08','Jim','moved *Near* functions to *Near* file. ');
@@ -989,7 +1000,7 @@ INSERT History VALUES('spValidate','2013-05-03','Ani','Added spValidateGalProd f
 INSERT History VALUES('spValidate','2013-05-20','Ani','Added spValidateWise for WISE tables. ');
 INSERT History VALUES('spValidate','2013-07-03','Ani','Added reduction_id to apogeeStar PK test. ');
 INSERT History VALUES('spValidate','2013-07-03','Ani','Added apogeeObject PK test to spValidateApogee, and removed reduction_id from apogeeStar test. ');
-INSERT History VALUES('spValidate','2013-07-09','Ani','Added apogeeStarVisit and apogeeStarAllVisit. ');
+INSERT History VALUES('spValidate','2013-07-09','Ani','Added apogeeStarVisit and apogeeStarAllVisit. spValidateWise, and added type "forced" in spValidate. ');
 INSERT History VALUES('spPublish','2002-11-08','Jim','added INIT clause to backup ');
 INSERT History VALUES('spPublish','2002-11-10','Jim','commented out detach, reserved DONE status for the end of the step. added spPublishTiling, changed spPublish to spPublishStep, add insert to load history ');
 INSERT History VALUES('spPublish','2002-11-13','Jim','fixed transaction scope bug in CopyTable ');
@@ -1025,6 +1036,9 @@ INSERT History VALUES('spPublish','2013-05-20','Ani','Added spPublishWise. ');
 INSERT History VALUES('spPublish','2013-05-22','Ani','Added aspcapStarCovar to spPublishApogee. ');
 INSERT History VALUES('spPublish','2013-07-04','Ani','Added apogeeObject, apogeeField and apogeeDesign to spPublishApogee. ');
 INSERT History VALUES('spPublish','2013-07-09','Ani','Added apogeeStarVisit and apogeeStarAllVisit. ');
+INSERT History VALUES('spPublish','2016-03-03','Ani','Added spPublishMask. "forced" in  spPublish. ');
+INSERT History VALUES('spPublish','2016-03-25','Ani','Fixed typo in spPublishStep, changed duplicate "sspp" case to "resolve". ');
+INSERT History VALUES('spPublish','2016-03-29','Ani','Added spPublishManga. ');
 INSERT History VALUES('spFinish','2002-10-29','Jim','split spValidate and spFinish  (finish does neighbors and photo-spectro matchup). removed references to sdssdr1. ');
 INSERT History VALUES('spFinish','2002-11-25','Jim','added index build ');
 INSERT History VALUES('spFinish','2002-12-01','Jim','support *-pub types in spNeighbors ');
@@ -1155,6 +1169,9 @@ INSERT History VALUES('spFinish','2014-12-05','Ani','Updated row counting for sp
 INSERT History VALUES('spFinish','2015-03-06','Ani','Modified spSetVersion to distinguish between DB version and schema version. ');
 INSERT History VALUES('spFinish','2015-03-12','Ani','Fixed typo in spSynchronize. ');
 INSERT History VALUES('spFinish','2015-03-18','Ani','Updated spSetVersion to include DB description in SiteConstants. ');
+INSERT History VALUES('spFinish','2015-05-28','Ani','Updated DataServerURL template in spSetVersion. ');
+INSERT History VALUES('spFinish','2016-03-22','Ani','Deleted duplicate declaration of @checksum from spSetVersion. ');
+INSERT History VALUES('spFinish','2016-03-28','Ani','Created spFixDetectionIndex to add isPrimary column to detectionIndex table and set its value. ');
 INSERT History VALUES('spCopyDbSubset','2004-09-15','Jim','copy all of TilingGeometry, TilingRun, and TileAll so region code works  2004-10-07 Alex, Jim: DR3 starting ');
 INSERT History VALUES('spCopyDbSubset','2004-11-15','Jim','parameterized it  ');
 INSERT History VALUES('spCopyDbSubset','2005-01-28','Jim','BestTarget2Sector replaces Best2Sector. ');
@@ -1171,9 +1188,10 @@ INSERT History VALUES('spCopyDbSubset','2010-01-14','Ani','Replaced ObjMask with
 INSERT History VALUES('spCosmology','2008-10-30','Ani','Incorporated into sqlLoader2k5. ');
 INSERT History VALUES('spCosmology','2008-11-07','Ani','Updated with latest version from Manu  (distance modulus function added too). ');
 INSERT History VALUES('spCosmology','2010-08-24','Ani','Deleted actualy assembly binary string from commented out ALTER ASSEMBLY command.  This was causing an error in loader. ');
+INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* functions due to problems creating them. ');
 GO
 
 ------------------------------------
-PRINT '1164 lines inserted into History'
+PRINT '1182 lines inserted into History'
 ------------------------------------
 GO

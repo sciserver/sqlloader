@@ -55,6 +55,7 @@ IndexMap.sql
 -- WindowTables.sql
 -- ssppTables.sql
 -- ApogeeTables.sql
+-- MangaTables.sql
 -- TilingTables.sql
 -- RegionTables.sql
 -- FrameTables.sql

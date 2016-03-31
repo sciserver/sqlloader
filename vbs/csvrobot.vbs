@@ -53,6 +53,8 @@
 ' 2016-03-03    Replaced theExportType" with skyvsersion (2) in
 '               photo batch file names, and added new export 
 '               type "mask".
+' 2016-03-10    Added WISE forced photometry batch in export type "forced".
+' 2016-03-29    Added MaNGA batch in export type "manga".
 '==============================================================
 
 Option Explicit
@@ -174,6 +176,10 @@ Public Sub CheckDir (root,level)
 		s = s & "(^sql(ApogeeVisit|ApogeeStar|aspcapStar|aspcapStarCovar|ApogeePlate|ApogeeDesign|ApogeeField|ApogeeObject|ApogeeStarVisit|ApogeeStarAllVisit)" & "_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "wise" ) Then
 		s = s & "(^sqlWise(XMatch|AllSky)" & "_[0-9]*\.csv$)"
+	ElseIf ( theexporttype = "forced" ) Then
+		s = s & "(^sqlWISE_forced_target-2-" & rootname & "-*[0-9]*_*[0-9]*\.csv$)"
+	ElseIf ( theexporttype = "manga" ) Then
+		s = s & "(^sql(MangaDRPall|MangaTarget)" & "-v[0-9]*_[0-9]*_[0-9]*\.csv_[0-9]*\.csv$)"
 	Else
 			s = s & "(^sql(AtlasOutline|Field|FieldProfile|PhotoObjAll|PhotoProfile|Run|2MASS|2MASSXSC|First|RC3|ROSAT|USNOB)"
 			s = s & "-2-" & rootname & "-[0-9]*_*[0-9]*\.csv$)"
@@ -193,8 +199,6 @@ Public Sub CheckDir (root,level)
 			csvcount = csvcount+1
 		End If
 	Next
-	'
-	If (level>0 And csvcount=0) Then FatalError "No csv files found in " & root.Path
 	'
 	' compare to the csv_ready file
 	'
@@ -217,6 +221,8 @@ Public Sub CheckDir (root,level)
 		End If
 	Loop
 	inStream.Close
+	'
+	If (level>0 And filecount>0 And csvcount=0) Then FatalError "No csv files found in " & root.Path
 	'
 	If filecount <> csvcount Then
 		Debug "filecount: " & filecount & ", csvcount: " & csvcount 

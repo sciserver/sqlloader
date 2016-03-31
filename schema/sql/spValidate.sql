@@ -82,6 +82,10 @@
 --* 2013-07-09 Ani: Added apogeeStarVisit and apogeeStarAllVisit.
 --^ 2016-01-11 Ani: Commented out Target tables in spValidatePhoto.
 --^ 2016-01-11 Ani: Added spValidateMask.
+--^ 2016-03-22 Ani: Added unique key test for wiseForced in 
+--*                 spValidateWise, and added type "forced" in
+--*                 spValidate.
+--^ 2016-03-29 Ani: Added spValidateManga.
 --====================================================================
 SET NOCOUNT ON;
 GO
@@ -1507,6 +1511,82 @@ go
 
 
 IF EXISTS (SELECT [name]FROM sysobjects 
+	WHERE [name]= N'spValidateManga' ) 
+	drop procedure spValidateManga
+GO
+--
+CREATE PROCEDURE spValidateManga (
+	@taskid int, 
+	@stepid int,
+	@destinationDB varchar(16)
+)
+-------------------------------------------------------------
+--/H  Validate MaNGA tables  
+--/A 
+--/T <p> parameters:   
+--/T <li> taskid int,   		-- Task identifier
+--/T <li> stepid int,   		-- Step identifier
+--/T <li> destinationDB int,   		-- Name of destination DB 
+--/T <li> returns  0 if OK, non zero if something wrong  
+--/T <br>
+--/T Sample call:<br>
+--/T <samp> 
+--/T <br> exec  spValidateManga @taskid , @stepid, 'targetDB'  
+--/T </samp> 
+--/T <br>  
+------------------------------------------------------------- 
+AS BEGIN
+    	--
+    	SET NOCOUNT ON
+
+    	--- Globals
+    	DECLARE	@start datetime,
+		@summary bigint,
+		@error bigint,
+		@errorMsg varchar(1000),
+		@verb varchar(16)
+
+    -- Put out step greeting
+    EXEC spNewPhase @taskid, @stepid, 'spValidateManga', 'OK', 'spValidateManga called'; 
+
+    -------------------------------------
+    SET @start  = current_timestamp
+    SET @summary = 0
+
+	---------------------
+	-- test unique keys
+	---------------------
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mangaDrpAll',          	'plateIFU',	@error OUTPUT
+	set @summary = @summary + @error;
+ 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mangaTarget',          	'mangaID',	@error OUTPUT
+	set @summary = @summary + @error;
+ 
+	-- generate completion message.
+
+	IF @summary = 0 
+	    BEGIN
+		SET @errorMsg =   'MaNGA tables validated in '  
+			+ cast(dbo.fDatediffSec(@start, current_timestamp) as varchar(30))+ ' seconds'
+		SET @verb = 'OK'
+	    END
+	ELSE 	
+	    BEGIN
+		SET @errorMsg =   'MaNGA tables validation found ' +str(@summary) + ' errors in ' 
+			+ cast(dbo.fDatediffSec(@start, current_timestamp) as varchar(30)) + ' seconds'
+		SET @verb = 'ERROR'
+	    END
+
+	EXEC spNewPhase @taskid, @stepid, 'spValidateManga', @verb, @errorMsg ;
+	
+	RETURN @summary
+END		-- End spValidateManga()
+--======================================
+go
+
+
+
+IF EXISTS (SELECT [name]FROM sysobjects 
 	WHERE [name]= N'spValidateResolve' ) 
 	drop procedure spValidateResolve
 GO
@@ -1755,6 +1835,9 @@ AS BEGIN
 	exec dbo.spTestUniqueKey  @taskid , @stepid,  'wise_allsky', 'cntr', @error OUTPUT
 	set @summary = @summary + @error;
 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'wiseForced', 'objID', @error OUTPUT
+	set @summary = @summary + @error;
+
 	-- generate completion message.
 	IF @summary = 0 
 	    BEGIN
@@ -1973,6 +2056,23 @@ BEGIN
 	    END
 
 
+	IF @type = 'manga'
+	    BEGIN
+		EXEC @err = spValidateManga @taskID, @stepID, @destinationDBbname 
+	        IF @err = 0
+		    BEGIN 
+	   		set @stepMsg = 'Validated MaNGA ' + @id
+			set @phaseMsg = 'Validated MaNGA ' + @id
+		    END
+		ELSE
+		    BEGIN
+		   	SET @stepMsg = 'Failed to validate MaNGA ' + @id
+			SET @phaseMsg = 'Failed to validate MaNGA ' + @id
+		    END
+		GOTO commonExit
+	    END
+
+
 	IF @type = 'resolve'
 	    BEGIN
 		EXEC @err = spValidateResolve @taskID, @stepID, @destinationDBbname 
@@ -2007,7 +2107,7 @@ BEGIN
 	    END
 
 
-	IF @type = 'wise'
+	IF @type = 'wise' or @type = 'forced'
 	    BEGIN
 		EXEC @err = spValidateWise @taskID, @stepID, @destinationDBbname 
 	        IF @err = 0

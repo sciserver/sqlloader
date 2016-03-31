@@ -44,6 +44,7 @@ RegionTables.sql
 WindowTables.sql
 ssppTables.sql
 ApogeeTables.sql
+MangaTables.sql
 FrameTables.sql
 GalaxyZooTables.sql
 GalaxyZoo2Tables.sql

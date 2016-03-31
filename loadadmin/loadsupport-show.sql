@@ -15,6 +15,8 @@
 --                   1,2,3) in Active tasks regardless of status,
 --                   include finished *-PUB tasks in Finished list. 
 -- 2012-06-07   Ani: spShowTask now does not list TARG db tasks.
+-- 2016-03-31   Ani: Increased length of table name to 64 from 16 in
+--                   spShowFileStats.
 --=============================================================
 SET NOCOUNT ON
 GO
@@ -289,7 +291,7 @@ BEGIN
     SET NOCOUNT ON;
     --
     DECLARE @total real, @average real;
-    DECLARE @stat TABLE ([table] varchar(16), [total] int, [average] int)
+    DECLARE @stat TABLE ([table] varchar(64), [total] int, [average] int)
     --
     INSERT @stat
     SELECT

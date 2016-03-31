@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="51925"
+   name=""
+   committed-date="2006-08-01T21:01:33.000000Z"
+   url="svn+ssh://sdss3svn@sdss3.org/repo/sqlLoader2k5/trunk/admin/img"
+   last-author="cvsuser"
+   kind="dir"
+   uuid="b00c9580-4927-0410-8824-811d448ea4c7"
+   revision="52387"/>
+<entry
+   committed-rev="51925"
+   name="sdss-main-logo.gif"
+   text-time="2009-02-09T18:50:27.000000Z"
+   committed-date="2006-08-01T21:01:33.000000Z"
+   checksum="990e57923e29e25fe86adbddd310bc00"
+   last-author="cvsuser"
+   kind="file"
+   prop-time="2009-02-09T18:50:24.000000Z"/>
+<entry
+   committed-rev="51925"
+   name="loadsteps-big.gif"
+   text-time="2009-02-09T18:50:28.000000Z"
+   committed-date="2006-08-01T21:01:33.000000Z"
+   checksum="74d769fc7abf0d3ecb4654872e8bc3cd"
+   last-author="cvsuser"
+   kind="file"
+   prop-time="2009-02-09T18:50:24.000000Z"/>
+<entry
+   committed-rev="51925"
+   name="loadsteps.gif"
+   text-time="2009-02-09T18:50:28.000000Z"
+   committed-date="2006-08-01T21:01:33.000000Z"
+   checksum="a72830f368f37fc5112bc92c13b23a09"
+   last-author="cvsuser"
+   kind="file"
+   prop-time="2009-02-09T18:50:24.000000Z"/>
+<entry
+   committed-rev="51925"
+   name="circle.gif"
+   text-time="2009-02-09T18:50:29.000000Z"
+   committed-date="2006-08-01T21:01:33.000000Z"
+   checksum="734cd3bf484ff1ca11c6da17b006ad1e"
+   last-author="cvsuser"
+   kind="file"
+   prop-time="2009-02-09T18:50:25.000000Z"/>
+<entry
+   committed-rev="51925"
+   name="run.gif"
+   text-time="2009-02-09T18:50:29.000000Z"
+   committed-date="2006-08-01T21:01:33.000000Z"
+   checksum="17fb22f51354e487581aa7f5cd5e9940"
+   last-author="cvsuser"
+   kind="file"
+   prop-time="2009-02-09T18:50:25.000000Z"/>
+<entry
+   committed-rev="51925"
+   name="cancel.gif"
+   text-time="2009-02-09T18:50:29.000000Z"
+   committed-date="2006-08-01T21:01:33.000000Z"
+   checksum="79da36ac614b79a7c27765921c22744b"
+   last-author="cvsuser"
+   kind="file"
+   prop-time="2009-02-09T18:50:25.000000Z"/>
+<entry
+   committed-rev="51925"
+   name="end.gif"
+   text-time="2009-02-09T18:50:29.000000Z"
+   committed-date="2006-08-01T21:01:33.000000Z"
+   checksum="f85a62fa538aebfddff5e3272f009006"
+   last-author="cvsuser"
+   kind="file"
+   prop-time="2009-02-09T18:50:25.000000Z"/>
+<entry
+   committed-rev="51925"
+   name="sdss-main-logo.jpg"
+   text-time="2009-02-09T18:50:30.000000Z"
+   committed-date="2006-08-01T21:01:33.000000Z"
+   checksum="80ad74ecdb690acb286c7f250bff0806"
+   last-author="cvsuser"
+   kind="file"
+   prop-time="2009-02-09T18:50:26.000000Z"/>
+<entry
+   committed-rev="51925"
+   name="x.gif"
+   text-time="2009-02-09T18:50:30.000000Z"
+   committed-date="2006-08-01T21:01:33.000000Z"
+   checksum="b03dce83d1dd14c02c8ce05cfffc468d"
+   last-author="cvsuser"
+   kind="file"
+   prop-time="2009-02-09T18:50:26.000000Z"/>
+<entry
+   committed-rev="51925"
+   name="halt.gif"
+   text-time="2009-02-09T18:50:30.000000Z"
+   committed-date="2006-08-01T21:01:33.000000Z"
+   checksum="945b9114a8d7980819709cd3f1648158"
+   last-author="cvsuser"
+   kind="file"
+   prop-time="2009-02-09T18:50:27.000000Z"/>
+<entry
+   committed-rev="51925"
+   name="ok.gif"
+   text-time="2009-02-09T18:50:31.000000Z"
+   committed-date="2006-08-01T21:01:33.000000Z"
+   checksum="0ca3dc0e0b3a4896da6f694caab19210"
+   last-author="cvsuser"
+   kind="file"
+   prop-time="2009-02-09T18:50:27.000000Z"/>
+</wc-entries>

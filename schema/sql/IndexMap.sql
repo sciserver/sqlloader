@@ -231,6 +231,8 @@
 --* 2016-02-22 Ani: Added covering index on PhotoObjAll.b (galactic latitude),
 --*                 and moved WISE_AllSky.rjce index to FINISH group because it
 --*                 is an index on a computed column.
+--* 2016-03-22 Ani: Added indices for wiseForced.
+--* 2016-03-29 Ani: Added PK and FK for MaNGA tables in SPECTRO group.
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -402,6 +404,7 @@ INSERT IndexMap Values('K','primary key', 'TwoMass', 		'objID'			,'','PHOTO');
 INSERT IndexMap Values('K','primary key', 'TwoMassXSC',		'objID'			,'','PHOTO');
 INSERT IndexMap Values('K','primary key', 'WISE_xmatch',	'sdss_objID,wise_cntr'			,'','PHOTO');
 INSERT IndexMap Values('K','primary key', 'WISE_allsky',	'cntr'			,'','PHOTO');
+INSERT IndexMap Values('K','primary key', 'wiseForced',		'objID'			,'','PHOTO');
 INSERT IndexMap Values('K','primary key', 'thingIndex', 	'thingId'		,'','PHOTO');
 INSERT IndexMap Values('K','primary key', 'detectionIndex', 	'thingId,objID'			,'','PHOTO');
 INSERT IndexMap Values('K','primary key', 'ProperMotions',	'objID'			,'','PHOTO');
@@ -442,6 +445,8 @@ INSERT IndexMap Values('K','primary key', 'aspcapStarCovar', 	 	'aspcap_covar_id
 INSERT IndexMap Values('K','primary key', 'apogeeObject',		'target_id'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'apogeeStarVisit', 	 	'visit_id'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'apogeeStarAllVisit', 	'visit_id,apstar_id'		,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'mangaDrpAll',		'plateIFU'			,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'mangaTarget',		'mangaID'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'zooSpec', 			'specObjID'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'zooConfidence',		'specObjID'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'zoo2MainSpecz', 		'dr7objid'		,'','SPECTRO');
@@ -501,6 +506,7 @@ INSERT IndexMap Values('F','foreign key', 'MaskedObject', 	'maskID'	,'Mask(maskI
 --------------------------------------------------
 INSERT IndexMap Values('F','foreign key', 'SpecObjAll', 	'plateID'	,'PlateX(plateID)'	,'SPECTRO');
 --	INSERT IndexMap Values('F','foreign key', 'PlateX',	'tile'		,'sdssTileAll(tile)'	,'SPECTRO');
+INSERT IndexMap Values('F','foreign key', 'mangaDrpAll',	'mangaID'	,'mangaTarget(mangaID)'	,'SPECTRO');
 INSERT IndexMap Values('F','foreign key', 'zoo2MainSpecz', 	'dr8objid'	,'PhotoObjAll(objid)','SPECTRO');
 INSERT IndexMap Values('F','foreign key', 'zoo2Stripe82Coadd1', 'dr8objid'	,'PhotoObjAll(objid)','SPECTRO');
 INSERT IndexMap Values('F','foreign key', 'zoo2Stripe82Coadd2', 'dr8objid'	,'PhotoObjAll(objid)','SPECTRO');
@@ -649,6 +655,7 @@ INSERT IndexMap Values('I','index', 'WISE_allsky',	 'w2cc_map'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'WISE_allsky',	 'w3cc_map'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'WISE_allsky',	 'w4cc_map'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'WISE_xmatch',	 'wise_cntr'			,'','PHOTO');
+INSERT IndexMap Values('I','index', 'wiseForced',	 'ra,dec,has_wise_phot,treated_as_pointsource','','PHOTO');
 INSERT IndexMap Values('I','index', 'zooNoSpec', 	 'objID'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'zooVotes', 	 'objID'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'zooMirrorBias', 	 'objID'			,'','PHOTO');
