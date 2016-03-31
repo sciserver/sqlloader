@@ -40,6 +40,8 @@
 --* 2014-11-25 Ani: Incorporated schema changes for DR12 (new columns
 --*            param_m_h_err and param_alpha_m_err in aspcapStar) and
 --*            changed http bitmask help links to internal info links.
+--^ 2016-03-16 DR13 updates.
+--^ 2016-03-30 More DR13 updates - ce_* and felem_ce* columns removed..
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -67,20 +69,20 @@ CREATE TABLE apogeeVisit (
     target_id varchar(64) NOT NULL, --/D target ID (Foreign key, of form [location_id].[apogee_id])  
     reduction_id varchar(32) NOT NULL, --/D ID star identification used within reductions
     [file] varchar(128) NOT NULL, --/D File base name with visit spectrum and catalog information
-    telescope varchar(32) NOT NULL, --/D Telescope where data was taken
     fiberid bigint NOT NULL, --/D Fiber ID for this visit
     plate varchar(32) NOT NULL, --/D Plate of this visit
     mjd bigint NOT NULL, --/D MJD of this visit
+    telescope varchar(32) NOT NULL, --/D Telescope where data was taken
     location_id bigint NOT NULL, --/D Location ID for the field this visit is in (Foreign key)
     ra float NOT NULL, --/U deg --/D Right ascension, J2000
     dec float NOT NULL, --/U deg --/D Declination, J2000
     glon float NOT NULL, --/U deg --/D Galactic longitude
     glat float NOT NULL, --/U deg --/D Galactic latitude
-    apogee_target1 bigint NOT NULL, --/D APOGEE target flag (first 64 bits)  --/R ApogeeTarget1
-    apogee_target2 bigint NOT NULL, --/D APOGEE target flag (second 64 bits)  --/R ApogeeTarget2
-    extratarg bigint NOT NULL, --/D Shorthand flag to denote not a main survey object  --/R ApogeeExtraTarg
+    apogee_target1 bigint NOT NULL, --/D APOGEE target flag (first 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET1)
+    apogee_target2 bigint NOT NULL, --/D APOGEE target flag (second 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET2)
+    extratarg bigint NOT NULL, --/D Shorthand flag to denote not a main survey object (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_EXTRATARG)
     snr real NOT NULL, --/D Median signal-to-noise ratio per pixel
-    starflag bigint NOT NULL, --/D Bit mask with APOGEE star flags  --/R ApogeeStarFlag
+    starflag bigint NOT NULL, --/D Bit mask with APOGEE star flags (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_STARFLAG)
     dateobs varchar(100) NOT NULL, --/D Date of observation (YYYY-MM-DDTHH:MM:SS.SSS) 
     jd float NOT NULL, --/D Julian date of observation	
     bc real NOT NULL, --/U km/s --/D Barycentric correction (VHELIO - VREL)
@@ -133,14 +135,14 @@ CREATE TABLE apogeeStar (
     dec float NOT NULL, --/U deg --/D Declination, J2000
     glon float NOT NULL, --/U deg --/D Galactic longitude
     glat float NOT NULL, --/U deg --/D Galactic latitude
-    apogee_target1 bigint NOT NULL, --/D APOGEE target flag (first 64 bits)  --/R ApogeeTarget1
-    apogee_target2 bigint NOT NULL, --/D APOGEE target flag (second 64 bits)  --/R ApogeeTarget2
-    extratarg bigint NOT NULL, --/D Shorthand flag to denote not a main survey object  --/R ApogeeExtraTarg
+    apogee_target1 bigint NOT NULL, --/D APOGEE target flag (first 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET1)
+    apogee_target2 bigint NOT NULL, --/D APOGEE target flag (second 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET2)
+    extratarg bigint NOT NULL, --/D Shorthand flag to denote not a main survey object (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_EXTRATARG)
     nvisits bigint NOT NULL, --/D Number of visits contributing to the combined spectrum
     commiss bigint NOT NULL, --/D Set to 1 if this is commissioning data
     snr real NOT NULL, --/D Median signal-to-noise ratio per pixel
-    starflag bigint NOT NULL, --/D Bit mask with APOGEE star flags; each bit is set here if it is set in any visit  --/R ApogeeStarFlag
-    andflag bigint NOT NULL, --/D AND of visit bit mask with APOGEE star flags; each bit is set if set in all visits  --/R ApogeeStarFlag
+    starflag bigint NOT NULL, --/D Bit mask with APOGEE star flags; each bit is set here if it is set in any visit (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_STARFLAG)
+    andflag bigint NOT NULL, --/D AND of visit bit mask with APOGEE star flags; each bit is set if set in all visits (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_STARFLAG)
     vhelio_avg real NOT NULL, --/U km/s --/D Signal-to-noise weighted average of heliocentric radial velocity, as determined relative to combined spectrum, with zeropoint from xcorr of combined spectrum with best-fitting template
     vscatter real NOT NULL, --/U km/s --/D Standard deviation of scatter of individual visit RVs around average
     verr real NOT NULL, --/U km/s --/D  Weighted error of heliocentric RV
@@ -234,13 +236,22 @@ CREATE TABLE aspcapStar (
     results_version varchar(32) NOT NULL, --/D reduction version of for post-processing
     teff real NOT NULL,  --/U deg K --/D Empirically calibrated temperature from ASPCAP 
     teff_err real NOT NULL, --/U deg K  --/D external uncertainty estimate for calibrated temperature from ASPCAP
-    teff_flag int NOT NULL, --/F paramflag 0 --/D PARAMFLAG for effective temperature --/R ApogeeParamFlag
+    teff_flag int NOT NULL, --/F paramflag 0 --/D PARAMFLAG for effective temperature(see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_PARAMFLAG)
     logg real NOT NULL, --/U dex --/D empirically calibrated log gravity from ASPCAP
     logg_err real NOT NULL, --/U dex --/D external uncertainty estimate for log gravity from ASPCAP
-    logg_flag int NOT NULL, --/F paramflag 1 --/D PARAMFLAG for log g --/R ApogeeParamFlag
+    logg_flag int NOT NULL, --/F paramflag 1 --/D PARAMFLAG for log g(see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_PARAMFLAG)
+    vmicro real NOT NULL, --/U km/s --/D microturbulent velocity (fit for dwarfs, f(log g) for giants)
+    vmacro real NOT NULL, --/U km/s --/D macroturbulent velocity (f(log Teff,[M/H]) for giants)
+    vsini real NOT NULL, --/U km/s --/D rotation+macroturbulent velocity (fit for dwarfs)
+    m_h real NOT NULL, --/U dex --/D calibrated [M/H]
+    m_h_err real NOT NULL, --/U dex --/D calibrated [M/H] uncertainty
+    m_h_flag int NOT NULL, --/F paramflag 3 --/D PARAMFLAG for [M/H] (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_PARAMFLAG)
+    alpha_m real NOT NULL, --/U dex --/D calibrated [M/H]
+    alpha_m_err real NOT NULL, --/U dex --/D calibrated [M/H] uncertainty
+    alpha_m_flag int NOT NULL, --/F paramflag 6 --/D PARAMFLAG for [alpha/M] (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_PARAMFLAG)
     aspcap_chi2 real NOT NULL, --/D chi^2 of ASPCAP fit
     aspcap_class varchar(100) NOT NULL, --/D Temperature class of best-fitting spectrum
-    aspcapflag bigint NOT NULL, --/D Bitmask flag relating results of ASPCAP  --/R ApogeeAspcapFlag
+    aspcapflag bigint NOT NULL, --/D Bitmask flag relating results of ASPCAP (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ASPCAPFLAG)
     fparam_teff real NOT NULL, --/U deg K --/F fparam 0 --/D original fit temperature
     fparam_logg real NOT NULL, --/U dex --/F fparam 1 --/D original fit log g from 6-parameter FERRE fit
     fparam_logvmicro real NOT NULL, --/F fparam 2 --/D log10 of the fit microturbulent velocity in km/s from 6-parameter FERRE fit 
@@ -248,95 +259,135 @@ CREATE TABLE aspcapStar (
     fparam_c_m real NOT NULL, --/U dex --/F fparam 4 --/D original fit [C/H] from 6-parameter FERRE fit
     fparam_n_m real NOT NULL, --/U dex --/F fparam 5 --/D original fit [N/H] from 6-parameter FERRE fit
     fparam_alpha_m real NOT NULL, --/U dex --/F fparam 6 --/D original fit [alpha/M] from 6-parameter FERRE fit
-    param_teff real NOT NULL, --/F param 0 --/U deg K --/D Empirically calibrated temperature from ASPCAP 
-    param_logg real NOT NULL, --/F param 1 --/U dex --/D Empirically calibrated surface gravity from ASPCAP 
-    param_logvmicro real NOT NULL, --/F param 2 --/U dex --/D log10 of the empirically calibrated microturbulent velocity in km/s from ASPCAP
-    param_logvmicro_flag int NOT NULL, --/F paramflag 2 --/D PARAMFLAG microturbulent velocity --/R ApogeeParamFlag
-    param_m_h real NOT NULL, --/U dex --/D empirically calibrated metal abundances [M/H] from ASPCAP
-    param_m_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated metal abundances [M/H] from ASPCAP
-    param_m_h_flag int NOT NULL, --/F paramflag 3 --/D PARAMFLAG for [M/H]  --/R ApogeeParamFlag
     param_c_m real NOT NULL, --/F param 4 --/U dex --/D empirically calibrated [C/M] from ASPCAP
-    param_c_m_flag int NOT NULL, --/F paramflag 4 --/D PARAMFLAG for [C/M]  --/R ApogeeParamFlag
+    param_c_m_flag int NOT NULL, --/F paramflag 4 --/D PARAMFLAG for [C/M] (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_PARAMFLAG)
     param_n_m real NOT NULL, --/F param 5 --/U dex --/D empirically calibrated [N/M] from ASPCAP
-    param_n_m_flag int NOT NULL, --/F paramflag 5 --/D PARAMFLAG for [N/M]  --/R ApogeeParamFlag
-    param_alpha_m real NOT NULL, --/U dex --/D empirically calibrated [alpha/M] from ASPCAP
-    param_alpha_m_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [alpha/M] from ASPCAP
-    param_alpha_m_flag int NOT NULL, --/F paramflag 6 --/D PARAMFLAG for [alpha/M]  --/R ApogeeParamFlag
-    al_h real NOT NULL, --/U dex --/D empirically calibrated [Al/H] from ASPCAP 
-    al_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Al/H] from ASPCAP 
-    al_h_flag int NOT NULL, --/F elemflag 1 --/D ELEMFLAG for Al  --/R ApogeeParamFlag
-    c_h real NOT NULL, --/U dex --/D empirically calibrated [C/H] from ASPCAP; [C/H] is calculated as (ASPCAP [C/M])+param_metals 
-    c_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [C/H] from ASPCAP 
-    c_h_flag int NOT NULL, --/F elemflag 0 --/D ELEMFLAG for C  --/R ApogeeParamFlag
-    ca_h real NOT NULL, --/U dex --/D empirically calibrated [Ca/H] from ASPCAP ; [Ca/H] is calculated as (ASPCAP [Ca/M])+param_metals 
-    ca_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Ca/H] from ASPCAP 
-    ca_h_flag int NOT NULL, --/F elemflag 2 --/D ELEMFLAG for Ca  --/R ApogeeParamFlag
+    param_n_m_flag int NOT NULL, --/F paramflag 5 --/D PARAMFLAG for [N/M] (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_PARAMFLAG)
+    c_fe real NOT NULL, --/U dex --/D empirically calibrated [C/Fe] from ASPCAP; [C/Fe] is calculated as (ASPCAP [C/M])+param_metals 
+    c_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [C/Fe] from ASPCAP 
+    c_fe_flag int NOT NULL, --/F elemflag 0 --/D ELEMFLAG for C (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    ci_fe real NOT NULL, --/U dex --/D empirically calibrated [CI/Fe] from ASPCAP; [C/Fe] is calculated as (ASPCAP [C/M])+param_metals 
+    ci_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [CI/Fe] from ASPCAP 
+    ci_fe_flag int NOT NULL, --/F elemflag 1 --/D ELEMFLAG for CI (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    n_fe real NOT NULL, --/U dex --/D empirically calibrated [N/Fe] from ASPCAP; [N/Fe] is calculated as (ASPCAP [N/M])+param_metals 
+    n_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [N/Fe] from ASPCAP 
+    n_fe_flag int NOT NULL, --/F elemflag 2 --/D ELEMFLAG for N (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    o_fe real NOT NULL, --/U dex --/D empirically calibrated [O/Fe] from ASPCAP; [O/Fe] is calculated as (ASPCAP [O/M])+param_metals 
+    o_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [O/Fe] from ASPCAP 
+    o_fe_flag int NOT NULL, --/F elemflag 3 --/D ELEMFLAG for O (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    na_fe real NOT NULL, --/U dex --/D empirically calibrated [Na/Fe] from ASPCAP 
+    na_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Na/Fe] from ASPCAP 
+    na_fe_flag int NOT NULL, --/F elemflag 4 --/D ELEMFLAG for Na (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    mg_fe real NOT NULL, --/U dex --/D empirically calibrated [Mg/Fe] from ASPCAP; [Mg/Fe] is calculated as (ASPCAP [Mg/M])+param_metals  
+    mg_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Mg/Fe] from ASPCAP 
+    mg_fe_flag int NOT NULL, --/F elemflag 5 --/D ELEMFLAG for Mg (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    al_fe real NOT NULL, --/U dex --/D empirically calibrated [Al/Fe] from ASPCAP 
+    al_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Al/Fe] from ASPCAP 
+    al_fe_flag int NOT NULL, --/F elemflag 6 --/D ELEMFLAG for Al (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    si_fe real NOT NULL, --/U dex --/D empirically calibrated [Si/Fe] from ASPCAP; [Si/Fe] is calculated as (ASPCAP [Si/M])+param_metals  
+    si_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Si/Fe] from ASPCAP 
+    si_fe_flag int NOT NULL, --/F elemflag 7 --/D ELEMFLAG for Si (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    p_fe real NOT NULL, --/U dex --/D empirically calibrated [P/Fe] from ASPCAP; [P/Fe] is calculated as (ASPCAP [P/M])+param_metals  
+    p_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [P/Fe] from ASPCAP 
+    p_fe_flag int NOT NULL, --/F elemflag 8 --/D ELEMFLAG for Si (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    s_fe real NOT NULL, --/U dex --/D empirically calibrated [S/Fe] from ASPCAP; [S/Fe] is calculated as (ASPCAP [S/M])+param_metals 
+    s_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [S/Fe] from ASPCAP 
+    s_fe_flag int NOT NULL, --/F elemflag 9 --/D ELEMFLAG for S (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    k_fe real NOT NULL, --/U dex --/D empirically calibrated [K/Fe] from ASPCAP 
+    k_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [K/Fe] from ASPCAP 
+    k_fe_flag int NOT NULL, --/F elemflag 10 --/D ELEMFLAG for K (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    ca_fe real NOT NULL, --/U dex --/D empirically calibrated [Ca/Fe] from ASPCAP ; [Ca/Fe] is calculated as (ASPCAP [Ca/M])+param_metals 
+    ca_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Ca/Fe] from ASPCAP 
+    ca_fe_flag int NOT NULL, --/F elemflag 11 --/D ELEMFLAG for Ca (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    ti_fe real NOT NULL, --/U dex --/D empirically calibrated [Ti/Fe] from ASPCAP; [Ti/Fe] is calculated as (ASPCAP [Ti/M])+param_metals  
+    ti_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Ti/Fe] from ASPCAP 
+    ti_fe_flag int NOT NULL, --/F elemflag 12 --/D ELEMFLAG for Ti (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    tiii_fe real NOT NULL, --/U dex --/D empirically calibrated [TiII/Fe] from ASPCAP; [TiII/Fe] is calculated as (ASPCAP [TiII/M])+param_metals  
+    tiii_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [TiII/Fe] from ASPCAP 
+    tiii_fe_flag int NOT NULL, --/F elemflag 13 --/D ELEMFLAG for TiII (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    v_fe real NOT NULL, --/U dex --/D empirically calibrated [V/Fe] from ASPCAP 
+    v_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [V/Fe] from ASPCAP 
+    v_fe_flag int NOT NULL, --/F elemflag 14 --/D ELEMFLAG for V (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    cr_fe real NOT NULL, --/U dex --/D empirically calibrated [Cr/Fe] from ASPCAP 
+    cr_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Cr/Fe] from ASPCAP 
+    cr_fe_flag int NOT NULL, --/F elemflag 15 --/D ELEMFLAG for Cr (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    mn_fe real NOT NULL, --/U dex --/D empirically calibrated [Mn/Fe] from ASPCAP 
+    mn_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Mn/Fe] from ASPCAP 
+    mn_fe_flag int NOT NULL, --/F elemflag 16 --/D ELEMFLAG for Mn (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
     fe_h real NOT NULL, --/U dex --/D empirically calibrated [Fe/H] from ASPCAP 
     fe_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Fe/H] from ASPCAP 
-    fe_h_flag int NOT NULL, --/F elemflag 3 --/D ELEMFLAG for Fe  --/R ApogeeParamFlag
-    k_h real NOT NULL, --/U dex --/D empirically calibrated [K/H] from ASPCAP 
-    k_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [K/H] from ASPCAP 
-    k_h_flag int NOT NULL, --/F elemflag 4 --/D ELEMFLAG for K  --/R ApogeeParamFlag
-    mg_h real NOT NULL, --/U dex --/D empirically calibrated [Mg/H] from ASPCAP; [Mg/H] is calculated as (ASPCAP [Mg/M])+param_metals  
-    mg_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Mg/H] from ASPCAP 
-    mg_h_flag int NOT NULL, --/F elemflag 5 --/D ELEMFLAG for Mg  --/R ApogeeParamFlag
-    mn_h real NOT NULL, --/U dex --/D empirically calibrated [Mn/H] from ASPCAP 
-    mn_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Mn/H] from ASPCAP 
-    mn_h_flag int NOT NULL, --/F elemflag 6 --/D ELEMFLAG for Mn  --/R ApogeeParamFlag
-    na_h real NOT NULL, --/U dex --/D empirically calibrated [Na/H] from ASPCAP 
-    na_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Na/H] from ASPCAP 
-    na_h_flag int NOT NULL, --/F elemflag 7 --/D ELEMFLAG for Na  --/R ApogeeParamFlag
-    ni_h real NOT NULL, --/U dex --/D empirically calibrated [Ni/H] from ASPCAP 
-    ni_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Ni/H] from ASPCAP 
-    ni_h_flag int NOT NULL, --/F elemflag 8 --/D ELEMFLAG for Ni  --/R ApogeeParamFlag
-    n_h real NOT NULL, --/U dex --/D empirically calibrated [N/H] from ASPCAP; [N/H] is calculated as (ASPCAP [N/M])+param_metals 
-    n_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [N/H] from ASPCAP 
-    n_h_flag int NOT NULL, --/F elemflag 9 --/D ELEMFLAG for N  --/R ApogeeParamFlag
-    o_h real NOT NULL, --/U dex --/D empirically calibrated [O/H] from ASPCAP; [O/H] is calculated as (ASPCAP [O/M])+param_metals 
-    o_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [O/H] from ASPCAP 
-    o_h_flag int NOT NULL, --/F elemflag 10 --/D ELEMFLAG for O  --/R ApogeeParamFlag
-    si_h real NOT NULL, --/U dex --/D empirically calibrated [Si/H] from ASPCAP; [Si/H] is calculated as (ASPCAP [Si/M])+param_metals  
-    si_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Si/H] from ASPCAP 
-    si_h_flag int NOT NULL, --/F elemflag 11 --/D ELEMFLAG for Si  --/R ApogeeParamFlag
-    s_h real NOT NULL, --/U dex --/D empirically calibrated [S/H] from ASPCAP; [S/H] is calculated as (ASPCAP [S/M])+param_metals 
-    s_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [S/H] from ASPCAP 
-    s_h_flag int NOT NULL, --/F elemflag 12 --/D ELEMFLAG for S  --/R ApogeeParamFlag
-    ti_h real NOT NULL, --/U dex --/D empirically calibrated [Ti/H] from ASPCAP; [Ti/H] is calculated as (ASPCAP [Ti/M])+param_metals  
-    ti_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Ti/H] from ASPCAP 
-    ti_h_flag int NOT NULL, --/F elemflag 13 --/D ELEMFLAG for Ti  --/R ApogeeParamFlag
-    v_h real NOT NULL, --/U dex --/D empirically calibrated [V/H] from ASPCAP 
-    v_h_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [V/H] from ASPCAP 
-    v_h_flag int NOT NULL, --/F elemflag 14 --/D ELEMFLAG for V  --/R ApogeeParamFlag
-    felem_al_h real NOT NULL, --/U deg K --/F felem 1 --/D original fit [Al/H]
-    felem_al_h_err real NOT NULL, --/U deg K --/F felem 1 --/D original fit uncertainty [Al/H]
+    fe_h_flag int NOT NULL, --/F elemflag 17 --/D ELEMFLAG for Fe (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    co_fe real NOT NULL, --/U dex --/D empirically calibrated [Co/Fe] from ASPCAP 
+    co_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Co/Fe] from ASPCAP 
+    co_fe_flag int NOT NULL, --/F elemflag 18 --/D ELEMFLAG for Co (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    ni_fe real NOT NULL, --/U dex --/D empirically calibrated [Ni/Fe] from ASPCAP 
+    ni_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Ni/Fe] from ASPCAP 
+    ni_fe_flag int NOT NULL, --/F elemflag 19 --/D ELEMFLAG for Ni (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    cu_fe real NOT NULL, --/U dex --/D empirically calibrated [Cu/Fe] from ASPCAP 
+    cu_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Cu/Fe] from ASPCAP 
+    cu_fe_flag int NOT NULL, --/F elemflag 20 --/D ELEMFLAG for Cu (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    ge_fe real NOT NULL, --/U dex --/D empirically calibrated [Ge/Fe] from ASPCAP 
+    ge_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Ge/Fe] from ASPCAP 
+    ge_fe_flag int NOT NULL, --/F elemflag 21 --/D ELEMFLAG for Ge (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    rb_fe real NOT NULL, --/U dex --/D empirically calibrated [Rb/Fe] from ASPCAP 
+    rb_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Rb/Fe] from ASPCAP 
+    rb_fe_flag int NOT NULL, --/F elemflag 23 --/D ELEMFLAG for Rb (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    y_fe real NOT NULL, --/U dex --/D empirically calibrated [Y/Fe] from ASPCAP 
+    y_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Y/Fe] from ASPCAP 
+    y_fe_flag int NOT NULL, --/F elemflag 24 --/D ELEMFLAG for Y (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    nd_fe real NOT NULL, --/U dex --/D empirically calibrated [Nd/Fe] from ASPCAP 
+    nd_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Nd/Fe] from ASPCAP 
+    nd_fe_flag int NOT NULL, --/F elemflag 25 --/D ELEMFLAG for Nd (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
     felem_c_m real NOT NULL, --/U dex --/F felem 0 --/D original fit [C/M]
-    felem_c_m_err real NOT NULL, --/U dex --/F felem 0 --/D original fit uncertainty [C/M]
-    felem_ca_m real NOT NULL, --/U dex --/F felem 2 --/D original fit [Ca/M]
-    felem_ca_m_err real NOT NULL, --/U dex --/F felem 2 --/D original fit uncertainty [Ca/M]
-    felem_fe_h real NOT NULL, --/U dex --/F felem 3 --/D original fit [Fe/H]
-    felem_fe_h_err real NOT NULL, --/U dex --/F felem 3 --/D original fit uncertainty [Fe/H]
-    felem_k_h real NOT NULL, --/U dex --/F felem 4 --/D original fit [K/H]
-    felem_k_h_err real NOT NULL, --/U dex --/F felem 4 --/D original fit uncertainty [K/H]
+    felem_c_m_err real NOT NULL, --/U dex --/F felem_err 0 --/D original fit uncertainty [C/M]
+    felem_ci_m real NOT NULL, --/U dex --/F felem 1 --/D original fit [CI/M]
+    felem_ci_m_err real NOT NULL, --/U dex --/F felem_err 1 --/D original fit uncertainty [CI/M]
+    felem_n_m real NOT NULL, --/U dex --/F felem 2 --/D original fit [N/M]
+    felem_n_m_err real NOT NULL, --/U dex --/F felem_err 2 --/D original fit uncertainty [N/M]
+    felem_o_m real NOT NULL, --/U dex --/F felem 3 --/D original fit [O/M]
+    felem_o_m_err real NOT NULL, --/U dex --/F felem_err 3 --/D original fit uncertainty [O/M]
+    felem_na_h real NOT NULL, --/U dex --/F felem 4 --/D original fit [Na/H]
+    felem_na_h_err real NOT NULL, --/U dex --/F felem_err 4 --/D original fit uncertainty [Na/H]
     felem_mg_m real NOT NULL, --/U dex --/F felem 5 --/D original fit [Mg/M]
-    felem_mg_m_err real NOT NULL, --/U dex --/F felem 5 --/D original fit uncertainty [Mg/M]
-    felem_mn_h real NOT NULL, --/U dex --/F felem 6 --/D original fit [Mn/H]
-    felem_mn_h_err real NOT NULL, --/U dex --/F felem 6 --/D original fit uncertainty [Mn/H]
-    felem_na_h real NOT NULL, --/U dex --/F felem 8 --/D original fit [Na/H]
-    felem_na_h_err real NOT NULL, --/U dex --/F felem 8 --/D original fit uncertainty [Na/H]
-    felem_ni_h real NOT NULL, --/U dex --/F felem 9 --/D original fit [Ni/H]
-    felem_ni_h_err real NOT NULL, --/U dex --/F felem 9 --/D original fit uncertainty [Ni/H]
-    felem_n_m real NOT NULL, --/U dex --/F felem 7 --/D original fit [N/M]
-    felem_n_m_err real NOT NULL, --/U dex --/F felem 7 --/D original fit uncertainty [N/M]
-    felem_o_m real NOT NULL, --/U dex --/F felem 10 --/D original fit [O/M]
-    felem_o_m_err real NOT NULL, --/U dex --/F felem 10 --/D original fit uncertainty [O/M]
-    felem_si_m real NOT NULL, --/U dex --/F felem 12 --/D original fit [Si/M]
-    felem_si_m_err real NOT NULL, --/U dex --/F felem 12 --/D original fit uncertainty [Si/M]
-    felem_s_m real NOT NULL, --/U dex --/F felem 11 --/D original fit [S/M]
-    felem_s_m_err real NOT NULL, --/U dex --/F felem 11 --/D original fit uncertainty [S/M]
-    felem_ti_m real NOT NULL, --/U dex --/F felem 13 --/D original fit [Ti/M]
-    felem_ti_m_err real NOT NULL, --/U dex --/F felem 13 --/D original fit uncertainty [Ti/M]
+    felem_mg_m_err real NOT NULL, --/U dex --/F felem_err 5 --/D original fit uncertainty [Mg/M]
+    felem_al_h real NOT NULL, --/U deg K --/F felem 6 --/D original fit [Al/H]
+    felem_al_h_err real NOT NULL, --/U deg K --/F felem_err 6 --/D original fit uncertainty [Al/H]
+    felem_si_m real NOT NULL, --/U dex --/F felem 7 --/D original fit [Si/M]
+    felem_si_m_err real NOT NULL, --/U dex --/F felem_err 7 --/D original fit uncertainty [Si/M]
+    felem_p_m real NOT NULL, --/U dex --/F felem 8 --/D original fit [P/M]
+    felem_p_m_err real NOT NULL, --/U dex --/F felem_err 8 --/D original fit uncertainty [P/M]
+    felem_s_m real NOT NULL, --/U dex --/F felem 9 --/D original fit [S/M]
+    felem_s_m_err real NOT NULL, --/U dex --/F felem_err 9 --/D original fit uncertainty [S/M]
+    felem_k_h real NOT NULL, --/U dex --/F felem 10 --/D original fit [K/H]
+    felem_k_h_err real NOT NULL, --/U dex --/F felem_err 10 --/D original fit uncertainty [K/H]
+    felem_ca_m real NOT NULL, --/U dex --/F felem 11 --/D original fit [Ca/M]
+    felem_ca_m_err real NOT NULL, --/U dex --/F felem_err 11 --/D original fit uncertainty [Ca/M]
+    felem_ti_m real NOT NULL, --/U dex --/F felem 12 --/D original fit [Ti/M]
+    felem_ti_m_err real NOT NULL, --/U dex --/F felem_err 12 --/D original fit uncertainty [Ti/M]
+    felem_tiii_m real NOT NULL, --/U dex --/F felem 13 --/D original fit [TiII/M]
+    felem_tiii_m_err real NOT NULL, --/U dex --/F felem_err 13 --/D original fit uncertainty [TiII/M]
     felem_v_h real NOT NULL, --/U dex --/F felem 14 --/D original fit [V/H]
-    felem_v_h_err real NOT NULL, --/U dex --/F felem 14 --/D original fit uncertainty [V/H]
+    felem_v_h_err real NOT NULL, --/U dex --/F felem_err 14 --/D original fit uncertainty [V/H]
+    felem_cr_h real NOT NULL, --/U dex --/F felem 15 --/D original fit [Cr/H]
+    felem_cr_h_err real NOT NULL, --/U dex --/F felem_err 15 --/D original fit uncertainty [Cr/H]
+    felem_mn_h real NOT NULL, --/U dex --/F felem 16 --/D original fit [Mn/H]
+    felem_mn_h_err real NOT NULL, --/U dex --/F felem_err 16 --/D original fit uncertainty [Mn/H]
+    felem_fe_h real NOT NULL, --/U dex --/F felem 17 --/D original fit [Fe/H]
+    felem_fe_h_err real NOT NULL, --/U dex --/F felem_err 17 --/D original fit uncertainty [Fe/H]
+    felem_co_h real NOT NULL, --/U dex --/F felem 18 --/D original fit [Co/H]
+    felem_co_h_err real NOT NULL, --/U dex --/F felem_err 18 --/D original fit uncertainty [Co/H]
+    felem_ni_h real NOT NULL, --/U dex --/F felem 19 --/D original fit [Ni/H]
+    felem_ni_h_err real NOT NULL, --/U dex --/F felem_err 19 --/D original fit uncertainty [Ni/H]
+    felem_cu_h real NOT NULL, --/U dex --/F felem 20 --/D original fit [Cu/H]
+    felem_cu_h_err real NOT NULL, --/U dex --/F felem_err 20 --/D original fit uncertainty [Cu/H]
+    felem_ge_h real NOT NULL, --/U dex --/F felem 21 --/D original fit [Ge/H]
+    felem_ge_h_err real NOT NULL, --/U dex --/F felem_err 21 --/D original fit uncertainty [Ge/H]
+    felem_rb_h real NOT NULL, --/U dex --/F felem 23 --/D original fit [Rb/H]
+    felem_rb_h_err real NOT NULL, --/U dex --/F felem_err 23 --/D original fit uncertainty [Rb/H]
+    felem_y_h real NOT NULL, --/U dex --/F felem 24 --/D original fit [Y/H]
+    felem_y_h_err real NOT NULL, --/U dex --/F felem_err 24 --/D original fit uncertainty [Y/H]
+    felem_nd_h real NOT NULL, --/U dex --/F felem 25 --/D original fit [Nd/H]
+    felem_nd_h_err real NOT NULL, --/U dex --/F felem_err 25 --/D original fit uncertainty [Nd/H]
 )
 GO
 
@@ -387,15 +438,15 @@ CREATE TABLE apogeePlate (
     plate varchar(32) NOT NULL, --/D Plate of this visit
     mjd bigint NOT NULL, --/D MJD of this visit
     apred_version varchar(32) NOT NULL, --/D Visit reduction pipeline version
-    [name] varchar(64) NOT NULL, --/D Name of location that this plate belongs to
+    name varchar(50) NOT NULL, --/D Name of location that this plate belongs to
     racen float NOT NULL, --/U deg --/D Right ascension, J2000, of plate center
     deccen float NOT NULL, --/U deg --/D Declination, J2000, of plate center
     radius real NOT NULL,  --/U deg --/D Utilized radius of plate
     shared tinyint NOT NULL, --/D If set to 1, a plate shared with another survey (0 if not)
     field_type tinyint NOT NULL,  --/D Type of field
-    survey varchar(64) NOT NULL, --/D Survey name 
-    programname varchar(64) NOT NULL, --/D Program name within survey
-    platerun varchar(64) NOT NULL,  --/D Plate run in which plate was drilled 
+    survey varchar(50) NOT NULL, --/D Survey name 
+    programname varchar(50) NOT NULL, --/D Program name within survey
+    platerun varchar(50) NOT NULL,  --/D Plate run in which plate was drilled 
     designid bigint NOT NULL, --/D Design ID associated with plate  (Foreign key)
     nStandard bigint NOT NULL, --/D Number of standard stars on plate
     nScience bigint NOT NULL, --/D Number of science stars on plate
