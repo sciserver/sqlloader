@@ -18,6 +18,7 @@
 -- 2013-03-21  Ani: Added ApogeeTables.sql.
 -- 2013-05-02  Ani: Added GalaxyProductTables.sql.
 -- 2015-02-09  Ani: Added PhotoZTables.sql.
+-- 2016-04-05  Ani: Added QsoVarTables.sql.
 --------------------------
 -- metadata
 --------------------------
@@ -45,6 +46,7 @@ WindowTables.sql
 ssppTables.sql
 ApogeeTables.sql
 MangaTables.sql
+QsoVarTables.sql
 FrameTables.sql
 GalaxyZooTables.sql
 GalaxyZoo2Tables.sql
@@ -56,6 +58,10 @@ Views.sql
 spSphericalLib.sql
 spHtmCSharp.sql
 spNearby.sql
+--------------------------
+-- other  functions
+--------------------------
+spApogee.sql
 --------------------------
 -- region stuff
 --------------------------

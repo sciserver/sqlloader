@@ -323,34 +323,27 @@ BEGIN
 	IF EXISTS (SELECT name FROM DBColumna WHERE tablename = 'detectionIndex' AND name = 'isPrimary')
 	   SET @ret = 0
 	ELSE
-	   BEGIN
-	   	ALTER TABLE detectionIndex ADD isPrimary TINYINT NOT NULL DEFAULT 0
+		BEGIN
+	   		ALTER TABLE detectionIndex ADD isPrimary TINYINT NOT NULL DEFAULT 0
 
-		UPDATE d
-      		   SET d.isPrimary = 1
-		FROM detectionIndex d 
-	   	   LEFT OUTER JOIN thingIndex t 
-		   	ON d.thingid=t.thingid AND d.objid=t.objid
-		WHERE
-		   t.objid is not null  
-		IF (@@ROWCOUNT > 0)
-		   @ret = 0
-		ELSE 
-		   @ret = 1
-	   END
+	        SET @cmd = 'UPDATE d SET d.isPrimary = 1 FROM detectionIndex d LEFT OUTER JOIN thingIndex t ON d.thingid=t.thingid AND d.objid=t.objid WHERE t.objid is not null'  
+			EXEC @ret=sp_executesql @cmd;
+			IF @ret = 0 AND (@@ROWCOUNT = 0)
+			   SET @ret = 1
+		END
 
-        IF (@ret = 0) 
-	   BEGIN
-		SET @status = 'OK'
-		SET @msg = @msg + ' completed successfully '
-	   END
-        ELSE
-	   BEGIN
-		SET @status ='WARNING'
-		SET @msg = @msg + ' set isPrimary for 0 rows '
-	   END
+	IF (@ret = 0) 
+		BEGIN
+			SET @status = 'OK'
+			SET @msg = @msg + ' completed successfully '
+		END
+	ELSE
+		BEGIN
+			SET @status ='WARNING'
+			SET @msg = @msg + ' set isPrimary for 0 rows '
+		END
 
-	INSERT DBColumns VALUES('detectionIndex','isPrimary','','','','1 if object is primary, 0 if not')
+	INSERT DBColumns VALUES('detectionIndex','isPrimary','','','','1 if object is primary, 0 if not',0)
 
 	-------------------------------
 	-- write log message
@@ -2794,6 +2787,7 @@ BEGIN
 	IF (@phaseName='computeNeighbors')     GOTO computeNeighbors
 	IF (@phaseName='regions')              GOTO regions
 	IF (@phaseName='syncSpectro')          GOTO syncSpectro
+	IF (@phaseName='fixDetectionIndex')     GOTO fixDetectionIndex
 	IF (@phaseName='buildFinishIndices')   GOTO buildFinishIndices
 	IF (@phaseName='setInsideMask')        GOTO setInsideMask
 	IF (@phaseName='loadPatches')          GOTO loadPatches
@@ -2895,6 +2889,16 @@ BEGIN
 	     	SET @msg = 'Starting to synchronize spectro and photo.'
 		EXEC spNewPhase @taskid, @stepid, 'syncSpectro', 'OK', @msg;
 		EXEC @ret = dbo.spSynchronize @taskID, @stepID
+	    END
+	IF (@ret != 0) OR (@execMode != 'resume') GOTO commonExit
+	---------------------------------------------------------
+	-- Fix detectioIndex table, only if BEST-PUB
+	fixDetectionIndex:
+	IF ('fixDetectionIndex' NOT IN (SELECT phase FROM #skipPhases))
+	    BEGIN
+	     	SET @msg = 'Starting to fix detectionIndex.'
+		EXEC spNewPhase @taskid, @stepid, 'detectionIndex', 'OK', @msg;
+		EXEC @ret = dbo.spFixDetectionIndex @taskID, @stepID, 'detectionIndex'
 	    END
 	IF (@ret != 0) OR (@execMode != 'resume') GOTO commonExit
 	------------------------------------------------------

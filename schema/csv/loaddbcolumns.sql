@@ -2139,32 +2139,32 @@ INSERT DBColumns VALUES('WISE_allsky','w4mag_8','mag','','','Like w4mag_1 but wi
 INSERT DBColumns VALUES('WISE_allsky','w4sigmag_8','mag','','','Like w4sigmag_1','0');
 INSERT DBColumns VALUES('WISE_allsky','w4flg_8','','','','Like w4flg_1','0');
 INSERT DBColumns VALUES('WISE_allsky','rjce','','','','Dereddening index - computed column used in APOGEE target selection','0');
-INSERT DBColumns VALUES('wiseForced','objID','','','','Unique SDSS identifier composed from [skyVersion,rerun,run,camcol,field,obj].','0');
-INSERT DBColumns VALUES('wiseForced','ra','deg','','','SDSS right ascension, J2000','0');
-INSERT DBColumns VALUES('wiseForced','dec','deg','','','SDSS declination, J2000','0');
-INSERT DBColumns VALUES('wiseForced','has_wise_phot','','','','Does WISE forced photometry exist for this source?','0');
-INSERT DBColumns VALUES('wiseForced','x','','','','FITS pixel coordinate in the unWISE tile','0');
-INSERT DBColumns VALUES('wiseForced','y','','','','FITS pixel coordinate in the unWISE tile','0');
-INSERT DBColumns VALUES('wiseForced','treated_as_pointsource','','','','Was this source treated as a point source for photometry purposes?','0');
-INSERT DBColumns VALUES('wiseForced','coadd_id','','','','unWISE tile identification, RRRR[pm]DDD, RRRR = int(10 * RA), DDD = int(10 * Dec), [pm] = sign(Dec), eg 2052p620','0');
-INSERT DBColumns VALUES('wiseForced','w1_nanomaggies','Vega mag','','','W1 flux. Fluxes are presented in the Vega system, NOT AB. 1 nmgy means Vega mag 22.5','0');
-INSERT DBColumns VALUES('wiseForced','w1_nanomaggies_ivar','1/(Vega mag)^2','','','Inverse-variance uncertainty for w1_nanomaggies','0');
-INSERT DBColumns VALUES('wiseForced','w1_mag','Vega mag','','','W1 magnitude. w1_nanomaggies converted to (Vega) magnitudes.','0');
-INSERT DBColumns VALUES('wiseForced','w1_mag_err','Vega mag','','','W1 magnitude uncertainty','0');
-INSERT DBColumns VALUES('wiseForced','w1_prochi2','','','','Profile-weighted chi-squared (goodness of fit)','0');
-INSERT DBColumns VALUES('wiseForced','w1_pronpix','','','','Profile-weighted number of WISE exposures in coadd','0');
-INSERT DBColumns VALUES('wiseForced','w1_profracflux','','','','Profile-weighted fraction of flux coming from other sources; blendedness measure.','0');
-INSERT DBColumns VALUES('wiseForced','w1_proflux','','','','Profile-weighted flux coming from other sources','0');
-INSERT DBColumns VALUES('wiseForced','w1_npix','','','','Number of pixels used in fit','0');
-INSERT DBColumns VALUES('wiseForced','w2_nanomaggies','Vega mag','','','W2 flux. Fluxes are presented in the Vega system, NOT AB. 1 nmgy means Vega mag 22.5','0');
-INSERT DBColumns VALUES('wiseForced','w2_nanomaggies_ivar','1/(Vega mag)^2','','','Inverse-variance uncertainty for w2_nanomaggies','0');
-INSERT DBColumns VALUES('wiseForced','w2_mag','Vega mag','','','W2 magnitude. w2_nanomaggies converted to (Vega) magnitudes.','0');
-INSERT DBColumns VALUES('wiseForced','w2_mag_err','Vega mag','','','W2 magnitude uncertainty','0');
-INSERT DBColumns VALUES('wiseForced','w2_prochi2','','','','Profile-weighted chi-squared (goodness of fit)','0');
-INSERT DBColumns VALUES('wiseForced','w2_pronpix','','','','Profile-weighted number of WISE exposures in coadd','0');
-INSERT DBColumns VALUES('wiseForced','w2_profracflux','','','','Profile-weighted fraction of flux coming from other sources; blendedness measure.','0');
-INSERT DBColumns VALUES('wiseForced','w2_proflux','','','','Profile-weighted flux coming from other sources','0');
-INSERT DBColumns VALUES('wiseForced','w2_npix','','','','Number of pixels used in fit','0');
+INSERT DBColumns VALUES('wiseForcedTarget','objID','','','','Unique SDSS identifier composed from [skyVersion,rerun,run,camcol,field,obj].','0');
+INSERT DBColumns VALUES('wiseForcedTarget','ra','deg','','','SDSS right ascension, J2000','0');
+INSERT DBColumns VALUES('wiseForcedTarget','dec','deg','','','SDSS declination, J2000','0');
+INSERT DBColumns VALUES('wiseForcedTarget','has_wise_phot','','','','Does WISE forced photometry exist for this source?','0');
+INSERT DBColumns VALUES('wiseForcedTarget','x','','','','FITS pixel coordinate in the unWISE tile','0');
+INSERT DBColumns VALUES('wiseForcedTarget','y','','','','FITS pixel coordinate in the unWISE tile','0');
+INSERT DBColumns VALUES('wiseForcedTarget','treated_as_pointsource','','','','Was this source treated as a point source for photometry purposes?','0');
+INSERT DBColumns VALUES('wiseForcedTarget','coadd_id','','','','unWISE tile identification, RRRR[pm]DDD, RRRR = int(10 * RA), DDD = int(10 * Dec), [pm] = sign(Dec), eg 2052p620','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w1_nanomaggies','Vega mag','','','W1 flux. Fluxes are presented in the Vega system, NOT AB. 1 nmgy means Vega mag 22.5','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w1_nanomaggies_ivar','1/(Vega mag)^2','','','Inverse-variance uncertainty for w1_nanomaggies','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w1_mag','Vega mag','','','W1 magnitude. w1_nanomaggies converted to (Vega) magnitudes.','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w1_mag_err','Vega mag','','','W1 magnitude uncertainty','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w1_prochi2','','','','Profile-weighted chi-squared (goodness of fit)','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w1_pronpix','','','','Profile-weighted number of WISE exposures in coadd','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w1_profracflux','','','','Profile-weighted fraction of flux coming from other sources; blendedness measure.','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w1_proflux','','','','Profile-weighted flux coming from other sources','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w1_npix','','','','Number of pixels used in fit','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w2_nanomaggies','Vega mag','','','W2 flux. Fluxes are presented in the Vega system, NOT AB. 1 nmgy means Vega mag 22.5','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w2_nanomaggies_ivar','1/(Vega mag)^2','','','Inverse-variance uncertainty for w2_nanomaggies','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w2_mag','Vega mag','','','W2 magnitude. w2_nanomaggies converted to (Vega) magnitudes.','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w2_mag_err','Vega mag','','','W2 magnitude uncertainty','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w2_prochi2','','','','Profile-weighted chi-squared (goodness of fit)','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w2_pronpix','','','','Profile-weighted number of WISE exposures in coadd','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w2_profracflux','','','','Profile-weighted fraction of flux coming from other sources; blendedness measure.','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w2_proflux','','','','Profile-weighted flux coming from other sources','0');
+INSERT DBColumns VALUES('wiseForcedTarget','w2_npix','','','','Number of pixels used in fit','0');
 INSERT DBColumns VALUES('Photoz','objID','','ID_MAIN','','unique ID pointing to GalaxyTag table','0');
 INSERT DBColumns VALUES('Photoz','z','','REDSHIFT_PHOT','','photometric redshift; estimated by robust fit to nearest neighbors in a reference set','0');
 INSERT DBColumns VALUES('Photoz','zErr','','REDSHIFT_PHOT ERROR','','estimated error of the photometric redshift; if zErr=-9999, the fit failed, but the neighbors'' average redshift might still be available','0');
@@ -5291,7 +5291,7 @@ INSERT DBColumns VALUES('apogeeObject','tmass_extkey','','','','2MASS Extended S
 INSERT DBColumns VALUES('apogeeObject','tmass_gal_contam','','','','2MASS galaxy contamination flag','0');
 INSERT DBColumns VALUES('mangaDrpAll','plate','','','','Plate ID','0');
 INSERT DBColumns VALUES('mangaDrpAll','ifudsgn','','','','IFU design id (e.g. 12701)','0');
-INSERT DBColumns VALUES('mangaDrpAll','plateIFU','','','','(Primary Key) Plate+ifudesign name for this object (e.g. 7443-12701)','0');
+INSERT DBColumns VALUES('mangaDrpAll','plateifu','','','','(Primary key) Plate+ifudesign name for this object (e.g. 7443-12701)','0');
 INSERT DBColumns VALUES('mangaDrpAll','mangaid','','','','MaNGA ID for this object (e.g. 1-114145)','0');
 INSERT DBColumns VALUES('mangaDrpAll','versdrp2','','','','Version of DRP used for 2d reductions','0');
 INSERT DBColumns VALUES('mangaDrpAll','versdrp3','','','','Version of DRP used for 3d reductions','0');
@@ -5432,6 +5432,7 @@ INSERT DBColumns VALUES('mangaDrpAll','nsa_extinction_g','mag','','','Galactic e
 INSERT DBColumns VALUES('mangaDrpAll','nsa_extinction_r','mag','','','Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in SDSS r-band (NSA)','0');
 INSERT DBColumns VALUES('mangaDrpAll','nsa_extinction_i','mag','','','Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in SDSS i-band (NSA)','0');
 INSERT DBColumns VALUES('mangaDrpAll','nsa_extinction_z','mag','','','Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in SDSS z-band (NSA)','0');
+INSERT DBColumns VALUES('mangaDrpAll','htmID','','','','Hierarchical Triangular Mesh ID for fast spatial searches','0');
 INSERT DBColumns VALUES('mangatarget','catalog_ra','deg','','','Right Ascension of measured object center (J2000) as given in the input catalog (NSA for main samples and most ancillaries)','0');
 INSERT DBColumns VALUES('mangatarget','catalog_dec','deg','','','Declination of measured object center (J2000) as given in the input catalog (NSA for main samples and most ancillaries)','0');
 INSERT DBColumns VALUES('mangatarget','nsa_z','','','','Heliocentric redshift (NSA)','0');
@@ -5565,6 +5566,29 @@ INSERT DBColumns VALUES('mangatarget','ifutargsizeanc','fibers','','','The ideal
 INSERT DBColumns VALUES('mangatarget','manga_target3','','','','Targeting bitmask for the ancillary samples','0');
 INSERT DBColumns VALUES('mangatarget','priorityanc','','','','The ancillary program''s priority for this object','0');
 INSERT DBColumns VALUES('mangatarget','unalloc','','','','Set to 1 if an ancillary target has been allocated an IFU the was not allocated to a main sample galaxy, otherwise 0','0');
+INSERT DBColumns VALUES('qsoVarPTF','VAR_OBJID','','','','ObjId','0');
+INSERT DBColumns VALUES('qsoVarPTF','THING_ID_TARGETING','','','','ThingID, as in the DR13 target list','0');
+INSERT DBColumns VALUES('qsoVarPTF','RA','deg','','','RA (DR12 astrometry)','0');
+INSERT DBColumns VALUES('qsoVarPTF','DEC','deg','','','DEC (DR12 astrometry)','0');
+INSERT DBColumns VALUES('qsoVarPTF','VAR_MATCHED','','','','Number of epoqs used for the lightcurve construction. For SDSS, one epoq = a single observation. For PTF, one epoq = a set of (coadded) observations, typically from a few months to a year. There are at least two PTF and one SDSS epoq for each object.','0');
+INSERT DBColumns VALUES('qsoVarPTF','VAR_CHI2','','','','Reduced chi2 when the combined light curve is adjusted to a constant','0');
+INSERT DBColumns VALUES('qsoVarPTF','VAR_A','','','','Structure function parameter A as defined in Palanque-Delabrouille et al. (2011)','0');
+INSERT DBColumns VALUES('qsoVarPTF','VAR_GAMMA','','','','Structure function parameter gamma as defined in Palanque-Delabrouille et al. (2011)','0');
+INSERT DBColumns VALUES('qsoVarStripe','VAR_OBJID','','','','ObjId','0');
+INSERT DBColumns VALUES('qsoVarStripe','RA','deg','','','RA (DR12 astrometry)','0');
+INSERT DBColumns VALUES('qsoVarStripe','DEC','deg','','','DEC (DR12 astrometry)','0');
+INSERT DBColumns VALUES('qsoVarStripe','VAR_CHI2','','','','Reduced chi2 when the combined light curve is adjusted to a constant','0');
+INSERT DBColumns VALUES('qsoVarStripe','VAR_A','','','','Structure function parameter A as defined in Palanque-Delabrouille et al. (2011)','0');
+INSERT DBColumns VALUES('qsoVarStripe','VAR_GAMMA','','','','Structure function parameter gamma as defined in Palanque-Delabrouille et al. (2011)','0');
+INSERT DBColumns VALUES('qsoVarStripe','NEPOQS','','','','Number of epoqs (SDSS observations) used in lightcurve','0');
+INSERT DBColumns VALUES('qsoVarStripe','CHI2_U','','','','Reduced chi2 in u band','0');
+INSERT DBColumns VALUES('qsoVarStripe','CHI2_G','','','','Reduced chi2 in g band','0');
+INSERT DBColumns VALUES('qsoVarStripe','CHI2_R','','','','Reduced chi2 in r band','0');
+INSERT DBColumns VALUES('qsoVarStripe','CHI2_I','','','','Reduced chi2 in i band','0');
+INSERT DBColumns VALUES('qsoVarStripe','CHI2_Z','','','','Reduced chi2 in z band','0');
+INSERT DBColumns VALUES('qsoVarStripe','VAR_NN','','','','Variability neural network output to discriminate stars against QSO','0');
+INSERT DBColumns VALUES('qsoVarStripe','MJD_FIRST','','','','MJD for the first observation','0');
+INSERT DBColumns VALUES('qsoVarStripe','MJD_LAST','','','','MJD for the last observation','0');
 INSERT DBColumns VALUES('Frame','fieldID','','ID_FIELD','','Link to the field table','0');
 INSERT DBColumns VALUES('Frame','zoom','','INST_SCALE','','Zoom level 2^(zoom/10)','0');
 INSERT DBColumns VALUES('Frame','run','','OBS_RUN','','Run number','0');
@@ -6992,6 +7016,6 @@ INSERT DBColumns VALUES('marvelsStar','HIP_SPTYPE','','','','Hipparcos Spectral 
 
 GO
 ----------------------------- 
-PRINT '6982 lines inserted into DBColumns '
+PRINT '7006 lines inserted into DBColumns '
 ----------------------------- 
 

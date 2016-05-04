@@ -60,6 +60,11 @@
 --*                  tables to change fieldOffset_[ugriz] columns from INT to
 --*                  REAL.
 --* 2016-03-22  Ani: Added wiseForced table definition (for DR13).
+--* 2016-04-01  Ani: Made WISE_xmatch columns NOT NULL, and turned 
+--*                  QUOTED_IDENTIFIER ON before WISE_allsky table def so
+--*                  there are np issues with computed column wjce.
+--* 2016-04-13  Ani: Changed wiseForced table name to wiseForcedTarget to 
+--*                  allow for wiseForced in DR14.
 --=============================================================================
 SET NOCOUNT ON
 GO
@@ -2202,9 +2207,9 @@ CREATE TABLE WISE_xmatch (
 --/T photoObjAll as s on xm.sdss_objid = s.objid join wise_allsky as w on
 --/T xm.wise_cntr  = w.cntr"
 -----------------------------------------------------------------------------------
-      sdss_objid BIGINT , --/D SDSS ObjectID of matched SDSS object (foreign key, PhotoObjAll / PhotoObj / PhotoTag . objId)
-      wise_cntr  BIGINT , --/D WISE unique ID of matched WISE object (foreign key, WISE_allsky . cntr)
-      match_dist REAL     --/D Distance in arcsec between SDSS object RA,Dec and WISE object RA,Dec --/U arcsec
+      sdss_objid BIGINT NOT NULL, --/D SDSS ObjectID of matched SDSS object (foreign key, PhotoObjAll / PhotoObj / PhotoTag . objId)
+      wise_cntr  BIGINT NOT NULL, --/D WISE unique ID of matched WISE object (foreign key, WISE_allsky . cntr)
+      match_dist REAL NOT NULL    --/D Distance in arcsec between SDSS object RA,Dec and WISE object RA,Dec --/U arcsec
 )
 GO
 --
@@ -2534,13 +2539,13 @@ GO
 
 --=============================================================================
 IF EXISTS (SELECT name FROM sysobjects
-         WHERE xtype='U' AND name = 'wiseForced')
-	DROP TABLE wiseForced
+         WHERE xtype='U' AND name = 'wiseForcedTarget')
+	DROP TABLE wiseForcedTarget
 GO
 --
-EXEC spSetDefaultFileGroup 'wiseForced'
+EXEC spSetDefaultFileGroup 'wiseForcedTarget'
 GO
-CREATE TABLE wiseForced (
+CREATE TABLE wiseForcedTarget (
 -------------------------------------------------------------------------------
 --/H WISE forced-photometry of SDSS primary sources.
 --/T This table contains one entry for each SDSS primary object.

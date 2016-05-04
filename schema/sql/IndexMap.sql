@@ -233,6 +233,10 @@
 --*                 is an index on a computed column.
 --* 2016-03-22 Ani: Added indices for wiseForced.
 --* 2016-03-29 Ani: Added PK and FK for MaNGA tables in SPECTRO group.
+--* 2016-04-01 Ani: Added flags settings to commands in spIndexCreate to avoid
+--*                 problems with computed columns (e.g. WISE_allsky.rjce).
+--* 2016-04-05 Ani: Added PKs for qsoVar* tables.
+--* 2016-04-13 Ani: Changed wiseForced to wiseForcedTarget.
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -404,7 +408,7 @@ INSERT IndexMap Values('K','primary key', 'TwoMass', 		'objID'			,'','PHOTO');
 INSERT IndexMap Values('K','primary key', 'TwoMassXSC',		'objID'			,'','PHOTO');
 INSERT IndexMap Values('K','primary key', 'WISE_xmatch',	'sdss_objID,wise_cntr'			,'','PHOTO');
 INSERT IndexMap Values('K','primary key', 'WISE_allsky',	'cntr'			,'','PHOTO');
-INSERT IndexMap Values('K','primary key', 'wiseForced',		'objID'			,'','PHOTO');
+INSERT IndexMap Values('K','primary key', 'wiseForcedTarget',	'objID'			,'','PHOTO');
 INSERT IndexMap Values('K','primary key', 'thingIndex', 	'thingId'		,'','PHOTO');
 INSERT IndexMap Values('K','primary key', 'detectionIndex', 	'thingId,objID'			,'','PHOTO');
 INSERT IndexMap Values('K','primary key', 'ProperMotions',	'objID'			,'','PHOTO');
@@ -447,6 +451,8 @@ INSERT IndexMap Values('K','primary key', 'apogeeStarVisit', 	 	'visit_id'		,'',
 INSERT IndexMap Values('K','primary key', 'apogeeStarAllVisit', 	'visit_id,apstar_id'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'mangaDrpAll',		'plateIFU'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'mangaTarget',		'mangaID'			,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'qsoVarPTF',			'VAR_OBJID'			,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'qsoVarStripe',		'VAR_OBJID'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'zooSpec', 			'specObjID'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'zooConfidence',		'specObjID'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'zoo2MainSpecz', 		'dr7objid'		,'','SPECTRO');
@@ -655,7 +661,7 @@ INSERT IndexMap Values('I','index', 'WISE_allsky',	 'w2cc_map'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'WISE_allsky',	 'w3cc_map'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'WISE_allsky',	 'w4cc_map'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'WISE_xmatch',	 'wise_cntr'			,'','PHOTO');
-INSERT IndexMap Values('I','index', 'wiseForced',	 'ra,dec,has_wise_phot,treated_as_pointsource','','PHOTO');
+INSERT IndexMap Values('I','index', 'wiseForcedTarget',	 'ra,dec,has_wise_phot,treated_as_pointsource','','PHOTO');
 INSERT IndexMap Values('I','index', 'zooNoSpec', 	 'objID'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'zooVotes', 	 'objID'			,'','PHOTO');
 INSERT IndexMap Values('I','index', 'zooMirrorBias', 	 'objID'			,'','PHOTO');
@@ -856,7 +862,7 @@ AS BEGIN
 	---------------
 	IF (lower(@type) = N'primary key')
 	    BEGIN
-		set @cmd = N'ALTER TABLE '+@tablename+' ADD CONSTRAINT '
+		set @cmd = N'SET ANSI_NULLS ON; SET ANSI_PADDING ON; SET ANSI_WARNINGS ON; SET ARITHABORT OFF; SET CONCAT_NULL_YIELDS_NULL ON;  SET NUMERIC_ROUNDABORT OFF; SET QUOTED_IDENTIFIER ON; ALTER TABLE '+@tablename+' ADD CONSTRAINT '
 			+@indexName+' PRIMARY KEY CLUSTERED '
 			+'('+@fieldList+') '
 		--
@@ -867,7 +873,7 @@ AS BEGIN
 	------------------
 	IF ((lower(@type) = 'index') or (lower(@type) = 'unique index'))
 	    BEGIN
-		set @cmd = N'CREATE '+upper(@type)+' '+@indexName+' ON '    
+		set @cmd = N'SET ANSI_NULLS ON; SET ANSI_PADDING ON; SET ANSI_WARNINGS ON; SET ARITHABORT OFF; SET CONCAT_NULL_YIELDS_NULL ON;  SET NUMERIC_ROUNDABORT OFF; SET QUOTED_IDENTIFIER ON; CREATE '+upper(@type)+' '+@indexName+' ON '    
 			+@tableName+'('+@fieldList+') WITH SORT_IN_TEMPDB';
 		--
 		if @fgroup is not null set @cmd = @cmd +' ON '+@fgroup;

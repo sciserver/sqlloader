@@ -30,6 +30,7 @@
 -- 2014-11-05  Ani: Updates for DR12.
 -- 2014-12-05  Ani: Updates for DR12.
 -- 2015-02-09  Ani: Added PhotoZTables.sql.
+-- 2016-04-05  Ani: Added QsoVarTables.sql.
 ------------------------------------------------------------------------------
 --------------------------
 -- metadata
@@ -56,6 +57,7 @@ IndexMap.sql
 -- ssppTables.sql
 -- ApogeeTables.sql
 -- MangaTables.sql
+-- QsoVarTables.sql
 -- TilingTables.sql
 -- RegionTables.sql
 -- FrameTables.sql
@@ -66,6 +68,11 @@ IndexMap.sql
 -- spSphericalLib.sql
 -- spHtmCSharp.sql
 -- spNearby.sql
+--------------------------
+-- other  functions
+--------------------------
+spApogee.sql
+--------------------------
 --------------------------
 -- region stuff
 --------------------------

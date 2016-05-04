@@ -62,6 +62,7 @@ INSERT Dependency VALUES('spFinish','spFinishStep','spDone');
 INSERT Dependency VALUES('spFinish','spFinishStep','spEndStep');
 INSERT Dependency VALUES('spFinish','spFinishStep','spFillMaskedObject');
 INSERT Dependency VALUES('spFinish','spFinishStep','spFinishDropIndices');
+INSERT Dependency VALUES('spFinish','spFinishStep','spFixDetectionIndex');
 INSERT Dependency VALUES('spFinish','spFinishStep','spIndexBuildSelection');
 INSERT Dependency VALUES('spFinish','spFinishStep','spLoadPatches');
 INSERT Dependency VALUES('spFinish','spFinishStep','spLoadPhotoTag');
@@ -145,6 +146,8 @@ INSERT Dependency VALUES('spNearby','fGetJpegObjects','fGetObjectsEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyApogeeStarEq','fDistanceArcMinEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyApogeeStarEq','fHtmCoverCircleEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyFrameEq','fHtmCoverCircleXyz');
+INSERT Dependency VALUES('spNearby','fGetNearbyMangaObjEq','fDistanceArcMinEq');
+INSERT Dependency VALUES('spNearby','fGetNearbyMangaObjEq','fHtmCoverCircleEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyObjAllEq','fGetNearbyObjAllXYZ');
 INSERT Dependency VALUES('spNearby','fGetNearbyObjAllXYZ','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','fGetNearbyObjEq','fGetNearbyObjXYZ');
@@ -156,6 +159,8 @@ INSERT Dependency VALUES('spNearby','fGetNearbySpecObjXYZ','fHtmCoverCircleXyz')
 INSERT Dependency VALUES('spNearby','fGetNearestApogeeStarEq','fDistanceArcMinEq');
 INSERT Dependency VALUES('spNearby','fGetNearestApogeeStarEq','fGetNearbyApogeeStarEq');
 INSERT Dependency VALUES('spNearby','fGetNearestFrameidEq','fGetNearestFrameEq');
+INSERT Dependency VALUES('spNearby','fGetNearestMangaObjEq','fDistanceArcMinEq');
+INSERT Dependency VALUES('spNearby','fGetNearestMangaObjEq','fGetNearbyMangaObjEq');
 INSERT Dependency VALUES('spNearby','fGetNearestObjAllEq','fGetNearbyObjAllXYZ');
 INSERT Dependency VALUES('spNearby','fGetNearestObjEq','fGetNearbyObjXYZ');
 INSERT Dependency VALUES('spNearby','fGetNearestObjIdAllEq','fGetNearestObjAllEq');
@@ -401,6 +406,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '391 lines inserted into Dependency'
+PRINT '396 lines inserted into Dependency'
 ------------------------------------
 GO

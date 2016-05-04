@@ -314,6 +314,9 @@ INSERT History VALUES('IndexMap','2015-02-09','Ani','Updated Photoz indices for 
 INSERT History VALUES('IndexMap','2016-02-22','Ani','Added covering index on PhotoObjAll.b (galactic latitude), and moved WISE_AllSky.rjce index to FINISH group because it is an index on a computed column. ');
 INSERT History VALUES('IndexMap','2016-03-22','Ani','Added indices for wiseForced. ');
 INSERT History VALUES('IndexMap','2016-03-29','Ani','Added PK and FK for MaNGA tables in SPECTRO group. ');
+INSERT History VALUES('IndexMap','2016-04-01','Ani','Added flags settings to commands in spIndexCreate to avoid problems with computed columns (e.g. WISE_allsky.rjce). ');
+INSERT History VALUES('IndexMap','2016-04-05','Ani','Added PKs for qsoVar* tables. ');
+INSERT History VALUES('IndexMap','2016-04-13','Ani','Changed wiseForced to wiseForcedTarget. ');
 INSERT History VALUES('PhotoTables','2009-04-27','Ani','Swapped in updated schema for photo tables for SDSS-III. Added new table Run. ');
 INSERT History VALUES('PhotoTables','2009-05-05','Ani','Added loadVersion to Field table. ');
 INSERT History VALUES('PhotoTables','2009-06-11','Ani','Added nProf_[ugriz] to Field table. ');
@@ -352,6 +355,8 @@ INSERT History VALUES('PhotoTables','2014-02-10','Ani','Added glat, glon columns
 INSERT History VALUES('PhotoTables','2015-02-09','Ani','Moved Photoz tables to new PhotoZTables.sql file. ');
 INSERT History VALUES('PhotoTables','2016-01-11','Ani','Added history entry for previous change: modified Field tables to change fieldOffset_[ugriz] columns from INT to REAL. ');
 INSERT History VALUES('PhotoTables','2016-03-22','Ani','Added wiseForced table definition (for DR13). ');
+INSERT History VALUES('PhotoTables','2016-04-01','Ani','Made WISE_xmatch columns NOT NULL, and turned  QUOTED_IDENTIFIER ON before WISE_allsky table def so there are np issues with computed column wjce. ');
+INSERT History VALUES('PhotoTables','2016-04-13','Ani','Changed wiseForced table name to wiseForcedTarget to  allow for wiseForced in DR14. ');
 INSERT History VALUES('PhotoZTables','2015-02-09','Ani','Moved photo-z tables here from PhotoTables.sql. Swapped in schema changes for DR12 from R.Beck. ');
 INSERT History VALUES('galSpecTables','2009-12-29','Ani','Adapted from sas-sql. ');
 INSERT History VALUES('galSpecTables','2011-09-27','Ani','Fixed inst_res and chisq units in galSpecLine as per PR#1404. ');
@@ -575,6 +580,9 @@ INSERT History VALUES('ApogeeTables','2014-11-13','Ani','Increased length of tar
 INSERT History VALUES('ApogeeTables','2014-11-25','Ani','Incorporated schema changes for DR12 (new columns param_m_h_err and param_alpha_m_err in aspcapStar) and changed http bitmask help links to internal info links. ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Adapted from sas-sql/mangadrp.sql. ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Increased length of mangaTarget.nsa_subdir to 128. ');
+INSERT History VALUES('MangaTables','2016-04-22','Ani','Added htmID to mangaDrpAll. ');
+INSERT History VALUES('MangaTables','2016-04-26','Ani','Updated schema for mangaDrpAll from D.Law to make data types the required precision. ');
+INSERT History VALUES('QsoVarTables','2016-04-05','Ani','Created sqlLoader schema file from sas/sql. ');
 INSERT History VALUES('FrameTables','2001-04-10','Jim','Moved index creation to happen after load. ');
 INSERT History VALUES('FrameTables','2001-05-15','Alex','changed spMakeFrame to join to Segment ');
 INSERT History VALUES('FrameTables','2001-11-06','Alex','added bunch of comments, plus separate PRIMARYKEYs ');
@@ -713,6 +721,9 @@ INSERT History VALUES('spNearby','2013-05-10','Ani','Added functions fGetNear[by
 INSERT History VALUES('spNearby','2013-05-16','Ani','Added ra/dec to fGetNear[by|est]ApogeeStarEq output. ');
 INSERT History VALUES('spNearby','2013-05-16','Ani','Moved fDistanceArcMin* functions to the top. ');
 INSERT History VALUES('spNearby','2013-07-11','Ani','Added dbo qualifier to fDistanceArcMinEq calls, and replaced "star" column with apogee_id in APOGEE functions. ');
+INSERT History VALUES('spNearby','2016-04-22','Ani','Added functions fGetNear[by|est]MangaObjEq for MaNGA searches. ');
+INSERT History VALUES('spNearby','2016-04-26','Ani','Updated data types returned by MaNGA functions fGetNear[by|est]MangaObjEq to match the table schema. ');
+INSERT History VALUES('spApogee','2006-04-27','Ani','Created inital version as per JOn Holtzman request. ');
 INSERT History VALUES('spCoordinate','2004-02-13','Ani','Fixed bugs in fCoordsFromEq, fLambdaFromEq and fEtaFromEq (PR #5865). ');
 INSERT History VALUES('spCoordinate','2004-03-18','Alex','extracted coordinate related stuff from spBoundary.sql ');
 INSERT History VALUES('spCoordinate','2004-06-10','Alex','added support for Galactic coordinates ');
@@ -964,6 +975,7 @@ INSERT History VALUES('spSetValues','2012-06-05','Ani','Streamlined spSetInsideM
 INSERT History VALUES('spSetValues','2012-06-06','Ani','Fixed typo in spSetInsideMask PhotoObjAll update query. ');
 INSERT History VALUES('spSetValues','2013-04-25','Ani','Added code to spSetValues to set apogeeStar.htmID. ');
 INSERT History VALUES('spSetValues','2013-10-18','Ani','Changed HTM computation for SpecObjAll to be done on equatorial coordinates rather than Cartesian, because the latter can be 0 for a small fraction of spectra. ');
+INSERT History VALUES('spSetValues','2016-04-26','Ani','Added code to spSetValues to set mangaDrpAll.htmID. ');
 INSERT History VALUES('spValidate','2002-10-29','Jim','split spValidate and spFinish  (finish does neighbors and photo-spectro matchup). removed references to sdssdr1. ');
 INSERT History VALUES('spValidate','2002-11-02','Jim','sped up by creating indexes for unique test. left keys/indices in place on the theory that they do not hurt. 2002-11-07   Jim change to specLineAll ');
 INSERT History VALUES('spValidate','2002-11-10','Jim','added test of frame zoom levels (commentend out for now) ');
@@ -1192,6 +1204,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1182 lines inserted into History'
+PRINT '1194 lines inserted into History'
 ------------------------------------
 GO
