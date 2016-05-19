@@ -286,6 +286,7 @@
 --*                 spSetVersion.
 --* 2016-03-28 Ani: Created spFixDetectionIndex to add isPrimary column
 --*                 to detectionIndex table and set its value.
+--* 2016-05-18 Ani: Fixed typo in spFixDetectionIndex.
 ---====================================================================
 SET NOCOUNT ON;
 GO
@@ -320,7 +321,7 @@ BEGIN
 	EXEC loadsupport.dbo.spSetFinishPhase 'detectionIndex'
 	SET @msg = 'Adding isPrimary to detectionIndex ';
 
-	IF EXISTS (SELECT name FROM DBColumna WHERE tablename = 'detectionIndex' AND name = 'isPrimary')
+	IF EXISTS (SELECT name FROM DBColumns WHERE tablename = 'detectionIndex' AND name = 'isPrimary')
 	   SET @ret = 0
 	ELSE
 		BEGIN

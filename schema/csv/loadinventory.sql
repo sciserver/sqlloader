@@ -272,6 +272,7 @@ INSERT Inventory VALUES('ApogeeTables','apogeeField','U');
 INSERT Inventory VALUES('ApogeeTables','apogeeObject','U');
 INSERT Inventory VALUES('MangaTables','mangaDrpAll','U');
 INSERT Inventory VALUES('MangaTables','mangatarget','U');
+INSERT Inventory VALUES('MangaTables','nsatlas','U');
 INSERT Inventory VALUES('QsoVarTables','qsoVarPTF','U');
 INSERT Inventory VALUES('QsoVarTables','qsoVarStripe','U');
 INSERT Inventory VALUES('FrameTables','Frame','U');
@@ -405,17 +406,17 @@ INSERT Inventory VALUES('spNearby','fGetObjectsEq','F');
 INSERT Inventory VALUES('spNearby','fGetObjectsMaskEq','F');
 INSERT Inventory VALUES('spNearby','fGetJpegObjects','F');
 INSERT Inventory VALUES('spNearby','spGetMatch','P');
-INSERT Inventory VALUES('spApogee','dbo.[fAspcapParamsAll]','F');
-INSERT Inventory VALUES('spApogee','dbo.[fAspcapParams]','F');
-INSERT Inventory VALUES('spApogee','dbo.[fAspcapParamErrs]','F');
-INSERT Inventory VALUES('spApogee','dbo.fAspcapParamFlags','F');
-INSERT Inventory VALUES('spApogee','dbo.[fAspcapElemsAll]','F');
-INSERT Inventory VALUES('spApogee','dbo.[fAspcapElems]','F');
-INSERT Inventory VALUES('spApogee','dbo.[fAspcapElemErrs]','F');
-INSERT Inventory VALUES('spApogee','dbo.[fAspcapElemFlags]','F');
-INSERT Inventory VALUES('spApogee','dbo.[fAspcapFelemsAll]','F');
-INSERT Inventory VALUES('spApogee','dbo.[fAspcapFelems]','F');
-INSERT Inventory VALUES('spApogee','dbo.[fAspcapFelemErrs]','F');
+INSERT Inventory VALUES('spApogee','fAspcapParamsAll','F');
+INSERT Inventory VALUES('spApogee','fAspcapParams','F');
+INSERT Inventory VALUES('spApogee','fAspcapParamErrs','F');
+INSERT Inventory VALUES('spApogee','fAspcapParamFlags','F');
+INSERT Inventory VALUES('spApogee','fAspcapElemsAll','F');
+INSERT Inventory VALUES('spApogee','fAspcapElems','F');
+INSERT Inventory VALUES('spApogee','fAspcapElemErrs','F');
+INSERT Inventory VALUES('spApogee','fAspcapElemFlags','F');
+INSERT Inventory VALUES('spApogee','fAspcapFelemsAll','F');
+INSERT Inventory VALUES('spApogee','fAspcapFelems','F');
+INSERT Inventory VALUES('spApogee','fAspcapFelemErrs','F');
 INSERT Inventory VALUES('spCoordinate','spTransposeRmatrix','P');
 INSERT Inventory VALUES('spCoordinate','spBuildRmatrix','P');
 INSERT Inventory VALUES('spCoordinate','fRotateV3','F');
@@ -524,6 +525,7 @@ INSERT Inventory VALUES('spValidate','spValidateSspp','P');
 INSERT Inventory VALUES('spValidate','spValidatePm','P');
 INSERT Inventory VALUES('spValidate','spValidateMask','P');
 INSERT Inventory VALUES('spValidate','spValidateManga','P');
+INSERT Inventory VALUES('spValidate','spValidateNSA','P');
 INSERT Inventory VALUES('spValidate','spValidateResolve','P');
 INSERT Inventory VALUES('spValidate','spValidateApogee','P');
 INSERT Inventory VALUES('spValidate','spValidateWise','P');
@@ -536,6 +538,7 @@ INSERT Inventory VALUES('spPublish','spCopyATable','P');
 INSERT Inventory VALUES('spPublish','spPublishPhoto','P');
 INSERT Inventory VALUES('spPublish','spPublishMask','P');
 INSERT Inventory VALUES('spPublish','spPublishManga','P');
+INSERT Inventory VALUES('spPublish','spPublishNSA','P');
 INSERT Inventory VALUES('spPublish','spPublishPlates','P');
 INSERT Inventory VALUES('spPublish','spPublishGalProd','P');
 INSERT Inventory VALUES('spPublish','spPublishTiling','P');
@@ -598,6 +601,6 @@ INSERT Inventory VALUES('spCosmology','fMathGetBin','F');
 GO
 
 ------------------------------------
-PRINT '588 lines inserted into Inventory'
+PRINT '591 lines inserted into Inventory'
 ------------------------------------
 GO

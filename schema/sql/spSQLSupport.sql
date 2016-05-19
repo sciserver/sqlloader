@@ -51,7 +51,7 @@
 --*            updated spExecuteSQL to remove ; when surrounded by spaces
 --*
 --* 2015-11-05 Sue: updated spExecuteSQL to add optional parameters for
---*	           controlling logging, filtering, and throttling behavior.			
+--*	           controlling logging, filtering, and throttling behavior.
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 

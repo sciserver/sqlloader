@@ -86,6 +86,7 @@
 --*                 spValidateWise, and added type "forced" in
 --*                 spValidate.
 --^ 2016-03-29 Ani: Added spValidateManga.
+--^ 2016-05-04 Ani: Added spValidateNSA.
 --====================================================================
 SET NOCOUNT ON;
 GO
@@ -1587,6 +1588,79 @@ go
 
 
 IF EXISTS (SELECT [name]FROM sysobjects 
+	WHERE [name]= N'spValidateNSA' ) 
+	drop procedure spValidateNSA
+GO
+--
+CREATE PROCEDURE spValidateNSA (
+	@taskid int, 
+	@stepid int,
+	@destinationDB varchar(16)
+)
+-------------------------------------------------------------
+--/H  Validate NSA tables  
+--/A 
+--/T <p> parameters:   
+--/T <li> taskid int,   		-- Task identifier
+--/T <li> stepid int,   		-- Step identifier
+--/T <li> destinationDB int,   		-- Name of destination DB 
+--/T <li> returns  0 if OK, non zero if something wrong  
+--/T <br>
+--/T Sample call:<br>
+--/T <samp> 
+--/T <br> exec  spValidateNSA @taskid , @stepid, 'targetDB'  
+--/T </samp> 
+--/T <br>  
+------------------------------------------------------------- 
+AS BEGIN
+    	--
+    	SET NOCOUNT ON
+
+    	--- Globals
+    	DECLARE	@start datetime,
+		@summary bigint,
+		@error bigint,
+		@errorMsg varchar(1000),
+		@verb varchar(16)
+
+    -- Put out step greeting
+    EXEC spNewPhase @taskid, @stepid, 'spValidateNSA', 'OK', 'spValidateNSA called'; 
+
+    -------------------------------------
+    SET @start  = current_timestamp
+    SET @summary = 0
+
+	---------------------
+	-- test unique keys
+	---------------------
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'nsatlas',          	'nsaid',	@error OUTPUT
+	set @summary = @summary + @error;
+ 
+	-- generate completion message.
+
+	IF @summary = 0 
+	    BEGIN
+		SET @errorMsg =   'NSA tables validated in '  
+			+ cast(dbo.fDatediffSec(@start, current_timestamp) as varchar(30))+ ' seconds'
+		SET @verb = 'OK'
+	    END
+	ELSE 	
+	    BEGIN
+		SET @errorMsg =   'NSA tables validation found ' +str(@summary) + ' errors in ' 
+			+ cast(dbo.fDatediffSec(@start, current_timestamp) as varchar(30)) + ' seconds'
+		SET @verb = 'ERROR'
+	    END
+
+	EXEC spNewPhase @taskid, @stepid, 'spValidateNSA', @verb, @errorMsg ;
+	
+	RETURN @summary
+END		-- End spValidateNSA()
+--======================================
+go
+
+
+
+IF EXISTS (SELECT [name]FROM sysobjects 
 	WHERE [name]= N'spValidateResolve' ) 
 	drop procedure spValidateResolve
 GO
@@ -2068,6 +2142,23 @@ BEGIN
 		    BEGIN
 		   	SET @stepMsg = 'Failed to validate MaNGA ' + @id
 			SET @phaseMsg = 'Failed to validate MaNGA ' + @id
+		    END
+		GOTO commonExit
+	    END
+
+
+	IF @type = 'nsa'
+	    BEGIN
+		EXEC @err = spValidateNSA @taskID, @stepID, @destinationDBbname 
+	        IF @err = 0
+		    BEGIN 
+	   		set @stepMsg = 'Validated NSA ' + @id
+			set @phaseMsg = 'Validated NSA ' + @id
+		    END
+		ELSE
+		    BEGIN
+		   	SET @stepMsg = 'Failed to validate NSA ' + @id
+			SET @phaseMsg = 'Failed to validate NSA ' + @id
 		    END
 		GOTO commonExit
 	    END

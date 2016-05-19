@@ -11,6 +11,9 @@
 --* 2016-04-26  Ani: Updated schema for mangaDrpAll from D.Law to make
 --*                  data types the required precision.
 --* 2016-05-03  Ani: Added nsatlas table for NASA-SLoan Atlas.
+--* 2016-05-04  Ani: Increased nsatlas.subdir to 128 chars and some other
+--*                  strings (e.g. programname) to 32 chars, indented table.
+--* 2016-05-10  Ani: Updated schema for NASA-SLoan Atlas.
 --=========================================================
 
 --=========================================================
@@ -363,10 +366,19 @@ CREATE TABLE nsatlas (
 --/T We recommend the use of the elliptical Petrosian photometry from 
 --/T this catalog. K-corrected absolute magnitudes are provided using
 --/T kcorrect v4_2. 
+--/T 
+--/T There are cases of elliptical Petrosian quantities in this file
+--/T with <code>_r_original</code> suffices (e.g. <code>petro_flux_r_original</code>), 
+--/T to indicate that these are the original quantities determined for the
+--/T r-band, without corrections. They differ from the r-band values in the
+--/T arrays (e.g. <code>petro_flux_r_original</code>) in those cases where the
+--/T Petrosian radius was undefined in the r-band. In those cases, the
+--/T quantities in the arrays assume a Petrosian radius of 5 arcsec.</p>
+--/T 
 ------------------------------------------------------------------------------
 	nsaid     int  NOT NULL,  --/D Unique ID within NSA v1 catalog
 	iauname   varchar(20)  NOT NULL,  --/D IAU-style designation based on RA/Dec
-	subdir    varchar(20)  NOT NULL,  --/D Subdirectory for images in the NSA 'detect' directory
+	subdir    varchar(128)  NOT NULL,  --/D Subdirectory for images in the NSA 'detect' directory
 	ra        float  NOT NULL,  --/U deg  --/D Right Ascension of measured object center (J2000)
 	dec       float  NOT NULL,  --/U deg  --/D Declination of measured object center (J2000)
 	isdss     int  NOT NULL,  --/D Zero-indexed row of SDSS source file for NSA (-1 if no match)
@@ -391,163 +403,168 @@ CREATE TABLE nsatlas (
 	mjd  int  NOT NULL,   --/U days  --/D SDSS MJD of spectroscopic observation (0 if not observed)
 	racat  float  NOT NULL,   --/U deg  --/D Right Ascension of catalog object (J2000)
 	deccat  float  NOT NULL,   --/U deg  --/D Declination of catalog object (J2000)
-	survey  varchar(20)  NOT NULL,   --/D Survey within SDSS that observed the plate
-	programname  varchar(20)  NOT NULL,   --/D Program name within the survey that observed the plate
-	platequality  varchar(20)  NOT NULL,   --/D Quality of plate
+	survey  varchar(32)  NOT NULL,   --/D Survey within SDSS that observed the plate
+	programname  varchar(32)  NOT NULL,   --/D Program name within the survey that observed the plate
+	platequality  varchar(32)  NOT NULL,   --/D Quality of plate
 	tile  int  NOT NULL,   --/D Tile number for plate containing spectrum
 	plug_ra  float  NOT NULL,   --/U deg  --/D Right Ascension of spectroscopic fiber (J2000)
 	plug_dec  float  NOT NULL,   --/U deg  --/D Declination of spectroscopic fiber (J2000)
 	in_dr7_lss  tinyint  NOT NULL,   --/D Set to 1 if spectrum is in SDSS Legacy survey large-scale structure sample (based on the NYU Value Added Galaxy Catalog for DR7, specifically lss_geometry.dr72.ply)
-	petro_ba_el  real  NOT NULL,   --/D Axis ratio used for elliptical apertures (for this version, same as ba90)
-	petro_phi_el  real  NOT NULL,   --/U deg  --/D Position angle (east of north) used for elliptical apertures (for this version, same as ba90)
-	petrotheta_el  real  NOT NULL,   --/U arcsec  --/D Elliptical SDSS-style Petrosian radius (r-band)
-	petroflux_el_f  real  NOT NULL,   --/F petroflux_el 0 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in GALEX far-UV (using r-band aperture)
-	petroflux_el_n  real  NOT NULL,   --/F petroflux_el 1 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in GALEX near-UV (using r-band aperture)
-	petroflux_el_u  real  NOT NULL,   --/F petroflux_el 2 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in SDSS u-band (using r-band aperture)
-	petroflux_el_g  real  NOT NULL,   --/F petroflux_el 3 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in SDSS g-band (using r-band aperture)
-	petroflux_el_r  real  NOT NULL,   --/F petroflux_el 4 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in SDSS r-band (using r-band aperture)
-	petroflux_el_i  real  NOT NULL,   --/F petroflux_el 5 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in SDSS i-band (using r-band aperture)
-	petroflux_el_z  real  NOT NULL,   --/F petroflux_el 6 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in SDSS z-band (using r-band aperture)
-	petroflux_ivar_el_f  real  NOT NULL,   --/F petroflux_ivar_el 0 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_el_f
-	petroflux_ivar_el_n  real  NOT NULL,   --/F petroflux_ivar_el 1 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_el_n
-	petroflux_ivar_el_u  real  NOT NULL,   --/F petroflux_ivar_el 2 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_el_u
-	petroflux_ivar_el_g  real  NOT NULL,   --/F petroflux_ivar_el 3 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_el_g
-	petroflux_ivar_el_r  real  NOT NULL,   --/F petroflux_ivar_el 4 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_el_r
-	petroflux_ivar_el_i  real  NOT NULL,   --/F petroflux_ivar_el 5 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_el_i
-	petroflux_ivar_el_z  real  NOT NULL,   --/F petroflux_ivar_el 6 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_el_z
-	petroth50_el_f  real  NOT NULL,   --/F petroth50_el 0 --/U arcsec  --/D Elliptical Petrosian 50% light radius in GALEX far-UV
-	petroth50_el_n  real  NOT NULL,   --/F petroth50_el 1 --/U arcsec  --/D Elliptical Petrosian 50% light radius in GALEX near-UV
-	petroth50_el_u  real  NOT NULL,   --/F petroth50_el 2 --/U arcsec  --/D Elliptical Petrosian 50% light radius in SDSS u-band
-	petroth50_el_g  real  NOT NULL,   --/F petroth50_el 3 --/U arcsec  --/D Elliptical Petrosian 50% light radius in SDSS g-band
-	petroth50_el_r  real  NOT NULL,   --/F petroth50_el 4 --/U arcsec  --/D Elliptical Petrosian 50% light radius in SDSS r-band
-	petroth50_el_i  real  NOT NULL,   --/F petroth50_el 5 --/U arcsec  --/D Elliptical Petrosian 50% light radius in SDSS i-band
-	petroth50_el_z  real  NOT NULL,   --/F petroth50_el 6 --/U arcsec  --/D Elliptical Petrosian 50% light radius in SDSS z-band
-	petroth90_el_f  real  NOT NULL,   --/F petroth90_el 0 --/U arcsec  --/D Elliptical Petrosian 90% light radius in GALEX far-UV
-	petroth90_el_n  real  NOT NULL,   --/F petroth90_el 1 --/U arcsec  --/D Elliptical Petrosian 90% light radius in GALEX near-UV
-	petroth90_el_u  real  NOT NULL,   --/F petroth90_el 2 --/U arcsec  --/D Elliptical Petrosian 90% light radius in SDSS u-band
-	petroth90_el_g  real  NOT NULL,   --/F petroth90_el 3 --/U arcsec  --/D Elliptical Petrosian 90% light radius in SDSS g-band
-	petroth90_el_r  real  NOT NULL,   --/F petroth90_el 4 --/U arcsec  --/D Elliptical Petrosian 90% light radius in SDSS r-band
-	petroth90_el_i  real  NOT NULL,   --/F petroth90_el 5 --/U arcsec  --/D Elliptical Petrosian 90% light radius in SDSS i-band
-	petroth90_el_z  real  NOT NULL,   --/F petroth90_el 6 --/U arcsec  --/D Elliptical Petrosian 90% light radius in SDSS z-band
-	petro_nmgy_el_f  real  NOT NULL,   --/F petro_nmgy_el 0 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in GALEX far-UV used for K-correction (from petroflux_el_f)
-	petro_nmgy_el_n  real  NOT NULL,   --/F petro_nmgy_el 1 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in GALEX near-UV used for K-correction (from petroflux_el_f)
-	petro_nmgy_el_u  real  NOT NULL,   --/F petro_nmgy_el 2 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS u-band used for K-correction (from petroflux_el_f)
-	petro_nmgy_el_g  real  NOT NULL,   --/F petro_nmgy_el 3 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS g-band used for K-correction (from petroflux_el_f)
-	petro_nmgy_el_r  real  NOT NULL,   --/F petro_nmgy_el 4 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS r-band used for K-correction (from petroflux_el_f)
-	petro_nmgy_el_i  real  NOT NULL,   --/F petro_nmgy_el 5 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS i-band used for K-correction (from petroflux_el_f)
-	petro_nmgy_el_z  real  NOT NULL,   --/F petro_nmgy_el 6 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS z-band used for K-correction (from petroflux_el_f)
-	petro_nmgy_ivar_el_f  real  NOT NULL,   --/F petro_nmgy_ivar_el 0 --/U nanomaggies^{-2}  --/D Inverse variance of petro_nmgy_el_f
-	petro_nmgy_ivar_el_n  real  NOT NULL,   --/F petro_nmgy_ivar_el 1 --/U nanomaggies^{-2}  --/D Inverse variance of petro_nmgy_el_n
-	petro_nmgy_ivar_el_u  real  NOT NULL,   --/F petro_nmgy_ivar_el 2 --/U nanomaggies^{-2}  --/D Inverse variance of petro_nmgy_el_u
-	petro_nmgy_ivar_el_g  real  NOT NULL,   --/F petro_nmgy_ivar_el 3 --/U nanomaggies^{-2}  --/D Inverse variance of petro_nmgy_el_g
-	petro_nmgy_ivar_el_r  real  NOT NULL,   --/F petro_nmgy_ivar_el 4 --/U nanomaggies^{-2}  --/D Inverse variance of petro_nmgy_el_r
-	petro_nmgy_ivar_el_i  real  NOT NULL,   --/F petro_nmgy_ivar_el 5 --/U nanomaggies^{-2}  --/D Inverse variance of petro_nmgy_el_i
-	petro_nmgy_ivar_el_z  real  NOT NULL,   --/F petro_nmgy_ivar_el 6 --/U nanomaggies^{-2}  --/D Inverse variance of petro_nmgy_el_z
-	petro_ok_el  smallint  NOT NULL,   --/D For elliptical Petrosian fluxes, 1 if K-correction was performed, 0 if not (should all be 1)
-	petro_rnmgy_el_f  real  NOT NULL,   --/F petro_rnmgy_el 0 --/U nanomaggies  --/D Reconstructed AB nanomaggies in GALEX far-UV from K-correction fit, for elliptical Petrosian fluxes
-	petro_rnmgy_el_n  real  NOT NULL,   --/F petro_rnmgy_el 1 --/U nanomaggies  --/D Reconstructed AB nanomaggies in GALEX near-UV from K-correction fit, for elliptical Petrosian fluxes
-	petro_rnmgy_el_u  real  NOT NULL,   --/F petro_rnmgy_el 2 --/U nanomaggies  --/D Reconstructed AB nanomaggies in SDSS u-band from K-correction fit, for elliptical Petrosian fluxes
-	petro_rnmgy_el_g  real  NOT NULL,   --/F petro_rnmgy_el 3 --/U nanomaggies  --/D Reconstructed AB nanomaggies in SDSS g-band from K-correction fit, for elliptical Petrosian fluxes
-	petro_rnmgy_el_r  real  NOT NULL,   --/F petro_rnmgy_el 4 --/U nanomaggies  --/D Reconstructed AB nanomaggies in SDSS r-band from K-correction fit, for elliptical Petrosian fluxes
-	petro_rnmgy_el_i  real  NOT NULL,   --/F petro_rnmgy_el 5 --/U nanomaggies  --/D Reconstructed AB nanomaggies in SDSS i-band from K-correction fit, for elliptical Petrosian fluxes
-	petro_rnmgy_el_z  real  NOT NULL,   --/F petro_rnmgy_el 6 --/U nanomaggies  --/D Reconstructed AB nanomaggies in SDSS z-band from K-correction fit, for elliptical Petrosian fluxes
-	petro_absmag_el_f  real  NOT NULL,   --/F petro_absmag_el 0 --/U mag  --/D Absolute magnitude in rest-frame GALEX far-UV, from elliptical Petrosian fluxes
-	petro_absmag_el_n  real  NOT NULL,   --/F petro_absmag_el 1 --/U mag  --/D Absolute magnitude in rest-frame GALEX near-UV, from elliptical Petrosian fluxes
-	petro_absmag_el_u  real  NOT NULL,   --/F petro_absmag_el 2 --/U mag  --/D Absolute magnitude in rest-frame SDSS u-band, from elliptical Petrosian fluxes
-	petro_absmag_el_g  real  NOT NULL,   --/F petro_absmag_el 3 --/U mag  --/D Absolute magnitude in rest-frame SDSS g-band, from elliptical Petrosian fluxes
-	petro_absmag_el_r  real  NOT NULL,   --/F petro_absmag_el 4 --/U mag  --/D Absolute magnitude in rest-frame SDSS r-band, from elliptical Petrosian fluxes
-	petro_absmag_el_i  real  NOT NULL,   --/F petro_absmag_el 5 --/U mag  --/D Absolute magnitude in rest-frame SDSS i-band, from elliptical Petrosian fluxes
-	petro_absmag_el_z  real  NOT NULL,   --/F petro_absmag_el 6 --/U mag  --/D Absolute magnitude in rest-frame SDSS z-band, from elliptical Petrosian fluxes
-	petro_amivar_el_f  real  NOT NULL,   --/F petro_amivar_el 0 --/U mag^{-2}  --/D Inverse variance of petro_absmag_el_f
-	petro_amivar_el_n  real  NOT NULL,   --/F petro_amivar_el 1 --/U mag^{-2}  --/D Inverse variance of petro_absmag_el_n
-	petro_amivar_el_u  real  NOT NULL,   --/F petro_amivar_el 2 --/U mag^{-2}  --/D Inverse variance of petro_absmag_el_u
-	petro_amivar_el_g  real  NOT NULL,   --/F petro_amivar_el 3 --/U mag^{-2}  --/D Inverse variance of petro_absmag_el_g
-	petro_amivar_el_r  real  NOT NULL,   --/F petro_amivar_el 4 --/U mag^{-2}  --/D Inverse variance of petro_absmag_el_r
-	petro_amivar_el_i  real  NOT NULL,   --/F petro_amivar_el 5 --/U mag^{-2}  --/D Inverse variance of petro_absmag_el_i
-	petro_amivar_el_z  real  NOT NULL,   --/F petro_amivar_el 6 --/U mag^{-2}  --/D Inverse variance of petro_absmag_el_z
-	petro_kcorrect_el_f  real  NOT NULL,   --/F petro_kcorrect_el 0 --/U mag  --/D K-correction value used for absolute magnitude in the GALEX far-UV for elliptical Petrosian fluxes 
-	petro_kcorrect_el_n  real  NOT NULL,   --/F petro_kcorrect_el 1 --/U mag  --/D K-correction value used for absolute magnitude in the GALEX near-UV for elliptical Petrosian fluxes 
-	petro_kcorrect_el_u  real  NOT NULL,   --/F petro_kcorrect_el 2 --/U mag  --/D K-correction value used for absolute magnitude in the SDSS u-band for elliptical Petrosian fluxes 
-	petro_kcorrect_el_g  real  NOT NULL,   --/F petro_kcorrect_el 3 --/U mag  --/D K-correction value used for absolute magnitude in the SDSS g-band for elliptical Petrosian fluxes 
-	petro_kcorrect_el_r  real  NOT NULL,   --/F petro_kcorrect_el 4 --/U mag  --/D K-correction value used for absolute magnitude in the SDSS r-band for elliptical Petrosian fluxes 
-	petro_kcorrect_el_i  real  NOT NULL,   --/F petro_kcorrect_el 5 --/U mag  --/D K-correction value used for absolute magnitude in the SDSS i-band for elliptical Petrosian fluxes 
-	petro_kcorrect_el_z  real  NOT NULL,   --/F petro_kcorrect_el 6 --/U mag  --/D K-correction value used for absolute magnitude in the SDSS z-band for elliptical Petrosian fluxes 
-	petro_kcoeff_el_0  real  NOT NULL,   --/F petro_kcoeff_el 0  --/D Coefficient 0 of templates in K-correction fit (see Blanton &amp; Roweis 2007) for elliptical Petrosian fluxes
-	petro_kcoeff_el_1  real  NOT NULL,   --/F petro_kcoeff_el 1  --/D Coefficient 1 of templates in K-correction fit (see Blanton &amp; Roweis 2007) for elliptical Petrosian fluxes
-	petro_kcoeff_el_2  real  NOT NULL,   --/F petro_kcoeff_el 2  --/D Coefficient 2 of templates in K-correction fit (see Blanton &amp; Roweis 2007) for elliptical Petrosian fluxes
-	petro_kcoeff_el_3  real  NOT NULL,   --/F petro_kcoeff_el 3  --/D Coefficient 3 of templates in K-correction fit (see Blanton &amp; Roweis 2007) for elliptical Petrosian fluxes
-	petro_kcoeff_el_4  real  NOT NULL,   --/F petro_kcoeff_el 4  --/D Coefficient 4 of templates in K-correction fit (see Blanton &amp; Roweis 2007) for elliptical Petrosian fluxes
-	petro_mass_el  real  NOT NULL,   --/U  solar masses --/D Stellar mass from K-correction fit (use with caution) for elliptical Petrosian fluxes
-	petro_mtol_el_f  real  NOT NULL,   --/F petro_mtol_el 0 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for GALEX far-UV for elliptical Petrosian fluxes
-	petro_mtol_el_n  real  NOT NULL,   --/F petro_mtol_el 1 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for GALEX near-UV for elliptical Petrosian fluxes
-	petro_mtol_el_u  real  NOT NULL,   --/F petro_mtol_el 2 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for SDSS u-band for elliptical Petrosian fluxes
-	petro_mtol_el_g  real  NOT NULL,   --/F petro_mtol_el 3 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for SDSS g-band for elliptical Petrosian fluxes
-	petro_mtol_el_r  real  NOT NULL,   --/F petro_mtol_el 4 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for SDSS r-band for elliptical Petrosian fluxes
-	petro_mtol_el_i  real  NOT NULL,   --/F petro_mtol_el 5 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for SDSS i-band for elliptical Petrosian fluxes
-	petro_mtol_el_z  real  NOT NULL,   --/F petro_mtol_el 6 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for SDSS z-band for elliptical Petrosian fluxes
-	petro_b300_el  real  NOT NULL,   --/D Star-formation rate b-parameter (current over past average) for last 300 Myrs (from K-correction fit, use with caution) for elliptical Petrosian fluxes
-	petro_b1000_el  real  NOT NULL,  --/D Star-formation rate b-parameter (current over past average) for last 1 Gyrs (from K-correction fit, use with caution) for elliptical Petrosian fluxes
-	petro_mets_el  real  NOT NULL,   --/D Metallicity from K-correction fit (use with caution) for elliptical Petrosian fluxes
-	petrotheta  real  NOT NULL,   --/U arcsec  --/D Azimuthally averaged SDSS-style Petrosian radius (derived from r band)
-	petroth50  real  NOT NULL,   --/U arcsec  --/D Azimuthally averaged SDSS-style Petrosian 50% light radius (derived from r band)
-	petroth90  real  NOT NULL,   --/U arcsec  --/D Azimuthally averaged SDSS-style Petrosian 90% light radius (derived from r band)
-	ba50  real  NOT NULL,   --/D Axis ratio b/a from Stokes parameters at 50% light radius (based on r-band)
-	phi50  real  NOT NULL,   --/U deg  --/D Angle (E of N) from Stokes parameters at 50% light radius(based on r-band)
-	ba90  real  NOT NULL,   --/D Axis ratio b/a from Stokes parameters at 90% light radius (based on r-band)
-	phi90  real  NOT NULL,   --/U deg  --/D Angle (E of N) from Stokes parameters at 90% light radius(based on r-band)
-	petroflux_f  real  NOT NULL,   --/F petroflux 0 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in GALEX far-UV (using r-band aperture)
-	petroflux_n  real  NOT NULL,   --/F petroflux 1 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in GALEX far-UV (using r-band aperture)
-	petroflux_u  real  NOT NULL,   --/F petroflux 2 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in SDSS u-band (using r-band aperture)
-	petroflux_g  real  NOT NULL,   --/F petroflux 3 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in SDSS g-band (using r-band aperture)
-	petroflux_r  real  NOT NULL,   --/F petroflux 4 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in SDSS r-band (using r-band aperture)
-	petroflux_i  real  NOT NULL,   --/F petroflux 5 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in SDSS i-band (using r-band aperture)
-	petroflux_z  real  NOT NULL,   --/F petroflux 6 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in SDSS z-band (using r-band aperture)
-	petroflux_ivar_f  real  NOT NULL,   --/F petroflux_ivar 0 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_f
-	petroflux_ivar_n  real  NOT NULL,   --/F petroflux_ivar 1 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_n
-	petroflux_ivar_u  real  NOT NULL,   --/F petroflux_ivar 2 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_u
-	petroflux_ivar_g  real  NOT NULL,   --/F petroflux_ivar 3 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_g
-	petroflux_ivar_r  real  NOT NULL,   --/F petroflux_ivar 4 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_r
-	petroflux_ivar_i  real  NOT NULL,   --/F petroflux_ivar 5 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_i
-	petroflux_ivar_z  real  NOT NULL,   --/F petroflux_ivar 6 --/U nanomaggies^{-2}  --/D Inverse variance of petroflux_z
-	fiberflux_f  real  NOT NULL,   --/F fiberflux 0 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in GALEX far-UV
-	fiberflux_n  real  NOT NULL,   --/F fiberflux 1 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in GALEX near-UV
-	fiberflux_u  real  NOT NULL,   --/F fiberflux 2 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in SDSS u-band
-	fiberflux_g  real  NOT NULL,   --/F fiberflux 3 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in SDSS g-band
-	fiberflux_r  real  NOT NULL,   --/F fiberflux 4 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in SDSS r-band
-	fiberflux_i  real  NOT NULL,   --/F fiberflux 5 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in SDSS i-band
-	fiberflux_z  real  NOT NULL,   --/F fiberflux 6 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in SDSS z-band
-	fiberflux_ivar_f  real  NOT NULL,   --/F fiberflux_ivar 0 --/U nanomaggies^{-2}  --/D Inverse variance of fiberflux_f
-	fiberflux_ivar_n  real  NOT NULL,   --/F fiberflux_ivar 1 --/U nanomaggies^{-2}  --/D Inverse variance of fiberflux_n
-	fiberflux_ivar_u  real  NOT NULL,   --/F fiberflux_ivar 2 --/U nanomaggies^{-2}  --/D Inverse variance of fiberflux_u
-	fiberflux_ivar_g  real  NOT NULL,   --/F fiberflux_ivar 3 --/U nanomaggies^{-2}  --/D Inverse variance of fiberflux_g
-	fiberflux_ivar_r  real  NOT NULL,   --/F fiberflux_ivar 4 --/U nanomaggies^{-2}  --/D Inverse variance of fiberflux_r
-	fiberflux_ivar_i  real  NOT NULL,   --/F fiberflux_ivar 5 --/U nanomaggies^{-2}  --/D Inverse variance of fiberflux_i
-	fiberflux_ivar_z  real  NOT NULL,   --/F fiberflux_ivar 6 --/U nanomaggies^{-2}  --/D Inverse variance of fiberflux_z
+	elpetro_ba  real  NOT NULL,   --/D Axis ratio used for elliptical apertures (for this version, same as petro_ba90)
+	elpetro_phi  real  NOT NULL,   --/U deg  --/D Position angle (east of north) used for elliptical apertures (for this version, same as petro_ba90)
+	elpetro_theta  real  NOT NULL,   --/U arcsec  --/D Elliptical SDSS-style Petrosian radius (r-band, with correction)
+	elpetro_theta_r_original  real  NOT NULL,   --/F elpetro_theta_r --/U arcsec  --/D Elliptical SDSS-style Petrosian radius in SDSS r-band, no correction
+	elpetro_flux_f  real  NOT NULL,   --/F elpetro_flux 0 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in GALEX far-UV (using r-band aperture)
+	elpetro_flux_n  real  NOT NULL,   --/F elpetro_flux 1 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in GALEX near-UV (using r-band aperture)
+	elpetro_flux_u  real  NOT NULL,   --/F elpetro_flux 2 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in SDSS u-band (using r-band aperture)
+	elpetro_flux_g  real  NOT NULL,   --/F elpetro_flux 3 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in SDSS g-band (using r-band aperture)
+	elpetro_flux_r  real  NOT NULL,   --/F elpetro_flux 4 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in SDSS r-band (using r-band aperture)
+	elpetro_flux_i  real  NOT NULL,   --/F elpetro_flux 5 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in SDSS i-band (using r-band aperture)
+	elpetro_flux_z  real  NOT NULL,   --/F elpetro_flux 6 --/U nanomaggies  --/D Elliptical SDSS-style Petrosian flux in SDSS z-band (using r-band aperture)
+	elpetro_flux_r_original  real  NOT NULL,   --/F elpetro_flux_r --/U arcsec  --/D Elliptical SDSS-style Petrosian flux in SDSS r-band, no correction
+	elpetro_flux_ivar_f  real  NOT NULL,   --/F elpetro_flux_ivar 0 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_flux_f
+	elpetro_flux_ivar_n  real  NOT NULL,   --/F elpetro_flux_ivar 1 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_flux_n
+	elpetro_flux_ivar_u  real  NOT NULL,   --/F elpetro_flux_ivar 2 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_flux_u
+	elpetro_flux_ivar_g  real  NOT NULL,   --/F elpetro_flux_ivar 3 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_flux_g
+	elpetro_flux_ivar_r  real  NOT NULL,   --/F elpetro_flux_ivar 4 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_flux_r
+	elpetro_flux_ivar_i  real  NOT NULL,   --/F elpetro_flux_ivar 5 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_flux_i
+	elpetro_flux_ivar_z  real  NOT NULL,   --/F elpetro_flux_ivar 6 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_flux_z
+	elpetro_flux_ivar_r_original  real  NOT NULL,   --/F elpetro_flux_ivar_r --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_flux_r_original
+	elpetro_th50_f  real  NOT NULL,   --/F elpetro_th50 0 --/U arcsec  --/D Elliptical Petrosian 50% light radius in GALEX far-UV
+	elpetro_th50_n  real  NOT NULL,   --/F elpetro_th50 1 --/U arcsec  --/D Elliptical Petrosian 50% light radius in GALEX near-UV
+	elpetro_th50_u  real  NOT NULL,   --/F elpetro_th50 2 --/U arcsec  --/D Elliptical Petrosian 50% light radius in SDSS u-band
+	elpetro_th50_g  real  NOT NULL,   --/F elpetro_th50 3 --/U arcsec  --/D Elliptical Petrosian 50% light radius in SDSS g-band
+	elpetro_th50_r  real  NOT NULL,   --/F elpetro_th50 4 --/U arcsec  --/D Elliptical Petrosian 50% light radius in SDSS r-band
+	elpetro_th50_i  real  NOT NULL,   --/F elpetro_th50 5 --/U arcsec  --/D Elliptical Petrosian 50% light radius in SDSS i-band
+	elpetro_th50_z  real  NOT NULL,   --/F elpetro_th50 6 --/U arcsec  --/D Elliptical Petrosian 50% light radius in SDSS z-band
+	elpetro_th90_f  real  NOT NULL,   --/F elpetro_th90 0 --/U arcsec  --/D Elliptical Petrosian 90% light radius in GALEX far-UV
+	elpetro_th50_r_original  real  NOT NULL,   --/F elpetro_th50_r --/U arcsec  --/D Elliptical Petrosian 50% light radius in SDSS r-band, no correction
+	elpetro_th90_n  real  NOT NULL,   --/F elpetro_th90 1 --/U arcsec  --/D Elliptical Petrosian 90% light radius in GALEX near-UV
+	elpetro_th90_u  real  NOT NULL,   --/F elpetro_th90 2 --/U arcsec  --/D Elliptical Petrosian 90% light radius in SDSS u-band
+	elpetro_th90_g  real  NOT NULL,   --/F elpetro_th90 3 --/U arcsec  --/D Elliptical Petrosian 90% light radius in SDSS g-band
+	elpetro_th90_r  real  NOT NULL,   --/F elpetro_th90 4 --/U arcsec  --/D Elliptical Petrosian 90% light radius in SDSS r-band
+	elpetro_th90_i  real  NOT NULL,   --/F elpetro_th90 5 --/U arcsec  --/D Elliptical Petrosian 90% light radius in SDSS i-band
+	elpetro_th90_z  real  NOT NULL,   --/F elpetro_th90 6 --/U arcsec  --/D Elliptical Petrosian 90% light radius in SDSS z-band
+	elpetro_th90_r_original  real  NOT NULL,   --/F elpetro_th90_r --/U arcsec  --/D Elliptical Petrosian 90% light radius in SDSS r-band, no correction
+	elpetro_nmgy_f  real  NOT NULL,   --/F elpetro_nmgy 0 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in GALEX far-UV used for K-correction (from elpetro_flux_f)
+	elpetro_nmgy_n  real  NOT NULL,   --/F elpetro_nmgy 1 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in GALEX near-UV used for K-correction (from elpetro_flux_n)
+	elpetro_nmgy_u  real  NOT NULL,   --/F elpetro_nmgy 2 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS u-band used for K-correction (from elpetro_flux_u)
+	elpetro_nmgy_g  real  NOT NULL,   --/F elpetro_nmgy 3 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS g-band used for K-correction (from elpetro_flux_g)
+	elpetro_nmgy_r  real  NOT NULL,   --/F elpetro_nmgy 4 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS r-band used for K-correction (from elpetro_flux_r)
+	elpetro_nmgy_i  real  NOT NULL,   --/F elpetro_nmgy 5 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS i-band used for K-correction (from elpetro_flux_i)
+	elpetro_nmgy_z  real  NOT NULL,   --/F elpetro_nmgy 6 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS z-band used for K-correction (from elpetro_flux_z)
+	elpetro_nmgy_ivar_f  real  NOT NULL,   --/F elpetro_nmgy_ivar 0 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_nmgy_f
+	elpetro_nmgy_ivar_n  real  NOT NULL,   --/F elpetro_nmgy_ivar 1 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_nmgy_n
+	elpetro_nmgy_ivar_u  real  NOT NULL,   --/F elpetro_nmgy_ivar 2 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_nmgy_u
+	elpetro_nmgy_ivar_g  real  NOT NULL,   --/F elpetro_nmgy_ivar 3 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_nmgy_g
+	elpetro_nmgy_ivar_r  real  NOT NULL,   --/F elpetro_nmgy_ivar 4 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_nmgy_r
+	elpetro_nmgy_ivar_i  real  NOT NULL,   --/F elpetro_nmgy_ivar 5 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_nmgy_i
+	elpetro_nmgy_ivar_z  real  NOT NULL,   --/F elpetro_nmgy_ivar 6 --/U nanomaggies^{-2}  --/D Inverse variance of elpetro_nmgy_z
+	elpetro_ok  smallint  NOT NULL,   --/D For elliptical Petrosian fluxes, 1 if K-correction was performed, 0 if not (should all be 1)
+	elpetro_rnmgy_f  real  NOT NULL,   --/F elpetro_rnmgy 0 --/U nanomaggies  --/D Reconstructed AB nanomaggies in GALEX far-UV from K-correction fit, for elliptical Petrosian fluxes
+	elpetro_rnmgy_n  real  NOT NULL,   --/F elpetro_rnmgy 1 --/U nanomaggies  --/D Reconstructed AB nanomaggies in GALEX near-UV from K-correction fit, for elliptical Petrosian fluxes
+	elpetro_rnmgy_u  real  NOT NULL,   --/F elpetro_rnmgy 2 --/U nanomaggies  --/D Reconstructed AB nanomaggies in SDSS u-band from K-correction fit, for elliptical Petrosian fluxes
+	elpetro_rnmgy_g  real  NOT NULL,   --/F elpetro_rnmgy 3 --/U nanomaggies  --/D Reconstructed AB nanomaggies in SDSS g-band from K-correction fit, for elliptical Petrosian fluxes
+	elpetro_rnmgy_r  real  NOT NULL,   --/F elpetro_rnmgy 4 --/U nanomaggies  --/D Reconstructed AB nanomaggies in SDSS r-band from K-correction fit, for elliptical Petrosian fluxes
+	elpetro_rnmgy_i  real  NOT NULL,   --/F elpetro_rnmgy 5 --/U nanomaggies  --/D Reconstructed AB nanomaggies in SDSS i-band from K-correction fit, for elliptical Petrosian fluxes
+	elpetro_rnmgy_z  real  NOT NULL,   --/F elpetro_rnmgy 6 --/U nanomaggies  --/D Reconstructed AB nanomaggies in SDSS z-band from K-correction fit, for elliptical Petrosian fluxes
+	elpetro_absmag_f  real  NOT NULL,   --/F elpetro_absmag 0 --/U mag  --/D Absolute magnitude in rest-frame GALEX far-UV, from elliptical Petrosian fluxes
+	elpetro_absmag_n  real  NOT NULL,   --/F elpetro_absmag 1 --/U mag  --/D Absolute magnitude in rest-frame GALEX near-UV, from elliptical Petrosian fluxes
+	elpetro_absmag_u  real  NOT NULL,   --/F elpetro_absmag 2 --/U mag  --/D Absolute magnitude in rest-frame SDSS u-band, from elliptical Petrosian fluxes
+	elpetro_absmag_g  real  NOT NULL,   --/F elpetro_absmag 3 --/U mag  --/D Absolute magnitude in rest-frame SDSS g-band, from elliptical Petrosian fluxes
+	elpetro_absmag_r  real  NOT NULL,   --/F elpetro_absmag 4 --/U mag  --/D Absolute magnitude in rest-frame SDSS r-band, from elliptical Petrosian fluxes
+	elpetro_absmag_i  real  NOT NULL,   --/F elpetro_absmag 5 --/U mag  --/D Absolute magnitude in rest-frame SDSS i-band, from elliptical Petrosian fluxes
+	elpetro_absmag_z  real  NOT NULL,   --/F elpetro_absmag 6 --/U mag  --/D Absolute magnitude in rest-frame SDSS z-band, from elliptical Petrosian fluxes
+	elpetro_amivar_f  real  NOT NULL,   --/F elpetro_amivar 0 --/U mag^{-2}  --/D Inverse variance of petro_absmag_f
+	elpetro_amivar_n  real  NOT NULL,   --/F elpetro_amivar 1 --/U mag^{-2}  --/D Inverse variance of petro_absmag_n
+	elpetro_amivar_u  real  NOT NULL,   --/F elpetro_amivar 2 --/U mag^{-2}  --/D Inverse variance of petro_absmag_u
+	elpetro_amivar_g  real  NOT NULL,   --/F elpetro_amivar 3 --/U mag^{-2}  --/D Inverse variance of petro_absmag_g
+	elpetro_amivar_r  real  NOT NULL,   --/F elpetro_amivar 4 --/U mag^{-2}  --/D Inverse variance of petro_absmag_r
+	elpetro_amivar_i  real  NOT NULL,   --/F elpetro_amivar 5 --/U mag^{-2}  --/D Inverse variance of petro_absmag_i
+	elpetro_amivar_z  real  NOT NULL,   --/F elpetro_amivar 6 --/U mag^{-2}  --/D Inverse variance of petro_absmag_z
+	elpetro_kcorrect_f  real  NOT NULL,   --/F elpetro_kcorrect 0 --/U mag  --/D K-correction value used for absolute magnitude in the GALEX far-UV for elliptical Petrosian fluxes 
+	elpetro_kcorrect_n  real  NOT NULL,   --/F elpetro_kcorrect 1 --/U mag  --/D K-correction value used for absolute magnitude in the GALEX near-UV for elliptical Petrosian fluxes 
+	elpetro_kcorrect_u  real  NOT NULL,   --/F elpetro_kcorrect 2 --/U mag  --/D K-correction value used for absolute magnitude in the SDSS u-band for elliptical Petrosian fluxes 
+	elpetro_kcorrect_g  real  NOT NULL,   --/F elpetro_kcorrect 3 --/U mag  --/D K-correction value used for absolute magnitude in the SDSS g-band for elliptical Petrosian fluxes 
+	elpetro_kcorrect_r  real  NOT NULL,   --/F elpetro_kcorrect 4 --/U mag  --/D K-correction value used for absolute magnitude in the SDSS r-band for elliptical Petrosian fluxes 
+	elpetro_kcorrect_i  real  NOT NULL,   --/F elpetro_kcorrect 5 --/U mag  --/D K-correction value used for absolute magnitude in the SDSS i-band for elliptical Petrosian fluxes 
+	elpetro_kcorrect_z  real  NOT NULL,   --/F elpetro_kcorrect 6 --/U mag  --/D K-correction value used for absolute magnitude in the SDSS z-band for elliptical Petrosian fluxes 
+	elpetro_kcoeff_0  real  NOT NULL,   --/F elpetro_kcoeff 0  --/D Coefficient 0 of templates in K-correction fit (see Blanton &amp; Roweis 2007) for elliptical Petrosian fluxes
+	elpetro_kcoeff_1  real  NOT NULL,   --/F elpetro_kcoeff 1  --/D Coefficient 1 of templates in K-correction fit (see Blanton &amp; Roweis 2007) for elliptical Petrosian fluxes
+	elpetro_kcoeff_2  real  NOT NULL,   --/F elpetro_kcoeff 2  --/D Coefficient 2 of templates in K-correction fit (see Blanton &amp; Roweis 2007) for elliptical Petrosian fluxes
+	elpetro_kcoeff_3  real  NOT NULL,   --/F elpetro_kcoeff 3  --/D Coefficient 3 of templates in K-correction fit (see Blanton &amp; Roweis 2007) for elliptical Petrosian fluxes
+	elpetro_kcoeff_4  real  NOT NULL,   --/F elpetro_kcoeff 4  --/D Coefficient 4 of templates in K-correction fit (see Blanton &amp; Roweis 2007) for elliptical Petrosian fluxes
+	elpetro_mass  real  NOT NULL,   --/U  solar masses --/D Stellar mass from K-correction fit (use with caution) for elliptical Petrosian fluxes
+	elpetro_mtol_f  real  NOT NULL,   --/F elpetro_mtol 0 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for GALEX far-UV for elliptical Petrosian fluxes
+	elpetro_mtol_n  real  NOT NULL,   --/F elpetro_mtol 1 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for GALEX near-UV for elliptical Petrosian fluxes
+	elpetro_mtol_u  real  NOT NULL,   --/F elpetro_mtol 2 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for SDSS u-band for elliptical Petrosian fluxes
+	elpetro_mtol_g  real  NOT NULL,   --/F elpetro_mtol 3 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for SDSS g-band for elliptical Petrosian fluxes
+	elpetro_mtol_r  real  NOT NULL,   --/F elpetro_mtol 4 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for SDSS r-band for elliptical Petrosian fluxes
+	elpetro_mtol_i  real  NOT NULL,   --/F elpetro_mtol 5 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for SDSS i-band for elliptical Petrosian fluxes
+	elpetro_mtol_z  real  NOT NULL,   --/F elpetro_mtol 6 --/U solar  --/D Mass-to-light ratio derived in K-correction fit for SDSS z-band for elliptical Petrosian fluxes
+	elpetro_b300  real  NOT NULL,   --/D Star-formation rate b-parameter (current over past average) for last 300 Myrs (from K-correction fit, use with caution) for elliptical Petrosian fluxes
+	elpetro_b1000  real  NOT NULL,  --/D Star-formation rate b-parameter (current over past average) for last 1 Gyrs (from K-correction fit, use with caution) for elliptical Petrosian fluxes
+	elpetro_mets  real  NOT NULL,   --/D Metallicity from K-correction fit (use with caution) for elliptical Petrosian fluxes
+	petro_theta  real  NOT NULL,   --/U arcsec  --/D Azimuthally averaged SDSS-style Petrosian radius (derived from r band)
+	petro_th50  real  NOT NULL,   --/U arcsec  --/D Azimuthally averaged SDSS-style Petrosian 50% light radius (derived from r band)
+	petro_th90  real  NOT NULL,   --/U arcsec  --/D Azimuthally averaged SDSS-style Petrosian 90% light radius (derived from r band)
+	petro_ba50  real  NOT NULL,   --/D Axis ratio b/a from Stokes parameters at 50% light radius (based on r-band)
+	petro_phi50  real  NOT NULL,   --/U deg  --/D Angle (E of N) from Stokes parameters at 50% light radius(based on r-band)
+	petro_ba90  real  NOT NULL,   --/D Axis ratio b/a from Stokes parameters at 90% light radius (based on r-band)
+	petro_phi90  real  NOT NULL,   --/U deg  --/D Angle (E of N) from Stokes parameters at 90% light radius(based on r-band)
+	petro_flux_f  real  NOT NULL,   --/F petro_flux 0 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in GALEX far-UV (using r-band aperture)
+	petro_flux_n  real  NOT NULL,   --/F petro_flux 1 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in GALEX far-UV (using r-band aperture)
+	petro_flux_u  real  NOT NULL,   --/F petro_flux 2 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in SDSS u-band (using r-band aperture)
+	petro_flux_g  real  NOT NULL,   --/F petro_flux 3 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in SDSS g-band (using r-band aperture)
+	petro_flux_r  real  NOT NULL,   --/F petro_flux 4 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in SDSS r-band (using r-band aperture)
+	petro_flux_i  real  NOT NULL,   --/F petro_flux 5 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in SDSS i-band (using r-band aperture)
+	petro_flux_z  real  NOT NULL,   --/F petro_flux 6 --/U nanomaggies  --/D Azimuthally-averaged SDSS-style Petrosian flux in SDSS z-band (using r-band aperture)
+	petro_flux_ivar_f  real  NOT NULL,   --/F petro_flux_ivar 0 --/U nanomaggies^{-2}  --/D Inverse variance of petro_flux_f
+	petro_flux_ivar_n  real  NOT NULL,   --/F petro_flux_ivar 1 --/U nanomaggies^{-2}  --/D Inverse variance of petro_flux_n
+	petro_flux_ivar_u  real  NOT NULL,   --/F petro_flux_ivar 2 --/U nanomaggies^{-2}  --/D Inverse variance of petro_flux_u
+	petro_flux_ivar_g  real  NOT NULL,   --/F petro_flux_ivar 3 --/U nanomaggies^{-2}  --/D Inverse variance of petro_flux_g
+	petro_flux_ivar_r  real  NOT NULL,   --/F petro_flux_ivar 4 --/U nanomaggies^{-2}  --/D Inverse variance of petro_flux_r
+	petro_flux_ivar_i  real  NOT NULL,   --/F petro_flux_ivar 5 --/U nanomaggies^{-2}  --/D Inverse variance of petro_flux_i
+	petro_flux_ivar_z  real  NOT NULL,   --/F petro_flux_ivar 6 --/U nanomaggies^{-2}  --/D Inverse variance of petro_flux_z
+	fiber_flux_f  real  NOT NULL,   --/F fiber_flux 0 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in GALEX far-UV
+	fiber_flux_n  real  NOT NULL,   --/F fiber_flux 1 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in GALEX near-UV
+	fiber_flux_u  real  NOT NULL,   --/F fiber_flux 2 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in SDSS u-band
+	fiber_flux_g  real  NOT NULL,   --/F fiber_flux 3 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in SDSS g-band
+	fiber_flux_r  real  NOT NULL,   --/F fiber_flux 4 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in SDSS r-band
+	fiber_flux_i  real  NOT NULL,   --/F fiber_flux 5 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in SDSS i-band
+	fiber_flux_z  real  NOT NULL,   --/F fiber_flux 6 --/U nanomaggies  --/D Flux in 3-arcsec diameter aperture (not apodized) in SDSS z-band
+	fiber_flux_ivar_f  real  NOT NULL,   --/F fiber_flux_ivar 0 --/U nanomaggies^{-2}  --/D Inverse variance of fiber_flux_f
+	fiber_flux_ivar_n  real  NOT NULL,   --/F fiber_flux_ivar 1 --/U nanomaggies^{-2}  --/D Inverse variance of fiber_flux_n
+	fiber_flux_ivar_u  real  NOT NULL,   --/F fiber_flux_ivar 2 --/U nanomaggies^{-2}  --/D Inverse variance of fiber_flux_u
+	fiber_flux_ivar_g  real  NOT NULL,   --/F fiber_flux_ivar 3 --/U nanomaggies^{-2}  --/D Inverse variance of fiber_flux_g
+	fiber_flux_ivar_r  real  NOT NULL,   --/F fiber_flux_ivar 4 --/U nanomaggies^{-2}  --/D Inverse variance of fiber_flux_r
+	fiber_flux_ivar_i  real  NOT NULL,   --/F fiber_flux_ivar 5 --/U nanomaggies^{-2}  --/D Inverse variance of fiber_flux_i
+	fiber_flux_ivar_z  real  NOT NULL,   --/F fiber_flux_ivar 6 --/U nanomaggies^{-2}  --/D Inverse variance of fiber_flux_z
 	sersic_n  real  NOT NULL,   --/D Sersic index from two-dimensional, single-component Sersic fit in r-band
 	sersic_ba  real  NOT NULL,   --/D Axis ratio b/a from two-dimensional, single-component Sersic fit in r-band
 	sersic_phi  real  NOT NULL,   --/U deg  --/D Angle (E of N) of major axis in two-dimensional, single-component Sersic fit in r-band
 	sersic_th50  real  NOT NULL,   --/U arcsec  --/D 50% light radius of two-dimensional, single-component Sersic fit to r-band
-	sersicflux_f  real  NOT NULL,   --/F sersicflux 0 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in GALEX far-UV (fit using r-band structural parameters)
-	sersicflux_n  real  NOT NULL,   --/F sersicflux 1 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in GALEX near-UV (fit using r-band structural parameters)
-	sersicflux_u  real  NOT NULL,   --/F sersicflux 2 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in SDSS u-band (fit using r-band structural parameters)
-	sersicflux_g  real  NOT NULL,   --/F sersicflux 3 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in SDSS g-band (fit using r-band structural parameters)
-	sersicflux_r  real  NOT NULL,   --/F sersicflux 4 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in SDSS r-band (fit using r-band structural parameters)
-	sersicflux_i  real  NOT NULL,   --/F sersicflux 5 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in SDSS i-band (fit using r-band structural parameters)
-	sersicflux_z  real  NOT NULL,   --/F sersicflux 6 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in SDSS z-band (fit using r-band structural parameters)
-	sersicflux_ivar_f  real  NOT NULL,   --/F sersicflux_ivar 0 --/U nanomaggies^{-2}  --/D Inverse variance of sersicflux_f
-	sersicflux_ivar_n  real  NOT NULL,   --/F sersicflux_ivar 1 --/U nanomaggies^{-2}  --/D Inverse variance of sersicflux_n
-	sersicflux_ivar_u  real  NOT NULL,   --/F sersicflux_ivar 2 --/U nanomaggies^{-2}  --/D Inverse variance of sersicflux_u
-	sersicflux_ivar_g  real  NOT NULL,   --/F sersicflux_ivar 3 --/U nanomaggies^{-2}  --/D Inverse variance of sersicflux_g
-	sersicflux_ivar_r  real  NOT NULL,   --/F sersicflux_ivar 4 --/U nanomaggies^{-2}  --/D Inverse variance of sersicflux_r
-	sersicflux_ivar_i  real  NOT NULL,   --/F sersicflux_ivar 5 --/U nanomaggies^{-2}  --/D Inverse variance of sersicflux_i
-	sersicflux_ivar_z  real  NOT NULL,   --/F sersicflux_ivar 6 --/U nanomaggies^{-2}  --/D Inverse variance of sersicflux_z
-	sersic_nmgy_f  real  NOT NULL,  --/F sersic_nmgy 0 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in GALEX far-UV used for K-correction (from sersicflux_f)
-	sersic_nmgy_n  real  NOT NULL,  --/F sersic_nmgy 1 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in GALEX near-UV used for K-correction (from sersicflux_n)
-	sersic_nmgy_u  real  NOT NULL,  --/F sersic_nmgy 2 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS u-band used for K-correction (from sersicflux_u)
-	sersic_nmgy_g  real  NOT NULL,  --/F sersic_nmgy 3 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS g-band used for K-correction (from sersicflux_g)
-	sersic_nmgy_r  real  NOT NULL,  --/F sersic_nmgy 4 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS r-band used for K-correction (from sersicflux_r)
-	sersic_nmgy_i  real  NOT NULL,  --/F sersic_nmgy 5 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS i-band used for K-correction (from sersicflux_i)
-	sersic_nmgy_z  real  NOT NULL,  --/F sersic_nmgy 6 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS z-band used for K-correction (from sersicflux_z)
+	sersic_flux_f  real  NOT NULL,   --/F sersic_flux 0 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in GALEX far-UV (fit using r-band structural parameters)
+	sersic_flux_n  real  NOT NULL,   --/F sersic_flux 1 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in GALEX near-UV (fit using r-band structural parameters)
+	sersic_flux_u  real  NOT NULL,   --/F sersic_flux 2 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in SDSS u-band (fit using r-band structural parameters)
+	sersic_flux_g  real  NOT NULL,   --/F sersic_flux 3 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in SDSS g-band (fit using r-band structural parameters)
+	sersic_flux_r  real  NOT NULL,   --/F sersic_flux 4 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in SDSS r-band (fit using r-band structural parameters)
+	sersic_flux_i  real  NOT NULL,   --/F sersic_flux 5 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in SDSS i-band (fit using r-band structural parameters)
+	sersic_flux_z  real  NOT NULL,   --/F sersic_flux 6 --/U nanomaggies  --/D Two-dimensional, single-component Sersic fit flux in SDSS z-band (fit using r-band structural parameters)
+	sersic_flux_ivar_f  real  NOT NULL,   --/F sersic_flux_ivar 0 --/U nanomaggies^{-2}  --/D Inverse variance of sersic_flux_f
+	sersic_flux_ivar_n  real  NOT NULL,   --/F sersic_flux_ivar 1 --/U nanomaggies^{-2}  --/D Inverse variance of sersic_flux_n
+	sersic_flux_ivar_u  real  NOT NULL,   --/F sersic_flux_ivar 2 --/U nanomaggies^{-2}  --/D Inverse variance of sersic_flux_u
+	sersic_flux_ivar_g  real  NOT NULL,   --/F sersic_flux_ivar 3 --/U nanomaggies^{-2}  --/D Inverse variance of sersic_flux_g
+	sersic_flux_ivar_r  real  NOT NULL,   --/F sersic_flux_ivar 4 --/U nanomaggies^{-2}  --/D Inverse variance of sersic_flux_r
+	sersic_flux_ivar_i  real  NOT NULL,   --/F sersic_flux_ivar 5 --/U nanomaggies^{-2}  --/D Inverse variance of sersic_flux_i
+	sersic_flux_ivar_z  real  NOT NULL,   --/F sersic_flux_ivar 6 --/U nanomaggies^{-2}  --/D Inverse variance of sersic_flux_z
+	sersic_nmgy_f  real  NOT NULL,  --/F sersic_nmgy 0 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in GALEX far-UV used for K-correction (from sersic_flux_f)
+	sersic_nmgy_n  real  NOT NULL,  --/F sersic_nmgy 1 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in GALEX near-UV used for K-correction (from sersic_flux_n)
+	sersic_nmgy_u  real  NOT NULL,  --/F sersic_nmgy 2 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS u-band used for K-correction (from sersic_flux_u)
+	sersic_nmgy_g  real  NOT NULL,  --/F sersic_nmgy 3 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS g-band used for K-correction (from sersic_flux_g)
+	sersic_nmgy_r  real  NOT NULL,  --/F sersic_nmgy 4 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS r-band used for K-correction (from sersic_flux_r)
+	sersic_nmgy_i  real  NOT NULL,  --/F sersic_nmgy 5 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS i-band used for K-correction (from sersic_flux_i)
+	sersic_nmgy_z  real  NOT NULL,  --/F sersic_nmgy 6 --/U nanomaggies  --/D Galactic-extinction corrected AB flux in SDSS z-band used for K-correction (from sersic_flux_z)
 	sersic_nmgy_ivar_f  real  NOT NULL,  --/F sersic_nmgy_ivar 0 --/U nanomaggies^{-2}  --/D Inverse variance of sersic_nmgy_f
 	sersic_nmgy_ivar_n  real  NOT NULL,  --/F sersic_nmgy_ivar 1 --/U nanomaggies^{-2}  --/D Inverse variance of sersic_nmgy_n
 	sersic_nmgy_ivar_u  real  NOT NULL,  --/F sersic_nmgy_ivar 2 --/U nanomaggies^{-2}  --/D Inverse variance of sersic_nmgy_u
@@ -589,7 +606,7 @@ CREATE TABLE nsatlas (
 	sersic_kcoeff_2  real  NOT NULL,  --/F sersic_kcoeff 2 --/D Coefficient 2 of templates in K-correction fit (see Blanton &amp; Roweis 2007) for Sersic fluxes
 	sersic_kcoeff_3  real  NOT NULL,  --/F sersic_kcoeff 3 --/D Coefficient 3 of templates in K-correction fit (see Blanton &amp; Roweis 2007) for Sersic fluxes
 	sersic_kcoeff_4  real  NOT NULL,  --/F sersic_kcoeff 4 --/D Coefficient 4 of templates in K-correction fit (see Blanton &amp; Roweis 2007) for Sersic fluxes
-	sersic_mass  real  NOT NULL,   --/U   --/D Stellar mass from K-correction fit (use with caution) for Sersic fluxes
+	sersic_mass  real  NOT NULL,   --/U solar masses  --/D Stellar mass from K-correction fit (use with caution) for Sersic fluxes
 	sersic_mtol_f  real  NOT NULL,   --/F sersic_mtol 0 --/U solar mass per solar luminosity --/D Mass-to-light ratio derived in K-correction fit for GALEX far-UV for Sersic fluxes
 	sersic_mtol_n  real  NOT NULL,   --/F sersic_mtol 1 --/U solar mass per solar luminosity --/D Mass-to-light ratio derived in K-correction fit for GALEX near-UV for Sersic fluxes
 	sersic_mtol_u  real  NOT NULL,   --/F sersic_mtol 2 --/U solar mass per solar luminosity --/D Mass-to-light ratio derived in K-correction fit for SDSS u-band for Sersic fluxes
@@ -597,9 +614,9 @@ CREATE TABLE nsatlas (
 	sersic_mtol_r  real  NOT NULL,   --/F sersic_mtol 4 --/U solar mass per solar luminosity --/D Mass-to-light ratio derived in K-correction fit for SDSS r-band for Sersic fluxes
 	sersic_mtol_i  real  NOT NULL,   --/F sersic_mtol 5 --/U solar mass per solar luminosity --/D Mass-to-light ratio derived in K-correction fit for SDSS i-band for Sersic fluxes
 	sersic_mtol_z  real  NOT NULL,   --/F sersic_mtol 6 --/U solar mass per solar luminosity --/D Mass-to-light ratio derived in K-correction fit for SDSS z-band for Sersic fluxes
-	sersic_b300  real  NOT NULL,   --/U   --/D Star-formation rate b-parameter (current over past average) for last 300 Myrs (from K-correction fit, use with caution) for Sersic fluxes
-	sersic_b1000  real  NOT NULL,   --/U   --/D Star-formation rate b-parameter (current over past average) for last 1 Gyrs (from K-correction fit, use with caution) for Sersic fluxes
-	sersic_mets  real  NOT NULL,   --/U   --/D Metallicity from K-correction fit (use with caution) for Sersic fluxes
+	sersic_b300  real  NOT NULL,   --/D Star-formation rate b-parameter (current over past average) for last 300 Myrs (from K-correction fit, use with caution) for Sersic fluxes
+	sersic_b1000  real  NOT NULL,    --/D Star-formation rate b-parameter (current over past average) for last 1 Gyrs (from K-correction fit, use with caution) for Sersic fluxes
+	sersic_mets  real  NOT NULL,   --/D Metallicity from K-correction fit (use with caution) for Sersic fluxes
 	asymmetry_f  real  NOT NULL,   --/F asymmetry 0 --/D Asymmetry parameter (use with caution) in GALEX far-UV 
 	asymmetry_n  real  NOT NULL,   --/F asymmetry 1 --/D Asymmetry parameter (use with caution) in GALEX near-UV 
 	asymmetry_u  real  NOT NULL,   --/F asymmetry 2 --/D Asymmetry parameter (use with caution) in SDSS u-band 
