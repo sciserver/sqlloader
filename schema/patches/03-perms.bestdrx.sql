@@ -64,19 +64,61 @@ END
 
 GO
 
+print 'adding dbo.fReplaceMax'
+go
 
+IF EXISTS (SELECT name FROM   sysobjects 
+	   WHERE  name = N'fReplaceMax' )
+	DROP FUNCTION fReplaceMax
+GO
 
+CREATE FUNCTION fReplaceMax(@oldstr VARCHAR(max), @pattern VARCHAR(1000), @replacement VARCHAR(1000))
+------------------------------------------------
+--/H Case-insensitve string replacement for varchar(max)
+------------------------------------------------
+--/T Used by the SQL parser stored procedures.
+------------------------------------------------
+RETURNS varchar(max) 
+AS
+BEGIN 
+	-------------------------------------
+	DECLARE @newstr varchar(max);
+	SET @newstr = '';
+	IF (LTRIM(@pattern) = '') GOTO done;
+	-----------------------------------
+	DECLARE @offset int,
+			@patlen int,
+			@lowold varchar(max),
+			@lowpat varchar(max);
+	SET @lowold = LOWER(@oldstr);
+	SET @lowpat = LOWER(@pattern);
+	SET @patlen = LEN(@pattern);
+	SET @offset = 0
+	--
+	WHILE (CHARINDEX(@lowpat,@lowold, 1) != 0 )
+	BEGIN
+		SET @offset	= CHARINDEX(@lowpat, @lowold, 1);
+		SET @newstr	= @newstr + SUBSTRING(@oldstr,1,@offset-1) + @replacement;
+		SET @oldstr	= SUBSTRING(@oldstr, @offset+@patlen, LEN(@oldstr)-@offset+@patlen);
+		SET @lowold	= SUBSTRING(@lowold, @offset+@patlen, LEN(@lowold)-@offset+@patlen);
+	END
+	-----------------------------------------
+done:	RETURN( @newstr + @oldstr);
+END
+GO
 
 
 
 print 'updating spExecuteSQL....'
+--===================================================================
+
 --===================================================================
 IF EXISTS (SELECT name FROM   sysobjects 
 	   WHERE  name = N'spExecuteSQL' )
 	DROP PROCEDURE spExecuteSQL
 GO
 --
-CREATE PROCEDURE [dbo].[spExecuteSQL] (@cmd VARCHAR(8000), @limit INT = 1000, 
+CREATE PROCEDURE [dbo].[spExecuteSQL] (@cmd VARCHAR(MAX), @limit INT = 1000, 
     @webserver      VARCHAR(64) = '',   -- the url
 	@winname	VARCHAR(64) = '',   -- the windows name of the server
     @clientIP   VARCHAR(50)  = 0,   -- client IP address 
@@ -105,11 +147,12 @@ AS
  
         BEGIN 
         SET NOCOUNT ON 
-        DECLARE @inputCmd varchar(8000)                 -- safe copy of command for log 
+        DECLARE @inputCmd varchar(7800)                 -- safe copy of command for log 
+													    -- also, truncated to varchar(7800) for weblog db (why 7800??)
         SET 	@inputCmd = @cmd                            
         --      SET @cmd = LOWER(@cmd)+ ' ';            -- makes parsing easier 
         SET 	@cmd = @cmd + ' '; 
-        DECLARE @oldCmd     VARCHAR (8000);             -- temporary copy of command 
+        DECLARE @oldCmd     VARCHAR (MAX);             -- temporary copy of command 
 	DECLARE @error      INT;			-- error number
         DECLARE @errorMsg VARCHAR(100), @ipAddr VARCHAR(100);		-- error msg 
 	DECLARE @serverName varchar(32);		-- name of this databaes server
@@ -182,26 +225,29 @@ AS
 			-- Remove potentially dangerous expressions from the string. 
 			UNTIL:  BEGIN 
 					SET @oldCmd = @cmd; 
-					SET @cmd = dbo.fReplace(@cmd, '.xp_',   '#'); -- discard extended SPs               
-					SET @cmd = dbo.fReplace(@cmd, '.sp_',   '#'); -- discard stored procedures 
-					SET @cmd = dbo.fReplace(@cmd, '.fn_',   '#'); -- discard functions 
-					SET @cmd = dbo.fReplace(@cmd, '.ms_',   '#'); -- discard microsoft extensions 
-					SET @cmd = dbo.fReplace(@cmd, '.dt_',   '#'); -- discard microsoft extensions 
-					SET @cmd = dbo.fReplace(@cmd, ' xp_',   '#'); -- discard extended SPs               
-					SET @cmd = dbo.fReplace(@cmd, ' sp_',   '#'); -- discard stored procedures 
-					SET @cmd = dbo.fReplace(@cmd, ' fn_',   '#'); -- discard functions 
-					SET @cmd = dbo.fReplace(@cmd, ' ms_',   '#'); -- discard microsoft extensions 
-					SET @cmd = dbo.fReplace(@cmd, ' dt_',   '#'); -- discard microsoft extensions 
+					SET @cmd = dbo.fReplaceMax(@cmd, '.xp_',   '#'); -- discard extended SPs               
+					SET @cmd = dbo.fReplaceMax(@cmd, '.sp_',   '#'); -- discard stored procedures 
+					SET @cmd = dbo.fReplaceMax(@cmd, '.fn_',   '#'); -- discard functions 
+					SET @cmd = dbo.fReplaceMax(@cmd, '.ms_',   '#'); -- discard microsoft extensions 
+					SET @cmd = dbo.fReplaceMax(@cmd, '.dt_',   '#'); -- discard microsoft extensions 
+					SET @cmd = dbo.fReplaceMax(@cmd, ' xp_',   '#'); -- discard extended SPs               
+					SET @cmd = dbo.fReplaceMax(@cmd, ' sp_',   '#'); -- discard stored procedures 
+					SET @cmd = dbo.fReplaceMax(@cmd, ' fn_',   '#'); -- discard functions 
+					SET @cmd = dbo.fReplaceMax(@cmd, ' ms_',   '#'); -- discard microsoft extensions 
+					SET @cmd = dbo.fReplaceMax(@cmd, ' dt_',   '#'); -- discard microsoft extensions 
 					SET @cmd =      replace(@cmd, '  ' ,   ' '); -- discard duplicate spaces 
 					SET @cmd =      replace(@cmd, '  ' ,   ' '); -- discard duplicate spaces 
-					set @cmd = dbo.fReplace(@cmd, CHAR(13),  ' '); --discard carraige return
-					set @cmd = dbo.fReplace(@cmd, CHAR(10),  ' '); --discard line feed
+					set @cmd = dbo.fReplaceMax(@cmd, CHAR(13),  ' '); --discard carraige return
+					set @cmd = dbo.fReplaceMax(@cmd, CHAR(10),  ' '); --discard line feed
 					SET @cmd=       replace(@cmd,0x0D0A,   0x200A);     -- replace cr/lf with space/lf 
 					SET @cmd=       replace(@cmd,  0x09,   ' ');     -- discard tabs				
 					SET @cmd =      replace(@cmd,   ' ; ',    '#'); -- discard semicolon
 					SET @cmd =      replace(@cmd,   ';',    '#'); -- discard semicolon 
 					END 
-			IF (@cmd != @oldCmd) GOTO UNTIL; 
+			IF (@cmd != @oldCmd) GOTO UNTIL;
+			
+			 declare @l int
+			 set @l = len(@cmd)
 			--------------------------------------------------------------------------      
 				-- Insist that command is a SELECT statement or a syntax check
  			IF (CHARINDEX('set parseonly',LOWER(@cmd),1) = 1)
@@ -282,7 +328,8 @@ bottom:
  			IF (CHARINDEX('set parseonly',LOWER(@cmd),1) = 1)
 	 			BEGIN
 					-- run the syntax check command and return
-					EXEC (@cmd)
+					--exec sp_executesql @cmd
+					exec (@cmd)
 					IF (@errorMsg is null)
 						SELECT 'Syntax is OK'
 					RETURN
@@ -311,7 +358,8 @@ bottom:
 
 			--======================================================== 
 			-- EXECUTE THE COMMAND 
-			EXEC (@cmd)                             -- return the data 
+			--EXEC sp_executesql @cmd                             -- return the data 
+			exec (@cmd)
 			select @rows = @@rowCount, @error = @@error
 			------------------------------------------------------ 
 			-- record the performance when (if) the command completes. 
@@ -355,7 +403,8 @@ bottom:
 		begin
 			--======================================================== 
 			-- EXECUTE THE COMMAND 
-			EXEC (@cmd)                             -- return the data 
+			-- EXEC sp_executesql @cmd
+			exec(@cmd)                             -- return the data 
 			select @rows = @@rowCount, @error = @@error
 			------------------------------------------------------ 
 		end --good command case
@@ -370,7 +419,11 @@ END  --end spExecuteSQL
 -------------------------------------------------------------------------------------- 
 
 -------------------------------------------------------------------------------------- 
+
 GO
+
+
+
 --
 
 
