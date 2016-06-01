@@ -51,15 +51,11 @@
 --*            updated spExecuteSQL to remove ; when surrounded by spaces
 --*
 --* 2015-11-05 Sue: updated spExecuteSQL to add optional parameters for
-<<<<<<< HEAD
 --*	           controlling logging, filtering, and throttling behavior.
-=======
---*	           controlling logging, filtering, and throttling behavior.		
---*
 --* 2016-05-19 Sue: changed spExecuteSQL to take varchar(max)
---*					also added fReplaceMax to handle string replacement 
---*					for varchar(max)	
->>>>>>> origin/master
+--*					also added fReplaceMax to handle string
+--*					replacement for varchar(max)
+--* 2016-06-01 Ani: conflict resolution and cosmetic changes.
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 
@@ -105,6 +101,9 @@ done:	RETURN( @newstr + @oldstr);
 END
 GO
 
+
+
+--===================================================================
 IF EXISTS (SELECT name FROM   sysobjects 
 	   WHERE  name = N'fReplaceMax' )
 	DROP FUNCTION fReplaceMax
