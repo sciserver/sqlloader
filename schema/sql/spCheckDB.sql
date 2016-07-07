@@ -28,6 +28,7 @@
 --*                 spCheckDBColumns to avoid collation conflicts
 --*                 with non-latin collations (e.g. Chinese).
 --* 2011-06-14 Ani: Added function type 'IF' to spCheckDBObjects.
+--* 2016-07-07 Ani: Excluded diagram Fs and SPs in spCheckDBObjects.
 -------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -382,12 +383,12 @@ AS BEGIN
 	    SELECT name, xtype as type, 'in DB' as found 
 		FROM sysobjects WITH (nolock)
 		WHERE xtype=N'P' 
-		    and name collate latin1_general_ci_as not like N'dt_%'
+		    and name collate latin1_general_ci_as not like N'dt_%' and name not like 'sp_%diagram%'
 	--
 	INSERT #indbobjects
 	    SELECT name, 'F' as type, 'in DB' as found 
 		FROM sysobjects WITH (nolock)
-		WHERE xtype collate latin1_general_ci_as  in (N'FN' ,N'TF', N'FS', N'FT', N'IF')
+		WHERE xtype collate latin1_general_ci_as  in (N'FN' ,N'TF', N'FS', N'FT', N'IF') and name not like 'fn_diagram%'
 	--
 	INSERT #diff
 	SELECT i.name, i.type, found

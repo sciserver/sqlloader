@@ -317,6 +317,7 @@ INSERT History VALUES('IndexMap','2016-03-29','Ani','Added PK and FK for MaNGA t
 INSERT History VALUES('IndexMap','2016-04-01','Ani','Added flags settings to commands in spIndexCreate to avoid problems with computed columns (e.g. WISE_allsky.rjce). ');
 INSERT History VALUES('IndexMap','2016-04-05','Ani','Added PKs for qsoVar* tables. ');
 INSERT History VALUES('IndexMap','2016-04-13','Ani','Changed wiseForced to wiseForcedTarget. ');
+INSERT History VALUES('IndexMap','2016-07-06','Ani','Added PKs for apogeeDesign, apogeeField and nsatlas. ');
 INSERT History VALUES('PhotoTables','2009-04-27','Ani','Swapped in updated schema for photo tables for SDSS-III. Added new table Run. ');
 INSERT History VALUES('PhotoTables','2009-05-05','Ani','Added loadVersion to Field table. ');
 INSERT History VALUES('PhotoTables','2009-06-11','Ani','Added nProf_[ugriz] to Field table. ');
@@ -816,6 +817,7 @@ INSERT History VALUES('spCheckDB','2008-06-25','Ani','Added function type string
 INSERT History VALUES('spCheckDB','2010-12-11','Ani','Modified spMakeDiagnostics to use sp_spaceused so table row counts are done faster. ');
 INSERT History VALUES('spCheckDB','2011-03-16','Ani','Modified spMakeDiagnostics, spCheckDBObjects and spCheckDBColumns to avoid collation conflicts with non-latin collations (e.g. Chinese). ');
 INSERT History VALUES('spCheckDB','2011-06-14','Ani','Added function type ''IF'' to spCheckDBObjects. ');
+INSERT History VALUES('spCheckDB','2016-07-07','Ani','Excluded diagram Fs and SPs in spCheckDBObjects. ');
 INSERT History VALUES('spTestQueries','2003-06-03','Alex','changed row_count from int to bigint, changed row_count() to rowcount_big(). ');
 INSERT History VALUES('spTestQueries','2004-08-30','Alex','move QueryResults to MetadataTables.sql ');
 INSERT History VALUES('spTestQueries','2004-08-31','Jim+Alex','adapted ad hoc script to a sp ');
@@ -862,6 +864,8 @@ INSERT History VALUES('spSQLSupport','2007-08-27','Ani','Added "system" paramete
 INSERT History VALUES('spSQLSupport','2008-04-21','Ani','Added "maxQueries" parameter to spExecuteSQL so that the client can pass the throttle value to it. ');
 INSERT History VALUES('spSQLSupport','2015-07-21','Sue','updated spExecuteSql and spExecuteSql2 to use "logger" user to log queries to weblog db updated spExecuteSQL to remove ; when surrounded by spaces ');
 INSERT History VALUES('spSQLSupport','2015-11-05','Sue','updated spExecuteSQL to add optional parameters for controlling logging, filtering, and throttling behavior. ');
+INSERT History VALUES('spSQLSupport','2016-05-19','Sue','changed spExecuteSQL to take varchar(max) also added fReplaceMax to handle string replacement for varchar(max) ');
+INSERT History VALUES('spSQLSupport','2016-06-01','Ani','conflict resolution and cosmetic changes. ');
 INSERT History VALUES('spUrlFitsSupport','2001-11-07','Alex','changed names for fGetFieldsObjects to spGet...  and fGetFiberList to spGetFiberList ');
 INSERT History VALUES('spUrlFitsSupport','2001-12-02','Alex','moved Globe table to ZoomTables.sql, now this is functions and procedures only, also fixed bug in spGetFiberList ');
 INSERT History VALUES('spUrlFitsSupport','2001-12-08','Jim','moved *Near* functions to *Near* file. ');
@@ -1214,6 +1218,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1204 lines inserted into History'
+PRINT '1208 lines inserted into History'
 ------------------------------------
 GO

@@ -362,19 +362,22 @@ CREATE TABLE nsatlas (
 --/T bands in a self-consistent manner. After cleaning a number of
 --/T suspicious cases the final catalog contains about 640,000
 --/T galaxies. See http://nsatlas.org for more information.
---/T 
+--/T <br><br>
 --/T We recommend the use of the elliptical Petrosian photometry from 
 --/T this catalog. K-corrected absolute magnitudes are provided using
 --/T kcorrect v4_2. 
---/T 
+--/T <br><br>
 --/T There are cases of elliptical Petrosian quantities in this file
 --/T with <code>_r_original</code> suffices (e.g. <code>petro_flux_r_original</code>), 
 --/T to indicate that these are the original quantities determined for the
 --/T r-band, without corrections. They differ from the r-band values in the
 --/T arrays (e.g. <code>petro_flux_r_original</code>) in those cases where the
 --/T Petrosian radius was undefined in the r-band. In those cases, the
---/T quantities in the arrays assume a Petrosian radius of 5 arcsec.</p>
---/T 
+--/T quantities in the arrays assume a Petrosian radius of 5 arcsec.
+--/T <br><br>
+--/T All absolute magnitudes are given with <i>H<sub>0</sub> = 100 h km
+--/T s<sup>-1</sup> Mpc<sup>-1</sup></i>, so should be interpreted as 
+--/T <i>M - 5 log<sub>10</sub> h</i>.
 ------------------------------------------------------------------------------
 	nsaid     int  NOT NULL,  --/D Unique ID within NSA v1 catalog
 	iauname   varchar(20)  NOT NULL,  --/D IAU-style designation based on RA/Dec

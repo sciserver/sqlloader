@@ -329,7 +329,7 @@ INSERT Dependency VALUES('spSphericalLib','sph.fRegionContainsXYZ','SphericalSql
 INSERT Dependency VALUES('spSphericalLib','sph.fSimplify','sph.fSimplifyAdvanced');
 INSERT Dependency VALUES('spSphericalLib','sph.fSimplifyAdvanced','sph.fSimplifyQueryAdvanced');
 INSERT Dependency VALUES('spSQLSupport','dbo.[spExecuteSQL]','fIsNumbers');
-INSERT Dependency VALUES('spSQLSupport','dbo.[spExecuteSQL]','fReplace');
+INSERT Dependency VALUES('spSQLSupport','dbo.[spExecuteSQL]','fReplaceMax');
 INSERT Dependency VALUES('spTestQueries','spTestQueries','fGetNearbyObjEq');
 INSERT Dependency VALUES('spTestQueries','spTestQueries','fHtmCoverRegion');
 INSERT Dependency VALUES('spTestQueries','spTestQueries','fPhotoFlags');

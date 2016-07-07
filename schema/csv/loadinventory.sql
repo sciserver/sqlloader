@@ -478,6 +478,7 @@ INSERT Inventory VALUES('spDocSupport','fDocFunctionParams','F');
 INSERT Inventory VALUES('spDocSupport','spDocEnum','P');
 INSERT Inventory VALUES('spDocSupport','spDocKeySearch','P');
 INSERT Inventory VALUES('spSQLSupport','fReplace','F');
+INSERT Inventory VALUES('spSQLSupport','fReplaceMax','F');
 INSERT Inventory VALUES('spSQLSupport','fIsNumbers','F');
 INSERT Inventory VALUES('spSQLSupport','dbo.[spExecuteSQL]','P');
 INSERT Inventory VALUES('spSQLSupport','dbo.[spExecuteSQL2]','P');
@@ -601,6 +602,6 @@ INSERT Inventory VALUES('spCosmology','fMathGetBin','F');
 GO
 
 ------------------------------------
-PRINT '591 lines inserted into Inventory'
+PRINT '592 lines inserted into Inventory'
 ------------------------------------
 GO

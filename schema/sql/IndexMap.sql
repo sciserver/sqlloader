@@ -237,6 +237,7 @@
 --*                 problems with computed columns (e.g. WISE_allsky.rjce).
 --* 2016-04-05 Ani: Added PKs for qsoVar* tables.
 --* 2016-04-13 Ani: Changed wiseForced to wiseForcedTarget.
+--* 2016-07-06 Ani: Added PKs for apogeeDesign, apogeeField and nsatlas.
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -441,6 +442,8 @@ INSERT IndexMap Values('K','primary key', 'stellarMassPCAWiscBC03', 	'specObjID'
 INSERT IndexMap Values('K','primary key', 'stellarMassPCAWiscM11', 	'specObjID'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'stellarMassStarformingPort', 	'specObjID'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'stellarMassPassivePort', 	'specObjID'		,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'apogeeDesign', 	 	'designid'		,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'apogeeField', 	 	'location_id'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'apogeeVisit', 	 	'visit_id'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'apogeeStar', 	 	'apstar_id'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'aspcapStar', 	 	'aspcap_id'		,'','SPECTRO');
@@ -451,6 +454,7 @@ INSERT IndexMap Values('K','primary key', 'apogeeStarVisit', 	 	'visit_id'		,'',
 INSERT IndexMap Values('K','primary key', 'apogeeStarAllVisit', 	'visit_id,apstar_id'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'mangaDrpAll',		'plateIFU'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'mangaTarget',		'mangaID'			,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'nsatlas',			'nsaID'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'qsoVarPTF',			'VAR_OBJID'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'qsoVarStripe',		'VAR_OBJID'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'zooSpec', 			'specObjID'		,'','SPECTRO');
