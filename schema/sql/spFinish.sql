@@ -287,6 +287,8 @@
 --* 2016-03-28 Ani: Created spFixDetectionIndex to add isPrimary column
 --*                 to detectionIndex table and set its value.
 --* 2016-05-18 Ani: Fixed typo in spFixDetectionIndex.
+--* 2016-07-30 Ani: Fixed DataServerURL setting in spSetVersion 
+--*                 (sdss3.org->sdss.org).
 ---====================================================================
 SET NOCOUNT ON;
 GO
@@ -518,7 +520,7 @@ BEGIN
 	SET @curtime=CAST( GETDATE() AS VARCHAR(64) );
 
 	-- update SiteConstants table
-        UPDATE siteconstants SET value='http://dr'+@release+'.sdss3.org/' WHERE name='DataServerURL'
+        UPDATE siteconstants SET value='http://dr'+@release+'.sdss.org/' WHERE name='DataServerURL'
         UPDATE siteconstants SET value='http://skyserver.sdss.org/dr'+@release+'/en/' WHERE name='WebServerURL'
         UPDATE siteconstants SET value=@release+@vnum WHERE name='DB Version'
         UPDATE siteconstants SET value=@dbversion WHERE name='Schema Version'

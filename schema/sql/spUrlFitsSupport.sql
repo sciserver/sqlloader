@@ -72,6 +72,8 @@
 --* 2013-10-30 Ani: Modified fMJDtoGMT to pad all fields with leading
 --*            zeros and reduce precision of seconds to 3 decimal places.
 --* 2015-01-15 Ani: Updated specById file name in fGetUrlSpecImg.
+--* 2016-07-29 Ani: Replaced "boss" with "eboss" for SAS file paths.
+--* 2016-07-30 Ani: Added fGetUrlMangaCube to return MaNGA data cube URL.
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 
@@ -212,7 +214,7 @@ BEGIN
 	SET @release = (select value from SiteConstants where name='Release');
 	SET @dbType = (select value from SiteConstants where name='DB Type');
 	--SET @link = @link + 'imaging/';
-	SET @link = @link + 'sas/dr' + @release + '/boss/photoObj/';
+	SET @link = @link + 'sas/dr' + @release + '/eboss/photoObj/';
 	SELECT @skyVersion=cast(dbo.fSkyVersion(@fieldid) as varchar(8));
 	SELECT  @run = cast(f.run as varchar(8)), 
 		@rerun=cast(f.rerun as varchar(8)), 
@@ -270,7 +272,7 @@ BEGIN
 	SET @release = (select value from SiteConstants where name='Release');
 	SET @dbType = (select value from SiteConstants where name='DB Type');
 	--SET @link = @link + 'imaging/';
-	SET @link = @link + 'sas/dr' + @release + '/boss/photoObj/frames/';
+	SET @link = @link + 'sas/dr' + @release + '/eboss/photoObj/frames/';
 	SELECT  @run = cast(run as varchar(8)), @rerun=cast(rerun as varchar(8)), 
 		@camcol=cast(camcol as varchar(8)), @field=cast(field as varchar(8))
 	    FROM Field
@@ -317,7 +319,7 @@ BEGIN
 	SET @release = (select value from SiteConstants where name='Release');
 	SET @dbType = (select value from SiteConstants where name='DB Type');
 	--SET @link = @link + 'imaging/';
-	SET @link = @link + 'sas/dr' + @release + '/boss/photo/redux/';
+	SET @link = @link + 'sas/dr' + @release + '/eboss/photo/redux/';
 	SELECT  @run = cast(run as varchar(8)), @rerun=cast(rerun as varchar(8)), 
 		@camcol=cast(camcol as varchar(8)), @field=cast(field as varchar(8))
 	    FROM Field
@@ -364,7 +366,7 @@ BEGIN
 	SET @release = (select value from SiteConstants where name='Release');
 	SET @dbType = (select value from SiteConstants where name='DB Type');
 	--SET @link = @link + 'imaging/';
-	SET @link = @link + 'sas/dr' + @release + '/boss/photo/redux/';
+	SET @link = @link + 'sas/dr' + @release + '/eboss/photo/redux/';
 	SELECT  @run = cast(run as varchar(8)), @rerun=cast(rerun as varchar(8)), 
 		@camcol=cast(camcol as varchar(8)), @field=cast(field as varchar(8))
 	    FROM Field
@@ -410,7 +412,7 @@ BEGIN
 	SET @release = (select value from SiteConstants where name='Release');
 	SET @dbType = (select value from SiteConstants where name='DB Type');
 	--SET @link = @link + 'imaging/';
-	SET @link = @link + 'sas/dr' + @release + '/boss/photo/redux/';
+	SET @link = @link + 'sas/dr' + @release + '/eboss/photo/redux/';
 	SELECT  @run = cast(run as varchar(8)), @rerun=cast(rerun as varchar(8)), 
 		@camcol=cast(camcol as varchar(8)), @field=cast(field as varchar(8))
 	    FROM Field
@@ -490,13 +492,15 @@ BEGIN
 	    FROM PlateX p JOIN specObjAll s ON p.plateId=s.plateId 
 	    WHERE s.specObjID=@specObjId;
     IF @survey != 'boss'
-        SET @survey = 'sdss';
-	SET @link = @link + 'sas/dr' + @release + '/' + @survey + '/spectro/redux/' +
+        SET @survey = 'sdss'
+    ELSE 
+        SET @survey = 'eboss'
+    SET @link = @link + 'sas/dr' + @release + '/' + @survey + '/spectro/redux/' +
 		@rerun + '/';
-	SET @oplate = substring('0000',1,4-len(@plate)) + @plate;
-	SET @link = @link + @oplate + '/';
-	SET @link = @link + 'spPlate-' + @oplate + '-' + @mjd + '.fits';
-	RETURN @link;
+    SET @oplate = substring('0000',1,4-len(@plate)) + @plate;
+    SET @link = @link + @oplate + '/';
+    SET @link = @link + 'spPlate-' + @oplate + '-' + @mjd + '.fits';
+    RETURN @link;
 END
 GO
 
@@ -530,12 +534,49 @@ BEGIN
 	    FROM PlateX p JOIN specObjAll s ON p.plateId=s.plateId 
 	    WHERE s.specObjID=@specObjId;
 	IF @survey != 'boss'
-        	SET @survey = 'sdss';
+            SET @survey = 'sdss'
+	ELSE
+	    SET @survey = 'eboss'
 	SET @oplate = substring('0000',1,4-len(@plate)) + @plate;
 	SET @ofiber = substring( '0000',1,4-len(@fiber)) + @fiber;
 	SET @link = @link + 'sas/dr' + @release + '/' + @survey + '/spectro/redux/' +
 		@rerun + '/spectra/' + @oplate + '/spec-' + @oplate + '-' + 
 		@mjd + '-' + @ofiber + '.fits';
+	RETURN @link;
+END
+GO
+
+
+--===================================================================
+if exists (select * from dbo.sysobjects 
+	where id = object_id(N'[dbo].[fGetUrlMangaCube]') 
+	and xtype in (N'FN', N'IF', N'TF'))
+	drop function [dbo].[fGetUrlMangaCube]
+GO
+--
+CREATE FUNCTION fGetUrlMangaCube(@plateIFU VARCHAR(20), @type VARCHAR(3))
+-------------------------------------------------
+--/H Get the URL of the MaNGA data cube of the specified type (LIN/LOG)
+-------------------------------------------------
+--/T Combines the value of the DataServer URL from the SiteConstants
+--/T table and builds up the whole URL from the plateIFU and data cube
+--/T type ('LIN' or 'LOG'), along with the version string (versdp3 from
+--/T the mangaDrpAll entry.
+--/T <br><samp> select TOP 10 dbo.fGetUrlMangaCube(plateIFU,'LIN') 
+--/T            FROM mangaDrpAll </samp>
+-------------------------------------------------
+RETURNS varchar(128)
+BEGIN
+	DECLARE @link varchar(128), @vers VARCHAR(20), 
+	    @release varchar(8), @plate INT;
+	SET @link = (SELECT value FROM SiteConstants WHERE name='DataServerURL');
+	SET @release = (select value from SiteConstants where name='Release');
+	SELECT @plate=plate, @vers = versdrp3
+	    FROM mangaDrpAll
+	    WHERE plateIFU=@plateIFU;
+	SET @link = @link + 'sas/dr' + @release + '/manga/spectro/redux/' +
+		@vers + '/' + CAST(@plate as VARCHAR) + '/stack/manga-' + 
+		@plateIFU + '-' + UPPER(@type) + 'CUBE.fits.gz';
 	RETURN @link;
 END
 GO

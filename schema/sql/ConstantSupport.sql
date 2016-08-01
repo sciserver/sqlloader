@@ -107,6 +107,7 @@
 --* 2015-02-15 Ani: Fixed EBossTarget0 function examples.
 --* 2015-03-16 Ani: Fixed column names for AncillaryTarget? examples.
 --* 2015-03-25 Ani: Fixed AncillaryTarget2 view (needs to be 64-bit).
+--* 2016-07-30 Ani: Fixed APOGEE flag function descriptions.
 --=================================================================================
 SET NOCOUNT ON
 GO
@@ -2796,9 +2797,9 @@ CREATE FUNCTION fApogeeTarget1(@name varchar(40))
 --/T <samp> 
 --/T <br> select top 10 * 
 --/T <br> from apogeeStar 
---/T <br> where apogeeTarget1 & dbo.fApogeeTarget1('APOGEE_EXTENDED') > 0 
+--/T <br> where apogee_target1 & dbo.fApogeeTarget1('APOGEE_EXTENDED') > 0 
 --/T </samp> 
---/T <br> see also fApogeeTarget2
+--/T <br> see also fApogeeTarget1N. fApogeeTarget2
 -------------------------------------------------------------
 RETURNS bigint
 AS BEGIN
@@ -2824,7 +2825,7 @@ CREATE FUNCTION fApogeeTarget1N(@value bigint)
 --/T <br>
 --/T Sample call to show the apogee target flags of some APOGEE objects is
 --/T <samp> 
---/T <br> select top 10 specObjId, dbo.fApogeeTarget1N(apogee_target1) as apogeeTarget1
+--/T <br> select top 10 apogee_id, dbo.fApogeeTarget1N(apogee_target1) as apogeeTarget1
 --/T <br> from apogeeVisit
 --/T </samp> 
 --/T <br> see also fApogeeTarget1, fApogeeTarget2
@@ -2865,9 +2866,9 @@ CREATE FUNCTION fApogeeTarget2(@name varchar(40))
 --/T <samp> 
 --/T <br> select top 10 * 
 --/T <br> from apogeeStar
---/T <br> where ApogeeTarget2 & dbo.fApogeeTarget2('APOGEE_RV_STANDARD') > 0 
+--/T <br> where apogee_target2 & dbo.fApogeeTarget2('APOGEE_RV_STANDARD') > 0 
 --/T </samp> 
---/T <br> see also fApogeeTarget1
+--/T <br> see also fApogeeTarget2N, fApogeeTarget1
 -------------------------------------------------------------
 RETURNS bigint
 AS BEGIN
@@ -2893,7 +2894,7 @@ CREATE FUNCTION fApogeeTarget2N(@value bigint)
 --/T <br>
 --/T Sample call to show the apogee target flags of some APOGEEobjects is
 --/T <samp> 
---/T <br> select top 10 apstar_id, dbo.fApogeeTarget2N(apogee_target2) as apogeeTarget2
+--/T <br> select top 10 aogee_id, dbo.fApogeeTarget2N(apogee_target2) as apogeeTarget2
 --/T <br> from apogeeVisit
 --/T </samp> 
 --/T <br> see also fApogeeTarget2, fApogeeTarget1N
@@ -2935,7 +2936,7 @@ CREATE FUNCTION fApogeeStarFlag(@name varchar(40))
 --/T <samp> 
 --/T <br> select top 10 * 
 --/T <br> from apogeeStar
---/T <br> where ApogeeStarFlag & dbo.fApogeeStarFlag('CRPIX') > 0 
+--/T <br> where starFlag & dbo.fApogeeStarFlag('LOW_SNR') > 0 
 --/T </samp> 
 --/T <br> see also fApogeeTarget1
 -------------------------------------------------------------
@@ -3004,7 +3005,7 @@ CREATE FUNCTION fApogeeAspcapFlag(@name varchar(40))
 --/T <samp> 
 --/T <br> select top 10 * 
 --/T <br> from aspcapStar
---/T <br> where ApogeeAspcapFlag & dbo.fApogeeAspcapFlag('CRPIX') > 0 
+--/T <br> where ApogeeAspcapFlag & dbo.fApogeeAspcapFlag('CHI2_BAD') > 0 
 --/T </samp> 
 --/T <br> see also fApogeeTarget1
 -------------------------------------------------------------
@@ -3067,15 +3068,16 @@ CREATE FUNCTION fApogeeParamFlag(@name varchar(40))
 -------------------------------------------------------------
 --/H Returns the ApogeeParamFlag value corresponding to a name
 -------------------------------------------------------------
---/T the spectro ApogeeParamFlag flags can be shown with Select * from ApogeeParamFlag 
+--/T The spectro ApogeeParamFlag flags can be shown with Select * from ApogeeParamFlag 
 --/T <br>
---/T Sample call to find APOGEE 
+--/T Sample call to find APOGEE aspcapStar objects with one of the parameters
+--/T (alpha_m) might have unreliable calibration:
 --/T <samp> 
---/T <br> select top 10 * 
---/T <br> from apogeeStar
---/T <br> where ApogeeParamFlag & dbo.fApogeeParamFlag('CRPIX') > 0 
+--/T <br> select top 10 apStar_id, dbo.fApogeeParamFlagN(alpha_m_flag) as flags
+--/T <br> from aspcapStar
+--/T <br> where alpha_m_flag & dbo.fApogeeParamFlag('CALRANGE_WARN') > 0 
 --/T </samp> 
---/T <br> see also fApogeeTarget1
+--/T <br> see also fApogeeParamFlagN
 -------------------------------------------------------------
 RETURNS bigint
 AS BEGIN
@@ -3095,16 +3097,17 @@ GO
 --
 CREATE FUNCTION fApogeeParamFlagN(@value int)
 ---------------------------------------------------
---/H Returns the expanded ApogeeParamFlag corresponding to the flag value as a string
+--/H Returns the expanded ApogeeParamFlag names corresponding to the flag
+--/H value as a string
 ---------------------------------------------------
---/T The spectro apogeeTarget2 flags can be shown with Select * from ApogeeParamFlag 
+--/T The spectro ApogeeParamFlag flags can be shown with Select * from ApogeeParamFlag 
 --/T <br>
---/T Sample call to show the apogee target flags of some spec objects is
+--/T Sample call to show the param flags of aspcapStar objects:
 --/T <samp> 
---/T <br> select top 10 apstar_id, dbo.fApogeeParamFlagN(apogeeTarget2) as apogeeTarget2
---/T <br> from apogeeStar
+--/T <br> select top 10 apstar_id, dbo.fApogeeParamFlagN(alpha_m_flag) as a
+--/T <br> from aspcapStar
 --/T </samp> 
---/T <br> see also fApogeeParamFlag, fApogeeTarget1N
+--/T <br> see also fApogeeParamFlag
 -------------------------------------------------------------
 RETURNS varchar(1000)
 BEGIN
@@ -3142,9 +3145,9 @@ CREATE FUNCTION fApogeeExtraTarg(@name varchar(40))
 --/T <samp> 
 --/T <br> select top 10 * 
 --/T <br> from apogeeVisit
---/T <br> where ApogeeExtraTarg & dbo.fApogeeExtraTarg('TELLURIC') > 0 
+--/T <br> where extraTarg & dbo.fApogeeExtraTarg('TELLURIC') > 0 
 --/T </samp> 
---/T <br> see also fApogeeTarget1
+--/T <br> see also fApogeeExtraTargN, fApogeeTarget1
 -------------------------------------------------------------
 RETURNS bigint
 AS BEGIN

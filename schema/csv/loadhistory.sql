@@ -125,6 +125,7 @@ INSERT History VALUES('ConstantSupport','2015-02-09','Ani','Added functions for 
 INSERT History VALUES('ConstantSupport','2015-02-15','Ani','Fixed EBossTarget0 function examples. ');
 INSERT History VALUES('ConstantSupport','2015-03-16','Ani','Fixed column names for AncillaryTarget? examples. ');
 INSERT History VALUES('ConstantSupport','2015-03-25','Ani','Fixed AncillaryTarget2 view (needs to be 64-bit). ');
+INSERT History VALUES('ConstantSupport','2016-07-30','Ani','Fixed APOGEE flag function descriptions. ');
 INSERT History VALUES('MetadataTables','2001-05-15','Alex','Omitted sx from names and changed FOREIGN KEYs 2001-11-03 Jim : Added site constants. ');
 INSERT History VALUES('MetadataTables','2001-11-23','Alex','Eliminated sql_variant, switched to varchar(..) ');
 INSERT History VALUES('MetadataTables','2001-12-09','Jim','Documentation (v.3.36), & 3.36  history changes Changed spUpdateStatistcs to spUpdateSkyServerCrossCheck ');
@@ -903,6 +904,8 @@ INSERT History VALUES('spUrlFitsSupport','2012-07-18','Ani','Removed startMu fro
 INSERT History VALUES('spUrlFitsSupport','2012-07-25','Ani','Modified fGetUrlFitsField to return photoObj file instead of photoField file, as instructed by MB.  Also modified fGetUrlFitsSpectrum to use 4-digit fiber number (0-padded) instead of 3. ');
 INSERT History VALUES('spUrlFitsSupport','2013-10-30','Ani','Modified fMJDtoGMT to pad all fields with leading zeros and reduce precision of seconds to 3 decimal places. ');
 INSERT History VALUES('spUrlFitsSupport','2015-01-15','Ani','Updated specById file name in fGetUrlSpecImg. ');
+INSERT History VALUES('spUrlFitsSupport','2016-07-29','Ani','Replaced "boss" with "eboss" for SAS file paths. ');
+INSERT History VALUES('spUrlFitsSupport','2016-07-30','Ani','Added fGetUrlMangaCube to return MaNGA data cube URL. ');
 INSERT History VALUES('spNeighbor','2004-08-30','Alex','Moved here spNeighbors and spBuildMatchTables ');
 INSERT History VALUES('spNeighbor','2004-10-10','Jim+Alex','updated spBuildMatchTables ');
 INSERT History VALUES('spNeighbor','2004-10-10','Alex+Jim','Tied into load framework to record messages.  Added code to drop/build indices and foreign keys.  Optimized triple computation.  ');
@@ -1198,6 +1201,7 @@ INSERT History VALUES('spFinish','2015-05-28','Ani','Updated DataServerURL templ
 INSERT History VALUES('spFinish','2016-03-22','Ani','Deleted duplicate declaration of @checksum from spSetVersion. ');
 INSERT History VALUES('spFinish','2016-03-28','Ani','Created spFixDetectionIndex to add isPrimary column to detectionIndex table and set its value. ');
 INSERT History VALUES('spFinish','2016-05-18','Ani','Fixed typo in spFixDetectionIndex. ');
+INSERT History VALUES('spFinish','2016-07-30','Ani','Fixed DataServerURL setting in spSetVersion  (sdss3.org->sdss.org). ');
 INSERT History VALUES('spCopyDbSubset','2004-09-15','Jim','copy all of TilingGeometry, TilingRun, and TileAll so region code works  2004-10-07 Alex, Jim: DR3 starting ');
 INSERT History VALUES('spCopyDbSubset','2004-11-15','Jim','parameterized it  ');
 INSERT History VALUES('spCopyDbSubset','2005-01-28','Jim','BestTarget2Sector replaces Best2Sector. ');
@@ -1218,6 +1222,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1208 lines inserted into History'
+PRINT '1212 lines inserted into History'
 ------------------------------------
 GO

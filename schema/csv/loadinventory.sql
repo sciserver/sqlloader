@@ -495,6 +495,7 @@ INSERT Inventory VALUES('spUrlFitsSupport','fGetUrlFitsBin','F');
 INSERT Inventory VALUES('spUrlFitsSupport','fGetUrlFitsAtlas','F');
 INSERT Inventory VALUES('spUrlFitsSupport','fGetUrlFitsPlate','F');
 INSERT Inventory VALUES('spUrlFitsSupport','fGetUrlFitsSpectrum','F');
+INSERT Inventory VALUES('spUrlFitsSupport','fGetUrlMangaCube','F');
 INSERT Inventory VALUES('spUrlFitsSupport','fGetUrlNavEq','F');
 INSERT Inventory VALUES('spUrlFitsSupport','fGetUrlNavId','F');
 INSERT Inventory VALUES('spUrlFitsSupport','fGetUrlSpecImg','F');
@@ -602,6 +603,6 @@ INSERT Inventory VALUES('spCosmology','fMathGetBin','F');
 GO
 
 ------------------------------------
-PRINT '592 lines inserted into Inventory'
+PRINT '593 lines inserted into Inventory'
 ------------------------------------
 GO
