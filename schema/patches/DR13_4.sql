@@ -1,4 +1,5 @@
--- Patch to set the primary flags for various spectro programs correctly (fixes a bug in DR12)
+-- Patch to set the primary flags for various spectro programs correctly
+-- (fixes a bug in DR12)
 SELECT specobjid, legacyPrimary INTO #legacy FROM SpecObjAll
 SELECT specobjid, bossPrimary INTO #boss FROM SpecObjAll
 UPDATE SpecObjAll SET legacyPrimary=seguePrimary
@@ -21,13 +22,19 @@ select count(*) from SpecObjAll where segueprimary > 0    -- 370966
 select count(*) from SpecObjAll where segue1primary > 0   -- 247865
 select count(*) from SpecObjAll where segue2primary > 0   -- 125459
 
+-- Update schema version date
+update SiteConstants
+set value='Aug 11 2016 1:00PM'
+where name='Schema Version Date'
+
+
 -- Set the DB version to 13.4
 DELETE FROM Versions WHERE verson='13.4'
 EXECUTE spSetVersion
   0
   ,0
   ,'13'
-  ,'53a57f8cfee9563ae3d361c93aaf2bc428ce6851'
+  ,'af04a1baa0209cbf0209c7def35e565f75c0b55b'
   ,'Update DR'
   ,'.4'
   ,'Spectro primary flags update'

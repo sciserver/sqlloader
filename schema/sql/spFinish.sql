@@ -289,6 +289,9 @@
 --* 2016-05-18 Ani: Fixed typo in spFixDetectionIndex.
 --* 2016-07-30 Ani: Fixed DataServerURL setting in spSetVersion 
 --*                 (sdss3.org->sdss.org).
+--* 2016-08-16 Ani: Added call to spRegionSync in spSdssPolygonRegions
+--*                 to fix bug in f[In]FootprintEq after polygons were
+--*                 recomputed for DR13 (fix as per T.Budavari).
 ---====================================================================
 SET NOCOUNT ON;
 GO
@@ -2359,20 +2362,24 @@ BEGIN
 	EXEC dbo.spIndexDropSelection @taskID, @stepID, 'F', 'REGION'
 	EXEC dbo.spIndexDropSelection @taskID, @stepID, 'F', 'SECTOR'
 	TRUNCATE TABLE Region
-	INSERT Region WITH (tablockx)
+	INSERT Region WITH (tablock)
 	    SELECT sdsspolygonid AS id, 'POLYGON' AS TYPE, '' AS comment,
 		   0 AS ismask, -1 AS area, NULL AS regionstring,
-		   dbo.fSphSimplifyQueryAdvanced('SELECT 0, X,Y,Z, C FROM SdssImagingHalfspaces WHERE SdssPolygonID=' + convert(varchar(128),SdssPolygonID), 0,0,0,0) AS regionBinary
--- 			dbo.fSphSimplifyAdvanced(sdsspolygonid, 0,0,0,0) AS regionbinary
+		   sph.fSimplifyQueryAdvanced('SELECT 0, X,Y,Z, C FROM SdssImagingHalfspaces WHERE SdssPolygonID=' + convert(varchar(128),SdssPolygonID), 0,0,0,0) AS regionBinary
+--		   dbo.fSphSimplifyQueryAdvanced('SELECT 0, X,Y,Z, C FROM SdssImagingHalfspaces WHERE SdssPolygonID=' + convert(varchar(128),SdssPolygonID), 0,0,0,0) AS regionBinary
 		FROM sdssPolygons WITH (NOLOCK)
-	UPDATE Region SET area = COALESCE(dbo.fSphGetArea(regionbinary), -1)
---	UPDATE Region SET area = dbo.fSphGetArea(regionbinary)
+	UPDATE Region SET area = COALESCE(sph.fGetArea(regionbinary), -1)
+--	UPDATE Region SET area = COALESCE(dbo.fSphGetArea(regionbinary), -1)
+
+	-- Sync the RegionPatch table with Region
+	EXEC spRegionSync 'POLYGON'
+  
 	EXEC dbo.spIndexBuildSelection @taskID, @stepID, 'F', 'SECTOR'
 	EXEC dbo.spIndexBuildSelection @taskID, @stepID, 'F', 'REGION'
 	------------------------------------------------------
-    -- generate completion message.
+	-- generate completion message.
 	SET @msg = 'Created SDSS Polygon regions';
-    EXEC spNewPhase @taskid, @stepid, 'spSdssPolygonRegions', 'OK', @msg;
+	EXEC spNewPhase @taskid, @stepid, 'spSdssPolygonRegions', 'OK', @msg;
 	------------------------------------------------------
     RETURN(0);
 END
