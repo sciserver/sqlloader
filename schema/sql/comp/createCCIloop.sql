@@ -19,6 +19,7 @@ begin
 
 	set @sql = 'create clustered columnstore index cci_' +@tablename + ' on ' + @tablename
 	print @sql
+	exec sp_executesql @sql
 
 fetch next from tablecursor into @tablename
 end

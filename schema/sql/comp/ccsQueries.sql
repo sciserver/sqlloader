@@ -90,7 +90,7 @@
 	i.type_desc AS index_type, 
 	i.is_unique AS is_unique_index
 
-	into tempdb.dbo.ccitables
+	--into tempdb.dbo.ccitables
 
 FROM sys.tables AS t
 INNER JOIN sys.schemas AS s
@@ -102,7 +102,7 @@ INNER JOIN indexMap2 as m
 WHERE i.type_desc IN ('CLUSTERED COLUMNSTORE')
 and m.compression = 'PAGE'
 and m.code = 'K'
-order by index_type
+order by index_type, table_name
 
 
 
