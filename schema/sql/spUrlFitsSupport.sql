@@ -478,7 +478,7 @@ if exists (select * from dbo.sysobjects
 	drop function [dbo].[fGetUrlFitsPlate]
 GO
 --
-CREATE FUNCTION fGetUrlFitsPlate(@specObjId bigint)
+CREATE FUNCTION fGetUrlFitsPlate(@specObjID numeric(20,0))
 -------------------------------------------------
 --/H Get the URL to the spPlate FITS file containing the spectrum given the SpecObjID
 -------------------------------------------------
@@ -518,7 +518,7 @@ if exists (select * from dbo.sysobjects
 	drop function [dbo].[fGetUrlFitsSpectrum]
 GO
 --
-CREATE FUNCTION fGetUrlFitsSpectrum(@specObjId bigint)
+CREATE FUNCTION fGetUrlFitsSpectrum(@specObjID numeric(20,0))
 -------------------------------------------------
 --/H Get the URL to the FITS file of the spectrum given the SpecObjID
 -------------------------------------------------
@@ -661,7 +661,7 @@ if exists (select * from dbo.sysobjects
 	drop function [dbo].[fGetUrlSpecImg]
 GO
 --
-CREATE FUNCTION fGetUrlSpecImg(@specObjId bigint)
+CREATE FUNCTION fGetUrlSpecImg(@specObjID numeric(20,0))
 ------------------------------------------------------------------------
 --/H  Returns the URL for a GIF image of the spectrum given the SpecObjID
 --/T  <br> returns http://localhost/en/get/specById.asp?id=0x011fcb379dc00000

@@ -290,7 +290,7 @@ CREATE TABLE stellarMassFSPSGranEarlyDust (
 --/T when the star-formation in the galaxy could occur to within 2 Gyrs of the Big Bang.  This version also fits for 
 --/T dust extinction.
 -------------------------------------------------------------------------------
-  specObjID BIGINT NOT NULL, --/D  Unique ID
+  specObjID numeric(20,0) NOT NULL, --/D  Unique ID
   plate SMALLINT , --/D  Plate number
   fiberID SMALLINT , --/D  Fiber ID
   MJD INT , --/U days --/D MJD of observation
@@ -397,7 +397,7 @@ CREATE TABLE stellarMassFSPSGranEarlyNoDust (
 --/T when the star-formation in the galaxy could occur to within 2 Gyrs of the Big Bang.  This version assumes
 --/T no dust extinction.
 -------------------------------------------------------------------------------
-  specObjID BIGINT NOT NULL, --/D  Unique ID
+  specObjID numeric(20,0) NOT NULL, --/D  Unique ID
   plate SMALLINT , --/D  Plate number
   fiberID SMALLINT , --/D  Fiber ID
   MJD INT , --/U days --/D MJD of observation
@@ -502,7 +502,7 @@ CREATE TABLE stellarMassFSPSGranWideDust (
 --/T to the i-band c-model magnitude. This "wide-star-formation" version allows an extended star-formation
 --/T history.  This version also fits for dust extinction.
 -------------------------------------------------------------------------------
-  specObjID BIGINT NOT NULL, --/D  Unique ID
+  specObjID numeric(20,0) NOT NULL, --/D  Unique ID
   plate SMALLINT , --/D  Plate number
   fiberID SMALLINT , --/D  Fiber ID
   MJD INT , --/U days --/D MJD of observation
@@ -607,7 +607,7 @@ CREATE TABLE stellarMassFSPSGranWideNoDust (
 --/T to the i-band c-model magnitude. This "wide-star-formation" version allows an extended star-formation
 --/T history.  This version assumes no dust extinction.
 -------------------------------------------------------------------------------
-  specObjID BIGINT NOT NULL, --/D  Unique ID
+  specObjID numeric(20,0) NOT NULL, --/D  Unique ID
   plate SMALLINT , --/D  Plate number
   fiberID SMALLINT , --/D  Fiber ID
   MJD INT , --/U days --/D MJD of observation

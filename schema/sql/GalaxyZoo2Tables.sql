@@ -301,7 +301,7 @@ CREATE TABLE zoo2MainSpecz (
 --/T al. (2013, in prep). Please cite this paper if making use of any data
 --/T in this table in publications.
 -------------------------------------------------------------------------------
-	specobjid	bigint NOT NULL,	--/D match to the DR8 spectrum object
+	specObjID       numeric(20,0) NOT NULL,	--/D match to the DR8 spectrum object
 	dr8objid	bigint NOT NULL,	--/D match to the DR8 objID
 	dr7objid	bigint NOT NULL,	--/D match to the DR7 objID
 	ra	real NOT NULL,	--/D right ascension [J2000.0], decimal degrees
@@ -566,7 +566,7 @@ CREATE TABLE zoo2Stripe82Coadd1 (
 --/T (2013, in prep). Please cite this paper if making use of any data in this
 --/T table in publications.
 -------------------------------------------------------------------------------
-	specobjid	bigint NOT NULL,	--/D match to the DR8 spectrum object
+	specObjID       numeric(20,0) NOT NULL,	--/D match to the DR8 spectrum object
 	stripe82objid	bigint NOT NULL,	--/D objID of the galaxy in the Stripe82 context of CasJobs
 	dr8objid	bigint NOT NULL,	--/D match to the DR8 objID for the corresponding normal-depth image
 	dr7objid	bigint NOT NULL,	--/D match to the DR7 objID for the corresponding normal-depth image
@@ -832,7 +832,7 @@ CREATE TABLE zoo2Stripe82Coadd2 (
 --/T (2013, in prep). Please cite this paper if making use of any data in
 --/T this table in publications.
 -------------------------------------------------------------------------------
-	specobjid	bigint NOT NULL,	--/D match to the DR8 spectrum object
+	specObjID       numeric(20,0) NOT NULL,	--/D match to the DR8 spectrum object
 	stripe82objid	bigint NOT NULL,	--/D objID of the galaxy in the Stripe82 context of CasJobs
 	dr8objid	bigint NOT NULL,	--/D match to the DR8 objID for the corresponding normal-depth image
 	dr7objid	bigint NOT NULL,	--/D match to the DR7 objID for the corresponding normal-depth image
@@ -1097,7 +1097,7 @@ CREATE TABLE zoo2Stripe82Normal (
 --/T (2013, in prep). Please cite this paper if making use of any data in
 --/T this table in publications.
 -------------------------------------------------------------------------------
-	specobjid	bigint NOT NULL,	--/D match to the DR8 spectrum object
+	specObjID   bigint NOT NULL,	--/D match to the DR8 spectrum object
 	dr8objid	bigint NOT NULL,	--/D match to the DR8 objID
 	dr7objid	bigint NOT NULL,	--/D match to the DR7 objID
 	ra	real NOT NULL,	--/D right ascension [J2000.0], decimal degrees

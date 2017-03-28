@@ -78,7 +78,7 @@ CREATE TABLE Target (
 	cy		float NOT NULL,		--/D y projection of vector on unit sphere --/K POS_EQ_CART_Y
 	cz		float NOT NULL,		--/D z projection of vector on unit sphere --/K POS_EQ_CART_Z
 	bestObjID	bigint NOT NULL,	--/D hashed ID of object in best version of the sky --/K CODE_MISC
-	specObjID	bigint NOT NULL,	--/D hashed ID of specobj in best version of the sky --/K CODE_MISC
+	specObjID       numeric(20,0) NOT NULL,	--/D hashed ID of specobj in best version of the sky --/K CODE_MISC
 	bestMode	tinyInt NOT NULL,	--/D mode from BEST PhotoObj --/K CLASS_OBJECT
 	loadVersion	int NOT NULL		--/D Load Version --/K ID_VERSION
 )
@@ -274,7 +274,7 @@ CREATE TABLE sdssTiledTargetAll (
 	tiMaskAll	smallint NOT NULL,	--/D Combined value of tiling results bitmask --/R TiMask
 	collisionGroupAll   int NOT NULL,	--/D unique ID of collisionGroup
 	photoObjID	bigint NOT NULL,		--/D hashed ID of photometric object in best version of the sky 
-	specObjID	bigint NOT NULL,		--/D hashed ID of spectroscopic object in best version of the sky
+	specObjID       numeric(20,0) NOT NULL,		--/D hashed ID of spectroscopic object in best version of the sky
 	regionID	int NOT NULL,		--/D ID of tiling region, 0 if unset --/F NOFITS
 	loadVersion	int	NOT NULL		--/D Load Version --/K ID_VERSION --/F NOFITS
 )

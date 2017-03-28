@@ -475,7 +475,7 @@ CREATE TABLE [dbo].[PhotoObjAll_cci](
 	[htmID] [bigint] NOT NULL,
 	[fieldID] [bigint] NOT NULL,
 	[parentID] [bigint] NOT NULL,
-	[specObjID] [bigint] NOT NULL,
+	[specObjID] [numeric(20,0)] NOT NULL,
 	[u] [real] NOT NULL,
 	[g] [real] NOT NULL,
 	[r] [real] NOT NULL,

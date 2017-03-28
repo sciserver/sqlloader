@@ -1287,7 +1287,7 @@ BEGIN
         	 	WHERE xtype='U' AND name = 'PlateIds')
 	    BEGIN
 		CREATE TABLE SpecObjIds (
-			specObjID bigint NOT NULL PRIMARY KEY
+			specObjID numeric(20,0) NOT NULL PRIMARY KEY
 		)
 		CREATE TABLE PlateIds (
 			plateID bigint NOT NULL PRIMARY KEY
@@ -1534,7 +1534,7 @@ BEGIN
 	DECLARE @objCount INT, @msg VARCHAR(4000);
 	--
 	CREATE TABLE SpecObjIds (
-		specObjID bigint NOT NULL PRIMARY KEY
+		specObjID numeric(20,0) NOT NULL PRIMARY KEY
 	)
 	CREATE TABLE PlateIds (
 		plateID bigint NOT NULL PRIMARY KEY
@@ -1637,7 +1637,7 @@ BEGIN
 		plateID bigint NOT NULL PRIMARY KEY
 	)
 	CREATE TABLE SpecObjIds (
-		specObjID bigint NOT NULL PRIMARY KEY
+		specObjID numeric(20,0) NOT NULL PRIMARY KEY
 	)
 
 	INSERT PlateIds

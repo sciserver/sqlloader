@@ -1018,7 +1018,7 @@ CREATE TABLE PhotoObjAll (
 	htmID            bigint NOT NULL, --/D 20-deep hierarchical trangular mesh ID of this object --/F NOFITS
 	fieldID          bigint NOT NULL, --/D Link to the field this object is in
 	parentID         bigint NOT NULL DEFAULT 0, --/D Pointer to parent (if object deblended) or BRIGHT detection (if object has one), else 0
-	specObjID        bigint NOT NULL DEFAULT 0, --/D Pointer to the spectrum of object, if exists, else 0 --/F NOFITS
+	specObjID       numeric(20,0) NOT NULL DEFAULT 0, --/D Pointer to the spectrum of object, if exists, else 0 --/F NOFITS
 	u                real NOT NULL, --/U mag --/D Shorthand alias for modelMag --/F modelmag
 	g                real NOT NULL, --/U mag --/D Shorthand alias for modelMag --/F modelmag
 	r                real NOT NULL, --/U mag --/D Shorthand alias for modelMag --/F modelmag
@@ -1380,7 +1380,7 @@ CREATE TABLE PhotoPrimaryDR7 (
 	extinction_z	real NOT NULL,	--/D Extinction in each filter --/U mag --/K PHOT_EXTINCTION_GAL
 	htmID 		bigint NOT NULL, --/D 20-deep hierarchical trangular mesh ID of this object --/K CODE_HTM
 	fieldID 	bigint NOT NULL, --/D Link to the field this object is in --/K ID_FIELD
-	specObjID 	bigint NOT NULL default 0, --/D Pointer to the spectrum of object, if exists, else 0  --/K ID_CATALOG
+	specObjID   bigint NOT NULL default 0, --/D Pointer to the spectrum of object, if exists, else 0  --/K ID_CATALOG
 	[size]		real NOT NULL default -9999  --/D computed: =SQRT(mRrCc_r/2.0)
 )
 GO
@@ -1479,7 +1479,7 @@ CREATE TABLE PhotoObjDR7 (
 	extinction_z	real NOT NULL,	--/D Extinction in each filter --/U mag --/K PHOT_EXTINCTION_GAL
 	htmID 		bigint NOT NULL, --/D 20-deep hierarchical trangular mesh ID of this object --/K CODE_HTM
 	fieldID 	bigint NOT NULL, --/D Link to the field this object is in --/K ID_FIELD
-	specObjID 	bigint NOT NULL default 0, --/D Pointer to the spectrum of object, if exists, else 0  --/K ID_CATALOG
+	specObjID   bigint NOT NULL default 0, --/D Pointer to the spectrum of object, if exists, else 0  --/K ID_CATALOG
 	[size]		real NOT NULL default -9999  --/D computed: =SQRT(mRrCc_r/2.0)
 )
 GO

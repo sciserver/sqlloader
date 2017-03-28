@@ -324,7 +324,7 @@ CREATE TABLE SpecObjAll (
 --/T catalog.
 
 -------------------------------------------------------------------------------
-  specObjID       bigint NOT NULL, --/D Unique database ID based on PLATE, MJD, FIBERID, RUN2D --/K ID_CATALOG
+  specObjID       numeric(20,0) NOT NULL, --/D Unique database ID based on PLATE, MJD, FIBERID, RUN2D --/K ID_CATALOG
   bestObjID       bigint NOT NULL, --/D Object ID of photoObj match (position-based) --/K ID_MAIN
   fluxObjID       bigint NOT NULL, --/D Object ID of photoObj match (flux-based) --/K ID_MAIN
   targetObjID     bigint NOT NULL, --/D Object ID of original target --/K ID_CATALOG
@@ -536,7 +536,7 @@ CREATE TABLE SpecPhotoAll (
 --/T The photo attibutes included cover about the same as PhotoTag.
 --/T The table also includes certain attributes from Tiles.
 -------------------------------------------------------------------------------
-	specObjID	bigint NOT NULL,	--/D Unique ID --/K ID_CATALOG
+	specObjID       numeric(20,0) NOT NULL,	--/D Unique ID --/K ID_CATALOG
 	mjd		int NOT NULL,		--/D MJD of observation --/U MJD --/K TIME_DATE
 	plate		smallint NOT NULL, 	--/D Plate ID --/K ID_PLATE
 	tile		smallint NOT NULL,  	--/D Tile ID --/K ID_PLATE
@@ -681,7 +681,7 @@ CREATE TABLE SpecDR7 (
 --/T within 1 arcsec.  DR7 PhotoTag columns and relevant DR7 ProperMotions are
 --/T also included for convenience.
 -------------------------------------------------------------------------------
-	specObjID	bigint NOT NULL,	--/D Unique DR8 ID based on PLATE, MJD, FIBERID, RUN2D--/K ID_CATALOG
+	specObjID   bigint NOT NULL,	--/D Unique DR8 ID based on PLATE, MJD, FIBERID, RUN2D--/K ID_CATALOG
 	dr7ObjID	bigint NOT NULL,	--/D Unique DR7 PhotoPrimary ID composed from [skyVersion,rerun,run,camcol,field,obj]. --/K ID_MAIN
 	ra		float NOT NULL,		--/D J2000 right ascension (r') --/U deg --/K POS_EQ_RA_MAIN
 	[dec]		float NOT NULL,		--/D J2000 declination (r') --/U deg --/K POS_EQ_DEC_MAIN

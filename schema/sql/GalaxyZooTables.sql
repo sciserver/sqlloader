@@ -24,7 +24,7 @@ CREATE TABLE zooConfidence (
 --/T data release is described in Lintott et al. 2010. Anyone making use of the 
 --/T data should cite at least one of these papers in any resulting publications.
 -----------------------------------------------------------------------------------
-  specobjid bigint NOT NULL, --/D match to DR8 spectrum object
+  specObjID numeric(20,0) NOT NULL, --/D match to DR8 spectrum object
 	objid bigint NOT NULL, --/D DR8 ObjID
 	dr7objid bigint NOT NULL, --/D DR7 ObjID
   ra real NOT NULL, --/D Right Ascension, J2000 deg
@@ -56,7 +56,7 @@ CREATE TABLE zooMirrorBias (
 --/T data release is described in Lintott et al. 2010. Anyone making use of the 
 --/T data should cite at least one of these papers in any resulting publications.
 -----------------------------------------------------------------------------------
-  specobjid bigint NOT NULL, --/D match to DR8 spectrum object
+  specObjID numeric(20,0) NOT NULL, --/D match to DR8 spectrum object
 	objid bigint NOT NULL, --/D DR8 ObjID
 	dr7objid bigint NOT NULL, --/D DR7 ObjID
   ra real NOT NULL, --/D Right Ascension, J2000 deg
@@ -99,7 +99,7 @@ CREATE TABLE zooMonochromeBias (
 --/T data release is described in Lintott et al. 2010. Anyone making use of the 
 --/T data should cite at least one of these papers in any resulting publications.
 -----------------------------------------------------------------------------------
-  specobjid bigint NOT NULL, --/D match to DR8 spectrum object
+  specObjID numeric(20,0) NOT NULL, --/D match to DR8 spectrum object
 	objid bigint NOT NULL, --/D DR8 ObjID
 	dr7objid bigint NOT NULL, --/D DR7 ObjID
   ra real NOT NULL, --/D Right Ascension, J2000 deg
@@ -134,7 +134,7 @@ CREATE TABLE zooNoSpec (
 --/T data release is described in Lintott et al. 2010. Anyone making use of the 
 --/T data should cite at least one of these papers in any resulting publications.
 -----------------------------------------------------------------------------------
-  specobjid bigint NOT NULL, --/D match to DR8 spectrum object
+  specObjID numeric(20,0) NOT NULL, --/D match to DR8 spectrum object
 	objid bigint NOT NULL, --/D DR8 ObjID
 	dr7objid bigint NOT NULL, --/D DR7 ObjID
   ra real NOT NULL, --/D Right Ascension, J2000 deg
@@ -170,7 +170,7 @@ CREATE TABLE zooSpec (
 --/T data release is described in Lintott et al. 2010. Anyone making use of the 
 --/T data should cite at least one of these papers in any resulting publications.
 -----------------------------------------------------------------------------------
-  specobjid bigint NOT NULL, --/D match to DR8 spectrum object
+  specObjID numeric(20,0) NOT NULL, --/D match to DR8 spectrum object
 	objid bigint NOT NULL, --/D DR8 ObjID
 	dr7objid bigint NOT NULL, --/D DR7 ObjID
   ra real NOT NULL, --/D Right Ascension, J2000 deg
@@ -210,7 +210,7 @@ CREATE TABLE zooVotes (
 --/T data release is described in Lintott et al. 2010. Anyone making use of the 
 --/T data should cite at least one of these papers in any resulting publications.
 -----------------------------------------------------------------------------------
-  specobjid bigint NOT NULL, --/D match to DR8 spectrum object
+  specObjID numeric(20,0) NOT NULL, --/D match to DR8 spectrum object
 	objid bigint NOT NULL, --/D DR8 ObjID
 	dr7objid bigint NOT NULL, --/D DR7 ObjID
   ra real NOT NULL, --/D Right Ascension, J2000 deg

@@ -32,7 +32,7 @@ AS BEGIN
 	CREATE TABLE #PhotoSpec (
 		PhotoObjID 		bigint,
 	 	mode			tinyint,
-		SpecObjID		bigint PRIMARY KEY,
+		specObjID       numeric(20,0) PRIMARY KEY,
 		sciencePrimary	tinyint,
 		ra				float,
 		[dec]			float,

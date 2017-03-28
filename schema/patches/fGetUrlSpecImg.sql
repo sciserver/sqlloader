@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER OFF
 GO
 --
-ALTER FUNCTION [dbo].[fGetUrlSpecImg](@specObjId bigint)
+ALTER FUNCTION [dbo].[fGetUrlSpecImg](@specObjID numeric(20,0))
 ------------------------------------------------------------------------
 --/H  Returns the URL for a GIF image of the spectrum given the SpecObjID
 --/T  <br> returns http://localhost/en/get/specById.asp?id=0x011fcb379dc00000

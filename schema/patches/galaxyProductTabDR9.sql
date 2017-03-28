@@ -57,7 +57,7 @@ CREATE TABLE stellarMassPCAWisc (
 --/T   warning = 8 : Total of log mass PDF equal to zero
 --/T   warning = 9 : Total of velocity dispersion PDF equal to zero
 -------------------------------------------------------------------------------
-  specObjID        bigint NOT NULL, --/D Unique ID --/K ID_CATALOG
+  specObjID       numeric(20,0) NOT NULL, --/D Unique ID --/K ID_CATALOG
   plate            smallint NOT NULL, --/D Plate number 
   fiberID          smallint NOT NULL, --/D Fiber ID 
   mjd              int NOT NULL, --/U days --/D MJD of observation 
@@ -111,7 +111,7 @@ CREATE TABLE stellarMassPassivePort (
 --/T is 97% solar metallicity and 3% metal-poor, by mass. In this table we 
 --/T assume the Kroupa IMF.
 -------------------------------------------------------------------------------
-  specObjID        bigint NOT NULL, --/D Unique ID --/K ID_CATALOG
+  specObjID       numeric(20,0) NOT NULL, --/D Unique ID --/K ID_CATALOG
   plate            smallint NOT NULL, --/D Plate number 
   fiberID          smallint NOT NULL, --/D Fiber ID 
   mjd              int NOT NULL, --/U days --/D MJD of observation 
@@ -170,7 +170,7 @@ CREATE TABLE stellarMassStarformingPort (
 --/T column. The "age" listed gives the start time for the onset of
 --/t star-formation in each model. In this table we assume the Kroupa IMF.
 -------------------------------------------------------------------------------
-  specObjID        bigint NOT NULL, --/D Unique ID --/K ID_CATALOG
+  specObjID       numeric(20,0) NOT NULL, --/D Unique ID --/K ID_CATALOG
   plate            smallint NOT NULL, --/D Plate number 
   fiberID          smallint NOT NULL, --/D Fiber ID 
   mjd              int NOT NULL, --/U days --/D MJD of observation 
@@ -228,7 +228,7 @@ CREATE TABLE emissionLinesPort (
 --/T Stellar population models for the continuum are from of <a href="http://adsabs.harvard.edu/abs/2011MNRAS.418.2785M">Maraston & Strömbäck (2011)</a> and 
 --/T <a href="http://adsabs.harvard.edu/abs/2011MNRAS.412.2183T">Thomas, Maraston & Johansson (2011)</a>.
 -------------------------------------------------------------------------------
-  specObjID        bigint NOT NULL, --/D Unique ID --/K ID_CATALOG
+  specObjID       numeric(20,0) NOT NULL, --/D Unique ID --/K ID_CATALOG
   plate            smallint NOT NULL, --/D Plate number 
   fiberID          smallint NOT NULL, --/D Fiber ID 
   mjd              int NOT NULL, --/U days --/D MJD of observation 

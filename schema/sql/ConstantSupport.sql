@@ -3513,7 +3513,7 @@ IF EXISTS (SELECT name FROM   sysobjects
 	DROP FUNCTION fSpecDescription
 GO
 --
-CREATE FUNCTION fSpecDescription(@specObjID bigint)
+CREATE FUNCTION fSpecDescription(@specObjID numeric(20,0))
 -------------------------------------------------------------------------------
 --/H Returns a string indicating class, status and zWarning for a specObj
 -------------------------------------------------------------------------------

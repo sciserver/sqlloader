@@ -34,7 +34,7 @@ CREATE TABLE galSpecExtra (
 --/T corrections are done by estimating SFRs from SED fits to the photometry outside the
 --/T fiber following the methodology in Salim et al (2007).
 -------------------------------------------------------------------------------
-specObjID       bigint NOT NULL, --/D Unique ID --/K ID_CATALOG
+specObjID       numeric(20,0) NOT NULL, --/D Unique ID --/K ID_CATALOG
 bptclass			smallint  NOT NULL,  --/D Emission line classification based on the BPT diagram using the methodology described in Brinchmann et al (2004). -1 means unclassifiable, 1 is star-forming, 2 means low S/N star-forming, 3 is composite, 4 AGN (excluding liners) and 5 is a low S/N LINER.  
 oh_p2p5				real      NOT NULL,  --/D The 2.5 percentile of the Oxygen abundance derived using Charlot & Longhetti models. The values are reported as 12 + Log O/H. See Tremonti et al (2004) and Brinchmann et al (2004) for details.
 oh_p16				real      NOT NULL,  --/D The 16 percentile of the Oxygen abundance derived using Charlot & Longhetti models. The values are reported as 12 + Log O/H. See Tremonti et al (2004) and Brinchmann et al (2004) for details.
@@ -97,7 +97,7 @@ CREATE TABLE galSpecIndx (
 --/T For each index, we give our estimate and error bar.  Measurements
 --/T performed as described in Brinchmann et al. 2004.
 -------------------------------------------------------------------------------
-specObjID       bigint NOT NULL, --/D Unique ID --/K ID_CATALOG
+specObjID       numeric(20,0) NOT NULL, --/D Unique ID --/K ID_CATALOG
 lick_cn1                             real  NOT NULL,  --/U mag --/D Restframe index measurement --/F LICK_CN1 
 lick_cn1_err                         real  NOT NULL,  --/U mag --/D Error on index measurement --/F LICK_CN1_ERR 
 lick_cn1_model                       real  NOT NULL,  --/U mag --/D Index of best fit model spectrum --/F LICK_CN1_MODEL 
@@ -346,7 +346,7 @@ CREATE TABLE galSpecInfo (
 --/T given here are for the version of data used by the MPA-JHU
 --/T and may not be in perfect agreement with specObjAll.
 -------------------------------------------------------------------------------
-specObjID       bigint NOT NULL, --/D Unique ID --/K ID_CATALOG
+specObjID       numeric(20,0) NOT NULL, --/D Unique ID --/K ID_CATALOG
 plateid                          smallint  NOT NULL,  --/D Plate number 
 mjd                                 [int]  NOT NULL,  --/D Modified Julian Date of plate observation 
 fiberid                          smallint  NOT NULL,  --/D Fiber number (1 - 640) 
@@ -387,7 +387,7 @@ CREATE TABLE galSpecLine (
 --/T The table contains one entry per spectroscopic observation derived as 
 --/T described in Tremonti et al (2004) and Brinchmann et al (2004).
 -------------------------------------------------------------------------------
-specObjID       bigint NOT NULL, --/D Unique ID --/K ID_CATALOG
+specObjID				     numeric(20,0) NOT NULL, --/D Unique ID --/K ID_CATALOG
 sigma_balmer                         real  NOT NULL,  --/U km/s --/D Velocity dispersion (sigma not FWHM) measured simultaneously in all of the Balmer lines 
 sigma_balmer_err                     real  NOT NULL,  --/U km/s --/D Error in the above 
 sigma_forbidden                      real  NOT NULL,  --/U km/s --/D Velocity dispersion (sigma not FWHM) measured simultaneously in all the forbidden lines 

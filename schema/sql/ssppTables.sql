@@ -60,7 +60,7 @@ CREATE TABLE sppLines (
 --/T tables such as specobjall and photoobjall.  See the Sample Queries in
 --/T SkyServer for examples of such queries.
 -------------------------------------------------------------------------------
- SPECOBJID            bigint NOT NULL,                        --/D id number
+ specObjID       numeric(20,0) NOT NULL,                        --/D id number
  bestObjID       bigint NOT NULL, --/D Object ID of photoObj match (flux-based) --/K ID_MAIN
  TARGETOBJID          bigint NOT NULL,                      --/D targeted object ID
  sciencePrimary  smallint NOT NULL, --/D Best version of spectrum at this location (defines default view SpecObj) --/F specprimary
@@ -440,7 +440,7 @@ CREATE TABLE sppParams (
 --/T Note that all values of -9999 indicate missing or no values.
 --/T See the Sample Queries in SkyServer for examples of such queries. 
 -------------------------------------------------------------------------------
-  SPECOBJID            bigint NOT NULL,                      --/D id number, match in specObjAll
+  specObjID       numeric(20,0) NOT NULL,                      --/D id number, match in specObjAll
   BESTOBJID       bigint NOT NULL, --/D Object ID of best PhotoObj match (flux-based) --/K ID_MAIN
   FLUXOBJID       bigint NOT NULL, --/D Object ID of best PhotoObj match (position-based) --/K ID_MAIN
   TARGETOBJID            bigint NOT NULL,                      --/D targeted object ID
@@ -687,12 +687,12 @@ PSFMAGERR_r       real    NOT NULL, --/U mag    --/D Error in u band PSF magnitu
 PSFMAGERR_i       real    NOT NULL, --/U mag    --/D Error in u band PSF magnitude
 PSFMAGERR_z       real    NOT NULL, --/U mag    --/D Error in u band PSF magnitude
 PLATEID       bigint  NOT NULL,             --/D Hash of plate and MJD 
-SPECOBJID       bigint  NOT NULL,             --/D Spectroscopic object ID
+SPECOBJID       numeric(20)  NOT NULL,             --/D Spectroscopic object ID
 PLATE           bigint   NOT NULL,             --/D Plate number         
 MJD             bigint   NOT NULL,             --/D Modified Julian Date     
 FIBERID         bigint   NOT NULL,             --/D Fiber number     
 ORIGINALPLATEID       bigint  NOT NULL,             --/D Original plate ID hash (if targeted based on previous spectrum)
-ORIGINALSPECOBJID       bigint  NOT NULL,             --/D Original spectroscopic object ID (if targeted based on previous spectrum)
+ORIGINALSPECOBJID       numeric(20,0)  NOT NULL,             --/D Original spectroscopic object ID (if targeted based on previous spectrum)
 ORIGINALPLATE           bigint   NOT NULL,             --/D Original plate number   (if targeted based on previous spectrum)       
 ORIGINALMJD             bigint   NOT NULL,             --/D Original Modified Julian Date   (if targeted based on previous spectrum)   
 ORIGINALFIBERID         bigint   NOT NULL,             --/D Original fiber number    (if targeted based on previous spectrum)(if targeted based on previous spectrum)   
