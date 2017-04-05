@@ -181,7 +181,7 @@ IF EXISTS (SELECT name FROM   sysobjects
 	DROP PROCEDURE spGetFiberList
 GO
 -- 
-CREATE PROCEDURE spGetFiberList (@plateid bigint)
+CREATE PROCEDURE spGetFiberList (@plateid numeric(20,0))
 -------------------------------------------------
 --/H Return a list of fibers on a given plate.
 -------------------------------------------------
