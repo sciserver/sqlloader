@@ -162,7 +162,7 @@ CREATE TABLE PlateX (
 --/T Each SDSS spectrograph plate has 640 observed spectra, whereas each BOSS 
 --/T spectrograph plate has 1000 observed spectra. 
 -------------------------------------------------------------------------------
-	plateID         bigint  NOT NULL,	--/D Unique ID, composite of plate number and MJD --/K ID_PLATE
+	plateID         numeric(20,0)  NOT NULL,	--/D Unique ID, composite of plate number and MJD --/K ID_PLATE
 	firstRelease	varchar(32) NOT NULL,	--/D Name of release that this plate/mjd/rerun was first distributed in 
 	plate           smallint NOT NULL,      --/D Plate number 
 	mjd             int     NOT NULL,       --/D MJD of observation (last) --/U days
@@ -328,7 +328,7 @@ CREATE TABLE SpecObjAll (
   bestObjID       bigint NOT NULL, --/D Object ID of photoObj match (position-based) --/K ID_MAIN
   fluxObjID       bigint NOT NULL, --/D Object ID of photoObj match (flux-based) --/K ID_MAIN
   targetObjID     bigint NOT NULL, --/D Object ID of original target --/K ID_CATALOG
-  plateID         bigint NOT NULL, --/D Database ID of Plate 
+  plateID         numeric(20,0) NOT NULL, --/D Database ID of Plate 
   sciencePrimary  smallint NOT NULL, --/D Best version of spectrum at this location (defines default view SpecObj) --/F specprimary
   legacyPrimary   smallint NOT NULL, --/D Best version of spectrum at this location, among Legacy plates --/F speclegacy
   seguePrimary    smallint NOT NULL, --/D Best version of spectrum at this location, among SEGUE plates --/F specsegue

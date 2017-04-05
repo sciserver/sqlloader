@@ -1290,7 +1290,7 @@ BEGIN
 			specObjID numeric(20,0) NOT NULL PRIMARY KEY
 		)
 		CREATE TABLE PlateIds (
-			plateID bigint NOT NULL PRIMARY KEY
+			plateID numeric(20,0) NOT NULL PRIMARY KEY
 		)
 		SET @created = 1;
 	    END
@@ -1537,7 +1537,7 @@ BEGIN
 		specObjID numeric(20,0) NOT NULL PRIMARY KEY
 	)
 	CREATE TABLE PlateIds (
-		plateID bigint NOT NULL PRIMARY KEY
+		plateID numeric(20,0) NOT NULL PRIMARY KEY
 	)
 
 	--------------------------------------
@@ -1634,7 +1634,7 @@ BEGIN
 	-- create tables to hold plateids and specobjids
 	------------------------------------------------
 	CREATE TABLE PlateIds (
-		plateID bigint NOT NULL PRIMARY KEY
+		plateID numeric(20,0) NOT NULL PRIMARY KEY
 	)
 	CREATE TABLE SpecObjIds (
 		specObjID numeric(20,0) NOT NULL PRIMARY KEY

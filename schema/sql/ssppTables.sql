@@ -444,7 +444,7 @@ CREATE TABLE sppParams (
   BESTOBJID       bigint NOT NULL, --/D Object ID of best PhotoObj match (flux-based) --/K ID_MAIN
   FLUXOBJID       bigint NOT NULL, --/D Object ID of best PhotoObj match (position-based) --/K ID_MAIN
   TARGETOBJID            bigint NOT NULL,                      --/D targeted object ID
-  PLATEID         bigint NOT NULL, --/D Database ID of Plate (match in plateX)
+  PLATEID         numeric(20,0) NOT NULL, --/D Database ID of Plate (match in plateX)
   sciencePrimary  smallint NOT NULL, --/D Best version of spectrum at this location (defines default view SpecObj) --/F specprimary
   legacyPrimary  smallint NOT NULL, --/D Best version of spectrum at this location, among Legacy plates --/F speclegacy
   seguePrimary  smallint NOT NULL, --/D Best version of spectrum at this location, among SEGUE plates (defines default view SpecObj) --/F specsegue
@@ -686,7 +686,7 @@ PSFMAGERR_g       real    NOT NULL, --/U mag    --/D Error in u band PSF magnitu
 PSFMAGERR_r       real    NOT NULL, --/U mag    --/D Error in u band PSF magnitude
 PSFMAGERR_i       real    NOT NULL, --/U mag    --/D Error in u band PSF magnitude
 PSFMAGERR_z       real    NOT NULL, --/U mag    --/D Error in u band PSF magnitude
-PLATEID       bigint  NOT NULL,             --/D Hash of plate and MJD 
+PLATEID       numeric(20,0)  NOT NULL,             --/D Hash of plate and MJD 
 SPECOBJID       numeric(20)  NOT NULL,             --/D Spectroscopic object ID
 PLATE           bigint   NOT NULL,             --/D Plate number         
 MJD             bigint   NOT NULL,             --/D Modified Julian Date     
@@ -784,7 +784,7 @@ CREATE TABLE Plate2Target (
 -------------------------------------------------------------------------------
 plate2targetid  [int]  NOT NULL,  --/D primary key --/F NOFITS
 plate  [int]  NOT NULL,  --/D plate number
-plateid  [bigint]  NOT NULL,  --/D plate identification number in plateX
+plateid  [numeric](20,0)  NOT NULL,  --/D plate identification number in plateX
 objid  [bigint]  NOT NULL,  --/D object identification number in sppTargets
 loadVersion     int NOT NULL            --/D Load Version --/F NOFITS
 )
