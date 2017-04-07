@@ -28,6 +28,9 @@
 --*            pnum for both input and output params.
 --* 2013-07-08 Ani: Modified spDocEnum to just call the view for the
 --*            fieldname if it exists.
+--*
+--* 2017-04-07 Sue:modified fDocColumns to include column_id so columns
+--*			   are correctly ordered.	
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 
@@ -135,7 +138,7 @@ IF EXISTS (SELECT name FROM   sysobjects
 	DROP FUNCTION fDocColumns
 GO
 --
-CREATE FUNCTION fDocColumns(@tablename varchar(400))
+CREATE FUNCTION [dbo].[fDocColumns](@tablename varchar(400))
 -------------------------------------------------
 --/H Return the list of Columns in a given table or view
 -------------------------------------------------
@@ -153,7 +156,8 @@ RETURNS @out TABLE (
 	[length]	int,
 	[unit]		varchar(64),
 	[ucd]		varchar(64),
-	[description]	varchar(2048)
+	[description]	varchar(2048),
+	[columnID]		int primary key
 )
 AS BEGIN
 	---------------------------------
@@ -225,7 +229,7 @@ AS BEGIN
 		-------------------------------------
 		INSERT @out
 		SELECT '', c.name, t.name as type, c.max_length as length,
-			'','',''
+			'','','',c.column_id
 		FROM sys.columns c, sys.types t, sys.objects o
 		WHERE c.system_type_id = t.system_type_id
 		  and c.object_id = o.object_id
@@ -254,7 +258,7 @@ AS BEGIN
 	---------------------------
 		INSERT @out
 		SELECT m.enum, c.name, t.name as type, c.max_length as length,
-			m.unit, m.ucd, m.description
+			m.unit, m.ucd, m.description, c.column_id
 		FROM sys.objects o, sys.columns c, sys.types t, DBColumns m
 		WHERE o.object_id=c.object_id
 		  and o.type_desc='USER_TABLE'
@@ -267,6 +271,7 @@ AS BEGIN
 	--------------------------
     RETURN
 END
+
 GO
 
 
