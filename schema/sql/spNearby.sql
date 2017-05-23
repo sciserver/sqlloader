@@ -102,9 +102,19 @@
 --*                 MaNGA searches.
 --* 2016-04-26 Ani: Updated data types returned by MaNGA functions
 --*                 fGetNear[by|est]MangaObjEq to match the table schema.
+--*
+--* 2017-04-19 Sue: Added inner loop join to fGetNearbyObjXYZ and fGetNearbyObjAllXYZ
+--*                 to fix performance issues with clustered columnstore indexes
+--*					Commented out code to set DB compatibility level to SQL2005
+
 --=====================================================================
 SET NOCOUNT ON;
 GO
+
+/*
+
+Commenting this out (4/19/2017) - it doesn't appear to be needed anymore
+--sue
 
 DECLARE @dbName nvarchar(1000)
 SELECT @dbName = DB_NAME()
@@ -115,7 +125,7 @@ EXEC sp_configure 'clr enabled', 1
 reconfigure with override
 GO
 
-
+*/
 
 --===================================================================
 IF EXISTS (SELECT name FROM   sysobjects
@@ -674,7 +684,7 @@ BEGIN
 	    htmID,
  	    2*DEGREES(ASIN(sqrt(power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2))/2))*60 
 	    
-	    FROM @htmTemp H  join PhotoPrimary P
+	    FROM @htmTemp H  inner loop join PhotoPrimary P
 	             ON  (P.HtmID BETWEEN H.HtmIDstart AND H.HtmIDend )
 	   AND power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2) < @lim
 	ORDER BY power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2)  ASC
@@ -753,7 +763,7 @@ BEGIN
 	    htmID,
  	    2*DEGREES(ASIN(sqrt(power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2))/2))*60 
 	    --sqrt(power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2))/@d2r*60 
-	    FROM @htmTemp H join PhotoObjAll P
+	    FROM @htmTemp H inner loop join PhotoObjAll P
 	             ON  (P.HtmID BETWEEN H.HtmIDstart AND H.HtmIDend )
 	    AND power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2)< @lim
 	    ORDER BY power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2) ASC
