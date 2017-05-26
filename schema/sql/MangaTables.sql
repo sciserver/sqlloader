@@ -14,6 +14,7 @@
 --* 2016-05-04  Ani: Increased nsatlas.subdir to 128 chars and some other
 --*                  strings (e.g. programname) to 32 chars, indented table.
 --* 2016-05-10  Ani: Updated schema for NASA-SLoan Atlas.
+--* 2017-04-26  Ani: Updates for DR14.
 --=========================================================
 
 --=========================================================
@@ -86,6 +87,12 @@ CREATE TABLE mangaDrpAll (
     ifutargetsize int NOT NULL, --/U fibers --/D The ideal IFU size for this object. The intended IFU size is equal to IFUTargetSize except if IFUTargetSize > 127 when it is 127, or < 19 when it is 19
     ifudesignsize int NOT NULL, --/U fibers --/D The allocated IFU size (0 = "unallocated")
     ifudesignwrongsize int NOT NULL, --/U fibers --/D The allocated IFU size if the intended IFU size was not available
+    zmin real NOT NULL, --/D The minimum redshift at which the galaxy could still have been included in the Primary sample
+    zmax real NOT NULL, --/D The maximum redshift at which the galaxy could still have been included in the Primary sample
+    szmin real NOT NULL, --/D The minimum redshift at which the galaxy could still have been included in the Secondary sample
+    szmax real NOT NULL, --/D The maximum redshift at which the galaxy could still have been included in the Secondary sample
+    ezmin real NOT NULL, --/D The minimum redshift at which the galaxy could still have been included in the Primary+ sample
+    ezmax real NOT NULL, --/D The minimum redshift at which the galaxy could still have been included in the Primary+ sample
     nsa_field  int  NOT NULL,   --/U   --/D SDSS field ID covering the target
     nsa_run  int  NOT NULL,   --/U   --/D SDSS run ID covering the target
     nsa_camcol int NOT NULL, --/U --/D SDSS camcol ID covering the catalog position.
@@ -193,21 +200,20 @@ CREATE TABLE mangatarget (
 ------------------------------------------------------------------------------
 --/H MaNGA Target Catalog
 ------------------------------------------------------------------------------
---/T The MaNGA targeting catalog, v1_2_18. This table contains the details of
---/T the three main MaNGA samples, Primary, Secondary and Color-Enhanced, as
---/T well as the ancillary targets. In addition to the targeting information
---/T there are details of the tile and IFU allocation as of 03/10/2016. This
---/T tiling and allocation details may change slightly as the survey evolves.
---/T Also included are various useful parameters from the NASA-Sloan Atlas
---/T (NSA) catalog, v1_0_1, which was used to select almost all of the targets.
---/T A few ancillary targets may have been selected from elsewhere. Targets
---/T cover the full SDSS spectroscopic DR7 region, although only approximately
---/T 1/3 will be observed in the final survey.
+--/T The MaNGA targeting catalog, v1_2_23. This table contains the details of the three
+--/T main MaNGA samples, Primary, Primary+, and Secondary, as well as the ancillary targets.
+--/T In addition to the targeting information there are details of the tile and IFU allocation
+--/T as of 02/13/2017. These tiling and allocation details may change slightly as the survey progresses.
+--/T Included are various useful parameters from the NASA-Sloan Atlas (NSA) catalog, v1_0_1,
+--/T which was used to select almost all of the targets. A few ancillary targets may have been selected
+--/T from elsewhere. Also included are volume weights which can be used to correct the MaNGA sample
+--/T selection to a volume limited sample. Targets cover the full SDSS spectroscopic DR7 region although
+--/T only approximately 1/3 will be observed in the final survey. See Wake et al. (2017) for further details.
 ------------------------------------------------------------------------------
     catalog_ra float NOT NULL, --/U deg --/D Right Ascension of measured object center (J2000) as given in the input catalog (NSA for main samples and most ancillaries)
     catalog_dec float NOT NULL, --/U deg --/D Declination of measured object center (J2000) as given in the input catalog (NSA for main samples and most ancillaries)
     nsa_z real NOT NULL, --/D Heliocentric redshift (NSA)
-    nsa_zdist real NOT NULL, --/D Distance estimate using pecular velocity model of Willick et al. (1997), expressed as a redshift equivalent; multiply by c/H0 for Mpc (NSA)
+    nsa_zdist real NOT NULL, --/D Distance estimate using peculiar velocity model of Willick et al. (1997), expressed as a redshift equivalent; multiply by c/H0 for Mpc (NSA)
     nsa_elpetro_mass real NOT NULL, --/U solar masses --/D Stellar mass from K-correction fit (use with caution) for elliptical Petrosian fluxes (NSA)
     nsa_elpetro_absmag_f real NOT NULL, --/F nsa_elpetro_absmag 0 --/U mag --/D Absolute magnitude in rest-frame GALEX far-UV, from elliptical Petrosian fluxes (NSA)
     nsa_elpetro_absmag_n real NOT NULL, --/F nsa_elpetro_absmag 1 --/U mag --/D Absolute magnitude in rest-frame GALEX near-UV, from elliptical Petrosian fluxes (NSA)
@@ -315,6 +321,15 @@ CREATE TABLE mangatarget (
     szmax real NOT NULL, --/D The maximum redshift at which the galaxy could still have been included in the Secondary sample
     ezmin real NOT NULL, --/D The minimum redshift at which the galaxy could still have been included in the Primary+ sample
     ezmax real NOT NULL, --/D The minimum redshift at which the galaxy could still have been included in the Primary+ sample
+    probs real NOT NULL, --/D The probability that a Secondary sample galaxy is included after down-sampling. For galaxies not in the Secondary sample PROBS is set to the mean down-sampling probability
+    pweight real NOT NULL, --/D The volume weight for the Primary sample. Corrects the MaNGA selection to a volume limited sample
+    sweight real NOT NULL, --/D The volume weight for the full Secondary sample. Corrects the MaNGA selection to a volume limited sample
+    srweight real NOT NULL, --/D The volume weight for the down-sampled Secondary sample. Corrects the MaNGA selection to a volume limited sample
+    eweight real NOT NULL, --/D The volume weight for the Primary+ sample. Corrects the MaNGA selection to a volume limited sample
+    psrweight real NOT NULL, --/D The volume weight for the combined Primary and down-sampled Secondary samples. Corrects the MaNGA selection to a volume limited sample
+    esrweight real NOT NULL, --/D The volume weight for the combined Primary+ and down-sampled Secondary samples. Corrects the MaNGA selection to a volume limited sample
+    psweight real NOT NULL, --/D The volume weight for the combined Primary and full Secondary samples. Corrects the MaNGA selection to a volume limited sample
+    esweight real NOT NULL, --/D The volume weight for the combined Primary+ and full Secondary samples. Corrects the MaNGA selection to a volume limited sample
     ranflag bit NOT NULL, --/D Set to 1 if a target is to be included after random sampling to produce the correct proportions of each sample, otherwise 0
     manga_tileids int NOT NULL, --/D IDs of all tiles that overlap a galaxy's position
     manga_tileid int NOT NULL, --/D The ID of the tile to which this object has been allocated

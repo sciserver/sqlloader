@@ -74,6 +74,7 @@
 --* 2016-05-04 Ani: Added spPublishNSA.
 --* 2016-05-05 Ani: Fixed typo in spPublishNSA conditional drop statement.
 --* 2016-05-05 Ani: Fixed typo in spPublishNSA log message.
+--* 2017-04-19 Ani: Added cannonStar to spPublishApogee.
 ----------------------------------------------------------------------
 -- We are not copying 
 -- DBcolumns, DBObjects, DBViewCols, DataConstants, Globe,Glossary, 
@@ -1304,6 +1305,9 @@ AS BEGIN
 	set @summary = @summary + @err 
 
 	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'apogeeStarAllVisit', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'cannonStar', @firstTime 
 	set @summary = @summary + @err 
 
 	---------------------------------------------------------

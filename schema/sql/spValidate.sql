@@ -87,6 +87,8 @@
 --*                 spValidate.
 --^ 2016-03-29 Ani: Added spValidateManga.
 --^ 2016-05-04 Ani: Added spValidateNSA.
+--* 2017-04-19 Ani: Added cannonStar PK check to spValidateApogee.
+--* 2017-04-19 Ani: Added apogeeDesign PK check to spValidateApogee.
 --====================================================================
 SET NOCOUNT ON;
 GO
@@ -1827,6 +1829,13 @@ AS BEGIN
                 
 	IF @summary = 0
             BEGIN
+	    	exec dbo.spTestUniqueKey  @taskid , @stepid,  'apogeeDesign', 'designid', @error OUTPUT
+		set @summary = @summary + @error;
+            END
+
+                
+	IF @summary = 0
+            BEGIN
 	    	exec dbo.spTestUniqueKey  @taskid , @stepid,  'apogeeStarVisit', 'visit_id', @error OUTPUT
 		set @summary = @summary + @error;
             END
@@ -1835,6 +1844,13 @@ AS BEGIN
 	IF @summary = 0
             BEGIN
 	    	exec dbo.spTestUniqueKey  @taskid , @stepid,  'apogeeStarAllVisit', 'visit_id,apstar_id', @error OUTPUT
+		set @summary = @summary + @error;
+            END
+
+                
+	IF @summary = 0
+            BEGIN
+	    	exec dbo.spTestUniqueKey  @taskid , @stepid,  'cannonStar', 'cannon_id', @error OUTPUT
 		set @summary = @summary + @error;
             END
 

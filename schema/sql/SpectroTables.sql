@@ -140,6 +140,8 @@
 --* 2015-01-22  Ani: Changed zwarning_noqso data type to INT from REAL and
 --*                  tweaked descriptions to say BOSS data only (PR #2094).
 --* 2015-02-16  Ani: Added info link for zwarning_noqso column in SpecObjAll.
+--* 2017-04-07  Ani: Moved sdssPrimary up below sciencePrimary, and added new
+--*                  DR14 columns for eBOSS to SpecObjAll.
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -171,7 +173,7 @@ CREATE TABLE PlateX (
 	programName     varchar(32) NOT NULL,   --/D Name of program [from platelist product]
 	instrument      varchar(32) NOT NULL,   --/D Instrument used (SDSS or BOSS spectrograph)
 	chunk           varchar(32) NOT NULL,   --/D Name of tiling chunk  [from platelist product]
-	plateRun        varchar(32) NOT NULL,   --/D Drilling run for plate [from platelist product]
+	plateRun        varchar(128) NOT NULL,   --/D Drilling run for plate [from platelist product]
 	designComments  varchar(128) NOT NULL,  --/D Comments on the plate design from plate plans [from platelist product]
 	plateQuality    varchar(32) NOT NULL,   --/D Characterization of plate quality
 	qualityComments varchar(100) NOT NULL,  --/D Comments on reason for plate quality  
@@ -330,12 +332,12 @@ CREATE TABLE SpecObjAll (
   targetObjID     bigint NOT NULL, --/D Object ID of original target --/K ID_CATALOG
   plateID         numeric(20,0) NOT NULL, --/D Database ID of Plate 
   sciencePrimary  smallint NOT NULL, --/D Best version of spectrum at this location (defines default view SpecObj) --/F specprimary
+  sdssPrimary     smallint NOT NULL, --/D Best version of spectrum at this location among SDSS plates (defines default view SpecObj) --/F specsdss
   legacyPrimary   smallint NOT NULL, --/D Best version of spectrum at this location, among Legacy plates --/F speclegacy
   seguePrimary    smallint NOT NULL, --/D Best version of spectrum at this location, among SEGUE plates --/F specsegue
   segue1Primary   smallint NOT NULL, --/D Best version of spectrum at this location, among SEGUE-1 plates --/F specsegue1
   segue2Primary   smallint NOT NULL, --/D Best version of spectrum at this location, among SEGUE-2 plates --/F specsegue2
   bossPrimary     smallint NOT NULL, --/D Best version of spectrum at this location, among BOSS plates --/F specboss
-  sdssPrimary     smallint NOT NULL, --/D Best version of spectrum at this location among SDSS plates (defines default view SpecObj) --/F specsdss
   bossSpecObjID   int NOT NULL, --/D Index of BOSS observation in spAll flat file
   firstRelease    varchar(32) NOT NULL, --/D Name of first release this object was associated with
   survey          varchar(32) NOT NULL, --/D Survey name
@@ -359,9 +361,14 @@ CREATE TABLE SpecObjAll (
   segue2_target1   bigint NOT NULL, --/D SEGUE-2 target selection information at plate design, primary science selection --/F segue2_target1  --/R Segue2Target1
   segue2_target2   bigint NOT NULL, --/D SEGUE-2 target selection information at plate design, secondary/qa/calib selection --/F segue2_target2  --/R Segue2Target2
   boss_target1   bigint NOT NULL, --/D BOSS target selection information at plate  --/F boss_target1  --/R BossTarget1
-  eboss_target0   bigint NOT NULL, --/D EBOSS target selection information at plate  --/R EbossTarget0
+  eboss_target0   bigint NOT NULL, --/D EBOSS target selection information, for SEQUELS plates --/F eboss_target0
+  eboss_target1   bigint NOT NULL, --/D EBOSS target selection information, for eBOSS plates --/F eboss_target1
+  eboss_target2   bigint NOT NULL, --/D EBOSS target selection information, for TDSS, SPIDERS, ELG, etc. plates --/F eboss_target2
+  eboss_target_id bigint NOT NULL, --/D EBOSS unique target identifier for every spectroscopic target, --/F eboss_target_id
   ancillary_target1   bigint NOT NULL, --/D BOSS ancillary science target selection information at plate design --/F ancillary_target1  --/R AncillaryTarget1
   ancillary_target2   bigint NOT NULL, --/D BOSS ancillary target selection information at plate design --/F ancillary_target2  --/R AncillaryTarget2
+  thing_id_targeting  bigint Not NULL, --/D thing_id value from the version of resolve from which the targeting was created --/F thing_id_targeting
+  thing_id            int Not NULL, --/D Unique identifier from global resolve --/F thing_id
   primTarget       bigint NOT NULL, --/D target selection information at plate design, primary science selection (for backwards compatibility)  --/R PrimTarget
   secTarget        bigint NOT NULL, --/D target selection information at plate design, secondary/qa/calib selection  (for backwards compatibility)  --/R SecTarget
   spectrographID  smallint NOT NULL, --/D which spectrograph (1,2)  

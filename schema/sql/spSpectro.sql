@@ -24,6 +24,11 @@
 --*             NULL.
 --* 2013-12-13  Ani: Made perms for GetBlob assembly conditionally set.
 --* 2015-03-18  Ani: Added new function fSDSSfromSpecID (PR #2257).
+--* 2017-05-12  Ani: Fixed spMakeSpecObjAll to handle plate numbers longer
+--*             than 4 digits in PNG file names. Note that up to 4 digits,
+--*             the PNG file names are constructed by padding the plate
+--*             number with leading zeros, but this convention is broken
+--*             for bigger plate numbers (starting with DR14).
 ------------------------------------------------------------------------
 
 -----------------------------------------------------
@@ -315,7 +320,7 @@ Add Constraint pk_SpecObjAll_SpecObjID PRIMARY KEY CLUSTERED (SpecObjID)
 INSERT INTO [dbo].[SpecObjAll]
 Select 
 *,
-COALESCE(dbo.fGetBlob(''+@ImagePath+CAST(run2d as varchar)+'\'+right(('0000'+CAST(plate as varchar)),4)+'-'+CAST(mjd as varchar)+'\'+'spec-image-'+right(('0000'+CAST(plate as varchar)),4)+'-'+CAST(mjd as varchar)+'-'+right(('0000'+CAST(fiberID as varchar)),4)+@imgext+''),0x1111) as img
+COALESCE(dbo.fGetBlob(''+@ImagePath+CAST(run2d as varchar)+'\'+(case when(plate<10000) then right(('0000'+CAST(plate as varchar)),4) else cast(plate as varchar) end)+'-'+CAST(mjd as varchar)+'\'+'spec-image-'+(case when(plate<10000) then right(('0000'+CAST(plate as varchar)),4) else cast(plate as varchar) end)+'-'+CAST(mjd as varchar)+'-'+right(('0000'+CAST(fiberID as varchar)),4)+@imgext+''),0x1111) as img
 from #SpecObjAllCsv
 
 

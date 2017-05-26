@@ -238,6 +238,7 @@
 --* 2016-04-05 Ani: Added PKs for qsoVar* tables.
 --* 2016-04-13 Ani: Changed wiseForced to wiseForcedTarget.
 --* 2016-07-06 Ani: Added PKs for apogeeDesign, apogeeField and nsatlas.
+--* 2017-04-19 Ani: Added PK for APOGEE cannonStar.
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -452,6 +453,7 @@ INSERT IndexMap Values('K','primary key', 'aspcapStarCovar', 	 	'aspcap_covar_id
 INSERT IndexMap Values('K','primary key', 'apogeeObject',		'target_id'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'apogeeStarVisit', 	 	'visit_id'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'apogeeStarAllVisit', 	'visit_id,apstar_id'		,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'cannonStar', 	 	'cannon_id'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'mangaDrpAll',		'plateIFU'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'mangaTarget',		'mangaID'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'nsatlas',			'nsaID'			,'','SPECTRO');

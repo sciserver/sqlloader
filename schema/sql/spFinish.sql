@@ -292,6 +292,8 @@
 --* 2016-08-16 Ani: Added call to spRegionSync in spSdssPolygonRegions
 --*                 to fix bug in f[In]FootprintEq after polygons were
 --*                 recomputed for DR13 (fix as per T.Budavari).
+--* 2017-05-15 Ani: Updated spFinishStep to skip loadPatches if it is
+--*                 listed in SkipFinishPhases.
 ---====================================================================
 SET NOCOUNT ON;
 GO

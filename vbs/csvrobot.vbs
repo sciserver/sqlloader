@@ -56,6 +56,7 @@
 ' 2016-03-10    Added WISE forced photometry batch in export type "forced".
 ' 2016-03-29    Added MaNGA batch in export type "manga".
 ' 2016-05-04    Added NSA batch in export type "nsa".
+' 2017-04-19    Added APOGEE cannonStar CSV.
 '==============================================================
 
 Option Explicit
@@ -174,7 +175,7 @@ Public Sub CheckDir (root,level)
 	ElseIf ( theexporttype = "resolve" ) Then
 		s = s & "(^sql(ThingIndex|DetectionIndex).csv" & "_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "apogee" ) Then
-		s = s & "(^sql(ApogeeVisit|ApogeeStar|aspcapStar|aspcapStarCovar|ApogeePlate|ApogeeDesign|ApogeeField|ApogeeObject|ApogeeStarVisit|ApogeeStarAllVisit)" & "_*[0-9]*\.csv$)"
+		s = s & "(^sql(ApogeeVisit|ApogeeStar|aspcapStar|aspcapStarCovar|ApogeePlate|ApogeeDesign|ApogeeField|ApogeeObject|Apogee2Object|ApogeeStarVisit|ApogeeStarAllVisit|cannonStar)" & "_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "wise" ) Then
 		s = s & "(^sqlWise(XMatch|AllSky)" & "_[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "forced" ) Then
@@ -258,16 +259,16 @@ Public Sub CheckDir (root,level)
 		End If
 	End If
     '
-    ' check if there are plates with gif directories
+    ' check if there are plates with gif directories (commented out May/17 [ART])
     '
-    rg.Pattern = "[0-9]+"
-    If theexporttype="plates" Then
-		For Each folder In root.SubFolders
-			If rg.Test(folder.Name) Then
-				CheckPlate folder
-			End If
-		Next
-    End If
+    ' rg.Pattern = "[0-9]+"
+    ' If theexporttype="plates" Then
+	' 	For Each folder In root.SubFolders
+	' 		If rg.Test(folder.Name) Then
+	' 			CheckPlate folder
+	'		End If
+	'	Next
+    ' End If
     '
 	Exit Sub
 	'
