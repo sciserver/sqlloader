@@ -29,6 +29,8 @@
 --*                 with non-latin collations (e.g. Chinese).
 --* 2011-06-14 Ani: Added function type 'IF' to spCheckDBObjects.
 --* 2016-07-07 Ani: Excluded diagram Fs and SPs in spCheckDBObjects.
+--* 2017-09-14 Ani: Added code to strip qualified table name so that
+--*                 Diagnostics table gets all the row counts.
 -------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -109,7 +111,16 @@ BEGIN
 	SET NOCOUNT ON
 	INSERT #trows 
 		EXEC sp_msforeachtable 'sp_spaceused ''?'''
+
+	-- strip the qualified table name to just the table name (remove schema name and square brackets)
+
+	UPDATE r
+
+	    SET r.table_name = SUBSTRING(table_name, CHARINDEX('[',table_name,2)+1, (LEN(table_name)-  CHARINDEX('[',table_name,2) - 1) )
+
+    	FROM #trows r
 		
+
 	UPDATE d
 		SET d.count=CONVERT(bigint,r.row_count)
 	FROM Diagnostics d JOIN #trows r on r.table_name collate latin1_general_ci_as=d.name
