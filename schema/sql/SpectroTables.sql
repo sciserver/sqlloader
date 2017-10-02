@@ -142,6 +142,7 @@
 --* 2015-02-16  Ani: Added info link for zwarning_noqso column in SpecObjAll.
 --* 2017-04-07  Ani: Moved sdssPrimary up below sciencePrimary, and added new
 --*                  DR14 columns for eBOSS to SpecObjAll.
+--* 2017-07-11  Ani: Changed SpecPhotoAll.plateID to NUMERIC(20,0) from BIGINT.
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -579,7 +580,7 @@ CREATE TABLE SpecPhotoAll (
 	boss_target1   bigint NOT NULL, --/D BOSS target selection information at plate  --/F boss_target1  --/R BossTarget1
 	ancillary_target1   bigint NOT NULL, --/D BOSS ancillary science target selection information at plate design --/F ancillary_target1  --/R AncillaryTarget1
 	ancillary_target2   bigint NOT NULL, --/D BOSS ancillary target selection information at plate design --/F ancillary_target2  --/R AncillaryTarget2
-	plateID		bigint NOT NULL,	--/D Link to plate on which the spectrum was taken --/K ID_PLATE
+	plateID		numeric(20,0) NOT NULL,	--/D Link to plate on which the spectrum was taken --/K ID_PLATE
 	sourceType	varchar(32) NOT NULL,	--/D type of object targeted as --/R sourceType --/K CLASS_OBJECT
 	targetObjID	bigint NOT NULL,	--/D ID of target PhotoObj --/K ID_CATALOG
 -------------------------------------------------------------------------------

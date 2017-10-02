@@ -72,13 +72,9 @@
 --* 2013-10-30 Ani: Modified fMJDtoGMT to pad all fields with leading
 --*            zeros and reduce precision of seconds to 3 decimal places.
 --* 2015-01-15 Ani: Updated specById file name in fGetUrlSpecImg.
-<<<<<<< HEAD
---*
---* 2016-11-14 Sue: added order by s.FiberID to spGetFiberList
-=======
 --* 2016-07-29 Ani: Replaced "boss" with "eboss" for SAS file paths.
 --* 2016-07-30 Ani: Added fGetUrlMangaCube to return MaNGA data cube URL.
->>>>>>> origin/master
+--* 2016-11-14 Sue: added order by s.FiberID to spGetFiberList
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 

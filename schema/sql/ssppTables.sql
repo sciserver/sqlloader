@@ -32,6 +32,7 @@
 --* 2012-06-10  Ani: Renamed sppParams.ORIGOBJID to FLUXOBJID.
 --* 2013-07-08  Ani: Added info links for target flags.
 --* 2013-07-08  Ani: Changed LegacyTarget1/2 links to Prim/SecTarget.
+--^ 2017-07-17  Ani: Added identity column TARGETID to sppTargets as PK.
 --=========================================================
 
 --=========================================================
@@ -647,6 +648,7 @@ CREATE TABLE sppTargets(
 --/T These were added for the November 2008 drilling run and after.
 --/T The earlier files will be retrofit (eventually).
 -----------------------------------------------------------------------------------------
+TARGETID           int IDENTITY(1,1) NOT NULL,  --/D unique ID for target
 OBJID              bigint NOT NULL,             --/D Object ID matching DR8 --/F NOFITS
 RUN                bigint NOT NULL,             --/D Run number
 RERUN              bigint NOT NULL,             --/D Rerun number                                     

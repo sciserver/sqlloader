@@ -33,7 +33,7 @@ IF EXISTS (SELECT [name] FROM Constants WHERE [name]='version')
 INSERT INTO Constants VALUES('csvpath','c:\data\staging\sdss3\casload\');
 INSERT INTO Constants VALUES('csvpath','c:\data\publish\sdss3\casload\');
 
-INSERT INTO Constants VALUES('backuppath','\\sdss3c\taskdbbackup\');
+INSERT INTO Constants VALUES('backuppath','\\sdss4c\taskdbbackup\');
 INSERT INTO Constants VALUES('loadagent','SDSS\mssql');
 INSERT INTO constants VALUES('Taskdatapath','c:\data\task1\sql_db\');
 INSERT INTO constants VALUES('Taskdatapath','c:\data\task2\sql_db\');

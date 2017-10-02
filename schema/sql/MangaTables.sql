@@ -15,7 +15,9 @@
 --*                  strings (e.g. programname) to 32 chars, indented table.
 --* 2016-05-10  Ani: Updated schema for NASA-SLoan Atlas.
 --* 2017-04-26  Ani: Updates for DR14.
---=========================================================
+--* 2017-05-26  Ani: Added mangaFirefly and mangaPipe3D VAC tables.
+--* 2017-06-13  Ani: Added PLATEIFU to mangaFirefly.                            
+---=========================================================
 
 --=========================================================
 IF EXISTS (SELECT name FROM sysobjects
@@ -200,20 +202,21 @@ CREATE TABLE mangatarget (
 ------------------------------------------------------------------------------
 --/H MaNGA Target Catalog
 ------------------------------------------------------------------------------
---/T The MaNGA targeting catalog, v1_2_23. This table contains the details of the three
---/T main MaNGA samples, Primary, Primary+, and Secondary, as well as the ancillary targets.
---/T In addition to the targeting information there are details of the tile and IFU allocation
---/T as of 02/13/2017. These tiling and allocation details may change slightly as the survey progresses.
---/T Included are various useful parameters from the NASA-Sloan Atlas (NSA) catalog, v1_0_1,
---/T which was used to select almost all of the targets. A few ancillary targets may have been selected
---/T from elsewhere. Also included are volume weights which can be used to correct the MaNGA sample
---/T selection to a volume limited sample. Targets cover the full SDSS spectroscopic DR7 region although
---/T only approximately 1/3 will be observed in the final survey. See Wake et al. (2017) for further details.
+--/T The MaNGA targeting catalog, v1_2_18. This table contains the details of
+--/T the three main MaNGA samples, Primary, Secondary and Color-Enhanced, as
+--/T well as the ancillary targets. In addition to the targeting information
+--/T there are details of the tile and IFU allocation as of 03/10/2016. This
+--/T tiling and allocation details may change slightly as the survey evolves.
+--/T Also included are various useful parameters from the NASA-Sloan Atlas
+--/T (NSA) catalog, v1_0_1, which was used to select almost all of the targets.
+--/T A few ancillary targets may have been selected from elsewhere. Targets
+--/T cover the full SDSS spectroscopic DR7 region, although only approximately
+--/T 1/3 will be observed in the final survey.
 ------------------------------------------------------------------------------
     catalog_ra float NOT NULL, --/U deg --/D Right Ascension of measured object center (J2000) as given in the input catalog (NSA for main samples and most ancillaries)
     catalog_dec float NOT NULL, --/U deg --/D Declination of measured object center (J2000) as given in the input catalog (NSA for main samples and most ancillaries)
     nsa_z real NOT NULL, --/D Heliocentric redshift (NSA)
-    nsa_zdist real NOT NULL, --/D Distance estimate using peculiar velocity model of Willick et al. (1997), expressed as a redshift equivalent; multiply by c/H0 for Mpc (NSA)
+    nsa_zdist real NOT NULL, --/D Distance estimate using pecular velocity model of Willick et al. (1997), expressed as a redshift equivalent; multiply by c/H0 for Mpc (NSA)
     nsa_elpetro_mass real NOT NULL, --/U solar masses --/D Stellar mass from K-correction fit (use with caution) for elliptical Petrosian fluxes (NSA)
     nsa_elpetro_absmag_f real NOT NULL, --/F nsa_elpetro_absmag 0 --/U mag --/D Absolute magnitude in rest-frame GALEX far-UV, from elliptical Petrosian fluxes (NSA)
     nsa_elpetro_absmag_n real NOT NULL, --/F nsa_elpetro_absmag 1 --/U mag --/D Absolute magnitude in rest-frame GALEX near-UV, from elliptical Petrosian fluxes (NSA)
@@ -321,15 +324,15 @@ CREATE TABLE mangatarget (
     szmax real NOT NULL, --/D The maximum redshift at which the galaxy could still have been included in the Secondary sample
     ezmin real NOT NULL, --/D The minimum redshift at which the galaxy could still have been included in the Primary+ sample
     ezmax real NOT NULL, --/D The minimum redshift at which the galaxy could still have been included in the Primary+ sample
-    probs real NOT NULL, --/D The probability that a Secondary sample galaxy is included after down-sampling. For galaxies not in the Secondary sample PROBS is set to the mean down-sampling probability
-    pweight real NOT NULL, --/D The volume weight for the Primary sample. Corrects the MaNGA selection to a volume limited sample
-    sweight real NOT NULL, --/D The volume weight for the full Secondary sample. Corrects the MaNGA selection to a volume limited sample
-    srweight real NOT NULL, --/D The volume weight for the down-sampled Secondary sample. Corrects the MaNGA selection to a volume limited sample
-    eweight real NOT NULL, --/D The volume weight for the Primary+ sample. Corrects the MaNGA selection to a volume limited sample
-    psrweight real NOT NULL, --/D The volume weight for the combined Primary and down-sampled Secondary samples. Corrects the MaNGA selection to a volume limited sample
-    esrweight real NOT NULL, --/D The volume weight for the combined Primary+ and down-sampled Secondary samples. Corrects the MaNGA selection to a volume limited sample
-    psweight real NOT NULL, --/D The volume weight for the combined Primary and full Secondary samples. Corrects the MaNGA selection to a volume limited sample
-    esweight real NOT NULL, --/D The volume weight for the combined Primary+ and full Secondary samples. Corrects the MaNGA selection to a volume limited sample
+    probs real NOT NULL, --/D The probability that a Secondary sample galaxy is included after down-sampling. For galaxies not in the Secondary sample PROBS is set to the mean down-sampling probability                                                                     
+    pweight real NOT NULL, --/D The volume weight for the Primary sample. Corrects the MaNGA selection to a volume limited sample                                                                                                                                             
+    sweight real NOT NULL, --/D The volume weight for the full Secondary sample. Corrects the MaNGA selection to a volume limited sample                                                                                                                                      
+    srweight real NOT NULL, --/D The volume weight for the down-sampled Secondary sample. Corrects the MaNGA selection to a volume limited sample                                                                                                                             
+    eweight real NOT NULL, --/D The volume weight for the Primary+ sample. Corrects the MaNGA selection to a volume limited sample                                                                                                                                            
+    psrweight real NOT NULL, --/D The volume weight for the combined Primary and down-sampled Secondary samples. Corrects the MaNGA selection to a volume limited sample                                                                                                      
+    esrweight real NOT NULL, --/D The volume weight for the combined Primary+ and down-sampled Secondary samples. Corrects the MaNGA selection to a volume limited sample                                                                                                     
+    psweight real NOT NULL, --/D The volume weight for the combined Primary and full Secondary samples. Corrects the MaNGA selection to a volume limited sample                                                                                                               
+    esweight real NOT NULL, --/D The volume weight for the combined Primary+ and full Secondary samples. Corrects the MaNGA selection to a volume limited sample                                                                                                              
     ranflag bit NOT NULL, --/D Set to 1 if a target is to be included after random sampling to produce the correct proportions of each sample, otherwise 0
     manga_tileids int NOT NULL, --/D IDs of all tiles that overlap a galaxy's position
     manga_tileid int NOT NULL, --/D The ID of the tile to which this object has been allocated
@@ -672,6 +675,186 @@ CREATE TABLE nsatlas (
 GO
 --
 
+
+--=========================================================
+IF EXISTS (SELECT name FROM sysobjects
+         WHERE xtype='U' AND name = 'mangaFirefly')
+	DROP TABLE mangaFirefly
+GO
+--
+EXEC spSetDefaultFileGroup 'mangaFirefly'
+GO
+CREATE TABLE mangaFirefly (
+-------------------------------------------------------------------------------
+--/H Contains the measured stellar population parameters for each MaNGA galaxy.
+-------------------------------------------------------------------------------
+--/T This is a base table containing spectroscopic
+--/T information and the results of the FIREFLY fits on
+--/T the MaNGA Voronoi binned spectra with S/N threshold of 10.
+--/T This run has been computed using Maraston & Stromback (M11, 2011) models with 
+--/T the MILES stellar library and a Kroupa stellar initial mass function.
+-------------------------------------------------------------------------------
+    MANGAID            varchar(20) NOT NULL,     --/D Unique MaNGA identifier.
+    PLATEIFU      varchar(20) NOT NULL,   --/D Unique identifier containing the MaNGA plate and ifu combination.                                                 
+    PLATE           int NOT NULL,     --/D Plate used to observe galaxy.
+    IFUDSGN            varchar(20) NOT NULL,     --/D IFU used to observe galaxy.
+    OBJRA            real NOT NULL,     --/D Right ascension of the galaxy, not the IFU.
+    OBJDEC            real NOT NULL,     --/D Declination of the galaxy, not the IFU.
+    REDSHIFT            real NOT NULL,     --/D Redshift of the galaxy.
+    PHOTOMETRIC_MASS            real NOT NULL,     --/D Photometric Mass of galaxy obtained from SED fitting. In units of log(M/M_odot).
+    MANGADRP_VER            varchar(20) NOT NULL,     --/D Version of MaNGA DRP that produced this data.
+    MANGADAP_VER            varchar(20) NOT NULL,     --/D Version of MaNGA DAP that analysed this data.
+    FIREFLY_VER            varchar(20) NOT NULL,     --/D Version of FIREFLY that analysed this data.
+    LW_AGE_1RE           real NOT NULL,       --/D Property at 1Re. Units of log(Age(Gyr)).
+    LW_AGE_1RE_ERROR           real NOT NULL,        --/D Error on property at 1Re. Units of log(Age(Gyr)).
+    MW_AGE_1RE           real NOT NULL,       --/D Property at 1Re. Units of log(Age(Gyr)).
+    MW_AGE_1RE_ERROR           real NOT NULL,       --/D Error on property at 1Re. Units of log(Age(Gyr)).
+    LW_Z_1RE           real NOT NULL,        --/D Property at 1Re. Units of [Z/H].
+    LW_Z_1RE_ERROR           real NOT NULL,        --/D Error on property at 1Re. Units of [Z/H].
+    MW_Z_1RE           real NOT NULL,       --/D Property at 1Re. Units of [Z/H].
+    MW_Z_1RE_ERROR           real NOT NULL,       --/D Error on property at 1Re. Units of [Z/H].
+    LW_AGE_3ARCSEC          real NOT NULL,      --/D Property within 3arcsec diameter.  Units of log(Age(Gyr)).
+    LW_AGE_3ARCSEC_ERROR           real NOT NULL,       --/D Error on property within 3arcsec. Units of log(Age(Gyr)).
+    MW_AGE_3ARCSEC           real NOT NULL,        --/D Property within 3arcsec diameter. Units of log(Age(Gyr)).
+    MW_AGE_3ARCSEC_ERROR           real NOT NULL,       --/D Error on property within 3arcsec. Units of log(Age(Gyr)).
+    LW_Z_3ARCSEC           real NOT NULL,       --/D Property within 3arcsec diameter. Units of [Z/H].
+    LW_Z_3ARCSEC_ERROR           real NOT NULL,      --/D Error on property within 3arcsec. Units of [Z/H].
+    MW_Z_3ARCSEC           real NOT NULL,       --/D Property within 3arcsec diameter. Units of [Z/H].
+    MW_Z_3ARCSEC_ERROR           real NOT NULL,      --/D Error on property within 3arcsec. Units of [Z/H].
+    LW_AGE_GRADIENT           real NOT NULL,      --/D Gradient within 1.5Re of galaxy. Units of dex/Re.
+    LW_AGE_GRADIENT_ERROR           real NOT NULL,      --/D Error on gradient within 1.5Re of galaxy. Units of dex/Re.
+    LW_AGE_ZEROPOINT          real NOT NULL,      --/D Zeropoint of gradient slope.
+    LW_AGE_ZEROPOINT_ERROR           real NOT NULL,      --/D Error on zeropoint of gradient slope.
+    MW_AGE_GRADIENT           real NOT NULL,      --/D Gradient within 1.5Re of galaxy. Units of dex/Re.
+    MW_AGE_GRADIENT_ERROR           real NOT NULL,      --/D Error on gradient within 1.5Re of galaxy. Units of dex/Re.
+    MW_AGE_ZEROPOINT          real NOT NULL,      --/D Zeropoint of gradient slope.
+    MW_AGE_ZEROPOINT_ERROR           real NOT NULL,      --/D Error on zeropoint of gradient slope.
+    LW_Z_GRADIENT           real NOT NULL,      --/D Gradient within 1.5Re of galaxy. Units of dex/Re.
+    LW_Z_GRADIENT_ERROR           real NOT NULL,      --/D Error on gradient within 1.5Re of galaxy. Units of dex/Re.
+    LW_Z_ZEROPOINT          real NOT NULL,      --/D Zeropoint of gradient slope.
+    LW_Z_ZEROPOINT_ERROR           real NOT NULL,      --/D Error on zeropoint of gradient slope.
+    MW_Z_GRADIENT           real NOT NULL,      --/D Gradient within 1.5Re of galaxy. Units of dex/Re.
+    MW_Z_GRADIENT_ERROR           real NOT NULL,      --/D Error on gradient within 1.5Re of galaxy. Units of dex/Re.
+    MW_Z_ZEROPOINT          real NOT NULL,      --/D Zeropoint of gradient slope.
+    MW_Z_ZEROPOINT_ERROR           real NOT NULL,      --/D Error on zeropoint of gradient slope.
+)
+GO
+--
+
+
+
+--=========================================================
+IF EXISTS (SELECT name FROM sysobjects
+         WHERE xtype='U' AND name = 'mangaPipe3D')
+	DROP TABLE mangaPipe3D
+GO
+--
+EXEC spSetDefaultFileGroup 'mangaPipe3D'
+GO
+CREATE TABLE mangaPipe3D (
+------------------------------------------------------------
+--/H Data products of MaNGA cubes derived using Pipe3D.
+------------------------------------------------------------
+--/T Contains all the information of each data product.
+------------------------------------------------------------
+    mangaID varchar(20) NOT NULL, --/U  --/D  MaNGA name of the cube
+    objra float NOT NULL, --/U degree --/D  RA of the object 
+    objdec float NOT NULL, --/U degree --/D  DEC of the object 
+    redshift real NOT NULL, --/U  --/D  redshift derived by Pipe3D form the center of the galaxy
+    re_arc real NOT NULL, --/U arcsec --/D  adopted effective radius in arcsec
+    PA real NOT NULL, --/U degrees --/D  adopted position angle in degrees
+    ellip real NOT NULL, --/U  --/D  adopted elipticity
+    DL real NOT NULL, --/U  --/D  adopted luminosity distance in Mpc
+    re_kpc real NOT NULL, --/U kpc --/D  derived effective radius in kpc
+    log_Mass real NOT NULL, --/U logMsun --/D  Integrated stellar mass in units of the solar mass in logarithm scale
+    e_log_Mass real NOT NULL, --/U logMsun --/D  Error of the integrated stellar mass in units of the solar mass in logarithm scale
+    log_SFR_Ha real NOT NULL, --/U logMsun/yr --/D  Integrated star-formation rate derived from the integrated Halpha flux in logarithm scale
+    e_log_SFR_Ha real NOT NULL, --/U logMsun/yr --/D  Error of the Integrated star-formation rate derived from the integrated Halpha flux in logarithm scale
+    log_SFR_ssp real NOT NULL, --/U logMsun/yr --/D  Integrated star-formation rate derived from the amount of stellar mass formed in the last 32Myr in logarithm scale
+    e_log_SFR_ssp real NOT NULL, --/U logMsun/yr --/D  Error of the Integrated star-formation rate derived from the amount of stellar mass formed in the last 32Myr in logarithm scale
+    log_Mass_gas real NOT NULL, --/U logMsun --/D  Integrated gas mass in units of the solar mass in logarithm scale estimated from the dust attenuation
+    e_log_Mass_gas real NOT NULL, --/U logMsun --/D  Error in the integrated gas mass in units of the solar mass in logarithm scale estimated from the dust attenuation
+    Age_LW_Re_fit real NOT NULL, --/U logyr --/D  Luminosity weighted age of the stellar population in logarithm of years at the effective radius of the galaxy
+    e_Age_LW_Re_fit real NOT NULL, --/U logyr --/D  Error in the luminosity weighted age of the stellar population in logarithm of years at the effective radius of the galaxy
+    alpha_Age_LW_Re_fit real NOT NULL, --/U  --/D  slope of the gradient of the LW log-age of the stellar population within a galactocentric distance of 0.5-2.0 r_eff
+    e_alpha_Age_LW_Re_fit real NOT NULL, --/U  --/D  Error of the slope of the gradient of the LW log-age of the stellar population within a galactocentric distance of 0.5-2.0 r_eff
+    age_MW_Re_fit real NOT NULL, --/U logyr --/D  Mass weighted age of the stellar population in logarithm of years at the effective radius of the galaxy
+    e_age_MW_Re_fit real NOT NULL, --/U logyr --/D  Error in the Mass weighted age of the stellar population in logarithm of years at the effective radius of the galaxy
+    alpha_Age_MW_Re_fit real NOT NULL, --/U  --/D  slope of the gradient of the MW log-age of the stellar population within a galactocentric distance of 0.5-2.0 r_eff
+    e_alpha_Age_MW_Re_fit real NOT NULL, --/U  --/D  Error of the slope of the gradient of the MW log-age of the stellar population within a galactocentric distance of 0.5-2.0 r_eff
+    ZH_LW_Re_fit real NOT NULL, --/U logyr --/D  Luminosity weighted metallicity of the stellar population in logarithm normalized to the solar one at the effective radius of the galaxy
+    e_ZH_LW_Re_fit real NOT NULL, --/U logyr --/D  Error in the luminosity weighted metallicity of the stellar population in logarithm normalized to the solar one at the effective radius of the galaxy
+    alpha_ZH_LW_Re_fit real NOT NULL, --/U  --/D  slope of the gradient of the LW log-metallicity of the stellar population within a galactocentric distance of 0.5-2.0 r_eff
+    e_alpha_ZH_LW_Re_fit real NOT NULL, --/U  --/D  Error of the slope of the gradient of the LW log-metallicity of the stellar population within a galactocentric distance of 0.5-2.0 r_eff
+    ZH_MW_Re_fit real NOT NULL, --/U logyr --/D  Mass weighted metallicity of the stellar population in logarithm normalized to the solar one at the effective radius of the galaxy
+    e_ZH_MW_Re_fit real NOT NULL, --/U logyr --/D  Error in the Mass weighted metallicity of the stellar population in logarithm normalized to the solar one at the effective radius of the galaxy
+    alpha_ZH_MW_Re_fit real NOT NULL, --/U  --/D  slope of the gradient of the MW log-metallicity of the stellar population within a galactocentric distance of 0.5-2.0 r_eff
+    e_alpha_ZH_MW_Re_fit real NOT NULL, --/U  --/D  Error of the slope of the gradient of the MW log-metallicity of the stellar population within a galactocentric distance of 0.5-2.0 r_eff
+    Av_ssp_Re real NOT NULL, --/U mag --/D  Dust attenuation in the V-band derived from the analysis of the stellar populations at the effective radius
+    e_Av_ssp_Re real NOT NULL, --/U mag --/D  Error of the dust attenuation in the V-band derived from the analysis of the stellar populations at the effective radius
+    Av_gas_Re real NOT NULL, --/U mag --/D  Dust attenuation in the V-band derived from the Ha/Hb line ratios at the effective radius
+    e_Av_gas_Re real NOT NULL, --/U mag --/D  Error of the dust attenuation in the V-band derived from the Ha/Hb line ratios at the effective radius
+    OH_Re_fit_O3N2 real NOT NULL, --/U  --/D  12+logO/H oxygen abundance at the effective radius derived using the Marino et al. 2013 O3N2 calibrator
+    e_OH_Re_fit_O3N2 real NOT NULL, --/U  --/D  Error of 12+logO/H oxygen abundance at the effective radius derived using the Marino et al. 2013 O3N2 calibrator
+    alpha_OH_Re_fit_O3N2 real NOT NULL, --/U  --/D  Slope of the oxygen abundance derived using the Marino et al. 2013 O3N2 calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    e_alpha_OH_Re_fit_O3N2 real NOT NULL, --/U  --/D  Error of the slope of the oxygen abundance derived using the Marino et al. 2013 O3N2 calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    OH_Re_fit_N2 real NOT NULL, --/U  --/D  12+logO/H oxygen abundance at the effective radius derived using the Marino et al. 2013 N2 calibrator
+    e_OH_Re_fit_N2 real NOT NULL, --/U  --/D  Error of 12+logO/H oxygen abundance at the effective radius derived using the Marino et al. 2013 N2 calibrator
+    alpha_OH_Re_fit_N2 real NOT NULL, --/U  --/D  Slope of the oxygen abundance derived using the Marino et al. 2013 N2 calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    e_alpha_OH_Re_fit_N2 real NOT NULL, --/U  --/D  Error of the slope of the oxygen abundance derived using the Marino et al. 2013 N2 calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    OH_Re_fit_ONS real NOT NULL, --/U  --/D  12+logO/H oxygen abundance at the effective radius derived using the Pilyugin et al. 2010 ONS calibrator
+    e_OH_Re_fit_ONS real NOT NULL, --/U  --/D  Error of 12+logO/H oxygen abundance at the effective radius derived using the Pilyugin et al. 2010 ONS calibrator
+    alpha_OH_Re_fit_ONS real NOT NULL, --/U  --/D  Slope of the oxygen abundance derived using the Pilyugin et al. 2010 ONS calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    e_alpha_OH_Re_fit_ONS real NOT NULL, --/U  --/D  Error of the slope of the oxygen abundance derived using the Pilyugin et al. 2010 ONS calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    OH_Re_fit_pyqz real NOT NULL, --/U  --/D  12+logO/H oxygen abundance at the effective radius derived using the pyqz calibrator
+    e_OH_Re_fit_pyqz real NOT NULL, --/U  --/D  Error of 12+logO/H oxygen abundance at the effective radius derived using the pyqz calibrator
+    alpha_OH_Re_fit_pyqz real NOT NULL, --/U  --/D  Slope of the oxygen abundance derived using the pyqz calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    e_alpha_OH_Re_fit_pyqz real NOT NULL, --/U  --/D  Error of the slope of the oxygen abundance derived using the pyqz calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    OH_Re_fit_t2 real NOT NULL, --/U  --/D  12+logO/H oxygen abundance at the effective radius derived using the t2 calibrator
+    e_OH_Re_fit_t2 real NOT NULL, --/U  --/D  Error of 12+logO/H oxygen abundance at the effective radius derived using the t2 calibrator
+    alpha_OH_Re_fit_t2 real NOT NULL, --/U  --/D  Slope of the oxygen abundance derived using the t2 calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    e_alpha_OH_Re_fit_t2 real NOT NULL, --/U  --/D  Error of the slope of the oxygen abundance derived using the t2 calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    OH_Re_fit_M08 real NOT NULL, --/U  --/D  12+logO/H oxygen abundance at the effective radius derived using the Maiolino et al. 2008 calibrator
+    e_OH_Re_fit_M08 real NOT NULL, --/U  --/D  Error of 12+logO/H oxygen abundance at the effective radius derived using the Maiolino et al. 2008 calibrator
+    alpha_OH_Re_fit_M08 real NOT NULL, --/U  --/D  Slope of the oxygen abundance derived using the Maiolino et al. 2008 calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    e_alpha_OH_Re_fit_M08 real NOT NULL, --/U  --/D  Error of the slope of the oxygen abundance derived using the Maiolino et al. 2008 calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    OH_Re_fit_T04 real NOT NULL, --/U  --/D  12+logO/H oxygen abundance at the effective radius derived using the Tremonti et al. 2004 calibrator
+    e_OH_Re_fit_T04 real NOT NULL, --/U  --/D  Error of 12+logO/H oxygen abundance at the effective radius derived using the Tremonti et al. 2004 calibrator
+    alpha_OH_Re_fit_T04 real NOT NULL, --/U  --/D  Slope of the oxygen abundance derived using the Tremonti et al. 2004 calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    e_alpha_OH_Re_fit_T04 real NOT NULL, --/U  --/D  Error of the slope of the oxygen abundance derived using the Tremonti et al. 2004 calibrator within a galactocentric distance of 0.5-2.0 r_eff
+    NO_Re_fit_EPM09 real NOT NULL, --/U  --/D  logN/O nitrogen-to-oxygen abundance at the effective radius derived using the Perez-Montero et al. 2009 calibrator
+    e_NO_Re_fit_EPM09 real NOT NULL, --/U  --/D  Error of logN/O nitrogen-to-oxygen abundance at the effective radius derived using the Perez-Montero et al. 2009 calibrator
+    alpha_NO_Re_fit_EPM09 real NOT NULL, --/U  --/D  Slope of the nitrogen-to-oxygen abundance derived using the Perez-Montero et al. 2009 calibrator
+    e_alpha_NO_Re_fit_EPM09 real NOT NULL, --/U  --/D  Error of the slope of the nitrogen-to-oxygen abundance derived using the Perez-Montero et al. 2009 calibrator
+    NO_Re_fit_N2S2 real NOT NULL, --/U  --/D  logN/O nitrogen-to-oxygen abundance at the effective radius derived using the Perez-Montero et al. 2009 calibrator
+    e_NO_Re_fit_N2S2 real NOT NULL, --/U  --/D  Error of logN/O nitrogen-to-oxygen abundance at the effective radius derived using the Perez-Montero et al. 2009 calibrator
+    alpha_NO_Re_fit_N2S2 real NOT NULL, --/U  --/D  Slope of the nitrogen-to-oxygen abundance derived using the Dopita et al. N2/S2 calibrator
+    e_alpha_NO_Re_fit_N2S2 real NOT NULL, --/U  --/D  Error of the slope of the nitrogen-to-oxygen abundance derived using the Dopita et al. N2/S2 calibrator
+    log_NII_Ha_cen real NOT NULL, --/U  --/D  logarithm of the [NII]6583/Halpha line ratio in the central 2.5arcsec/aperture
+    e_log_NII_Ha_cen real NOT NULL, --/U  --/D  error in the logarithm of the [NII]6583/Halpha line ratio in the central 2.5arcsec/aperture
+    log_OIII_Hb_cen real NOT NULL, --/U  --/D  logarithm of the [OIII]5007/Hbeta line ratio in the central 2.5arcsec/aperture
+    e_log_OIII_Hb_cen real NOT NULL, --/U  --/D  error in the logarithm of the [OIII]5007/Hbeta line ratio in the central 2.5arcsec/aperture
+    log_SII_Ha_cen real NOT NULL, --/U  --/D  logarithm of the [SII]6717+6731/Halpha line ratio in the central 2.5arcsec/aperture
+    e_log_SII_Ha_cen real NOT NULL, --/U  --/D  error in the logarithm of the [SII]6717/Halpha line ratio in the central 2.5arcsec/aperture
+    log_OII_Hb_cen real NOT NULL, --/U  --/D  logarithm of the [OII]3727/Hbeta line ratio in the central 2.5arcsec/aperture
+    e_log_OII_Hb_cen real NOT NULL, --/U  --/D  error in the logarithm of the [OII]3727/Hbeta line ratio in the central 2.5arcsec/aperture
+    EW_Ha_cen real NOT NULL, --/U  --/D  EW of Halpha in the central 2.5arcsec/aperture
+    e_EW_Ha_cen real NOT NULL, --/U  --/D  error of the EW of Halpha in the central 2.5arcsec/aperture
+    ion_class_cen real NOT NULL, --/U  --/D  Classification of the central ionization
+    sigma_cen real NOT NULL, --/U km/s --/D  Velocity dispersion i.e. sigma in the central 2.5 arcsec/aperture derived for the stellar populations
+    e_sigma_cen real NOT NULL, --/U km/s --/D  error in the velocity dispersion in the central 2.5 arcsec/aperture derived for the stellar populations
+    sigma_cen_Ha real NOT NULL, --/U km/s --/D  Velocity dispersion i.e. sigma in the central 2.5 arcsec/aperture derived for the Halpha emission line
+    e_sigma_cen_Ha real NOT NULL, --/U km/s --/D  error in the velocity dispersion in the central 2.5 arcsec/aperture derived for the  Halpha emission line
+    vel_sigma_Re real NOT NULL, --/U  --/D  Velocity/dispersion ratio for the stellar populations within 1.5 effective radius
+    e_vel_sigma_Re real NOT NULL, --/U  --/D  error in the velocity/dispersion ratio for the stellar populations within 1.5 effective radius
+    Lambda_Re real NOT NULL, --/U  --/D  Specific angular momentum lambda parameter for the stellar populations within 1.5 effective radius
+    e_Lambda_Re real NOT NULL, --/U  --/D  error in the specific angular momentum lambda parameter for the stellar populations within 1.5 effective radius
+    plateifu varchar(20) NOT NULL, --/U  --/D  
+    plate int NOT NULL, --/U  --/D  plate ID of the MaNGA original cube
+    ifudsgn int NOT NULL, --/U  --/D  IFU bundle ID of the MaNGA original cube
+)
+GO
+--
 
 
 EXEC spSetDefaultFileGroup 'PrimaryFileGroup'

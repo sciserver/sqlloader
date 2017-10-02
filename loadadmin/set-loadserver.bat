@@ -3,5 +3,5 @@
 @echo off
 ::
 ::---------------------------
-set LOADSERVER=SDSS3B
+set LOADSERVER=SDSS4c
 ::----------------------------

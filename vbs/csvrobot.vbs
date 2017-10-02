@@ -96,7 +96,7 @@ sep		= "','"
 	'
 	Set theroot = fso.GetFolder(thepath)
 	'
-	iDebug		= 0
+	iDebug		= 1
 '	If iDebug = 1 Then
 		Set fDebug = fso.OpenTextFile( "C:\temp\csvRobotDbg.txt", 8, True)
 		CsvLog "Open debug file c:\temp\csvRobotDbg.txt", "File opened", "OK"

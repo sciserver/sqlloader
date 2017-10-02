@@ -239,6 +239,10 @@
 --* 2016-04-13 Ani: Changed wiseForced to wiseForcedTarget.
 --* 2016-07-06 Ani: Added PKs for apogeeDesign, apogeeField and nsatlas.
 --* 2017-04-19 Ani: Added PK for APOGEE cannonStar.
+--* 2017-05-26 Ani: Added PKs for mangaFirefly and mangaPipe3D.
+--* 2017-06-13 Ani: Changed manga[Firefly|Pipe3D] PKs to plateIFU (mangaID not unique).
+--* 2017-06-30 Ani: Changed PK for sppTargets to TARGETID (identity column).
+--* 2017-07-17 Ani: Added PK for Plate2Target.
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -457,6 +461,8 @@ INSERT IndexMap Values('K','primary key', 'cannonStar', 	 	'cannon_id'		,'','SPE
 INSERT IndexMap Values('K','primary key', 'mangaDrpAll',		'plateIFU'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'mangaTarget',		'mangaID'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'nsatlas',			'nsaID'			,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'mangaFirefly',		'plateIFU'			,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'mangaPipe3D',		'plateIFU'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'qsoVarPTF',			'VAR_OBJID'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'qsoVarStripe',		'VAR_OBJID'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'zooSpec', 			'specObjID'		,'','SPECTRO');
@@ -467,6 +473,7 @@ INSERT IndexMap Values('K','primary key', 'zoo2Stripe82Coadd2', 	'stripe82objid'
 INSERT IndexMap Values('K','primary key', 'zoo2Stripe82Normal', 	'dr7objid'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'marvelsStar', 	 	'STARNAME,PLATE'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'marvelsVelocityCurveUF1D',  	'STARNAME,BEAM,RADECID,FCJD,[LST-OBS]'		,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'sppTargets', 	 	'TARGETID'		,'','SPECTRO');
 -----------------------------------------------------
 -- Primary Keys for the TILES tables
 -----------------------------------------------------
@@ -479,6 +486,8 @@ INSERT IndexMap Values('K','primary key', 'sdssTilingGeometry', 	 'tilingGeometr
 INSERT IndexMap Values('K','primary key', 'sdssTilingRun', 	 	'tileRun'		,'','TILES');
 INSERT IndexMap Values('K','primary key', 'sdssTiledTargetAll',  	'targetID'		,'','TILES');
 INSERT IndexMap Values('K','primary key', 'sdssTilingInfo', 	'tileRun,targetID'	,'','TILES');
+INSERT IndexMap Values('K','primary key', 'plate2Target', 	'plate2TargetID,plate,objid'	,'','TILES');
+
 -----------------------------------------------------
 -- Primary Keys for the REGION tables
 -----------------------------------------------------

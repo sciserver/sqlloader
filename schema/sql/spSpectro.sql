@@ -29,12 +29,6 @@
 --*             the PNG file names are constructed by padding the plate
 --*             number with leading zeros, but this convention is broken
 --*             for bigger plate numbers (starting with DR14).
---*
---* 2017-05-31  Sue & Manu: Fixed functions fSDSSfromSpecID, fPlate, fMJD, 
---*				fFiber, and fSpecIDFromSDSS to handle larger specObjID's
---*				-- numeric(20,0) instead of bigint
---*			   
-			
 ------------------------------------------------------------------------
 
 -----------------------------------------------------
@@ -66,6 +60,7 @@ ELSE
       WITH PERMISSION_SET = SAFE
    END
 GO
+
 
 
 --=============================================================
@@ -100,11 +95,11 @@ CREATE FUNCTION fSpecidFromSDSS(@plate int, @mjd int, @fiber int, @run2d varchar
 --/T     run2d[14] - bits 10-23 for the spec2d rerun, and <br>
 --/T     0         - bits 0-9 unused in SpecObj, used for line/redshift/index
 --/T                 in other tables. <br>
---/T <samp> select dbo.fSpecidFromSDSS(266,51602,1,26) as specObjID </samp>
+--/T <samp> select dbo.fSpecidFromSDSS(266,51630,145) as specObjID </samp>
 -----------------------------------------------------------------
-RETURNS NUMERIC(20,0)
+RETURNS BIGINT
 AS BEGIN
-	declare @rerun int, @n int, @m int, @p int, @index1 int, @index2 int, @two numeric(20,0);
+	declare @rerun int, @n int, @m int, @p int, @index1 int, @index2 int, @two bigint;
 	SET @two = 2;
 	IF @run2d like 'v%'
 		BEGIN
@@ -120,7 +115,7 @@ AS BEGIN
     RETURN ( cast(
 				(@plate*power(@two,50) + @fiber*power(@two,38) + (@mjd - 50000)*power(@two,24)
 				+ @rerun*power(@two,10))
-			 as numeric(20,0)) );
+			 as bigint) );
 END
 GO
 
@@ -131,7 +126,7 @@ IF EXISTS (SELECT name FROM   sysobjects
 	DROP FUNCTION fSDSSfromSpecID
 GO
 --
-CREATE FUNCTION fSDSSfromSpecID(@specID numeric(20,0))
+CREATE FUNCTION fSDSSfromSpecID(@specID bigint)
 -------------------------------------------------------------------------------
 --/H Returns a table pf the 3-part SDSS numbers from the long specObjID.
 --
@@ -145,43 +140,11 @@ RETURNS @sdssSpecID TABLE (
 	fiber INT
 )
 AS BEGIN
-
-
-	declare @mjd int;
-	declare @fiber int;
-	declare @s bigint;
-
-
-	DECLARE @sum bigint = 0
-	DECLARE @cnt INT = cast(ceiling(log(cast(0x0000003FFFFFFFFF as bigint),2)) as int)
-	Declare @max  int = floor(log(@specID,2))
-	WHILE @cnt < @max
-	BEGIN
-		set @sum = @sum + power(cast(2 as bigint), @cnt)
-		SET @cnt = @cnt + 1;
-	END;
-
-	set @s = @specID - @sum
-	set @mjd = cast( (((@s & 0x0000003FFFFFFFFF)/ power(cast(2 as bigint),24)) + 50000) AS INT )
-
-
-	set @sum = 0
-	set @cnt = cast(ceiling(log(cast(0x0003FFFFFFFFFFFF as bigint),2)) as int)
-	WHILE @cnt < @max
-	BEGIN
-		set @sum = @sum + power(cast(2 as bigint), @cnt)
-		SET @cnt = @cnt + 1;
-	END;
-
-	set @s = @specID - @sum
-	set @fiber = cast( (((cast(@s as bigint) & 0x0003FFFFFFFFFFFF)/ power(cast(2 as bigint),38))) AS INT)
-
-	
     INSERT @sdssSpecID 
 	SELECT
 	    cast( (@specID / power(cast(2 as bigint),50)) AS INT ) AS plate,
-	    @mjd AS mjd,
-	    @fiber AS fiber
+	    cast( (((@specID & 0x0000003FFFFFFFFF)/ power(cast(2 as bigint),24)) + 50000) AS INT ) AS mjd,
+	    cast( (((@specID & 0x0003FFFFFFFFFFFF) / power(cast(2 as bigint),38))) AS INT) AS fiber
     RETURN
 END
 GO
@@ -195,7 +158,7 @@ if exists (select * from dbo.sysobjects
 	drop function [dbo].[fPlate]
 GO
 --
-CREATE FUNCTION fPlate(@SpecID numeric(20,0))
+CREATE FUNCTION fPlate(@SpecID bigint)
 -----------------------------------------------------------------
 --/H Extracts plate from an SDSS Spec ID
 --
@@ -210,13 +173,9 @@ CREATE FUNCTION fPlate(@SpecID numeric(20,0))
 -----------------------------------------------------------------
 RETURNS INT
 AS BEGIN
-/*
 	DECLARE @two BIGINT
 	SET @two = 2;
 	RETURN ( cast( (@SpecID / power(@two,50)) AS INT));
-*/
-
-	return ( select plate from fSDSSfromSpecID(@specID) )
 END  
 GO
 
@@ -228,7 +187,7 @@ if exists (select * from dbo.sysobjects
 	drop function [dbo].[fMJD]
 GO
 --
-CREATE FUNCTION fMJD(@SpecID numeric(20,0))
+CREATE FUNCTION fMJD(@SpecID bigint)
 -----------------------------------------------------------------
 --/H Extracts MJD from an SDSS Spec ID
 --
@@ -243,12 +202,9 @@ CREATE FUNCTION fMJD(@SpecID numeric(20,0))
 -----------------------------------------------------------------
 RETURNS INT
 AS BEGIN
-/*
 	DECLARE @two BIGINT
 	SET @two = 2;
 	RETURN ( cast(((@SpecID & 0x0000003FFFFFFFFF) / power(@two,24)) AS INT) + 50000 );
-*/
-	return ( select mjd from fSDSSfromSpecID(@specID))
 END  
 GO
 
@@ -260,7 +216,7 @@ if exists (select * from dbo.sysobjects
 	drop function [dbo].[fFiber]
 GO
 --
-CREATE FUNCTION fFiber(@SpecID numeric(20,0))
+CREATE FUNCTION fFiber(@SpecID bigint)
 -----------------------------------------------------------------
 --/H Extracts Fiber from an SDSS Spec ID
 --
@@ -275,13 +231,9 @@ CREATE FUNCTION fFiber(@SpecID numeric(20,0))
 -----------------------------------------------------------------
 RETURNS INT
 AS BEGIN
-/*
 	DECLARE @two BIGINT
 	SET @two = 2;
 	RETURN ( cast(((@SpecID & 0x0003FFFFFFFFFFFF) / power(@two,38)) AS INT));
-*/
-	return ( select fiber from fSDSSfromSpecID(@specID))
-
 END  
 GO
 

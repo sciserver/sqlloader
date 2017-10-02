@@ -38,8 +38,8 @@ time /T >>log.txt
 if not exist c:\sql_db\ mkdir c:\sql_db
 echo y| cacls c:\sql_db /t /g Administrators:F
 ::
-if not exist d:\sql_db\ mkdir d:\sql_db
-echo y| cacls d:\sql_db /t /g Administrators:F
+if not exist c:\sql_db\ mkdir c:\sql_db
+echo y| cacls c:\sql_db /t /g Administrators:F
 ::
 echo Created directories and shares >>log.txt
 ::

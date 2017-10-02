@@ -20,7 +20,7 @@ IF [%3}==[] goto nopmt
 ::
 :: set the directory where the databases will be created
 ::
-IF [%4]==[] ( SET DBPATH=d:\sql_db\ ) ELSE ( SET DBPATH=%4% )
+IF [%4]==[] ( SET DBPATH=c:\sql_db\ ) ELSE ( SET DBPATH=%4% )
 ::
 ::
 :: build environment variables for easy query construction

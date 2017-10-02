@@ -294,6 +294,10 @@
 --*                 recomputed for DR13 (fix as per T.Budavari).
 --* 2017-05-15 Ani: Updated spFinishStep to skip loadPatches if it is
 --*                 listed in SkipFinishPhases.
+--* 2017-07-10 Ani: Commented out call to spNeighbors as precaution.
+--* 2017-07-11 Ani: Updated spBuildSpecPhotoAll for compressed version.
+--*                 Added support for "commonExit" as a valid resume
+--*                 mode phase in spFinishStep.
 ---====================================================================
 SET NOCOUNT ON;
 GO
@@ -1803,7 +1807,8 @@ AS BEGIN
 	BEGIN TRANSACTION
 	    TRUNCATE TABLE SpecPhotoAll
 	    --
-	    INSERT SpecPhotoAll
+		DBCC TRACEON(610)
+	    INSERT SpecPhotoAll WITH (TABLOCK)
  	    SELECT
 	 	s.specObjID,     
 		s.mjd,
@@ -1927,10 +1932,11 @@ AS BEGIN
 		p.dered_r,
 		p.dered_i,
 		p.dered_z
-	    FROM SpecObjAll s
-	    LEFT OUTER JOIN PhotoObjAll p WITH (nolock) ON s.bestObjid=p.objid
+	    FROM SpecObjAll s WITH (NOLOCK)
+	    LEFT OUTER JOIN PhotoObjAll p WITH (NOLOCK) ON s.bestObjid=p.objid
 	    ORDER BY s.specobjid
 	    SET  @rows = ROWCOUNT_BIG();
+		DBCC TRACEOFF(610)
 	COMMIT TRANSACTION
 	-- generate completion message.
 	EXEC spIndexBuildSelection @taskid, @stepid, 'I', 'SpecPhotoAll'
@@ -2804,6 +2810,7 @@ BEGIN
 	IF (@phaseName='setInsideMask')        GOTO setInsideMask
 	IF (@phaseName='loadPatches')          GOTO loadPatches
 	IF (@phaseName='createWeblogDB')       GOTO createWeblogDB
+	IF (@phaseName='commonExit')           GOTO commonExit
 	-- if the phase name doesnt match any of the above, exit with error
 	SET @err = 1;
 	SET @ret = 1;
@@ -2877,9 +2884,10 @@ BEGIN
 	IF ('computeNeighbors' NOT IN (SELECT phase FROM #skipPhases))
 	    BEGIN
 	     	SET @msg = 'Starting to compute neighbors.'
-		EXEC spNewPhase @taskid, @stepid, 'computeNeighbors', 'OK', @msg;
-	   	EXEC loadsupport.dbo.spSetFinishPhase 'computeNeighbors'
-		EXEC @ret = dbo.spNeighbors @taskID, @stepID, @type, @destinationDBname, 30.0, 1
+			EXEC spNewPhase @taskid, @stepid, 'computeNeighbors', 'OK', @msg;
+	   		EXEC loadsupport.dbo.spSetFinishPhase 'computeNeighbors'
+			-- Call to spNeighbors commented out as a precaution
+			-- EXEC @ret = dbo.spNeighbors @taskID, @stepID, @type, @destinationDBname, 30.0, 1
 	    END
 	IF (@ret != 0) OR (@execMode != 'resume') GOTO commonExit
 	---------------------------------------------------------
