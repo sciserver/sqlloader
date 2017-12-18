@@ -159,17 +159,11 @@ WITH
     ROWTERMINATOR = '\n',   --Use to shift the control to next row
     TABLOCK
 )
-
--- Add PK to IndexMap
-INSERT IndexMap Values('K','primary key', 'sdssEbosFirefly', 	'specObjID'		,'','SPECTRO');
 GO
-
--- Create the PK index
-EXEC spIndexBuildSelection 0, 0, 'K', 'sdssEbossFirefly'
-
 
 -- Add sdssEbossFirefly entry to DBObjects
 INSERT DBObjects VALUES('sdssEbossFirefly','U','U',' Contains the measured stellar population parameters for a spectrum. ',' This is a base table containing spectroscopic  information and the results of the FIREFLY fits on  the DR14 speclite spectra observed by SDSS (run2d=26) and eBOSS (run2d=v5_10_0)  This run used the Kroupa, Salpeteror Chabrier stellar initial mass function.  Redshifts used for BOSS and eBOSS plates is the Z_NOQSO version. ','0');
+GO
 
 -- Add sdssEbossFirefly columns to DBColumns
 INSERT DBColumns VALUES('sdssEbossFirefly','SPECOBJID','no unit','','','Unique database ID based on PLATE, MJD, FIBERID, RUN2D','0');
@@ -300,12 +294,23 @@ INSERT DBColumns VALUES('sdssEbossFirefly','Kroupa_STELIB_spm_EBV','no unit','',
 INSERT DBColumns VALUES('sdssEbossFirefly','Kroupa_STELIB_nComponentsSSP','no unit','','','number of single stellar population components, Kroupa IMF STELIB library','0');
 INSERT DBColumns VALUES('sdssEbossFirefly','Kroupa_STELIB_chi2','no unit','','','chi squared, Kroupa IMF STELIB library','0');
 INSERT DBColumns VALUES('sdssEbossFirefly','Kroupa_STELIB_ndof','no unit','','','number of degrees of freedom, Kroupa IMF STELIB library','0');
+GO
+
+-- Add PK to IndexMap
+INSERT IndexMap Values('K','primary key', 'sdssEbossFirefly', 	'specObjID'		,'','SPECTRO');
+GO
+
+-- Create the PK index
+EXEC spIndexBuildSelection 0, 0, 'K', 'sdssEbossFirefly'
+GO
 
 
 -- Add History and inventory entries
 INSERT History VALUES('IndexMap','2017-12-18','Ani','Added PK for sdssEbossFirefly (VAC). ');
 INSERT History VALUES('SpectroTables','2017-12-12','Ani','Added new VAC table sdssEbossFirefly (from J Comparat). ');
 INSERT Inventory VALUES('SpectroTables','sdssEbossFirefly','U');
+GO
+
 
 
 -- FInally, update the DB minor version
@@ -314,9 +319,9 @@ EXECUTE spSetVersion
   0
   ,0
   ,'14'
-  ,'154989'
+  ,'a92ac476e0ad68036bef605e5cac101671d3caa9'
   ,'Update DR'
-  ,'.7'
+  ,'.3'
   ,'eBOSS Firefly VAC addition'
   ,'Added eBOSS Firefly VAC table sdssEbossFirefly'
   ,'J.Comparat,A.Thakar'
