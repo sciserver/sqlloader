@@ -66,7 +66,6 @@ INSERT Dependency VALUES('spFinish','spFinishStep','spFixDetectionIndex');
 INSERT Dependency VALUES('spFinish','spFinishStep','spIndexBuildSelection');
 INSERT Dependency VALUES('spFinish','spFinishStep','spLoadPatches');
 INSERT Dependency VALUES('spFinish','spFinishStep','spLoadPhotoTag');
-INSERT Dependency VALUES('spFinish','spFinishStep','spNeighbors');
 INSERT Dependency VALUES('spFinish','spFinishStep','spNewPhase');
 INSERT Dependency VALUES('spFinish','spFinishStep','spSdssPolygonRegions');
 INSERT Dependency VALUES('spFinish','spFinishStep','spSetFinishPhase');
@@ -101,11 +100,11 @@ INSERT Dependency VALUES('spFinish','spRunPatch','spRunSqlScript');
 INSERT Dependency VALUES('spFinish','spRunPatch','spUpdateSkyServerCrossCheck');
 INSERT Dependency VALUES('spFinish','spRunPatch','spUpdateStatistics');
 INSERT Dependency VALUES('spFinish','spRunSQLScript','spNewPhase');
-INSERT Dependency VALUES('spFinish','spSdssPolygonRegions','fSphGetArea');
-INSERT Dependency VALUES('spFinish','spSdssPolygonRegions','fSphSimplifyQueryAdvanced');
+INSERT Dependency VALUES('spFinish','spSdssPolygonRegions','sph.fGetArea');
 INSERT Dependency VALUES('spFinish','spSdssPolygonRegions','spIndexBuildSelection');
 INSERT Dependency VALUES('spFinish','spSdssPolygonRegions','spIndexDropSelection');
 INSERT Dependency VALUES('spFinish','spSdssPolygonRegions','spNewPhase');
+INSERT Dependency VALUES('spFinish','spSdssPolygonRegions','spRegionSync');
 INSERT Dependency VALUES('spFinish','spSegue2SpectroPhotoMatch','fGetNearestObjIdEqMode');
 INSERT Dependency VALUES('spFinish','spSegue2SpectroPhotoMatch','spNewPhase');
 INSERT Dependency VALUES('spFinish','spSegue2SpectroPhotoMatch','sppParams');
@@ -413,6 +412,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '403 lines inserted into Dependency'
+PRINT '402 lines inserted into Dependency'
 ------------------------------------
 GO

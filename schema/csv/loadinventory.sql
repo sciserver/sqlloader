@@ -217,6 +217,7 @@ INSERT Inventory VALUES('SpectroTables','PlateX','U');
 INSERT Inventory VALUES('SpectroTables','SpecObjAll','U');
 INSERT Inventory VALUES('SpectroTables','SpecPhotoAll','U');
 INSERT Inventory VALUES('SpectroTables','SpecDR7','U');
+INSERT Inventory VALUES('SpectroTables','sdssEbossFirefly','U');
 INSERT Inventory VALUES('GalaxyProductTables','stellarMassPCAWiscBC03','U');
 INSERT Inventory VALUES('GalaxyProductTables','stellarMassPCAWiscM11','U');
 INSERT Inventory VALUES('GalaxyProductTables','stellarMassPassivePort','U');
@@ -266,13 +267,13 @@ INSERT Inventory VALUES('ApogeeTables','apogeeStarVisit','U');
 INSERT Inventory VALUES('ApogeeTables','apogeeStarAllVisit','U');
 INSERT Inventory VALUES('ApogeeTables','aspcapStar','U');
 INSERT Inventory VALUES('ApogeeTables','aspcapStarCovar','U');
+INSERT Inventory VALUES('ApogeeTables','cannonStar','U');
 INSERT Inventory VALUES('ApogeeTables','apogeePlate','U');
-INSERT Inventory VALUES('ApogeeTables','apogeeDesign','U');
-INSERT Inventory VALUES('ApogeeTables','apogeeField','U');
-INSERT Inventory VALUES('ApogeeTables','apogeeObject','U');
 INSERT Inventory VALUES('MangaTables','mangaDrpAll','U');
 INSERT Inventory VALUES('MangaTables','mangatarget','U');
 INSERT Inventory VALUES('MangaTables','nsatlas','U');
+INSERT Inventory VALUES('MangaTables','mangaFirefly','U');
+INSERT Inventory VALUES('MangaTables','mangaPipe3D','U');
 INSERT Inventory VALUES('QsoVarTables','qsoVarPTF','U');
 INSERT Inventory VALUES('QsoVarTables','qsoVarStripe','U');
 INSERT Inventory VALUES('FrameTables','Frame','U');
@@ -472,7 +473,7 @@ INSERT Inventory VALUES('spTestQueries','spTestTimeEnd','P');
 INSERT Inventory VALUES('spTestQueries','spTestQueries','P');
 INSERT Inventory VALUES('spDocSupport','fVarBinToHex','F');
 INSERT Inventory VALUES('spDocSupport','fEnum','F');
-INSERT Inventory VALUES('spDocSupport','fDocColumns','F');
+INSERT Inventory VALUES('spDocSupport','dbo.[fDocColumns]','F');
 INSERT Inventory VALUES('spDocSupport','fDocColumnsWithRank','F');
 INSERT Inventory VALUES('spDocSupport','fDocFunctionParams','F');
 INSERT Inventory VALUES('spDocSupport','spDocEnum','P');
@@ -603,6 +604,6 @@ INSERT Inventory VALUES('spCosmology','fMathGetBin','F');
 GO
 
 ------------------------------------
-PRINT '593 lines inserted into Inventory'
+PRINT '594 lines inserted into Inventory'
 ------------------------------------
 GO
