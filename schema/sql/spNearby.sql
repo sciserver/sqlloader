@@ -102,9 +102,20 @@
 --*                 MaNGA searches.
 --* 2016-04-26 Ani: Updated data types returned by MaNGA functions
 --*                 fGetNear[by|est]MangaObjEq to match the table schema.
+--*
+--* 2017-04-19 Sue: Added inner loop join to fGetNearbyObjXYZ and fGetNearbyObjAllXYZ
+--*                 to fix performance issues with clustered columnstore indexes
+--*					Commented out code to set DB compatibility level to SQL2005
+--* 2018-03-29 Sue: Fixed spec functions to return numeric(20) instead of bigint
+
 --=====================================================================
 SET NOCOUNT ON;
 GO
+
+/*
+
+Commenting this out (4/19/2017) - it doesn't appear to be needed anymore
+--sue
 
 DECLARE @dbName nvarchar(1000)
 SELECT @dbName = DB_NAME()
@@ -115,7 +126,7 @@ EXEC sp_configure 'clr enabled', 1
 reconfigure with override
 GO
 
-
+*/
 
 --===================================================================
 IF EXISTS (SELECT name FROM   sysobjects
@@ -674,7 +685,7 @@ BEGIN
 	    htmID,
  	    2*DEGREES(ASIN(sqrt(power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2))/2))*60 
 	    
-	    FROM @htmTemp H  join PhotoPrimary P
+	    FROM @htmTemp H  inner loop join PhotoPrimary P
 	             ON  (P.HtmID BETWEEN H.HtmIDstart AND H.HtmIDend )
 	   AND power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2) < @lim
 	ORDER BY power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2)  ASC
@@ -753,7 +764,7 @@ BEGIN
 	    htmID,
  	    2*DEGREES(ASIN(sqrt(power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2))/2))*60 
 	    --sqrt(power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2))/@d2r*60 
-	    FROM @htmTemp H join PhotoObjAll P
+	    FROM @htmTemp H inner loop join PhotoObjAll P
 	             ON  (P.HtmID BETWEEN H.HtmIDstart AND H.HtmIDend )
 	    AND power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2)< @lim
 	    ORDER BY power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2) ASC
@@ -837,7 +848,7 @@ CREATE FUNCTION fGetNearestSpecObjIdEq(@ra float, @dec float, @r float)
 --/T <br>      WHERE dbo.fGetNearestSpecObjIdEq(ra,dec,3.0) IS NOT NULL
 --/T</samp><p>
 -------------------------------------------------
-RETURNS bigint
+RETURNS numeric(20)
 AS BEGIN
     RETURN (select specObjID from dbo.fGetNearestSpecObjEq(@ra,@dec,@r)) 
 END
@@ -866,7 +877,7 @@ CREATE FUNCTION fGetNearestSpecObjIdAllEq(@ra float, @dec float, @r float)
 --/T <br>      WHERE dbo.fGetNearestSpecObjIdAllEq(ra,dec,3.0) IS NOT NULL
 --/T</samp><p>
 -------------------------------------------------
-RETURNS bigint
+RETURNS numeric(20)
 AS BEGIN
     RETURN (select specObjID from dbo.fGetNearestSpecObjAllEq(@ra,@dec,@r)) 
 END
@@ -885,7 +896,7 @@ CREATE FUNCTION fGetNearbySpecObjXYZ (@nx float, @ny float, @nz float, @r float)
 -------------------------------------------------------------
 --/T There is no limit on the number of objects returned, but there are about 40 per sq arcmin.
 --/T <p>returned table:  
---/T <li> specObjID numeric(20,0),               -- Photo primary object identifier
+--/T <li> specObjID numeric(20),               -- Photo primary object identifier
 --/T <li> run int NOT NULL,           -- run that observed this object   
 --/T <li> camcol int NOT NULL,        -- camera column that observed the object
 --/T <li> field int NOT NULL,         -- field that had the object
@@ -905,7 +916,7 @@ CREATE FUNCTION fGetNearbySpecObjXYZ (@nx float, @ny float, @nz float, @r float)
 --/T <br>see also fGetNearbySpecObjEq, fGetNearestSpecObjXYZ, fGetNearbySpecObjAllXYZ
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
-    specObjID numeric(20,0),
+    specObjID numeric(20),
     plate int NOT NULL,
     mjd int NOT NULL,
     fiberID int NOT NULL,
@@ -982,7 +993,7 @@ CREATE FUNCTION fGetNearbySpecObjAllXYZ (@nx float, @ny float, @nz float, @r flo
 --/T <br>see also fGetNearbySpecObjEq, fGetNearestSpecObjXYZ, fGetNearestSpecObjXYZ
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
-    specObjID numeric(20,0),
+    specObjID numeric(20),
     plate int NOT NULL,
     mjd int NOT NULL,
     fiberID int NOT NULL,
@@ -1040,7 +1051,7 @@ CREATE FUNCTION fGetNearestSpecObjXYZ (@nx float, @ny float, @nz float, @r float
 --/H Returns nearest scienceprimary specobj within @r arcminutes of an xyz point (@nx,@ny, @nz).
 -------------------------------------------------------------
 --/T <p> returned table:  
---/T <li>  specObjID numeric(20,0),		-- unique spectrum ID
+--/T <li>  specObjID numeric(20),		-- unique spectrum ID
 --/T <li>  plate int NOT NULL,		-- spectroscopic plate number
 --/T <li>  mjd int NOT NULL,		-- MJD of observation
 --/T <li>  fiberID int NOT NULL,	-- fiber number on plate
@@ -1061,7 +1072,7 @@ CREATE FUNCTION fGetNearestSpecObjXYZ (@nx float, @ny float, @nz float, @r float
 --/T  <br>see also fGetNearbySpecObjEq, fGetNearestSpecObjEq, fGetNearbySpecObjXYZ, 
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
-    specObjID numeric(20,0),
+    specObjID numeric(20),
     plate int NOT NULL,
     mjd int NOT NULL,
     fiberID int NOT NULL,
@@ -1094,7 +1105,7 @@ CREATE FUNCTION fGetNearestSpecObjAllXYZ (@nx float, @ny float, @nz float, @r fl
 --/H Returns nearest specobj within @r arcminutes of an xyz point (@nx,@ny, @nz).
 -------------------------------------------------------------
 --/T <p> returned table:  
---/T <li>  specObjID numeric(20,0),		-- unique spectrum ID
+--/T <li>  specObjID numeric(20),		-- unique spectrum ID
 --/T <li>  plate int NOT NULL,		-- spectroscopic plate number
 --/T <li>  mjd int NOT NULL,		-- MJD of observation
 --/T <li>  fiberID int NOT NULL,	-- fiber number on plate
@@ -1116,7 +1127,7 @@ CREATE FUNCTION fGetNearestSpecObjAllXYZ (@nx float, @ny float, @nz float, @r fl
 --/T  <br>see also fGetNearbySpecObjAllEq, fGetNearestSpecObjAllEq, fGetNearbySpecObjAllXYZ, 
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
-    specObjID numeric(20,0),
+    specObjID numeric(20),
     plate int NOT NULL,
     mjd int NOT NULL,
     fiberID int NOT NULL,
@@ -1151,7 +1162,7 @@ CREATE FUNCTION fGetNearbySpecObjEq (@ra float, @dec float, @r float)
 -------------------------------------------------------------
 --/T There is no limit on the number of objects returned.
 --/T <p>returned table:  
---/T <li>  specObjID numeric(20,0),		-- unique spectrum ID
+--/T <li>  specObjID numeric(20),		-- unique spectrum ID
 --/T <li>  plate int NOT NULL,		-- spectroscopic plate number
 --/T <li>  mjd int NOT NULL,		-- MJD of observation
 --/T <li>  fiberID int NOT NULL,	-- fiber number on plate
@@ -1171,7 +1182,7 @@ CREATE FUNCTION fGetNearbySpecObjEq (@ra float, @dec float, @r float)
 --/T <br>see also fGetNearbySpecObjEq, fGetNearestSpecObjXYZ, fGetNearestSpecObjXYZ
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
-    specObjID numeric(20,0),
+    specObjID numeric(20),
     plate int NOT NULL,
     mjd int NOT NULL,
     fiberID int NOT NULL,
@@ -1209,7 +1220,7 @@ CREATE FUNCTION fGetNearbySpecObjAllEq (@ra float, @dec float, @r float)
 -------------------------------------------------------------
 --/T There is no limit on the number of objects returned.
 --/T <p>returned table:  
---/T <li>  specObjID numeric(20,0),		-- unique spectrum ID
+--/T <li>  specObjID numeric(20),		-- unique spectrum ID
 --/T <li>  plate int NOT NULL,		-- spectroscopic plate number
 --/T <li>  mjd int NOT NULL,		-- MJD of observation
 --/T <li>  fiberID int NOT NULL,	-- fiber number on plate
@@ -1230,7 +1241,7 @@ CREATE FUNCTION fGetNearbySpecObjAllEq (@ra float, @dec float, @r float)
 --/T <br>see also fGetNearbySpecObjEq, fGetNearestSpecObjXYZ, fGetNearestSpecObjXYZ
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
-    specObjID numeric(20,0),
+    specObjID numeric(20),
     plate int NOT NULL,
     mjd int NOT NULL,
     fiberID int NOT NULL,
@@ -1268,7 +1279,7 @@ CREATE FUNCTION fGetNearestSpecObjEq (@ra float, @dec float, @r float)
 --/H Returns nearest scienceprimary specobj within @r arcminutes of an equatorial point (@ra,@dec).
 -------------------------------------------------------------
 --/T <p> returned table:  
---/T <li>  specObjID numeric(20,0),		-- unique spectrum ID
+--/T <li>  specObjID numeric(20),		-- unique spectrum ID
 --/T <li>  plate int NOT NULL,		-- spectroscopic plate number
 --/T <li>  mjd int NOT NULL,		-- MJD of observation
 --/T <li>  fiberID int NOT NULL,	-- fiber number on plate
@@ -1289,7 +1300,7 @@ CREATE FUNCTION fGetNearestSpecObjEq (@ra float, @dec float, @r float)
 --/T  <br>see also fGetNearbySpecObjEq, fGetNearestSpecObjAllEq, fGetNearbySpecObjXYZ, 
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
-    specObjID numeric(20,0),
+    specObjID numeric(20),
     plate int NOT NULL,
     mjd int NOT NULL,
     fiberID int NOT NULL,
@@ -1328,7 +1339,7 @@ CREATE FUNCTION fGetNearestSpecObjAllEq (@ra float, @dec float, @r float)
 --/H Returns nearest specobj within @r arcminutes of an equatorial point (@ra, @dec).
 -------------------------------------------------------------
 --/T <p> returned table:  
---/T <li>  specObjID numeric(20,0),		-- unique spectrum ID
+--/T <li>  specObjID numeric(20),		-- unique spectrum ID
 --/T <li>  plate int NOT NULL,		-- spectroscopic plate number
 --/T <li>  mjd int NOT NULL,		-- MJD of observation
 --/T <li>  fiberID int NOT NULL,	-- fiber number on plate
@@ -1350,7 +1361,7 @@ CREATE FUNCTION fGetNearestSpecObjAllEq (@ra float, @dec float, @r float)
 --/T  <br>see also fGetNearbySpecObjAllEq, fGetNearestSpecObjEq, fGetNearbySpecObjAllXYZ, 
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
-    specObjID numeric(20,0),
+    specObjID numeric(20),
     plate int NOT NULL,
     mjd int NOT NULL,
     fiberID int NOT NULL,
@@ -1942,7 +1953,7 @@ CREATE  PROCEDURE spGetSpecNeighborsRadius
 --/T specObjId. The result of this is then joined with the SpecObj 
 --/T table, to return the attributes of the photometric objects.
 --/T <samp>
---/T <br> create table #x (id int,specObjID numeric(20,0))
+--/T <br> create table #x (id int,specObjID numeric(20))
 --/T <br> insert into #x EXEC spGetNeighbours 
 --/T </samp>
 -------------------------------------------------------------------
@@ -1973,7 +1984,7 @@ CREATE PROCEDURE spGetSpecNeighborsPrim(@r float)
 --/T The result of this is then joined with the SpecObj table, 
 --/T to return the attributes of the photometric objects.
 --/T <samp>
---/T <br> create table #x (id int,specObjID numeric(20,0))
+--/T <br> create table #x (id int,specObjID numeric(20))
 --/T <br> insert into #x EXEC spGetSpecNeighborsPrim 2.5
 --/T </samp>
 -------------------------------------------------------------------
@@ -2004,7 +2015,7 @@ CREATE PROCEDURE spGetSpecNeighborsAll(@r float)
 --/T The result of this is then joined with the SpecObjAll table, 
 --/T to return the attributes of the photometric objects.
 --/T <samp>
---/T <br> create table #x (id int,specObjID numeric(20,0))
+--/T <br> create table #x (id int,specObjID numeric(20))
 --/T <br> insert into #x EXEC spGetSpecNeighborsAll 2.5
 --/T </samp>
 -------------------------------------------------------------------
