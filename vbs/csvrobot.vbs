@@ -56,6 +56,7 @@
 ' 2016-03-10    Added WISE forced photometry batch in export type "forced".
 ' 2016-03-29    Added MaNGA batch in export type "manga".
 ' 2016-05-04    Added NSA batch in export type "nsa".
+' 2018-06-08    Added MangaDAPall to MaNGA batch.
 '==============================================================
 
 Option Explicit
@@ -180,7 +181,7 @@ Public Sub CheckDir (root,level)
 	ElseIf ( theexporttype = "forced" ) Then
 		s = s & "(^sqlWISE_forced_target-2-" & rootname & "-*[0-9]*_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "manga" ) Then
-		s = s & "(^sql(MangaDRPall|MangaTarget)" & "-v[0-9]*_[0-9]*_[0-9]*\.csv_[0-9]*\.csv$)"
+		s = s & "(^sql(MangaDAPall|MangaDRPall|MangaTarget)" & "-v[0-9]*_[0-9]*_[0-9]*\.csv_[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "nsa" ) Then
 		s = s & "(^sqlNSA" & "-v[0-9]*_[0-9]*_[0-9]*\.csv_[0-9]*\.csv$)"
 	Else
