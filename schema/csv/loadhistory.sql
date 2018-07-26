@@ -324,7 +324,13 @@ INSERT History VALUES('IndexMap','2017-05-26','Ani','Added PKs for mangaFirefly 
 INSERT History VALUES('IndexMap','2017-06-13','Ani','Changed manga[Firefly|Pipe3D] PKs to plateIFU (mangaID not unique). ');
 INSERT History VALUES('IndexMap','2017-06-30','Ani','Changed PK for sppTargets to TARGETID (identity column). ');
 INSERT History VALUES('IndexMap','2017-07-17','Ani','Added PK for Plate2Target. ');
-INSERT History VALUES('IndexMap','2017-12-18','Ani','Added PK for sdssEbossFirefly (VAC). ');
+INSERT History VALUES('IndexMap','2017-12-18','Ani','Added PK for sdssEbossFirefly (VAC). (DR15) ');
+INSERT History VALUES('IndexMap','2018-06-11','Ani','Added PK. FK for mangaDAPall. (DR15) ');
+INSERT History VALUES('IndexMap','2018-06-12','Ani','Updated FK for mangaDAPall to plateIFU+daptype. (DR15) ');
+INSERT History VALUES('IndexMap','2018-06-13','Ani','Added PKs for mangaHIall and mangaHIbonus. (DR15) ');
+INSERT History VALUES('IndexMap','2018-07-17','Ani','Added PK for spiders_quasar. (DR14 mini) ');
+INSERT History VALUES('IndexMap','2018-07-23','Ani','Added PKs for Mastar tables. (DR15) ');
+INSERT History VALUES('IndexMap','2018-07-25','Ani','Fixed PK for mangaHIbonus (added bonusid), fixed typo in sdssEbossFirefly PK name. (DR15) ');
 INSERT History VALUES('PhotoTables','2009-04-27','Ani','Swapped in updated schema for photo tables for SDSS-III. Added new table Run. ');
 INSERT History VALUES('PhotoTables','2009-05-05','Ani','Added loadVersion to Field table. ');
 INSERT History VALUES('PhotoTables','2009-06-11','Ani','Added nProf_[ugriz] to Field table. ');
@@ -589,17 +595,26 @@ INSERT History VALUES('ApogeeTables','2014-09-05','Ani','Fixed typo in ApogeePla
 INSERT History VALUES('ApogeeTables','2014-11-06','Ani','Applied DR12 updates - removed apogeeObject.observed and updated descriptions for a few other columns. ');
 INSERT History VALUES('ApogeeTables','2014-11-06','Ani','Increased length of id strings in apogeeObject to 64. ');
 INSERT History VALUES('ApogeeTables','2014-11-13','Ani','Increased length of target_id everywhere to 64. ');
-INSERT History VALUES('ApogeeTables','2014-11-25','Ani','Incorporated schema changes for DR12 (new columns param_m_h_err and param_alpha_m_err in aspcapStar) and changed http bitmask help links to internal info links. Sobeck. cannonStar. cannonStar.filename and field columns because the CSVs have NULL values. 2017-05-06 Added columns to apogeeVisit and apogeeStar for DR14. ');
+INSERT History VALUES('ApogeeTables','2014-11-25','Ani','Incorporated schema changes for DR12 (new columns param_m_h_err and param_alpha_m_err in aspcapStar) and changed http bitmask help links to internal info links. Sobeck. cannonStar. cannonStar.filename and field columns because the CSVs have NULL values. 2017-05-06 Added columns to apogeeVisit and apogeeStar for DR14. 2018-07-18 Removed conditional DROP TABLE from tables that do not get recreated with each release (apogeeDesign/Field/Object). ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Adapted from sas-sql/mangadrp.sql. ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Increased length of mangaTarget.nsa_subdir to 128. ');
-INSERT History VALUES('MangaTables','2016-04-22','Ani','Added htmID to mangaDrpAll. ');
-INSERT History VALUES('MangaTables','2016-04-26','Ani','Updated schema for mangaDrpAll from D.Law to make data types the required precision. ');
+INSERT History VALUES('MangaTables','2016-04-22','Ani','Added htmID to mangaDRPall. ');
+INSERT History VALUES('MangaTables','2016-04-26','Ani','Updated schema for mangaDRPall from D.Law to make data types the required precision. ');
 INSERT History VALUES('MangaTables','2016-05-03','Ani','Added nsatlas table for NASA-SLoan Atlas. ');
 INSERT History VALUES('MangaTables','2016-05-04','Ani','Increased nsatlas.subdir to 128 chars and some other strings (e.g. programname) to 32 chars, indented table. ');
 INSERT History VALUES('MangaTables','2016-05-10','Ani','Updated schema for NASA-SLoan Atlas. ');
 INSERT History VALUES('MangaTables','2017-04-26','Ani','Updates for DR14. ');
 INSERT History VALUES('MangaTables','2017-05-26','Ani','Added mangaFirefly and mangaPipe3D VAC tables. ');
-INSERT History VALUES('MangaTables','2017-06-13','Ani','Added PLATEIFU to mangaFirefly.                             ');
+INSERT History VALUES('MangaTables','2017-06-13','Ani','Added PLATEIFU to mangaFirefly. ');
+INSERT History VALUES('MangaTables','2018-06-08','Ani','Added mangaDAPall (DR15).  ');
+INSERT History VALUES('MangaTables','2018-06-12','Ani','Updated mangaDRPall schema (DR15).  ');
+INSERT History VALUES('MangaTables','2018-06-12','Ani','Added htmID to mangaDAPall. (DR15) ');
+INSERT History VALUES('MangaTables','2018-06-13','Ani','Changed BIGINTs to INTs and FLOATs to REALs wherever applicable in mangaDapAll. Added mangaHIall and mangaHIbonus. (DR15) ');
+INSERT History VALUES('MangaTables','2018-07-20','Ani','Added mastar tables. (DR15) ');
+INSERT History VALUES('MangaTables','2018-07-24','Ani','Moved mastar tables to separate file MastarTables.sql. (DR15) ');
+INSERT History VALUES('MangaTables','2018-07-25','Ani','Updated objra,objdec for mangaFirefly to FLOAT from REAL. (DR15) ');
+INSERT History VALUES('MastarTables','2018-07-24','Ani','Adapted from sas-sql/mastarall.sql. ');
+INSERT History VALUES('MastarTables','2018-07-24','Ani','Flipped the float/real types for coords and mags, and changed psfMag_[ugriz] to psfMag_[12345] as per  Renbin''s request. ');
 INSERT History VALUES('QsoVarTables','2016-04-05','Ani','Created sqlLoader schema file from sas/sql. ');
 INSERT History VALUES('FrameTables','2001-04-10','Jim','Moved index creation to happen after load. ');
 INSERT History VALUES('FrameTables','2001-05-15','Alex','changed spMakeFrame to join to Segment ');
@@ -668,6 +683,8 @@ INSERT History VALUES('Views','2010-12-10','Ani','Added PhotoTag view. ');
 INSERT History VALUES('Views','2010-12-12','Ani','Added missing GO after PhotoTag view definition. ');
 INSERT History VALUES('Views','2010-12-23','Ani','Added SEGUE specObjAll views. ');
 INSERT History VALUES('Views','2013-04-02','Ani','Added "clean" photometry flag to Phototag view. ');
+INSERT History VALUES('VacTables','2018-07-17','Ani','Created file. ');
+INSERT History VALUES('VacTables','2018-07-26','Ani','Updated schema as per latest version in sas/sql. (DR14-mini) ');
 INSERT History VALUES('spHtmCSharp','2005-05-01','Jim','started ');
 INSERT History VALUES('spHtmCSharp','2005-05-02','Jim','removed fHtmLookup and fHtmLookupError added fHtmToString ');
 INSERT History VALUES('spHtmCSharp','2005-05-05','GYF','added .pdb to assembly for symbolic debugging added fHtmToName (faster than fHtmToString and reports error) ');
@@ -741,6 +758,7 @@ INSERT History VALUES('spNearby','2013-05-16','Ani','Moved fDistanceArcMin* func
 INSERT History VALUES('spNearby','2013-07-11','Ani','Added dbo qualifier to fDistanceArcMinEq calls, and replaced "star" column with apogee_id in APOGEE functions. ');
 INSERT History VALUES('spNearby','2016-04-22','Ani','Added functions fGetNear[by|est]MangaObjEq for MaNGA searches. ');
 INSERT History VALUES('spNearby','2016-04-26','Ani','Updated data types returned by MaNGA functions fGetNear[by|est]MangaObjEq to match the table schema. ');
+INSERT History VALUES('spNearby','2017-04-19','Sue','Added inner loop join to fGetNearbyObjXYZ and fGetNearbyObjAllXYZ to fix performance issues with clustered columnstore indexes Commented out code to set DB compatibility level to SQL2005 ');
 INSERT History VALUES('spApogee','2006-04-27','Ani','Created inital version as per JOn Holtzman request. ');
 INSERT History VALUES('spApogee','2006-05-13','Ani','Updated description of fAspcapFelem* functions. ');
 INSERT History VALUES('spApogee','2006-05-18','Ani','Removed dbo. prefix from function definitions and also. trailing spaces from some functions. ');
@@ -1004,6 +1022,7 @@ INSERT History VALUES('spSetValues','2012-06-06','Ani','Fixed typo in spSetInsid
 INSERT History VALUES('spSetValues','2013-04-25','Ani','Added code to spSetValues to set apogeeStar.htmID. ');
 INSERT History VALUES('spSetValues','2013-10-18','Ani','Changed HTM computation for SpecObjAll to be done on equatorial coordinates rather than Cartesian, because the latter can be 0 for a small fraction of spectra. ');
 INSERT History VALUES('spSetValues','2016-04-26','Ani','Added code to spSetValues to set mangaDrpAll.htmID. ');
+INSERT History VALUES('spSetValues','2018-06-12','Ani','Added code to spSetValues to set mangaDapAll.htmID. ');
 INSERT History VALUES('spValidate','2002-10-29','Jim','split spValidate and spFinish  (finish does neighbors and photo-spectro matchup). removed references to sdssdr1. ');
 INSERT History VALUES('spValidate','2002-11-02','Jim','sped up by creating indexes for unique test. left keys/indices in place on the theory that they do not hurt. 2002-11-07   Jim change to specLineAll ');
 INSERT History VALUES('spValidate','2002-11-10','Jim','added test of frame zoom levels (commentend out for now) ');
@@ -1043,6 +1062,10 @@ INSERT History VALUES('spValidate','2013-07-03','Ani','Added apogeeObject PK tes
 INSERT History VALUES('spValidate','2013-07-09','Ani','Added apogeeStarVisit and apogeeStarAllVisit. spValidateWise, and added type "forced" in spValidate. ');
 INSERT History VALUES('spValidate','2017-04-19','Ani','Added cannonStar PK check to spValidateApogee. ');
 INSERT History VALUES('spValidate','2017-04-19','Ani','Added apogeeDesign PK check to spValidateApogee. ');
+INSERT History VALUES('spValidate','2018-06-11','Ani','Added mangaDAPall to spValidateManga. ');
+INSERT History VALUES('spValidate','2018-06-11','Ani','Added mangaHIall and mangaHIbonus to spValidateManga. ');
+INSERT History VALUES('spValidate','2018-06-11','Ani','Fixed mangaDAPall PK test in spValidateManga. ');
+INSERT History VALUES('spValidate','2018-07-23','Ani','Added spValidateMastar. (DR15) ');
 INSERT History VALUES('spPublish','2002-11-08','Jim','added INIT clause to backup ');
 INSERT History VALUES('spPublish','2002-11-10','Jim','commented out detach, reserved DONE status for the end of the step. added spPublishTiling, changed spPublish to spPublishStep, add insert to load history ');
 INSERT History VALUES('spPublish','2002-11-13','Jim','fixed transaction scope bug in CopyTable ');
@@ -1085,6 +1108,9 @@ INSERT History VALUES('spPublish','2016-05-04','Ani','Added spPublishNSA. ');
 INSERT History VALUES('spPublish','2016-05-05','Ani','Fixed typo in spPublishNSA conditional drop statement. ');
 INSERT History VALUES('spPublish','2016-05-05','Ani','Fixed typo in spPublishNSA log message. ');
 INSERT History VALUES('spPublish','2017-04-19','Ani','Added cannonStar to spPublishApogee. ');
+INSERT History VALUES('spPublish','2018-06-11','Ani','Added mangaDAPall to spPublishManga. ');
+INSERT History VALUES('spPublish','2018-06-13','Ani','Added mangaHIall and mangaHIbonus to spPublishManga. ');
+INSERT History VALUES('spPublish','2018-07-23','Ani','Added spPublishMastar. ');
 INSERT History VALUES('spFinish','2002-10-29','Jim','split spValidate and spFinish  (finish does neighbors and photo-spectro matchup). removed references to sdssdr1. ');
 INSERT History VALUES('spFinish','2002-11-25','Jim','added index build ');
 INSERT History VALUES('spFinish','2002-12-01','Jim','support *-pub types in spNeighbors ');
@@ -1244,6 +1270,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1234 lines inserted into History'
+PRINT '1260 lines inserted into History'
 ------------------------------------
 GO

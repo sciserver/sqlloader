@@ -44,7 +44,9 @@
 				<option value="WISE">WISE
 				<option value="FORCED">FORCED
 				<option value="MASK">MASK
-				<option value="MaNGA">MaNGA
+				<option value="MANGA">MaNGA
+				<option value="MASTAR">MASTAR
+				<option value="NSA">NSA
 				<option value="RESOLVE">RESOLVE
 				<option value="PM">PM
 				<option value="APOGEE">APOGEE

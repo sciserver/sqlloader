@@ -86,6 +86,7 @@
 --*                 equatorial coordinates rather than Cartesian, because
 --*                 the latter can be 0 for a small fraction of spectra.
 --* 2016-04-26 Ani: Added code to spSetValues to set mangaDrpAll.htmID.
+--* 2018-06-12 Ani: Added code to spSetValues to set mangaDapAll.htmID.
 --------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -813,6 +814,16 @@ BEGIN
 		END
 		-- write phase log
 		EXEC spNewPhase @taskid, @stepid, 'Set values', 'OK', 'mangaDrpAll htmID computed';
+	      UPDATE mangaDapAll
+		SET htmID = dbo.fHtmEq(ifura, ifudec)
+	      IF @@error<>0
+		BEGIN
+		  SET @msg = 'Error in mangaDapAll htmID update'
+		  EXEC spEndStep @taskID, @stepID, 'ABORTING', @msg, @msg;
+		  RETURN(1);
+		END
+		-- write phase log
+		EXEC spNewPhase @taskid, @stepid, 'Set values', 'OK', 'mangaDapAll htmID computed';
  	    END
 END
 GO

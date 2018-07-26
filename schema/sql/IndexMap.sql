@@ -243,7 +243,14 @@
 --* 2017-06-13 Ani: Changed manga[Firefly|Pipe3D] PKs to plateIFU (mangaID not unique).
 --* 2017-06-30 Ani: Changed PK for sppTargets to TARGETID (identity column).
 --* 2017-07-17 Ani: Added PK for Plate2Target.
---* 2017-12-18 Ani: Added PK for sdssEbossFirefly (VAC).
+--* 2017-12-18 Ani: Added PK for sdssEbossFirefly (VAC). (DR15)
+--* 2018-06-11 Ani: Added PK. FK for mangaDAPall. (DR15)
+--* 2018-06-12 Ani: Updated FK for mangaDAPall to plateIFU+daptype. (DR15)
+--* 2018-06-13 Ani: Added PKs for mangaHIall and mangaHIbonus. (DR15)
+--* 2018-07-17 Ani: Added PK for spiders_quasar. (DR14 mini)
+--* 2018-07-23 Ani: Added PKs for Mastar tables. (DR15)
+--* 2018-07-25 Ani: Fixed PK for mangaHIbonus (added bonusid), fixed typo
+--*                 in sdssEbossFirefly PK name. (DR15)
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -459,11 +466,14 @@ INSERT IndexMap Values('K','primary key', 'apogeeObject',		'target_id'		,'','SPE
 INSERT IndexMap Values('K','primary key', 'apogeeStarVisit', 	 	'visit_id'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'apogeeStarAllVisit', 	'visit_id,apstar_id'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'cannonStar', 	 	'cannon_id'		,'','SPECTRO');
-INSERT IndexMap Values('K','primary key', 'mangaDrpAll',		'plateIFU'			,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'mangaDAPall',		'plateIFU,daptype'			,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'mangaDRPall',		'plateIFU'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'mangaTarget',		'mangaID'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'nsatlas',			'nsaID'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'mangaFirefly',		'plateIFU'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'mangaPipe3D',		'plateIFU'			,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'mangaHIall',			'plateIFU'			,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'mangaHIbonus',		'plateIFU,bonusid'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'qsoVarPTF',			'VAR_OBJID'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'qsoVarStripe',		'VAR_OBJID'			,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'zooSpec', 			'specObjID'		,'','SPECTRO');
@@ -475,7 +485,10 @@ INSERT IndexMap Values('K','primary key', 'zoo2Stripe82Normal', 	'dr7objid'		,''
 INSERT IndexMap Values('K','primary key', 'marvelsStar', 	 	'STARNAME,PLATE'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'marvelsVelocityCurveUF1D',  	'STARNAME,BEAM,RADECID,FCJD,[LST-OBS]'		,'','SPECTRO');
 INSERT IndexMap Values('K','primary key', 'sppTargets', 	 	'TARGETID'		,'','SPECTRO');
-INSERT IndexMap Values('K','primary key', 'sdssEbosFirefly', 	'specObjID'		,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'sdssEbossFirefly', 	'specObjID'		,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'spiders_quasar', 	'name'		,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'mastar_goodstars', 	'mangaid'		,'','SPECTRO');
+INSERT IndexMap Values('K','primary key', 'mastar_goodvisits', 	'mangaid,mjd'		,'','SPECTRO');
 -----------------------------------------------------
 -- Primary Keys for the TILES tables
 -----------------------------------------------------
@@ -529,7 +542,8 @@ INSERT IndexMap Values('F','foreign key', 'MaskedObject', 	'maskID'	,'Mask(maskI
 --------------------------------------------------
 INSERT IndexMap Values('F','foreign key', 'SpecObjAll', 	'plateID'	,'PlateX(plateID)'	,'SPECTRO');
 --	INSERT IndexMap Values('F','foreign key', 'PlateX',	'tile'		,'sdssTileAll(tile)'	,'SPECTRO');
-INSERT IndexMap Values('F','foreign key', 'mangaDrpAll',	'mangaID'	,'mangaTarget(mangaID)'	,'SPECTRO');
+INSERT IndexMap Values('F','foreign key', 'mangaDAPall',	'mangaID'	,'mangaTarget(mangaID)'	,'SPECTRO');
+INSERT IndexMap Values('F','foreign key', 'mangaDRPall',	'mangaID'	,'mangaTarget(mangaID)'	,'SPECTRO');
 INSERT IndexMap Values('F','foreign key', 'zoo2MainSpecz', 	'dr8objid'	,'PhotoObjAll(objid)','SPECTRO');
 INSERT IndexMap Values('F','foreign key', 'zoo2Stripe82Coadd1', 'dr8objid'	,'PhotoObjAll(objid)','SPECTRO');
 INSERT IndexMap Values('F','foreign key', 'zoo2Stripe82Coadd2', 'dr8objid'	,'PhotoObjAll(objid)','SPECTRO');

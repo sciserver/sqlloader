@@ -30,6 +30,7 @@
 -- 2016-03-22   Ani: Added MASK and (WISE) FORCED to spNewTask
 -- 2016-03-26   Ani: Added MaNGA to spNewTask.
 -- 2016-05-05   Ani: Added NSA to spNewTask.
+-- 2018-07-20   Ani: Added MASTAR to spNewTask.
 --=============================================================
 
 
@@ -216,7 +217,7 @@ BEGIN
 	RETURN
 	END
 
-    IF UPPER(@type) IN ('BEST', 'PLATES', 'TILES', 'MASK', 'MaNGA', 'NSA', 'WINDOW', 'WISE', 'SSPP', 'GALPROD', 'GALSPEC', 'RESOLVE', 'PM', 'APOGEE','FORCED')
+    IF UPPER(@type) IN ('BEST', 'PLATES', 'TILES', 'MASK', 'MaNGA', 'MASTAR', 'NSA', 'WINDOW', 'WISE', 'SSPP', 'GALPROD', 'GALSPEC', 'RESOLVE', 'PM', 'APOGEE','FORCED')
 	SET @pubtype='BEST-PUB'
     ELSE
 	SET @pubtype=UPPER(@type)+'-PUB'

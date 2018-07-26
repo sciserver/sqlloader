@@ -8,7 +8,7 @@ CREATE TABLE sdssEbossFirefly (
 --/T This run used the Kroupa, Salpeteror Chabrier stellar initial mass function.
 --/T Redshifts used for BOSS and eBOSS plates is the Z_NOQSO version.
 ----------------------------------------------------------------------------------
-SPECOBJID                             bigint   NOT NULL, --/U no unit --/D Unique database ID based on PLATE, MJD, FIBERID, RUN2D     --/F SPECOBJID
+SPECOBJID                             numeric(20,0)   NOT NULL, --/U no unit --/D Unique database ID based on PLATE, MJD, FIBERID, RUN2D     --/F SPECOBJID
 BESTOBJID                             bigint   NOT NULL, --/U no unit --/D Object ID of photoObj match (position-based)	             --/F BESTOBJID                                   
 RUN2D                                 varchar(7)   NOT NULL, --/U no unit --/D version of the 2d reduction pipeline		 	             --/F RUN2D                                                        
 RUN1D                                 varchar(7)   NOT NULL, --/U no unit --/D version of the 1d reduction pipeline			             --/F RUN1D            
