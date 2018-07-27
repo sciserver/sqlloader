@@ -1,0 +1,232 @@
+
+
+USE [DR13x]
+GO
+
+/****** Object:  Table [dbo].[SpecObjAll_tab]    Script Date: 7/17/2018 1:01:11 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[SpecObjAll_tab2](
+	[specObjID] [bigint] NOT NULL,
+	[bestObjID] [bigint] NOT NULL,
+	[fluxObjID] [bigint] NOT NULL,
+	[targetObjID] [bigint] NOT NULL,
+	[plateID] [numeric](20, 0) NOT NULL,
+	[sciencePrimary] [smallint] NOT NULL,
+	[legacyPrimary] [smallint] NOT NULL,
+	[seguePrimary] [smallint] NOT NULL,
+	[segue1Primary] [smallint] NOT NULL,
+	[segue2Primary] [smallint] NOT NULL,
+	[bossPrimary] [smallint] NOT NULL,
+	[sdssPrimary] [smallint] NOT NULL,
+	[bossSpecObjID] [int] NOT NULL,
+	[firstRelease] [varchar](32) NOT NULL,
+	[survey] [varchar](32) NOT NULL,
+	[instrument] [varchar](32) NOT NULL,
+	[programname] [varchar](32) NOT NULL,
+	[chunk] [varchar](32) NOT NULL,
+	[platerun] [varchar](32) NOT NULL,
+	[mjd] [int] NOT NULL,
+	[plate] [smallint] NOT NULL,
+	[fiberID] [smallint] NOT NULL,
+	[run1d] [varchar](32) NOT NULL,
+	[run2d] [varchar](32) NOT NULL,
+	[tile] [int] NOT NULL,
+	[designID] [int] NOT NULL,
+	[legacy_target1] [bigint] NOT NULL,
+	[legacy_target2] [bigint] NOT NULL,
+	[special_target1] [bigint] NOT NULL,
+	[special_target2] [bigint] NOT NULL,
+	[segue1_target1] [bigint] NOT NULL,
+	[segue1_target2] [bigint] NOT NULL,
+	[segue2_target1] [bigint] NOT NULL,
+	[segue2_target2] [bigint] NOT NULL,
+	[boss_target1] [bigint] NOT NULL,
+	[eboss_target0] [bigint] NOT NULL,
+	[ancillary_target1] [bigint] NOT NULL,
+	[ancillary_target2] [bigint] NOT NULL,
+	[primTarget] [bigint] NOT NULL,
+	[secTarget] [bigint] NOT NULL,
+	[spectrographID] [smallint] NOT NULL,
+	[sourceType] [varchar](128) NOT NULL,
+	[targetType] [varchar](128) NOT NULL,
+	[ra] [float] NOT NULL,
+	[dec] [float] NOT NULL,
+	[cx] [float] NOT NULL,
+	[cy] [float] NOT NULL,
+	[cz] [float] NOT NULL,
+	[xFocal] [real] NOT NULL,
+	[yFocal] [real] NOT NULL,
+	[lambdaEff] [real] NOT NULL,
+	[blueFiber] [int] NOT NULL,
+	[zOffset] [real] NOT NULL,
+	[z] [real] NOT NULL,
+	[zErr] [real] NOT NULL,
+	[zWarning] [int] NOT NULL,
+	[class] [varchar](32) NOT NULL,
+	[subClass] [varchar](32) NOT NULL,
+	[rChi2] [real] NOT NULL,
+	[DOF] [real] NOT NULL,
+	[rChi2Diff] [real] NOT NULL,
+	[z_noqso] [real] NOT NULL,
+	[zErr_noqso] [real] NOT NULL,
+	[zWarning_noqso] [int] NOT NULL,
+	[class_noqso] [varchar](32) NOT NULL,
+	[subClass_noqso] [varchar](32) NOT NULL,
+	[rChi2Diff_noqso] [real] NOT NULL,
+	[z_person] [real] NOT NULL,
+	[class_person] [varchar](32) NOT NULL,
+	[comments_person] [varchar](200) NOT NULL,
+	[tFile] [varchar](32) NOT NULL,
+	[tColumn_0] [smallint] NOT NULL,
+	[tColumn_1] [smallint] NOT NULL,
+	[tColumn_2] [smallint] NOT NULL,
+	[tColumn_3] [smallint] NOT NULL,
+	[tColumn_4] [smallint] NOT NULL,
+	[tColumn_5] [smallint] NOT NULL,
+	[tColumn_6] [smallint] NOT NULL,
+	[tColumn_7] [smallint] NOT NULL,
+	[tColumn_8] [smallint] NOT NULL,
+	[tColumn_9] [smallint] NOT NULL,
+	[nPoly] [real] NOT NULL,
+	[theta_0] [real] NOT NULL,
+	[theta_1] [real] NOT NULL,
+	[theta_2] [real] NOT NULL,
+	[theta_3] [real] NOT NULL,
+	[theta_4] [real] NOT NULL,
+	[theta_5] [real] NOT NULL,
+	[theta_6] [real] NOT NULL,
+	[theta_7] [real] NOT NULL,
+	[theta_8] [real] NOT NULL,
+	[theta_9] [real] NOT NULL,
+	[velDisp] [real] NOT NULL,
+	[velDispErr] [real] NOT NULL,
+	[velDispZ] [real] NOT NULL,
+	[velDispZErr] [real] NOT NULL,
+	[velDispChi2] [real] NOT NULL,
+	[velDispNPix] [int] NOT NULL,
+	[velDispDOF] [int] NOT NULL,
+	[waveMin] [real] NOT NULL,
+	[waveMax] [real] NOT NULL,
+	[wCoverage] [real] NOT NULL,
+	[snMedian_u] [real] NOT NULL,
+	[snMedian_g] [real] NOT NULL,
+	[snMedian_r] [real] NOT NULL,
+	[snMedian_i] [real] NOT NULL,
+	[snMedian_z] [real] NOT NULL,
+	[snMedian] [real] NOT NULL,
+	[chi68p] [real] NOT NULL,
+	[fracNSigma_1] [real] NOT NULL,
+	[fracNSigma_2] [real] NOT NULL,
+	[fracNSigma_3] [real] NOT NULL,
+	[fracNSigma_4] [real] NOT NULL,
+	[fracNSigma_5] [real] NOT NULL,
+	[fracNSigma_6] [real] NOT NULL,
+	[fracNSigma_7] [real] NOT NULL,
+	[fracNSigma_8] [real] NOT NULL,
+	[fracNSigma_9] [real] NOT NULL,
+	[fracNSigma_10] [real] NOT NULL,
+	[fracNSigHi_1] [real] NOT NULL,
+	[fracNSigHi_2] [real] NOT NULL,
+	[fracNSigHi_3] [real] NOT NULL,
+	[fracNSigHi_4] [real] NOT NULL,
+	[fracNSigHi_5] [real] NOT NULL,
+	[fracNSigHi_6] [real] NOT NULL,
+	[fracNSigHi_7] [real] NOT NULL,
+	[fracNSigHi_8] [real] NOT NULL,
+	[fracNSigHi_9] [real] NOT NULL,
+	[fracNSigHi_10] [real] NOT NULL,
+	[fracNSigLo_1] [real] NOT NULL,
+	[fracNSigLo_2] [real] NOT NULL,
+	[fracNSigLo_3] [real] NOT NULL,
+	[fracNSigLo_4] [real] NOT NULL,
+	[fracNSigLo_5] [real] NOT NULL,
+	[fracNSigLo_6] [real] NOT NULL,
+	[fracNSigLo_7] [real] NOT NULL,
+	[fracNSigLo_8] [real] NOT NULL,
+	[fracNSigLo_9] [real] NOT NULL,
+	[fracNSigLo_10] [real] NOT NULL,
+	[spectroFlux_u] [real] NOT NULL,
+	[spectroFlux_g] [real] NOT NULL,
+	[spectroFlux_r] [real] NOT NULL,
+	[spectroFlux_i] [real] NOT NULL,
+	[spectroFlux_z] [real] NOT NULL,
+	[spectroSynFlux_u] [real] NOT NULL,
+	[spectroSynFlux_g] [real] NOT NULL,
+	[spectroSynFlux_r] [real] NOT NULL,
+	[spectroSynFlux_i] [real] NOT NULL,
+	[spectroSynFlux_z] [real] NOT NULL,
+	[spectroFluxIvar_u] [real] NOT NULL,
+	[spectroFluxIvar_g] [real] NOT NULL,
+	[spectroFluxIvar_r] [real] NOT NULL,
+	[spectroFluxIvar_i] [real] NOT NULL,
+	[spectroFluxIvar_z] [real] NOT NULL,
+	[spectroSynFluxIvar_u] [real] NOT NULL,
+	[spectroSynFluxIvar_g] [real] NOT NULL,
+	[spectroSynFluxIvar_r] [real] NOT NULL,
+	[spectroSynFluxIvar_i] [real] NOT NULL,
+	[spectroSynFluxIvar_z] [real] NOT NULL,
+	[spectroSkyFlux_u] [real] NOT NULL,
+	[spectroSkyFlux_g] [real] NOT NULL,
+	[spectroSkyFlux_r] [real] NOT NULL,
+	[spectroSkyFlux_i] [real] NOT NULL,
+	[spectroSkyFlux_z] [real] NOT NULL,
+	[anyAndMask] [int] NOT NULL,
+	[anyOrMask] [int] NOT NULL,
+	[plateSN2] [real] NOT NULL,
+	[deredSN2] [real] NOT NULL,
+	[snTurnoff] [real] NOT NULL,
+	[sn1_g] [real] NOT NULL,
+	[sn1_r] [real] NOT NULL,
+	[sn1_i] [real] NOT NULL,
+	[sn2_g] [real] NOT NULL,
+	[sn2_r] [real] NOT NULL,
+	[sn2_i] [real] NOT NULL,
+	[elodieFileName] [varchar](32) NOT NULL,
+	[elodieObject] [varchar](32) NOT NULL,
+	[elodieSpType] [varchar](32) NOT NULL,
+	[elodieBV] [real] NOT NULL,
+	[elodieTEff] [real] NOT NULL,
+	[elodieLogG] [real] NOT NULL,
+	[elodieFeH] [real] NOT NULL,
+	[elodieZ] [real] NOT NULL,
+	[elodieZErr] [real] NOT NULL,
+	[elodieZModelErr] [real] NOT NULL,
+	[elodieRChi2] [real] NOT NULL,
+	[elodieDOF] [real] NOT NULL,
+	[htmID] [bigint] NOT NULL,
+	[loadVersion] [int] NOT NULL,
+	[img] [varbinary](max) NOT NULL,
+ CONSTRAINT [pk_specObjAll_specObjID] PRIMARY KEY CLUSTERED 
+(
+	[specObjID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 100) ON [SPEC]
+) ON [SPEC] TEXTIMAGE_ON [SPEC]
+GO
+
+ALTER TABLE [dbo].[SpecObjAll_tab2] ADD  DEFAULT (0x1111) FOR [img]
+GO
+
+
+dbcc traceon(610)
+insert [SpecObjAll_tab2] with (tablock)
+select * from [SpecObjAll_tab] with (nolock)
+order by SpecObjID
+
+drop table [SpecObjAll_tab]
+
+exec sp_rename 'SpecObjAll_tab2', 'SpecObjAll_tab'
+
+
+ CREATE NONCLUSTERED INDEX [i_SpecObjAll_fluxObjID] ON [dbo].[SpecObjAll_tab](fluxObjID ASC) WITH (PAD_INDEX = OFF, ALLOW_PAGE_LOCKS = ON, ALLOW_ROW_LOCKS = ON, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, DATA_COMPRESSION=PAGE, SORT_IN_TEMPDB = ON, FILLFACTOR = 100) ON [SPEC];
+ 
+CREATE NONCLUSTERED INDEX [i_SpecObjAll_htmID_ra_dec_cx_cy_] ON [dbo].[SpecObjAll_tab](htmID ASC, ra ASC, dec ASC, cx ASC, cy ASC, cz ASC, sciencePrimary ASC) WITH (PAD_INDEX = OFF, ALLOW_PAGE_LOCKS = ON, ALLOW_ROW_LOCKS = ON, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, DATA_COMPRESSION=PAGE, SORT_IN_TEMPDB = ON, FILLFACTOR = 100) ON [SPEC];
+ 
+CREATE NONCLUSTERED INDEX [i_SpecObjAll_ra_dec_class_plat] ON [dbo].[SpecObjAll_tab](ra ASC, dec ASC, class ASC, plate ASC, tile ASC, z ASC, zErr ASC, sciencePrimary ASC, plateID ASC, bestObjID ASC) WITH (PAD_INDEX = OFF, ALLOW_PAGE_LOCKS = ON, ALLOW_ROW_LOCKS = ON, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, DATA_COMPRESSION=PAGE, SORT_IN_TEMPDB = ON, FILLFACTOR = 100) ON [SPEC];
+ 
+CREATE NONCLUSTERED INDEX [i_SpecObjAll_targetObjID_sourceT] ON [dbo].[SpecObjAll_tab](targetObjID ASC, sourceType ASC, sciencePrimary ASC, class ASC, htmID ASC, ra ASC, dec ASC) WITH (PAD_INDEX = OFF, ALLOW_PAGE_LOCKS = ON, ALLOW_ROW_LOCKS = ON, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, DATA_COMPRESSION=PAGE, SORT_IN_TEMPDB = ON, FILLFACTOR = 100) ON [SPEC];
+ 
