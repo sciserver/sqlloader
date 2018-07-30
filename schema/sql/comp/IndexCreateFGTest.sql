@@ -1,40 +1,4 @@
-
-
-/****** Object:  StoredProcedure [dbo].[spIndexCreateFG]    Script Date: 11/10/2016 2:04:48 PM ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-
---
-CREATE PROCEDURE [dbo].[spIndexCreateFG](
-	@taskID	int,
-	@stepID int,
-	@indexmapid int			-- link to IndexMap table
-)
--------------------------------------------------------------
---/H Creates primary keys, foreign keys, and indices
---/A  -------------------------------------------------------
---/T Works for all user tables, views, procedures and functions 
---/T The default user is test, default access is U
---/T <BR>
---/T <li> taskID  int   	-- number of task causing this 
---/T <li> stepID  int   	-- number of step causing this 
---/T <li> tableName  varchar(1000)    -- name of table to get index or foreign key
---/T <li> fieldList  varchar(1000)    -- comma separated list of fields in key (no blanks)
---/T <li> foreignkey varchar(1000)    -- foreign key (f(a,b,c))
---/T <br> return value: 0: OK , > 0 : count of errors.
---/T <br> Example<br> 
---/T <samp>
---/T exec spCreateIndex @taskID, @stepID, 32 
---/T </samp>
--------------------------------------------------------------
-AS BEGIN
-	SET NOCOUNT ON;
-	--
-	DECLARE @indexName varchar(1000),
+DECLARE @indexName varchar(1000),
 		@cmd nvarchar(2000),
 		@msg varchar(2000),
 		@status varchar(16),
@@ -51,6 +15,13 @@ AS BEGIN
 	--
 	SET @status = 'OK'
 
+
+	----
+	-- for testing
+	---
+	declare @indexmapid int
+	set @indexmapid = 82
+	
 	--------------------------------------------------
 	-- fetch the parameters needed for spIndexCreate
 	--------------------------------------------------
@@ -138,91 +109,3 @@ AS BEGIN
 		print @cmd
 		
 	    END
-	---------------
-	-- foreign key
-	---------------
-	IF (lower(@type) = 'foreign key')
-	    BEGIN
-			set @cmd = N'ALTER TABLE '+@tableName+' WITH NOCHECK ADD CONSTRAINT '+@indexName   
-				+' FOREIGN KEY ('+@fieldList+') REFERENCES '+@foreignKey;
-			--
-			set @msg = 'foreign key constraint '+@tableName 
-				+'('+@fieldList+') references '+@foreignKey
-
-			print @cmd
-	    END
-	------------------------
-	-- Perform the command
-	------------------------
-        --while(0=1)
-		begin
-		IF EXISTS (
-			SELECT [name] FROM dbo.sysobjects
-			WHERE [name] = @tableName
-		) 
-			BEGIN
-				IF NOT EXISTS (	select id from dbo.sysobjects
-	    							where [name] = @indexname
-	  							union
-	    						select id from dbo.sysindexes
-	    							where [name] = @indexname 
-							  )
-	    			BEGIN
-						SET @ret = 1;		-- set it to an error value
-						BEGIN TRANSACTION
-							EXEC @ret=sp_executeSql @cmd 
-							
-							SET @error = @@error;
-						COMMIT TRANSACTION
-    				END
-				ELSE 
-				    BEGIN	-- index already there
-						SET @status = 'OK'
-						SET @msg = @msg  + ' already exists.'
-						SET @ret = -1		-- signifies special case
-					END
-			END
-		ELSE
-			BEGIN
-				SET @status = 'ERROR'
-				SET @msg = 'Error in '+ @msg + ': Table ' + @tableName + ' does not exist!' 
-				SET @ret = 1
-			END
-	--
-	IF (@ret =  0)
-	    BEGIN
-			SET @status = 'OK'
-			SET @msg = 'Created '  + @msg  
-	    END
-
-	IF (@ret > 0)
-	    BEGIN
-			IF (@error is not null)
-				BEGIN
-					SET @status = 'ERROR'
-					DECLARE @sysmsg varchar(1000)
-					SELECT @sysmsg = description FROM master.dbo.sysmessages WHERE error = @error
-					IF (@sysmsg is null) SET @sysmsg = 'no sysmsg'
-					SET @msg = 'Error in '+ @msg + ', ' + cast(@error as varchar(10)) + ': '  + @sysmsg 
-				END
-			ELSE
-				BEGIN
-					IF (@status != 'ERROR')
-						BEGIN		-- not already marked as error
-							SET @status = 'WARNING'
-							SET @msg = 'Error in '+ @msg + '.' 
-						END
-				END
-	    END
-		end
-	-----------------------
-	-- Generate log record
-	-----------------------
-	EXEC spNewPhase @taskid, @stepid, 'IndexCreate', @status, @msg 
-	-----------------------------------------------------
-	RETURN (case when (@ret < 0) then 0 else @ret end) 
-END
-
-
-GO
-
