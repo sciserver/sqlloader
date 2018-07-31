@@ -89,9 +89,9 @@
 --^ 2016-05-04 Ani: Added spValidateNSA.
 --* 2017-04-19 Ani: Added cannonStar PK check to spValidateApogee.
 --* 2017-04-19 Ani: Added apogeeDesign PK check to spValidateApogee.
---* 2018-06-11 Ani: Added mangaDAPall to spValidateManga.
---* 2018-06-11 Ani: Added mangaHIall and mangaHIbonus to spValidateManga.
---* 2018-06-11 Ani: Fixed mangaDAPall PK test in spValidateManga.
+--* 2018-06-11 Ani: Added mangaDAPall to spValidateManga. (DR15)
+--* 2018-06-11 Ani: Added mangaHIall and mangaHIbonus to spValidateManga. (DR15)
+--* 2018-06-11 Ani: Fixed mangaDAPall PK test in spValidateManga. (DR15)
 --* 2018-07-23 Ani: Added spValidateMastar. (DR15)
 --====================================================================
 SET NOCOUNT ON;

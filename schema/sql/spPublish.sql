@@ -75,9 +75,9 @@
 --* 2016-05-05 Ani: Fixed typo in spPublishNSA conditional drop statement.
 --* 2016-05-05 Ani: Fixed typo in spPublishNSA log message.
 --* 2017-04-19 Ani: Added cannonStar to spPublishApogee.
---* 2018-06-11 Ani: Added mangaDAPall to spPublishManga.
---* 2018-06-13 Ani: Added mangaHIall and mangaHIbonus to spPublishManga.
---* 2018-07-23 Ani: Added spPublishMastar.
+--* 2018-06-11 Ani: Added mangaDAPall to spPublishManga. (DR15)
+--* 2018-06-13 Ani: Added mangaHIall and mangaHIbonus to spPublishManga. (DR15)
+--* 2018-07-23 Ani: Added spPublishMastar. (DR15)
 ----------------------------------------------------------------------
 -- We are not copying 
 -- DBcolumns, DBObjects, DBViewCols, DataConstants, Globe,Glossary, 
