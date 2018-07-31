@@ -298,6 +298,11 @@
 --* 2017-07-11 Ani: Updated spBuildSpecPhotoAll for compressed version.
 --*                 Added support for "commonExit" as a valid resume
 --*                 mode phase in spFinishStep.
+<<<<<<< HEAD
+=======
+--* 2018-07-30 Sue: Updated spSetVersion with option to not update all statistics,
+--*					Call with @updateAllStats bit = 0 to skip update.  
+>>>>>>> 3765bf25000f9bb460f2c8e093341759aac9bdd6
 ---====================================================================
 SET NOCOUNT ON;
 GO
@@ -500,7 +505,12 @@ CREATE PROCEDURE spSetVersion(@taskid int, @stepid int,
 		@vnum varchar(8)='.0',
                 @vdesc varchar(128)='Incremental load',
                 @vtext varchar(4096)=' ',
+<<<<<<< HEAD
 		@vwho varchar(128) = ' ')
+=======
+		@vwho varchar(128) = ' ',
+		@updateAllStats bit = 1)
+>>>>>>> 3765bf25000f9bb460f2c8e093341759aac9bdd6
 ---------------------------------------------------
 --/H Update the checksum and set the version info for this DB.
 --/A -------------------------------------------------
@@ -516,8 +526,15 @@ BEGIN
 	EXEC spCheckDBColumns
 	EXEC spCheckDBIndexes
 
+<<<<<<< HEAD
 	-- Update statistics for all tables
 	EXEC spUpdateStatistics
+=======
+	
+	if (@updateAllStats = 1)
+		-- Update statistics for all tables
+		EXEC spUpdateStatistics
+>>>>>>> 3765bf25000f9bb460f2c8e093341759aac9bdd6
 
 	-- generate diagnostics and checksum
 	EXEC spMakeDiagnostics
@@ -554,6 +571,11 @@ GO
 
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 3765bf25000f9bb460f2c8e093341759aac9bdd6
 --==================================================================
 IF EXISTS (select * from dbo.sysobjects 
 	where id = object_id(N'[dbo].[spSyncSchema]') 
