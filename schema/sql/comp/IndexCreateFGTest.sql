@@ -1,3 +1,6 @@
+
+
+
 DECLARE @indexName varchar(1000),
 		@cmd nvarchar(2000),
 		@msg varchar(2000),
