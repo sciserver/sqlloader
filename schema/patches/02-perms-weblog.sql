@@ -24,6 +24,7 @@ grant insert on SqlPerformanceLogUTC to logger
 
 grant insert on SqlStatementLogUTC to logger
 
+
 /* actually, run this after updating spExecSQL
 ---remove skyuser and webuser from weblog db if neccessary
 print 'removing unneeded users from weblog db'
