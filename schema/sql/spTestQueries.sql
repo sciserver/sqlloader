@@ -71,7 +71,7 @@ if  exists (select * from sysobjects
 	drop procedure spTestTimeEnd
 GO
 --
-CREATE PROCEDURE spTestTimeEnd(
+CREATE PROCEDURE [dbo].[spTestTimeEnd](
 	@clock 	     datetime,
 	@elapsed     bigint        OUTPUT,
 	@cpu 	     bigint        OUTPUT, 
@@ -130,8 +130,11 @@ BEGIN
 	-- table record
 	if (@table > 0)
            begin
-           insert dbo.QueryResults
-              values(@query, @cpu/1000000.0, @elapsed/1000.0, @physical_io, @row_count,CURRENT_TIMESTAMP, @comment);
+		   if exists (select * from weblog.sys.tables where name = 'QueryResults')
+		      insert weblog.dbo.QueryResults
+              values(@query, @cpu/1000000.0, @elapsed/1000.0, @physical_io, @row_count,CURRENT_TIMESTAMP, db_name(), @comment);
+           else
+			  print concat('no weblog.dbo.QueryResults:',@query, @cpu/1000000.0, @elapsed/1000.0, @physical_io, @row_count,CURRENT_TIMESTAMP, db_name(), @comment)		  
            end          
 	return
 END
