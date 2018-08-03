@@ -812,7 +812,7 @@ if exists (select * from dbo.sysobjects
 	drop procedure spIndexCreate
 GO
 --
-CREATE PROCEDURE spIndexCreate(
+CREATE PROCEDURE [dbo].[spIndexCreate](
 	@taskID	int,
 	@stepID int,
 	@indexmapid int			-- link to IndexMap table
