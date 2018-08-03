@@ -478,7 +478,7 @@ INSERT Inventory VALUES('spCheckDB','spCheckDBObjects','P');
 INSERT Inventory VALUES('spCheckDB','spGrantAccess','P');
 INSERT Inventory VALUES('spCheckDB','spCheckDBIndexes','P');
 INSERT Inventory VALUES('spTestQueries','spTestTimeStart','P');
-INSERT Inventory VALUES('spTestQueries','spTestTimeEnd','P');
+INSERT Inventory VALUES('spTestQueries','dbo.[spTestTimeEnd]','P');
 INSERT Inventory VALUES('spTestQueries','spTestQueries','P');
 INSERT Inventory VALUES('spDocSupport','fVarBinToHex','F');
 INSERT Inventory VALUES('spDocSupport','fEnum','F');

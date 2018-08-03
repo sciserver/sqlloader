@@ -319,6 +319,8 @@ INSERT Dependency VALUES('spSetValues','spSetValues','spSetLoadVersion');
 INSERT Dependency VALUES('spSetValues','spSetValues','spTargetInfoTargetObjid');
 INSERT Dependency VALUES('spSetValues','spTargetInfoTargetObjID','ffirstfieldbit');
 INSERT Dependency VALUES('spSetValues','spTargetInfoTargetObjID','spNewPhase');
+INSERT Dependency VALUES('spSpectro','fFiber','fSDSSfromSpecID');
+INSERT Dependency VALUES('spSpectro','fMJD','fSDSSfromSpecID');
 INSERT Dependency VALUES('spSpectro','spMakeSpecObjAll','fGetBlob');
 INSERT Dependency VALUES('spSphericalLib','sph.fGetArcs','SphericalSql.[Spherical.Sql.UserDefinedFunctions.GetArcs');
 INSERT Dependency VALUES('spSphericalLib','sph.fGetConvexes','SphericalSql.[Spherical.Sql.UserDefinedFunctions.GetConvexes');
@@ -419,6 +421,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '409 lines inserted into Dependency'
+PRINT '411 lines inserted into Dependency'
 ------------------------------------
 GO

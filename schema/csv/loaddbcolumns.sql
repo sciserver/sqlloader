@@ -101,6 +101,9 @@ INSERT DBColumns VALUES('IndexMap','tableName','','CODE_MISC','','the name of th
 INSERT DBColumns VALUES('IndexMap','fieldList','','CODE_MISC','','the list of columns to be included in the index','0');
 INSERT DBColumns VALUES('IndexMap','foreignKey','','CODE_MISC','','the definition of the foreign Key if any','0');
 INSERT DBColumns VALUES('IndexMap','indexgroup','','CODE_MISC','','the group id, one of (''PHOTO''|''TAG''|''SPECTRO''|''QSO''|''META''|''TILES''|''FINISH'')','0');
+INSERT DBColumns VALUES('IndexMap','compression','','CODE_MISC','','type of data compression to use (page | row | none)','0');
+INSERT DBColumns VALUES('IndexMap','filegroup','','CODE_MISC','','filegroup where index should be created','0');
+INSERT DBColumns VALUES('IndexMap','common','','CODE_MISC','','for multi-DR versions, 0=DR specific, 1=common between DRs','0');
 INSERT DBColumns VALUES('Versions','event','','ID_IDENITIFIER','','The event that happened','0');
 INSERT DBColumns VALUES('Versions','previous','','ID_TRACER','','Version before the patch','0');
 INSERT DBColumns VALUES('Versions','checksum','','NUMBER','','Checksum before the patch','0');
@@ -8571,6 +8574,6 @@ INSERT DBColumns VALUES('spiders_quasar','edd_ratio2','','','','Eddington ratio 
 
 GO
 ----------------------------- 
-PRINT '8561 lines inserted into DBColumns '
+PRINT '8564 lines inserted into DBColumns '
 ----------------------------- 
 

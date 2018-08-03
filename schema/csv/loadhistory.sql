@@ -331,6 +331,7 @@ INSERT History VALUES('IndexMap','2018-06-13','Ani','Added PKs for mangaHIall an
 INSERT History VALUES('IndexMap','2018-07-17','Ani','Added PK for spiders_quasar. (DR14 mini) ');
 INSERT History VALUES('IndexMap','2018-07-23','Ani','Added PKs for Mastar tables. (DR15) ');
 INSERT History VALUES('IndexMap','2018-07-25','Ani','Fixed PK for mangaHIbonus (added bonusid), fixed typo in sdssEbossFirefly PK name. (DR15) ');
+INSERT History VALUES('IndexMap','2018-08-02','Sue','Changes to IndexMap for compression, filegroups, and common vs DR-specific (multi-DR) tables TODO: fill in all rows, this data is sufficient for DR15 loading ');
 INSERT History VALUES('PhotoTables','2009-04-27','Ani','Swapped in updated schema for photo tables for SDSS-III. Added new table Run. ');
 INSERT History VALUES('PhotoTables','2009-05-05','Ani','Added loadVersion to Field table. ');
 INSERT History VALUES('PhotoTables','2009-06-11','Ani','Added nProf_[ugriz] to Field table. ');
@@ -509,7 +510,8 @@ INSERT History VALUES('spSpectro','2013-12-11','Ani','Updated assembly for fGetB
 INSERT History VALUES('spSpectro','2013-12-13','Ani','Added COALESCE to fGetBlob call in case it returns NULL. ');
 INSERT History VALUES('spSpectro','2013-12-13','Ani','Made perms for GetBlob assembly conditionally set. ');
 INSERT History VALUES('spSpectro','2015-03-18','Ani','Added new function fSDSSfromSpecID (PR #2257). ');
-INSERT History VALUES('TilingTables','2017-05-12','Ani','Fixed spMakeSpecObjAll to handle plate numbers longer than 4 digits in PNG file names. Note that up to 4 digits, the PNG file names are constructed by padding the plate number with leading zeros, but this convention is broken for bigger plate numbers (starting with DR14). 2003-05-21 Adrian and Alex: changed Tile to TileAll,  took out htmSupport, added untiled ');
+INSERT History VALUES('spSpectro','2017-05-12','Ani','Fixed spMakeSpecObjAll to handle plate numbers longer than 4 digits in PNG file names. Note that up to 4 digits, the PNG file names are constructed by padding the plate number with leading zeros, but this convention is broken for bigger plate numbers (starting with DR14). ');
+INSERT History VALUES('TilingTables','2018-08-01','Sue','updated functions to use numeric(20) SpecObjID instead of bigint 2003-05-21 Adrian and Alex: changed Tile to TileAll,  took out htmSupport, added untiled ');
 INSERT History VALUES('TilingTables','2003-05-21','Adrian+Alex','modified Sector table, switched to regionId, dropped htmInfo and htmSupport ');
 INSERT History VALUES('TilingTables','2003-05-21','Adrian+Alex','changed TargetParam to name,value ');
 INSERT History VALUES('TilingTables','2003-05-21','Adrian+Alex','changed TilingRegion to TilingRun ');
@@ -685,6 +687,7 @@ INSERT History VALUES('Views','2010-12-23','Ani','Added SEGUE specObjAll views. 
 INSERT History VALUES('Views','2013-04-02','Ani','Added "clean" photometry flag to Phototag view. ');
 INSERT History VALUES('VacTables','2018-07-17','Ani','Created file. ');
 INSERT History VALUES('VacTables','2018-07-26','Ani','Updated schema as per latest version in sas/sql. (DR14-mini) ');
+INSERT History VALUES('VacTables','2018-07-29','Ani','Updated schema as per latest version in sas/sql, where several columns were changed to float from real. (DR14-mini) ');
 INSERT History VALUES('spHtmCSharp','2005-05-01','Jim','started ');
 INSERT History VALUES('spHtmCSharp','2005-05-02','Jim','removed fHtmLookup and fHtmLookupError added fHtmToString ');
 INSERT History VALUES('spHtmCSharp','2005-05-05','GYF','added .pdb to assembly for symbolic debugging added fHtmToName (faster than fHtmToString and reports error) ');
@@ -759,6 +762,7 @@ INSERT History VALUES('spNearby','2013-07-11','Ani','Added dbo qualifier to fDis
 INSERT History VALUES('spNearby','2016-04-22','Ani','Added functions fGetNear[by|est]MangaObjEq for MaNGA searches. ');
 INSERT History VALUES('spNearby','2016-04-26','Ani','Updated data types returned by MaNGA functions fGetNear[by|est]MangaObjEq to match the table schema. ');
 INSERT History VALUES('spNearby','2017-04-19','Sue','Added inner loop join to fGetNearbyObjXYZ and fGetNearbyObjAllXYZ to fix performance issues with clustered columnstore indexes Commented out code to set DB compatibility level to SQL2005 ');
+INSERT History VALUES('spNearby','2018-03-29','Sue','Fixed spec functions to return a numeric(20) instead of bigint ');
 INSERT History VALUES('spApogee','2006-04-27','Ani','Created inital version as per JOn Holtzman request. ');
 INSERT History VALUES('spApogee','2006-05-13','Ani','Updated description of fAspcapFelem* functions. ');
 INSERT History VALUES('spApogee','2006-05-18','Ani','Removed dbo. prefix from function definitions and also. trailing spaces from some functions. ');
@@ -1062,9 +1066,9 @@ INSERT History VALUES('spValidate','2013-07-03','Ani','Added apogeeObject PK tes
 INSERT History VALUES('spValidate','2013-07-09','Ani','Added apogeeStarVisit and apogeeStarAllVisit. spValidateWise, and added type "forced" in spValidate. ');
 INSERT History VALUES('spValidate','2017-04-19','Ani','Added cannonStar PK check to spValidateApogee. ');
 INSERT History VALUES('spValidate','2017-04-19','Ani','Added apogeeDesign PK check to spValidateApogee. ');
-INSERT History VALUES('spValidate','2018-06-11','Ani','Added mangaDAPall to spValidateManga. ');
-INSERT History VALUES('spValidate','2018-06-11','Ani','Added mangaHIall and mangaHIbonus to spValidateManga. ');
-INSERT History VALUES('spValidate','2018-06-11','Ani','Fixed mangaDAPall PK test in spValidateManga. ');
+INSERT History VALUES('spValidate','2018-06-11','Ani','Added mangaDAPall to spValidateManga. (DR15) ');
+INSERT History VALUES('spValidate','2018-06-11','Ani','Added mangaHIall and mangaHIbonus to spValidateManga. (DR15) ');
+INSERT History VALUES('spValidate','2018-06-11','Ani','Fixed mangaDAPall PK test in spValidateManga. (DR15) ');
 INSERT History VALUES('spValidate','2018-07-23','Ani','Added spValidateMastar. (DR15) ');
 INSERT History VALUES('spPublish','2002-11-08','Jim','added INIT clause to backup ');
 INSERT History VALUES('spPublish','2002-11-10','Jim','commented out detach, reserved DONE status for the end of the step. added spPublishTiling, changed spPublish to spPublishStep, add insert to load history ');
@@ -1108,9 +1112,9 @@ INSERT History VALUES('spPublish','2016-05-04','Ani','Added spPublishNSA. ');
 INSERT History VALUES('spPublish','2016-05-05','Ani','Fixed typo in spPublishNSA conditional drop statement. ');
 INSERT History VALUES('spPublish','2016-05-05','Ani','Fixed typo in spPublishNSA log message. ');
 INSERT History VALUES('spPublish','2017-04-19','Ani','Added cannonStar to spPublishApogee. ');
-INSERT History VALUES('spPublish','2018-06-11','Ani','Added mangaDAPall to spPublishManga. ');
-INSERT History VALUES('spPublish','2018-06-13','Ani','Added mangaHIall and mangaHIbonus to spPublishManga. ');
-INSERT History VALUES('spPublish','2018-07-23','Ani','Added spPublishMastar. ');
+INSERT History VALUES('spPublish','2018-06-11','Ani','Added mangaDAPall to spPublishManga. (DR15) ');
+INSERT History VALUES('spPublish','2018-06-13','Ani','Added mangaHIall and mangaHIbonus to spPublishManga. (DR15) ');
+INSERT History VALUES('spPublish','2018-07-23','Ani','Added spPublishMastar. (DR15) ');
 INSERT History VALUES('spFinish','2002-10-29','Jim','split spValidate and spFinish  (finish does neighbors and photo-spectro matchup). removed references to sdssdr1. ');
 INSERT History VALUES('spFinish','2002-11-25','Jim','added index build ');
 INSERT History VALUES('spFinish','2002-12-01','Jim','support *-pub types in spNeighbors ');
@@ -1250,6 +1254,7 @@ INSERT History VALUES('spFinish','2016-08-16','Ani','Added call to spRegionSync 
 INSERT History VALUES('spFinish','2017-05-15','Ani','Updated spFinishStep to skip loadPatches if it is listed in SkipFinishPhases. ');
 INSERT History VALUES('spFinish','2017-07-10','Ani','Commented out call to spNeighbors as precaution. ');
 INSERT History VALUES('spFinish','2017-07-11','Ani','Updated spBuildSpecPhotoAll for compressed version. Added support for "commonExit" as a valid resume mode phase in spFinishStep. ');
+INSERT History VALUES('spFinish','2018-07-30','Sue','Updated spSetVersion with option to not update all statistics, Call with @updateAllStats bit = 0 to skip update.   ');
 INSERT History VALUES('spCopyDbSubset','2004-09-15','Jim','copy all of TilingGeometry, TilingRun, and TileAll so region code works  2004-10-07 Alex, Jim: DR3 starting ');
 INSERT History VALUES('spCopyDbSubset','2004-11-15','Jim','parameterized it  ');
 INSERT History VALUES('spCopyDbSubset','2005-01-28','Jim','BestTarget2Sector replaces Best2Sector. ');
@@ -1270,6 +1275,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1260 lines inserted into History'
+PRINT '1265 lines inserted into History'
 ------------------------------------
 GO
