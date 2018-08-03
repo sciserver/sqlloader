@@ -31,6 +31,8 @@
 --*
 --* 2017-04-07 Sue:modified fDocColumns to include column_id so columns
 --*			   are correctly ordered.	
+--* 2018-08-03 Sue: Modified fDocColumns to handle views that should be 
+--*			   treated like tables in multi-DR / DRx db's
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 
@@ -168,11 +170,58 @@ AS BEGIN
 	SELECT @oid=object_id, @type=type
 	FROM sys.objects
 	WHERE name=@tablename
+
+	
+	--Test to see if 'PhotoObjAll' is a table or view in this DB
+	declare @photoType varchar(3)
+	
+	select @photoType = o.type
+	from sys.objects o
+	where o.name = 'PhotoObjAll'
+
+	if (@photoType = 'V') --if PhotoObjAll is a view, we're in a DRx db
+	begin
+		--test if @tablename is 'common' and needs special handling
+		declare @common bit
+		select @common=common from IndexMap where tablename=@tablename and code = 'K'
+		if (@common = 1) --it's a view but let's treat it like a table, special case code at end
+		set @type = 'X'
+	end
+
+	
+
 	-------------------
 	-- handle views
 	-------------------
 	IF (@type='V')
 	BEGIN
+		-- 
+		-- figure out if the referenced object is in the same db or different db
+		--declare @sourceServer sysname, @sourceDB sysname, @sourceTable sysname, @sourceSchema sysname
+		/*
+		declare @sTab table (sourceServer sysname null, sourceDB sysname null, sourceSchema sysname null, sourceTable sysname null)
+		insert @sTab 
+		SELECT 
+			referenced_server_name,referenced_database_name, referenced_schema_name,  
+			 referenced_entity_name
+		FROM sys.sql_expression_dependencies AS sed  
+		INNER JOIN sys.objects AS o ON sed.referencing_id = o.object_id  
+		WHERE referencing_id = @oid;  
+
+		select * from @sTab
+
+		--if sourceDB IS NOT NULL, handle as if it's a table, but get 
+		--data out of DBColumns table in sourceDB
+		--handle this by calling fDocColumns in sourceDB and getting the result
+		--have to use dynamic sql i guess yuck
+		--crap can't use dynamic sql in a function
+		--why is this a function and not a stored procedure ughhh
+	*/
+
+	--WAIT THIS MIGHT BE EASIER
+	--TREAT STUFF WHERE COMMON=0 LIKE TABLES
+
+
 		---------------------------------------------------
 		-- extract distinct parent-child relationships
 		-- from the sys.sql_dependencies table, ignoring
@@ -269,8 +318,29 @@ AS BEGIN
 		  order by c.column_id
 	END
 	--------------------------
+
+	--------------------------
+	-- handle a view that should be treated like a table
+	-- in a DRx / multi-DR DB
+	--------------------------
+	if (@type = 'X')
+	BEGIN
+		INSERT @out
+		SELECT m.enum, c.name, t.name as type, c.max_length as length,
+		m.unit, m.ucd, m.description, c.column_id
+		FROM sys.objects o, sys.columns c, sys.types t, DBColumns m
+		WHERE o.object_id=c.object_id
+		  and o.type_desc='VIEW'
+		  and m.tablename = o.name
+		  and c.name = m.name
+		  and c.system_type_id = t.system_type_id
+		  and o.name=@tablename
+		  order by c.column_id
+	END
+	--------------------------
     RETURN
 END
+
 
 GO
 
