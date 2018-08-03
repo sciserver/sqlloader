@@ -223,6 +223,8 @@ INSERT Dependency VALUES('spPublish','spPublishManga','spCopyATable');
 INSERT Dependency VALUES('spPublish','spPublishManga','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishMask','spCopyATable');
 INSERT Dependency VALUES('spPublish','spPublishMask','spNewPhase');
+INSERT Dependency VALUES('spPublish','spPublishMastar','spCopyATable');
+INSERT Dependency VALUES('spPublish','spPublishMastar','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishNSA','spCopyATable');
 INSERT Dependency VALUES('spPublish','spPublishNSA','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishPhoto','spCopyATable');
@@ -242,6 +244,7 @@ INSERT Dependency VALUES('spPublish','spPublishStep','spPublishGalProd');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishGalSpec');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishManga');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishMask');
+INSERT Dependency VALUES('spPublish','spPublishStep','spPublishMastar');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishNSA');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishPhoto');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishPlates');
@@ -316,6 +319,8 @@ INSERT Dependency VALUES('spSetValues','spSetValues','spSetLoadVersion');
 INSERT Dependency VALUES('spSetValues','spSetValues','spTargetInfoTargetObjid');
 INSERT Dependency VALUES('spSetValues','spTargetInfoTargetObjID','ffirstfieldbit');
 INSERT Dependency VALUES('spSetValues','spTargetInfoTargetObjID','spNewPhase');
+INSERT Dependency VALUES('spSpectro','fFiber','fSDSSfromSpecID');
+INSERT Dependency VALUES('spSpectro','fMJD','fSDSSfromSpecID');
 INSERT Dependency VALUES('spSpectro','spMakeSpecObjAll','fGetBlob');
 INSERT Dependency VALUES('spSphericalLib','sph.fGetArcs','SphericalSql.[Spherical.Sql.UserDefinedFunctions.GetArcs');
 INSERT Dependency VALUES('spSphericalLib','sph.fGetConvexes','SphericalSql.[Spherical.Sql.UserDefinedFunctions.GetConvexes');
@@ -358,6 +363,9 @@ INSERT Dependency VALUES('spValidate','spValidateManga','spTestUniqueKey');
 INSERT Dependency VALUES('spValidate','spValidateMask','fDatediffSec');
 INSERT Dependency VALUES('spValidate','spValidateMask','spNewPhase');
 INSERT Dependency VALUES('spValidate','spValidateMask','spTestUniqueKey');
+INSERT Dependency VALUES('spValidate','spValidateMastar','fDatediffSec');
+INSERT Dependency VALUES('spValidate','spValidateMastar','spNewPhase');
+INSERT Dependency VALUES('spValidate','spValidateMastar','spTestUniqueKey');
 INSERT Dependency VALUES('spValidate','spValidateNSA','fDatediffSec');
 INSERT Dependency VALUES('spValidate','spValidateNSA','spNewPhase');
 INSERT Dependency VALUES('spValidate','spValidateNSA','spTestUniqueKey');
@@ -390,6 +398,7 @@ INSERT Dependency VALUES('spValidate','spValidateStep','spValidateGalProd');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateGalSpec');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateManga');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateMask');
+INSERT Dependency VALUES('spValidate','spValidateStep','spValidateMastar');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateNSA');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidatePhoto');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidatePlates');
@@ -412,6 +421,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '402 lines inserted into Dependency'
+PRINT '411 lines inserted into Dependency'
 ------------------------------------
 GO

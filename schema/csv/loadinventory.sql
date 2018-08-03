@@ -269,11 +269,19 @@ INSERT Inventory VALUES('ApogeeTables','aspcapStar','U');
 INSERT Inventory VALUES('ApogeeTables','aspcapStarCovar','U');
 INSERT Inventory VALUES('ApogeeTables','cannonStar','U');
 INSERT Inventory VALUES('ApogeeTables','apogeePlate','U');
-INSERT Inventory VALUES('MangaTables','mangaDrpAll','U');
+INSERT Inventory VALUES('ApogeeTables','apogeeDesign','U');
+INSERT Inventory VALUES('ApogeeTables','apogeeField','U');
+INSERT Inventory VALUES('ApogeeTables','apogeeObject','U');
+INSERT Inventory VALUES('MangaTables','mangaDRPall','U');
 INSERT Inventory VALUES('MangaTables','mangatarget','U');
 INSERT Inventory VALUES('MangaTables','nsatlas','U');
 INSERT Inventory VALUES('MangaTables','mangaFirefly','U');
 INSERT Inventory VALUES('MangaTables','mangaPipe3D','U');
+INSERT Inventory VALUES('MangaTables','mangaDAPall','U');
+INSERT Inventory VALUES('MangaTables','mangaHIall','U');
+INSERT Inventory VALUES('MangaTables','mangaHIbonus','U');
+INSERT Inventory VALUES('MastarTables','mastar_goodstars','U');
+INSERT Inventory VALUES('MastarTables','mastar_goodvisits','U');
 INSERT Inventory VALUES('QsoVarTables','qsoVarPTF','U');
 INSERT Inventory VALUES('QsoVarTables','qsoVarStripe','U');
 INSERT Inventory VALUES('FrameTables','Frame','U');
@@ -314,6 +322,7 @@ INSERT Inventory VALUES('Views','sdssTile','V');
 INSERT Inventory VALUES('Views','sdssTilingBoundary','V');
 INSERT Inventory VALUES('Views','sdssTilingMask','V');
 INSERT Inventory VALUES('Views','TableDesc','V');
+INSERT Inventory VALUES('VacTables','spiders_quasar','U');
 INSERT Inventory VALUES('spSphericalLib','sph.fGetVersion','F');
 INSERT Inventory VALUES('spSphericalLib','sph.fGetVersions','F');
 INSERT Inventory VALUES('spSphericalLib','sph.fGetArea','F');
@@ -469,7 +478,7 @@ INSERT Inventory VALUES('spCheckDB','spCheckDBObjects','P');
 INSERT Inventory VALUES('spCheckDB','spGrantAccess','P');
 INSERT Inventory VALUES('spCheckDB','spCheckDBIndexes','P');
 INSERT Inventory VALUES('spTestQueries','spTestTimeStart','P');
-INSERT Inventory VALUES('spTestQueries','spTestTimeEnd','P');
+INSERT Inventory VALUES('spTestQueries','dbo.[spTestTimeEnd]','P');
 INSERT Inventory VALUES('spTestQueries','spTestQueries','P');
 INSERT Inventory VALUES('spDocSupport','fVarBinToHex','F');
 INSERT Inventory VALUES('spDocSupport','fEnum','F');
@@ -529,6 +538,7 @@ INSERT Inventory VALUES('spValidate','spValidatePm','P');
 INSERT Inventory VALUES('spValidate','spValidateMask','P');
 INSERT Inventory VALUES('spValidate','spValidateManga','P');
 INSERT Inventory VALUES('spValidate','spValidateNSA','P');
+INSERT Inventory VALUES('spValidate','spValidateMastar','P');
 INSERT Inventory VALUES('spValidate','spValidateResolve','P');
 INSERT Inventory VALUES('spValidate','spValidateApogee','P');
 INSERT Inventory VALUES('spValidate','spValidateWise','P');
@@ -542,6 +552,7 @@ INSERT Inventory VALUES('spPublish','spPublishPhoto','P');
 INSERT Inventory VALUES('spPublish','spPublishMask','P');
 INSERT Inventory VALUES('spPublish','spPublishManga','P');
 INSERT Inventory VALUES('spPublish','spPublishNSA','P');
+INSERT Inventory VALUES('spPublish','spPublishMastar','P');
 INSERT Inventory VALUES('spPublish','spPublishPlates','P');
 INSERT Inventory VALUES('spPublish','spPublishGalProd','P');
 INSERT Inventory VALUES('spPublish','spPublishTiling','P');
@@ -604,6 +615,6 @@ INSERT Inventory VALUES('spCosmology','fMathGetBin','F');
 GO
 
 ------------------------------------
-PRINT '594 lines inserted into Inventory'
+PRINT '605 lines inserted into Inventory'
 ------------------------------------
 GO

@@ -74,6 +74,10 @@
 		path = xroot+ "msCSV"+sep+xtype+sep+xid+sep;
 	if (xtype=="manga")
 		path = xroot+ "maCSV"+sep+xtype+sep+xid+sep;
+	if (xtype=="mastar")
+		path = xroot+ "mtCSV"+sep+xtype+sep+xid+sep;
+	if (xtype=="nsa")
+		path = xroot+ "nsCSV"+sep+xtype+sep+xid+sep;
 	if (xtype=="forced")
 		path = xroot+ "wfCSV"+sep+xtype+sep+xid+sep;
 	if (xtype=="apogee")

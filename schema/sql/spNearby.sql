@@ -105,8 +105,8 @@
 --*
 --* 2017-04-19 Sue: Added inner loop join to fGetNearbyObjXYZ and fGetNearbyObjAllXYZ
 --*                 to fix performance issues with clustered columnstore indexes
---*					Commented out code to set DB compatibility level to SQL2005
---* 2018-03-29 Sue: Fixed spec functions to return numeric(20) instead of bigint
+--*                 Commented out code to set DB compatibility level to SQL2005
+--* 2018-03-29 Sue: Fixed spec functions to return a numeric(20) instead of bigint
 
 --=====================================================================
 SET NOCOUNT ON;
