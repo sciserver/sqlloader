@@ -182,9 +182,9 @@ Public Sub CheckDir (root,level)
 	ElseIf ( theexporttype = "forced" ) Then
 		s = s & "(^sqlWISE_forced_target-2-" & rootname & "-*[0-9]*_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "manga" ) Then
-		s = s & "(^sql(MangaDAPall|MangaDRPall|MangaTarget|MangaHIall|MangaHIbonus|MastarGoodStars|MastarGoodVisits)" & "-v[0-9]*_[0-9]*_[0-9]*\.csv_[0-9]*\.csv$)"
+		s = s & "(^sql(MangaDAPall|MangaDRPall|MangaTarget|MangaHIall|MangaHIbonus)" & "-v[0-9]*_[0-9]*_[0-9]*\.csv_[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "mastar" ) Then
-		s = s & "(^sql(MastarGoodStars|MastarGoodVisits)" & "-v[0-9]*_[0-9]*_[0-9]*\.csv_[0-9]*\.csv$)"
+		s = s & "(^sql(MastarGoodStars|MastarGoodVisits)" & "-v[0-9]*_[0-9]*_[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "nsa" ) Then
 		s = s & "(^sqlNSA" & "-v[0-9]*_[0-9]*_[0-9]*\.csv_[0-9]*\.csv$)"
 	Else
