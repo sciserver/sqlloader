@@ -26,6 +26,8 @@
 --* 2018-07-20  Ani: Added mastar tables. (DR15)
 --* 2018-07-24  Ani: Moved mastar tables to separate file MastarTables.sql. (DR15)
 --* 2018-07-25  Ani: Updated objra,objdec for mangaFirefly to FLOAT from REAL. (DR15)
+--* 2018-08-06  Ani: Replaced all VARCHAR(20) with VARCHAR(32), made all mangaID 
+--*                  columns VARCHAR(32) for FK consistency. (DR15)
 ---=========================================================
 
 --=========================================================
@@ -330,13 +332,13 @@ CREATE TABLE mangatarget (
     nsa_extinction_r real NOT NULL, --/F nsa_extinction 4 --/U mag --/D Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in SDSS r-band (NSA)
     nsa_extinction_i real NOT NULL, --/F nsa_extinction 5 --/U mag --/D Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in SDSS i-band (NSA)
     nsa_extinction_z real NOT NULL, --/F nsa_extinction 6 --/U mag --/D Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in SDSS z-band (NSA)
-    nsa_iauname varchar(20) NOT NULL, --/D IAU-style designation based on RA/Dec (NSA)
+    nsa_iauname VARCHAR(32) NOT NULL, --/D IAU-style designation based on RA/Dec (NSA)
     nsa_subdir varchar(128) NOT NULL, --/D Subdirectory for images in the NSA 'detect' directory (NSA)
     nsa_pid int NOT NULL, --/D Parent id within mosaic for this object (NSA)
     nsa_nsaid int NOT NULL, --/D Unique ID within NSA v1 catalog (NSA)
     catind int NOT NULL, --/D Zero-indexed row within the input NSA v1 catalog (NSA)
     manga_target1 bigint NOT NULL, --/D Targeting bitmask for main sample targets
-    mangaID varchar(20) NOT NULL, --/D Unique ID for each manga target
+    mangaID varchar(32) NOT NULL, --/D Unique ID for each manga target
     zmin real NOT NULL, --/D The minimum redshift at which the galaxy could still have been included in the Primary sample
     zmax real NOT NULL, --/D The maximum redshift at which the galaxy could still have been included in the Primary sample
     szmin real NOT NULL, --/D The minimum redshift at which the galaxy could still have been included in the Secondary sample
@@ -417,7 +419,7 @@ CREATE TABLE nsatlas (
 --/T <i>M - 5 log<sub>10</sub> h</i>.
 ------------------------------------------------------------------------------
 	nsaid     int  NOT NULL,  --/D Unique ID within NSA v1 catalog
-	iauname   varchar(20)  NOT NULL,  --/D IAU-style designation based on RA/Dec
+	iauname   VARCHAR(32)  NOT NULL,  --/D IAU-style designation based on RA/Dec
 	subdir    varchar(128)  NOT NULL,  --/D Subdirectory for images in the NSA 'detect' directory
 	ra        float  NOT NULL,  --/U deg  --/D Right Ascension of measured object center (J2000)
 	dec       float  NOT NULL,  --/U deg  --/D Declination of measured object center (J2000)
@@ -429,12 +431,12 @@ CREATE TABLE nsatlas (
 	itwodf    int  NOT NULL,  --/D Zero-indexed row of 2dFGRS source file for NSA (-1 if no match)
 	mag       real  NOT NULL,  --/U mag  --/D Nominal B magnitude; not reliable, only used to set size of image for analysis
 	z         real  NOT NULL,  --/D Heliocentric redshift
-	zsrc      varchar(20)  NOT NULL,  --/D Source of redshift determination (alfalfa, ned, sdss, sixdf, twodf, or zcat)
+	zsrc      VARCHAR(32)  NOT NULL,  --/D Source of redshift determination (alfalfa, ned, sdss, sixdf, twodf, or zcat)
 	size      real  NOT NULL,  --/U deg  --/D Size of analyzed mosaics
 	run       smallint  NOT NULL,  --/D SDSS drift scan run covering catalog position (racat, deccat)
 	camcol    tinyint  NOT NULL,  --/D SDSS camcol covering catalog position (racat, deccat)
 	field     smallint  NOT NULL,  --/D SDSS field covering catalog position (racat, deccat)
-	rerun     varchar(20)  NOT NULL,  --/D Photometric rerun of SDSS used to determine SDSS coverage
+	rerun     VARCHAR(32)  NOT NULL,  --/D Photometric rerun of SDSS used to determine SDSS coverage
 	xpos      real  NOT NULL,  --/U pix  --/D SDSS camera column of catalog position (racat, deccat)
 	ypos      real  NOT NULL,  --/U pix  --/D SDSS camera row of catalog position (racat, deccat)
 	zdist     real  NOT NULL,  --/D Distance estimate using pecular velocity model of Willick et al. (1997), expressed as a redshift equivalent; multiply by <var>c/H<sub>0</sub></var> for Mpc
@@ -689,7 +691,7 @@ CREATE TABLE nsatlas (
 	dflags_r  int  NOT NULL,   --/F dflags 4 --/D Bitmask flags from photometric measurement for SDSS r-band
 	dflags_i  int  NOT NULL,   --/F dflags 5 --/D Bitmask flags from photometric measurement for SDSS i-band
 	dflags_z  int  NOT NULL,   --/F dflags 6 --/D Bitmask flags from photometric measurement for SDSS z-band
-	dversion  varchar(20)  NOT NULL,   --/D Version of dimage software used for object detection and initial measurement
+	dversion  VARCHAR(32)  NOT NULL,   --/D Version of dimage software used for object detection and initial measurement
 )
 GO
 --
@@ -713,17 +715,17 @@ CREATE TABLE mangaFirefly (
 --/T This run has been computed using Maraston & Stromback (M11, 2011) models with 
 --/T the MILES stellar library and a Kroupa stellar initial mass function.
 -------------------------------------------------------------------------------
-    MANGAID            varchar(20) NOT NULL,     --/D Unique MaNGA identifier.
-    PLATEIFU      varchar(20) NOT NULL,   --/D Unique identifier containing the MaNGA plate and ifu combination.                                                 
+    MANGAID            varchar(32) NOT NULL,     --/D Unique MaNGA identifier.
+    PLATEIFU      varchar(32) NOT NULL,   --/D Unique identifier containing the MaNGA plate and ifu combination.                                                 
     PLATE           int NOT NULL,     --/D Plate used to observe galaxy.
-    IFUDSGN            varchar(20) NOT NULL,     --/D IFU used to observe galaxy.
+    IFUDSGN            varchar(32) NOT NULL,     --/D IFU used to observe galaxy.
     OBJRA            float NOT NULL,     --/D Right ascension of the galaxy, not the IFU.
     OBJDEC            float NOT NULL,     --/D Declination of the galaxy, not the IFU.
     REDSHIFT            real NOT NULL,     --/D Redshift of the galaxy.
     PHOTOMETRIC_MASS            real NOT NULL,     --/D Photometric Mass of galaxy obtained from SED fitting. In units of log(M/M_odot).
-    MANGADRP_VER            varchar(20) NOT NULL,     --/D Version of MaNGA DRP that produced this data.
-    MANGADAP_VER            varchar(20) NOT NULL,     --/D Version of MaNGA DAP that analysed this data.
-    FIREFLY_VER            varchar(20) NOT NULL,     --/D Version of FIREFLY that analysed this data.
+    MANGADRP_VER            varchar(32) NOT NULL,     --/D Version of MaNGA DRP that produced this data.
+    MANGADAP_VER            varchar(32) NOT NULL,     --/D Version of MaNGA DAP that analysed this data.
+    FIREFLY_VER            varchar(32) NOT NULL,     --/D Version of FIREFLY that analysed this data.
     LW_AGE_1RE           real NOT NULL,       --/D Property at 1Re. Units of log(Age(Gyr)).
     LW_AGE_1RE_ERROR           real NOT NULL,        --/D Error on property at 1Re. Units of log(Age(Gyr)).
     MW_AGE_1RE           real NOT NULL,       --/D Property at 1Re. Units of log(Age(Gyr)).
@@ -776,7 +778,7 @@ CREATE TABLE mangaPipe3D (
 ------------------------------------------------------------
 --/T Contains all the information of each data product.
 ------------------------------------------------------------
-    mangaID varchar(20) NOT NULL, --/U  --/D  MaNGA name of the cube
+    mangaID varchar(32) NOT NULL, --/U  --/D  MaNGA name of the cube
     objra float NOT NULL, --/U degree --/D  RA of the object 
     objdec float NOT NULL, --/U degree --/D  DEC of the object 
     redshift real NOT NULL, --/U  --/D  redshift derived by Pipe3D form the center of the galaxy
@@ -868,7 +870,7 @@ CREATE TABLE mangaPipe3D (
     e_vel_sigma_Re real NOT NULL, --/U  --/D  error in the velocity/dispersion ratio for the stellar populations within 1.5 effective radius
     Lambda_Re real NOT NULL, --/U  --/D  Specific angular momentum lambda parameter for the stellar populations within 1.5 effective radius
     e_Lambda_Re real NOT NULL, --/U  --/D  error in the specific angular momentum lambda parameter for the stellar populations within 1.5 effective radius
-    plateifu varchar(20) NOT NULL, --/U  --/D  
+    plateifu VARCHAR(32) NOT NULL, --/U  --/D  
     plate int NOT NULL, --/U  --/D  plate ID of the MaNGA original cube
     ifudsgn int NOT NULL, --/U  --/D  IFU bundle ID of the MaNGA original cube
 )
@@ -894,7 +896,7 @@ CREATE TABLE mangaDAPall (
     plate int NOT NULL, --/U  --/D Plate number  
     ifudesign int NOT NULL, --/U  --/D IFU design number  
     plateifu varchar(32) NOT NULL, --/U  --/D String combination of PLATE-IFU to ease searching  
-    mangaid varchar(16) NOT NULL, --/U  --/D MaNGA ID string  
+    mangaid varchar(32) NOT NULL, --/U  --/D MaNGA ID string  
     drpallindx int NOT NULL, --/U  --/D Row index of the observation in the DRPall file  
     mode varchar(16) NOT NULL, --/U  --/D 3D mode of the DRP file (CUBE or RSS)  
     daptype varchar(32) NOT NULL, --/U  --/D Keyword of the analysis approach used (e.g., HYB10-GAU-MILESHC)  
