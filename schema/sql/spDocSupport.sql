@@ -33,6 +33,9 @@
 --*			   are correctly ordered.	
 --* 2018-08-03 Sue: Modified fDocColumns to handle views that should be 
 --*			   treated like tables in multi-DR / DRx db's
+--* 2018-08-10 Sue: fixed fDocColumns to handle complex views in DRx dbs
+--*            Rewrote code to use sys.objects views instead of 
+--*            INFORMATION_SCHEMA which had incorrect metadata 
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 
