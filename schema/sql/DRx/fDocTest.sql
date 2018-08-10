@@ -1,4 +1,4 @@
-
+--test to see if i can commit
 declare @tablename sysname
 set @tablename = 'PhotoObjAll'
 
