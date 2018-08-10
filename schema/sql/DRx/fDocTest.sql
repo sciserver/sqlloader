@@ -1,6 +1,6 @@
 --test to see if i can commit
 declare @tablename sysname
-set @tablename = 'PhotoObjAll'
+set @tablename = 'PhotoSecondary'
 
 declare @out TABLE (
 	[enum]		varchar(64),
@@ -22,7 +22,12 @@ declare @out TABLE (
 	FROM sys.objects
 	WHERE name=@tablename
 
-	
+	---------------------------------
+	-- figure out if we are in a DRx db or a monolithic DB 
+	-- set @isDRx accordingly
+	---------------------------------
+	declare @isDRx bit = 0
+
 	--Test to see if 'PhotoObjAll' is a table or view in this DB
 	declare @photoType varchar(3)
 	
@@ -32,14 +37,18 @@ declare @out TABLE (
 
 	if (@photoType = 'V') --if PhotoObjAll is a view, we're in a DRx db
 	begin
+		set @isDRx = 1
 		--test if @tablename is 'common' and needs special handling
 		declare @common bit
 		select @common=common from IndexMap where tablename=@tablename and code = 'K'
 		if (@common = 1) --it's a view but let's treat it like a table, special case code at end
-		set @type = 'X'
+			set @type = 'X'
 	end
 
-	
+	--select @type
+	--for testing
+	--set @type = 'X'
+
 
 	-------------------
 	-- handle views
@@ -92,16 +101,33 @@ declare @out TABLE (
 			type varchar(32)
 		)
 		--
+		-----------------------
+		-- 8/2018 Sue: INFORMATION_SCHEMA is missing info about some of the views!
+		-- MS docs say that INFORMATION_SCHEMA may not always have the correct metadata
+		-- and to use sys catalog views instead.  
+		-- Schema Browser in DRx db's was broken due to missing info in INFORMATION_SCHEMA
+		-- so re-writing to use system views..
+		------------------------
+
+		insert @depends
+		select v.name, o.name, o.type_desc
+		from sys.sql_expression_dependencies sed
+		inner join sys.views v on sed.referencing_id = v.object_id
+		inner join sys.objects o on sed.referenced_id = o.object_id
+		
+		/*
 		INSERT @depends
 		SELECT distinct d.VIEW_NAME as child, d.TABLE_NAME as parent, o.TABLE_TYPE as type
 		FROM INFORMATION_SCHEMA.VIEW_COLUMN_USAGE d, INFORMATION_SCHEMA.TABLES o
 		WHERE d.TABLE_NAME=o.TABLE_NAME;
+		*/
+
 		-----------------------------------------------
 		-- extract the parent objects, by tracking
 		-- them on the dependency tree, until we get
 		-- to user tables
 		-----------------------------------------------
-		WITH Next (child, parent, type, level)
+		;WITH Next (child, parent, type, level)
 		AS
 		( select child, parent, type, 0
 			from @depends where child=@tablename
@@ -110,17 +136,34 @@ declare @out TABLE (
 			from @depends p inner join
 			Next A ON A.parent = p.child
 		)
+
+
 		----------------------------------------------
 		-- get distinct names of columns that we depend on
 		----------------------------------------------
+
+		/*
 		INSERT @meta
 		SELECT m.tablename, m.name, m.unit, m.ucd, m.enum, m.description
 		FROM Next p, INFORMATION_SCHEMA.VIEW_COLUMN_USAGE d, DBColumns m
 		WHERE p.child = d.VIEW_NAME
 		  and p.parent= d.TABLE_NAME
-		  and p.type  ='BASE TABLE'
+		  and p.type  ='USER_TABLE'
 		  and d.TABLE_NAME  = m.tableName
 		  and d.COLUMN_NAME = m.name
+		*/
+		insert @meta
+		select m.tablename, m.name, m.unit, m.ucd, m.enum, m.description
+		from Next p, sys.sql_expression_dependencies sed
+		inner join sys.views v on sed.referencing_id = v.object_id
+		inner join sys.objects o on sed.referenced_id = o.object_id
+		inner join sys.columns c on v.object_id = c.object_id
+		join DBColumns m on m.tablename = o.name
+		where p.child = v.name
+		and p.parent = o.name
+		and c.name = m.name
+
+
 		-------------------------------------
 		-- Get list of columns in the view
 		-- and all their relevant properties.
@@ -135,6 +178,9 @@ declare @out TABLE (
 		  and c.object_id = o.object_id
 		  and o.name = @tablename
 		ORDER BY c.column_id
+
+
+
 		---------------------------------------
 		-- insert back if there is easy match
 		---------------------------------------
