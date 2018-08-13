@@ -52,6 +52,7 @@
 --*                 removed Glossary and Algorithm tables.
 --* 2010-12-10 Ani: Changed PubHistory.nrows to bigint from int.
 --* 2013-07-10 Ani: Added admin table SkipFinishPhases.
+--* 2018-08-13 Sue: Removing QueryResults table, moving to weblog db
 --=================================================================
 SET NOCOUNT ON;
 GO
@@ -94,26 +95,7 @@ INSERT SiteDBs
    WHERE [name] LIKE 'SkyServer%'
 
 
---============================================================
-if exists (select * from dbo.sysobjects 
-	where id = object_id(N'[QueryResults]') 
-	and OBJECTPROPERTY(id, N'IsUserTable') = 1)
-drop table [QueryResults]
-GO
---
-CREATE TABLE QueryResults (
--------------------------------------------------------
---/H Store the results of performance tests here
--------------------------------------------------------
-	query	 	varchar(10)	NOT NULL, 		--/D query name
-	cpu_sec		float 		NOT NULL,		--/D CPU time  --/U sec
-	elapsed_time	float 		NOT NULL,		--/D elapsed time --/U sec
-      	physical_IO	float 		NOT NULL,		--/D Physical IO
-        row_count	bigint 		NOT NULL,		--/D row count
-	[time]		DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP, --/D timestamp
-	comment		varchar(100) DEFAULT '' 		--/D comment describing test paraeters
-)
-GO
+
 
 
 --================================================================
