@@ -9,7 +9,7 @@ GO
 
 
 --
-CREATE PROCEDURE [dbo].[spIndexCreateFG](
+CREATE PROCEDURE [dbo].[spIndexCreate](
 	@taskID	int,
 	@stepID int,
 	@indexmapid int			-- link to IndexMap table
@@ -56,7 +56,7 @@ AS BEGIN
 	--------------------------------------------------
 	SELECT @type=type, @code=code, @tablename=tableName, 
 		@fieldlist=fieldList, @foreignkey=foreignKey, @compression=[compression], @fgroup=[filegroup]
-	    FROM DR15_IndexMap2 WITH (nolock)
+	    FROM IndexMap WITH (nolock)
 	    WHERE indexmapid=@indexmapid;
 
 	------------------------------------------------
