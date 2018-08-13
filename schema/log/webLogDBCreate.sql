@@ -83,7 +83,7 @@ GO
 exec sp_dboption N'weblog', N'trunc. log', N'true'
 GO
 
-exec sp_dboption N'weblog', N'torn page detection', N'true'
+exec sp_dboption N'weblog', N'checksum', N'true'
 GO
 
 exec sp_dboption N'weblog', N'read only', N'false'
@@ -469,7 +469,27 @@ AS
      END
 GO
 
-
+--============================================================
+if exists (select * from dbo.sysobjects 
+	where id = object_id(N'[QueryResults]') 
+	and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [QueryResults]
+GO
+--
+CREATE TABLE QueryResults (
+-------------------------------------------------------
+--/H Store the results of performance tests here
+-------------------------------------------------------
+	query	 		varchar(10)	NOT NULL, 		--/D query name
+	cpu_sec			float 		NOT NULL,		--/D CPU time  --/U sec
+	elapsed_time	float 		NOT NULL,		--/D elapsed time --/U sec
+    physical_IO		float 		NOT NULL,		--/D Physical IO
+    row_count		bigint 		NOT NULL,		--/D row count
+	[time]			DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP, --/D timestamp
+	[dbname]		[sysname] NOT NULL DEFAULT '',	--/D name of db where query was run
+	comment			varchar(100) DEFAULT '' 		--/D comment describing test paraeters
+)
+GO
 
 
 --===============
@@ -481,10 +501,10 @@ if not exists (select * from dbo.sysusers
 	EXEC sp_grantdbaccess N'skyuser', N'skyuser'
 exec sp_addrolemember N'db_datareader', N'skyuser'
 GO
-if not exists (select * from dbo.sysusers 
-	where name = N'internet' and uid < 16382)
-	EXEC sp_grantdbaccess N'internet', N'internet'
-exec sp_addrolemember N'db_datareader', N'internet'
+--if not exists (select * from dbo.sysusers 
+--	where name = N'internet' and uid < 16382)
+--	EXEC sp_grantdbaccess N'internet', N'internet'
+--exec sp_addrolemember N'db_datareader', N'internet'
 --
 EXEC sp_adduser N'skyuser', N'SKYUSER'
 GO
@@ -506,6 +526,8 @@ GRANT  SELECT	 	ON SqlStatementLog	 	TO skyuser
 GRANT  SELECT  		ON weblog 			TO skyuser
 GRANT  SELECT  		ON SqlLog 			TO skyuser
 GO
+
+/*
 GRANT  SELECT, INSERT 	ON SqlPerformanceLogUTC	 	TO internet
 GRANT  SELECT, INSERT 	ON SqlStatementLogUTC	 	TO internet
 GRANT  SELECT	 	ON SqlPerformanceLog	 	TO internet
@@ -514,5 +536,5 @@ GRANT  SELECT  		ON weblog 			TO internet
 GRANT  SELECT  		ON SqlLog 			TO internet
 GRANT  SELECT  		ON SqlLogUTC			TO internet
 GO
-
+*/
 
