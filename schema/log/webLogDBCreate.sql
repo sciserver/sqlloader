@@ -83,7 +83,7 @@ GO
 exec sp_dboption N'weblog', N'trunc. log', N'true'
 GO
 
-exec sp_dboption N'weblog', N'checksum', N'true'
+exec sp_dboption N'weblog', N'torn page detection', N'true'
 GO
 
 exec sp_dboption N'weblog', N'read only', N'false'
