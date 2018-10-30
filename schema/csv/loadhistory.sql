@@ -162,6 +162,7 @@ INSERT History VALUES('MetadataTables','2007-09-26','Ani','Changed SiteDiagnosti
 INSERT History VALUES('MetadataTables','2010-11-16','Ani','Removed TableDesc table - it is now a view.  Also removed Glossary and Algorithm tables. ');
 INSERT History VALUES('MetadataTables','2010-12-10','Ani','Changed PubHistory.nrows to bigint from int. ');
 INSERT History VALUES('MetadataTables','2013-07-10','Ani','Added admin table SkipFinishPhases. ');
+INSERT History VALUES('MetadataTables','2018-08-13','Sue','Removing QueryResults table, moving to weblog db ');
 INSERT History VALUES('IndexMap','2002-07-08','Jim','modified to V4 schema for PhotoProfile. dropped extra neighbor foreign key, added field->segment forign key, added segment->chunk forign key, added chunk->stripeDefs foreign key, added fieldProfile->Field, added PhotoProfile-PhotoObj, added Mosaic foreign keys. ');
 INSERT History VALUES('IndexMap','2001-11-01','Jan','created from system dump ');
 INSERT History VALUES('IndexMap','2001-11-08','Alex','manual edits for concise naming convention ');
@@ -331,7 +332,7 @@ INSERT History VALUES('IndexMap','2018-06-13','Ani','Added PKs for mangaHIall an
 INSERT History VALUES('IndexMap','2018-07-17','Ani','Added PK for spiders_quasar. (DR14 mini) ');
 INSERT History VALUES('IndexMap','2018-07-23','Ani','Added PKs for Mastar tables. (DR15) ');
 INSERT History VALUES('IndexMap','2018-07-25','Ani','Fixed PK for mangaHIbonus (added bonusid), fixed typo in sdssEbossFirefly PK name. (DR15) ');
-INSERT History VALUES('IndexMap','2018-08-02','Sue','Changes to IndexMap for compression, filegroups, and common vs DR-specific (multi-DR) tables TODO: fill in all rows, this data is sufficient for DR15 loading ');
+INSERT History VALUES('IndexMap','2018-08-02','Sue','Changes to IndexMap for compression, filegroups, and common vs DR-specific (multi-DR) tables updated spIndexCreate to handle compression and filegroups TODO: fill in all rows, this data is sufficient for DR15 loading ');
 INSERT History VALUES('PhotoTables','2009-04-27','Ani','Swapped in updated schema for photo tables for SDSS-III. Added new table Run. ');
 INSERT History VALUES('PhotoTables','2009-05-05','Ani','Added loadVersion to Field table. ');
 INSERT History VALUES('PhotoTables','2009-06-11','Ani','Added nProf_[ugriz] to Field table. ');
@@ -615,6 +616,7 @@ INSERT History VALUES('MangaTables','2018-06-13','Ani','Changed BIGINTs to INTs 
 INSERT History VALUES('MangaTables','2018-07-20','Ani','Added mastar tables. (DR15) ');
 INSERT History VALUES('MangaTables','2018-07-24','Ani','Moved mastar tables to separate file MastarTables.sql. (DR15) ');
 INSERT History VALUES('MangaTables','2018-07-25','Ani','Updated objra,objdec for mangaFirefly to FLOAT from REAL. (DR15) ');
+INSERT History VALUES('MangaTables','2018-08-06','Ani','Replaced all VARCHAR(20) with VARCHAR(32), made all mangaID  columns VARCHAR(32) for FK consistency. (DR15) ');
 INSERT History VALUES('MastarTables','2018-07-24','Ani','Adapted from sas-sql/mastarall.sql. ');
 INSERT History VALUES('MastarTables','2018-07-24','Ani','Flipped the float/real types for coords and mags, and changed psfMag_[ugriz] to psfMag_[12345] as per  Renbin''s request. ');
 INSERT History VALUES('QsoVarTables','2016-04-05','Ani','Created sqlLoader schema file from sas/sql. ');
@@ -687,7 +689,6 @@ INSERT History VALUES('Views','2010-12-23','Ani','Added SEGUE specObjAll views. 
 INSERT History VALUES('Views','2013-04-02','Ani','Added "clean" photometry flag to Phototag view. ');
 INSERT History VALUES('VacTables','2018-07-17','Ani','Created file. ');
 INSERT History VALUES('VacTables','2018-07-26','Ani','Updated schema as per latest version in sas/sql. (DR14-mini) ');
-INSERT History VALUES('VacTables','2018-07-29','Ani','Updated schema as per latest version in sas/sql, where several columns were changed to float from real. (DR14-mini) ');
 INSERT History VALUES('spHtmCSharp','2005-05-01','Jim','started ');
 INSERT History VALUES('spHtmCSharp','2005-05-02','Jim','removed fHtmLookup and fHtmLookupError added fHtmToString ');
 INSERT History VALUES('spHtmCSharp','2005-05-05','GYF','added .pdb to assembly for symbolic debugging added fHtmToName (faster than fHtmToString and reports error) ');
@@ -763,6 +764,7 @@ INSERT History VALUES('spNearby','2016-04-22','Ani','Added functions fGetNear[by
 INSERT History VALUES('spNearby','2016-04-26','Ani','Updated data types returned by MaNGA functions fGetNear[by|est]MangaObjEq to match the table schema. ');
 INSERT History VALUES('spNearby','2017-04-19','Sue','Added inner loop join to fGetNearbyObjXYZ and fGetNearbyObjAllXYZ to fix performance issues with clustered columnstore indexes Commented out code to set DB compatibility level to SQL2005 ');
 INSERT History VALUES('spNearby','2018-03-29','Sue','Fixed spec functions to return a numeric(20) instead of bigint ');
+INSERT History VALUES('spNearby','2018-10-30','Sue','Added manga functions: [fGetNearbyMaStarObjEq] and fGetNearestMastarObjEq ');
 INSERT History VALUES('spApogee','2006-04-27','Ani','Created inital version as per JOn Holtzman request. ');
 INSERT History VALUES('spApogee','2006-05-13','Ani','Updated description of fAspcapFelem* functions. ');
 INSERT History VALUES('spApogee','2006-05-18','Ani','Removed dbo. prefix from function definitions and also. trailing spaces from some functions. ');
@@ -1275,6 +1277,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1265 lines inserted into History'
+PRINT '1267 lines inserted into History'
 ------------------------------------
 GO

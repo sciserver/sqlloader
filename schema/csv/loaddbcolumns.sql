@@ -40,13 +40,6 @@ INSERT DBColumns VALUES('ProfileDefs','aDisk','arcsec^2','EXTENSION_AREA','','Th
 INSERT DBColumns VALUES('SiteDBs','dbname','','','','Name of the database','0');
 INSERT DBColumns VALUES('SiteDBs','description','','','','Short one-line description','0');
 INSERT DBColumns VALUES('SiteDBs','active','','','','Is it active/visible?','0');
-INSERT DBColumns VALUES('QueryResults','query','','','','query name','0');
-INSERT DBColumns VALUES('QueryResults','cpu_sec','sec','','','CPU time','0');
-INSERT DBColumns VALUES('QueryResults','elapsed_time','sec','','','elapsed time','0');
-INSERT DBColumns VALUES('QueryResults','physical_IO','','','','Physical IO','0');
-INSERT DBColumns VALUES('QueryResults','row_count','','','','row count','0');
-INSERT DBColumns VALUES('QueryResults','time','','','','timestamp','0');
-INSERT DBColumns VALUES('QueryResults','comment','','','','comment describing test paraeters','0');
 INSERT DBColumns VALUES('RecentQueries','ipAddr','','','','','0');
 INSERT DBColumns VALUES('RecentQueries','lastQueryTime','','','','','0');
 INSERT DBColumns VALUES('SkipFinishPhases','phase','','','','','0');
@@ -8574,6 +8567,6 @@ INSERT DBColumns VALUES('spiders_quasar','edd_ratio2','','','','Eddington ratio 
 
 GO
 ----------------------------- 
-PRINT '8564 lines inserted into DBColumns '
+PRINT '8557 lines inserted into DBColumns '
 ----------------------------- 
 

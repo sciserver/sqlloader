@@ -14,13 +14,13 @@ INSERT Dependency VALUES('ConstantSupport','fSpecDescription','fSpecZWarningN');
 INSERT Dependency VALUES('FrameTables','spComputeFrameHTM','fEqFromMuNu');
 INSERT Dependency VALUES('FrameTables','spComputeFrameHTM','fHtmXyz');
 INSERT Dependency VALUES('FrameTables','spMakeFrame','fTileFileName');
+INSERT Dependency VALUES('IndexMap','dbo.[spIndexCreate]','fIndexName');
+INSERT Dependency VALUES('IndexMap','dbo.[spIndexCreate]','spNewPhase');
 INSERT Dependency VALUES('IndexMap','spDropIndexAll','spIndexDrop');
 INSERT Dependency VALUES('IndexMap','spEndStep','spEndStep');
 INSERT Dependency VALUES('IndexMap','spEndStep','spNewPhase');
 INSERT Dependency VALUES('IndexMap','spIndexBuildList','spIndexCreate');
 INSERT Dependency VALUES('IndexMap','spIndexBuildSelection','spIndexBuildList');
-INSERT Dependency VALUES('IndexMap','spIndexCreate','fIndexName');
-INSERT Dependency VALUES('IndexMap','spIndexCreate','spNewPhase');
 INSERT Dependency VALUES('IndexMap','spIndexDropList','fIndexName');
 INSERT Dependency VALUES('IndexMap','spIndexDropList','spNewPhase');
 INSERT Dependency VALUES('IndexMap','spIndexDropSelection','spIndexDropList');
@@ -141,6 +141,11 @@ INSERT Dependency VALUES('spHtmCSharp','fHtmGetString','SphericalHTM.[Spherical.
 INSERT Dependency VALUES('spHtmCSharp','fHtmVersion','SphericalHTM.[Spherical.Htm.Sql.fHtmVersion');
 INSERT Dependency VALUES('spHtmCSharp','fHtmXyz','SphericalHTM.[Spherical.Htm.Sql.fHtmXyz');
 INSERT Dependency VALUES('spHtmCSharp','fHtmXyzToEq','SphericalHTM.[Spherical.Htm.Sql.fHtmXyzToEq');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fDistanceArcMinEq');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fHtmCoverCircleEq');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fHtmEq');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMastarEq]','fDistanceArcMinEq');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMastarEq]','fGetNearbyMaStarObjEq');
 INSERT Dependency VALUES('spNearby','fGetJpegObjects','fGetObjectsEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyApogeeStarEq','fDistanceArcMinEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyApogeeStarEq','fHtmCoverCircleEq');
@@ -421,6 +426,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '411 lines inserted into Dependency'
+PRINT '416 lines inserted into Dependency'
 ------------------------------------
 GO
