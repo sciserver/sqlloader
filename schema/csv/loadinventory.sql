@@ -416,7 +416,7 @@ INSERT Inventory VALUES('spNearby','fGetObjectsMaskEq','F');
 INSERT Inventory VALUES('spNearby','fGetJpegObjects','F');
 INSERT Inventory VALUES('spNearby','spGetMatch','P');
 INSERT Inventory VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','F');
-INSERT Inventory VALUES('spNearby','dbo.[fGetNearestMastarEq]','F');
+INSERT Inventory VALUES('spNearby','dbo.[fGetNearestMastarObjEq]','F');
 INSERT Inventory VALUES('spApogee','fAspcapParamsAll','F');
 INSERT Inventory VALUES('spApogee','fAspcapParams','F');
 INSERT Inventory VALUES('spApogee','fAspcapParamErrs','F');

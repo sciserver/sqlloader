@@ -144,8 +144,8 @@ INSERT Dependency VALUES('spHtmCSharp','fHtmXyzToEq','SphericalHTM.[Spherical.Ht
 INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fDistanceArcMinEq');
 INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fHtmCoverCircleEq');
 INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fHtmEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMastarEq]','fDistanceArcMinEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMastarEq]','fGetNearbyMaStarObjEq');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMastarObjEq]','fDistanceArcMinEq');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMastarObjEq]','fGetNearbyMaStarObjEq');
 INSERT Dependency VALUES('spNearby','fGetJpegObjects','fGetObjectsEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyApogeeStarEq','fDistanceArcMinEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyApogeeStarEq','fHtmCoverCircleEq');

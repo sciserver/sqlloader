@@ -764,7 +764,7 @@ INSERT History VALUES('spNearby','2016-04-22','Ani','Added functions fGetNear[by
 INSERT History VALUES('spNearby','2016-04-26','Ani','Updated data types returned by MaNGA functions fGetNear[by|est]MangaObjEq to match the table schema. ');
 INSERT History VALUES('spNearby','2017-04-19','Sue','Added inner loop join to fGetNearbyObjXYZ and fGetNearbyObjAllXYZ to fix performance issues with clustered columnstore indexes Commented out code to set DB compatibility level to SQL2005 ');
 INSERT History VALUES('spNearby','2018-03-29','Sue','Fixed spec functions to return a numeric(20) instead of bigint ');
-INSERT History VALUES('spNearby','2018-10-30','Sue','Added manga functions: [fGetNearbyMaStarObjEq] and fGetNearestMastarObjEq ');
+INSERT History VALUES('spNearby','2018-10-30','Sue','Added manga functions: fGetNearbyMaStarObjEq and fGetNearestMastarObjEq ');
 INSERT History VALUES('spApogee','2006-04-27','Ani','Created inital version as per JOn Holtzman request. ');
 INSERT History VALUES('spApogee','2006-05-13','Ani','Updated description of fAspcapFelem* functions. ');
 INSERT History VALUES('spApogee','2006-05-18','Ani','Removed dbo. prefix from function definitions and also. trailing spaces from some functions. ');
