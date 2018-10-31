@@ -2558,7 +2558,7 @@ CREATE FUNCTION [dbo].[fGetNearestMastarObjEq] (@ra float, @dec float, @r float)
 --/T <br><samp>
 --/T <br>select * from dbo.[fGetNearestMastarObjEq](38.7, 47.4, 1) 
 --/T </samp>  
---/T <br>see also fGetNearbystarObjEq
+--/T <br>see also fGetNearbyMastarObjEq
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
     mangaid varchar(20) NOT NULL,
