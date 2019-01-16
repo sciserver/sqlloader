@@ -105,13 +105,30 @@
 --*
 --* 2017-04-19 Sue: Added inner loop join to fGetNearbyObjXYZ and fGetNearbyObjAllXYZ
 --*                 to fix performance issues with clustered columnstore indexes
---*                 Commented out code to set DB compatibility level to SQL2005
---* 2018-03-29 Sue: Fixed spec functions to return a numeric(20) instead of bigint
---* 2018-10-30 Sue: Added manga functions: fGetNearbyMaStarObjEq and
---*                 fGetNearestMastarObjEq
+--*					Commented out code to set DB compatibility level to SQL2005
+--* 2018-03-29 Sue: Fixed spec functions to return numeric(20) instead of bigint
+--* 2019-01016 Sue: fGetObjectsEq now returns numeric(20) instead of bigint
+
 --=====================================================================
 SET NOCOUNT ON;
 GO
+
+/*
+
+Commenting this out (4/19/2017) - it doesn't appear to be needed anymore
+--sue
+
+DECLARE @dbName nvarchar(1000)
+SELECT @dbName = DB_NAME()
+EXEC sp_dbcmptlevel @dbName, 90   -- set database compatibility to SQL2005
+reconfigure with override
+GO
+EXEC sp_configure 'clr enabled', 1
+reconfigure with override
+GO
+
+*/
+
 --===================================================================
 IF EXISTS (SELECT name FROM   sysobjects
            WHERE  name = N'fDistanceArcMinEq' )
@@ -2150,7 +2167,7 @@ IF EXISTS (SELECT name FROM   sysobjects
 	DROP FUNCTION fGetObjectsEq
 GO
 --
-CREATE  FUNCTION fGetObjectsEq(@flag int, @ra float, 
+CREATE  FUNCTION [dbo].[fGetObjectsEq](@flag int, @ra float, 
 				@dec float, @r float, @zoom float)
 -------------------------------------------------------------
 --/H A helper function for SDSS cutout that returns all objects
@@ -2169,7 +2186,7 @@ CREATE  FUNCTION fGetObjectsEq(@flag int, @ra float,
 --/T the returned objects have 
 --/T          flag = (specobj:1, photoobj:2, target:4, mask:8, plate:16)
 -------------------------------------------------
-RETURNS @obj table (ra float, [dec] float, flag int, objid bigint)
+RETURNS @obj table (ra float, [dec] float, flag int, objid numeric(20))
 AS BEGIN
         DECLARE		@nx float,
                 @ny float,
@@ -2486,96 +2503,22 @@ END
 GO
 
 
-drop function if exists [dbo].[fGetNearbyMaStarObjEq]
-GO
---
-CREATE FUNCTION [dbo].[fGetNearbyMaStarObjEq] (@ra float, @dec float, @r float)
--------------------------------------------------------------
---/H Returns table of MaStar objects within @r arcmins of an equatorial point (@ra,@dec).
--------------------------------------------------------------
---/T There is no limit on the number of objects returned, but there are about 40 per sq arcmin.
---/T <p>returned table:  
---/T <li> mangaid varchar(20) NOT NULL,    -- MaNGA target id
---/T <li> objra float NOT NULL,            -- Right Ascension
---/T <li> objdec float NOT NULL,	   -- declination
---/T <li> htmID bigint NOT NULL		   -- Hierarchical Trangular Mesh id of this object
---/T <li> distance float NOT NULL		-- distance in arc minutes to this object from the ra,dec.
---/T <br> Sample call to find MaStar object within 5 arcminutes of xyz -.0996,-.1,0
---/T <br><samp>
---/T <br>select * from [dbo].[fGetNearbyMaStarObjEq](38.7, 47.4, 1)  
---/T </samp>  
---/T <br>see also fGetNearestMastarObjEq
-
--------------------------------------------------------------
-  RETURNS @proxtab TABLE (
-    mangaid varchar(20) NOT NULL,
-    objra float NOT NULL,
-    objdec float NOT NULL,
-    htmID bigint NOT NULL,
-	distance float not null
-  ) AS 
-BEGIN
-	DECLARE @htmTemp TABLE (
-		HtmIdStart bigint,
-		HtmIdEnd bigint
-	);
-	INSERT @htmTemp SELECT * FROM dbo.fHtmCoverCircleEq(@ra,@dec,@r)
-	DECLARE @lim float;
-	INSERT @proxtab	SELECT 
-	    mangaid,
-	    objra,
-	    objdec,
-	    dbo.fHtmEq(M.catalogra, M.catalogdec),
-		dbo.fDistanceArcMinEq(@ra,@dec, M.catalogra, M.catalogdec)
-	    FROM @htmTemp H join mastar_goodstars M
-	             ON  (dbo.fHtmEq(M.objra, M.objdec) BETWEEN H.HtmIDstart AND H.HtmIDend )
-	    AND dbo.fDistanceArcMinEq(@ra,@dec,
-		M.catalogra, M.catalogdec) < @r
-  RETURN
-  END
-
-GO
 
 
+ /* 
+
+test cases
 
 
-drop function if exists [dbo].[fGetNearestMastarObjEq] 
-go
---
-CREATE FUNCTION [dbo].[fGetNearestMastarObjEq] (@ra float, @dec float, @r float)
--------------------------------------------------------------
---/H Returns table of properties of nearest MaNGA object within @r arcmins of
---/H an equatorial point (@ra,@dec).
--------------------------------------------------------------
---/T There is no limit on the number of objects returned, but there are about 40 per sq arcmin.
---/T <p>returned table:  
---/T <li> mangaid varchar(20) NOT NULL,    -- MaNGA target id
---/T <li> objra float NOT NULL,            -- Right Ascension
---/T <li> objdec float NOT NULL,	   -- declination
---/T <li> htmID bigint NOT NULL		   -- Hierarchical Trangular Mesh id of this object
---/T <li> distance float NOT NULL		-- distance in arc minutes to this object from the ra,dec.
---/T <br> Sample call to find MaNGA object within 5 arcminutes of xyz -.0996,-.1,0
---/T <br><samp>
---/T <br>select * from dbo.[fGetNearestMastarObjEq](38.7, 47.4, 1) 
---/T </samp>  
---/T <br>see also fGetNearbyMastarObjEq
--------------------------------------------------------------
-  RETURNS @proxtab TABLE (
-    mangaid varchar(20) NOT NULL,
-    objra float NOT NULL,
-    objdec float NOT NULL,
-    htmID bigint NOT NULL, 
-	distance float not null
-  ) AS 
-BEGIN
-	INSERT @proxtab
-		SELECT TOP 1 *
-		FROM dbo.fGetNearbyMaStarObjEq(@ra, @dec, @r) n
-		order by dbo.fDistanceArcMinEq(@ra, @dec, n.objra, n.objdec) ASC
-	RETURN
-  END
-GO
-
+declare @ra float,@dec float
+select @ra = min(ra), @dec = min(dec) 
+ from ( select top 1 ra,dec 
+	from photoObj)  as t
+  	select * from dbo.fGetJpegObjects( 1, @ra,@dec,  10, 10)
+	select * from dbo.fGetJpegObjects( 1, @ra,@dec,  10,  0)
+	select * from dbo.fGetJpegObjects( 7, @ra,@dec, 100, 10)
+	select * from dbo.fGetJpegObjects( 7, @ra,@dec, 150, 20)
+*/
 
 --===================================================================
 PRINT '[spNearby.sql]: Proximity functions created'
