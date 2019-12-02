@@ -619,10 +619,9 @@ INSERT History VALUES('MangaTables','2018-07-20','Ani','Added mastar tables. (DR
 INSERT History VALUES('MangaTables','2018-07-24','Ani','Moved mastar tables to separate file MastarTables.sql. (DR15) ');
 INSERT History VALUES('MangaTables','2018-07-25','Ani','Updated objra,objdec for mangaFirefly to FLOAT from REAL . (DR15) ');
 INSERT History VALUES('MangaTables','2018-08-06','Ani','Replaced all VARCHAR(20) with VARCHAR(32), made all mangaID columns VARCHAR(32) for FK consistency. (DR15) ');
-INSERT History VALUES('MangaTables','2019-07-30','Ani','Added mangaGalaxyZoo table, changed all non-coord floats to reals, increased the varchar lengths, and added commas after each line and a closing parenthesis. ');
-INSERT History VALUES('MangaTables','2019-07-31','Ani','Changed nsa_id in mangaGalaxyZoo to int from bigint, IFUDESIGNSIZE to int from real after confirmation from K Masters. Also chamged MANGA_TILEID to int from real. ');
-INSERT History VALUES('MangaTables','2019-09-27','Ani','Brought mangaGAlaxyZoo table into this file, it was in its own file before. ');
-INSERT History VALUES('MangaTables','2019-10-24','Ani','Added mangaAlfalfaDR15 VAC table. ');
+INSERT History VALUES('MangaTables','2019-07-30','Ani','Added mangaGalaxyZoo table, changed all non-coord floats to reals, increased the varchar lengths, and added commas after each line and a closing parenthesis. DR16 ');
+INSERT History VALUES('MangaTables','2019-07-31','Ani','Changed nsa_id in mangaGalaxyZoo to int from bigint, IFUDESIGNSIZE to int from real after confirmation from K Masters. Also chamged MANGA_TILEID to int from real. DR16 ');
+INSERT History VALUES('MangaTables','2019-10-24','Ani','Added mangaAlfalfaDR15 VAC table. DR16 ');
 INSERT History VALUES('MastarTables','2018-07-24','Ani','Adapted from sas-sql/mastarall.sql. ');
 INSERT History VALUES('MastarTables','2018-07-24','Ani','Flipped the float/real types for coords and mags, and changed psfMag_[ugriz] to psfMag_[12345] as per  Renbin''s request. ');
 INSERT History VALUES('QsoVarTables','2016-04-05','Ani','Created sqlLoader schema file from sas/sql. ');
@@ -696,7 +695,7 @@ INSERT History VALUES('Views','2013-04-02','Ani','Added "clean" photometry flag 
 INSERT History VALUES('VacTables','2018-07-17','Ani','Created file. ');
 INSERT History VALUES('VacTables','2018-07-26','Ani','Updated schema as per latest version in sas/sql. (DR14-mini) ');
 INSERT History VALUES('VacTables','2018-07-29','Ani','Updated schema as per latest version in sas/sql, where several columns were changed to float from real. (DR14-mini) ');
-INSERT History VALUES('VacTables','2019-09-27','Ani','Added PawlikMorph table, updated spiders_quasar. ');
+INSERT History VALUES('VacTables','2019-09-27','Ani','Added PawlikMorph table, updated spiders_quasar. (DR16) ');
 INSERT History VALUES('spHtmCSharp','2005-05-01','Jim','started ');
 INSERT History VALUES('spHtmCSharp','2005-05-02','Jim','removed fHtmLookup and fHtmLookupError added fHtmToString ');
 INSERT History VALUES('spHtmCSharp','2005-05-05','GYF','added .pdb to assembly for symbolic debugging added fHtmToName (faster than fHtmToString and reports error) ');
@@ -1288,6 +1287,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1278 lines inserted into History'
+PRINT '1277 lines inserted into History'
 ------------------------------------
 GO

@@ -9,7 +9,7 @@
 --* 2018-07-26  Ani: Updated schema as per latest version in sas/sql. (DR14-mini)
 --* 2018-07-29  Ani: Updated schema as per latest version in sas/sql, where
 --*                  several columns were changed to float from real. (DR14-mini)
---* 2019-09-27  Ani: Added PawlikMorph table, updated spiders_quasar.
+--* 2019-09-27  Ani: Added PawlikMorph table, updated spiders_quasar. (DR16)
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -305,6 +305,8 @@ n 	      real     NOT NULL, --/U 			--/D  Sersic model’s best-fit parameter: t
 nerr 	      real     NOT NULL, --/U 			--/D  error associated with n
 warningflag   smallint  NOT NULL, --/U 			--/D  flag indicating unreliable measurement (0 if everything is OK)
 )
+GO
+
 
 
 -- revert to primary file group

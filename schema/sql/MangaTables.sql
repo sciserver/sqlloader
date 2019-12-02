@@ -31,13 +31,11 @@
 --*                  mangaID columns VARCHAR(32) for FK consistency. (DR15)
 --* 2019-07-30  Ani: Added mangaGalaxyZoo table, changed all non-coord floats
 --*                  to reals, increased the varchar lengths, and added commas
---*                  after each line and a closing parenthesis.
+--*                  after each line and a closing parenthesis. DR16
 --* 2019-07-31  Ani: Changed nsa_id in mangaGalaxyZoo to int from bigint,
 --*                  IFUDESIGNSIZE to int from real after confirmation from K
---*                  Masters. Also chamged MANGA_TILEID to int from real.
---* 2019-09-27  Ani: Brought mangaGAlaxyZoo table into this file, it was in
---*                  its own file before.
---* 2019-10-24  Ani: Added mangaAlfalfaDR15 VAC table.
+--*                  Masters. Also chamged MANGA_TILEID to int from real. DR16
+--* 2019-10-24  Ani: Added mangaAlfalfaDR15 VAC table. DR16
 ---=========================================================
 
 --=========================================================
