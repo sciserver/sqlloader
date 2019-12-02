@@ -4,11 +4,11 @@
 ----------------------------------------------------------------
 -- Functions to return groups of APOGEE columns (for convenience)
 ----------------------------------------------------------------
---* 2006-04-27 Ani: Created inital version as per JOn Holtzman request.
---* 2006-05-13 Ani: Updated description of fAspcapFelem* functions.
---* 2006-05-18 Ani: Removed dbo. prefix from function definitions and also.
+--* 2016-04-27 Ani: Created inital version as per JOn Holtzman request.
+--* 2016-05-13 Ani: Updated description of fAspcapFelem* functions.
+--* 2016-05-18 Ani: Removed dbo. prefix from function definitions and also.
 --*                 trailing spaces from some functions.
---* 2006-05-19 Ani: Removed multiple instances of links to flag docs.
+--* 2016-05-19 Ani: Removed multiple instances of links to flag docs.
 --======================================================================
 IF EXISTS (SELECT name FROM sysobjects 
            WHERE  name = N'fAspcapParamsAll' ) 

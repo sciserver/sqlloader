@@ -78,6 +78,7 @@
 --* 2018-06-11 Ani: Added mangaDAPall to spPublishManga. (DR15)
 --* 2018-06-13 Ani: Added mangaHIall and mangaHIbonus to spPublishManga. (DR15)
 --* 2018-07-23 Ani: Added spPublishMastar. (DR15)
+--* 2019-11-24 Ani: Added mangaGalaxyZoo, mangaAlfalfaDR15 to PublishManga (DR16).
 ----------------------------------------------------------------------
 -- We are not copying 
 -- DBcolumns, DBObjects, DBViewCols, DataConstants, Globe,Glossary, 
@@ -730,6 +731,12 @@ AS BEGIN
 	set @summary = @summary + @err 
 
 	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mangaHIbonus', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mangaGalaxyZoo', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mangaAlfalfaDR15', @firstTime 
 	set @summary = @summary + @err 
 
 	--------------------------------------------------

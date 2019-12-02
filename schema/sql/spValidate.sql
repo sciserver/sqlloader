@@ -93,6 +93,10 @@
 --* 2018-06-11 Ani: Added mangaHIall and mangaHIbonus to spValidateManga. (DR15)
 --* 2018-06-11 Ani: Fixed mangaDAPall PK test in spValidateManga. (DR15)
 --* 2018-07-23 Ani: Added spValidateMastar. (DR15)
+--* 2019-11-21 Ani: Commented out error exit for ApogeeObject to allow
+--*                 duplicate target_ids.
+--* 2019-11-23 Ani: Added mangaGalaxyZoo and mangaAlfalfaDR15 to
+--*                 spValidateManga.
 --====================================================================
 SET NOCOUNT ON;
 GO
@@ -1578,6 +1582,12 @@ AS BEGIN
 	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mangaHIbonus',          	'mangaID,bonusiD',	@error OUTPUT
 	set @summary = @summary + @error;
  
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mangaGalaxyZoo',      	'nsa_id',	@error OUTPUT
+	set @summary = @summary + @error;
+ 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mangaAlfalfaDR15',      	'plateIFU',	@error OUTPUT
+	set @summary = @summary + @error;
+ 
 	-- generate completion message.
 
 	IF @summary = 0 
@@ -1912,7 +1922,7 @@ AS BEGIN
 	IF @summary = 0
             BEGIN
 	    	exec dbo.spTestUniqueKey  @taskid , @stepid,  'apogeeObject', 'target_id', @error OUTPUT
-		set @summary = @summary + @error;
+--		set @summary = @summary + @error;
             END
 
                 

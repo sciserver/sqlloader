@@ -58,6 +58,8 @@
 ' 2016-05-04    Added NSA batch in export type "nsa".
 ' 2018-06-08    Added MangaDAPall, MangaHI* to MaNGA batch.
 ' 2018-07-19    Added mastar batch.
+' 2019-11-19    Added Apogee2Object files.
+' 2019-11-24    Added MangaGalaxyZoo and MangaAlfalfaDR15.
 '==============================================================
 
 Option Explicit
@@ -97,6 +99,7 @@ sep		= "','"
 	'
 	Set theroot = fso.GetFolder(thepath)
 	'
+
 	iDebug		= 0
 '	If iDebug = 1 Then
 		Set fDebug = fso.OpenTextFile( "C:\temp\csvRobotDbg.txt", 8, True)
@@ -176,13 +179,14 @@ Public Sub CheckDir (root,level)
 	ElseIf ( theexporttype = "resolve" ) Then
 		s = s & "(^sql(ThingIndex|DetectionIndex).csv" & "_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "apogee" ) Then
-		s = s & "(^sql(ApogeeVisit|ApogeeStar|aspcapStar|aspcapStarCovar|ApogeePlate|ApogeeDesign|ApogeeField|ApogeeObject|ApogeeStarVisit|ApogeeStarAllVisit)" & "_*[0-9]*\.csv$)"
+		s = s & "(^sql(ApogeeVisit|ApogeeStar|aspcapStar|aspcapStarCovar|ApogeePlate|ApogeeDesign|ApogeeField|ApogeeObject|Apogee2Object|ApogeeStarVisit|ApogeeStarAllVisit)" & "_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "wise" ) Then
 		s = s & "(^sqlWise(XMatch|AllSky)" & "_[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "forced" ) Then
 		s = s & "(^sqlWISE_forced_target-2-" & rootname & "-*[0-9]*_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "manga" ) Then
-		s = s & "(^sql(MangaDAPall|MangaDRPall|MangaTarget|MangaHIall|MangaHIbonus)" & "-v[0-9]*_[0-9]*_[0-9]*\.csv_[0-9]*\.csv$)"
+		s = s & "(^sql(MangaDAPall|MangaDRPall|MangaTarget|MangaHIall|MangaHIbonus|MangaGalaxyZoo|MangaAlfalfaDR15)" & "*\.csv$)"
+'		s = s & "(^sql(MangaDAPall|MangaDRPall|MangaTarget|MangaHIall|MangaHIbonus|MangaGalaxyZoo|MangaAlfalfaDR15)" & "-v[0-9]*_[0-9]*_[0-9]*\.csv_[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "mastar" ) Then
 		s = s & "(^sql(MastarGoodStars|MastarGoodVisits)" & "-v[0-9]*_[0-9]*_[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "nsa" ) Then

@@ -52,6 +52,7 @@
 --* 2017-05-06 Added columns to apogeeVisit and apogeeStar for DR14.
 --* 2018-07-18 Removed conditional DROP TABLE from tables that do not
 --*            get recreated with each release (apogeeDesign/Field/Object).
+--* 2019-11-14 DR16 schema changes.
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -77,7 +78,7 @@ CREATE TABLE apogeeVisit (
     apred_version varchar(32) NOT NULL, --/D Visit reduction pipeline version (e.g. "r3")
     apogee_id varchar(64) NOT NULL, --/D 2MASS-style star identification  
     target_id varchar(64) NOT NULL, --/D target ID (Foreign key, of form [location_id].[apogee_id])  
-    reduction_id varchar(32) NOT NULL, --/D ID star identification used within reductions
+    alt_id varchar(64) NOT NULL, --/D alternate ID star identification, for apo1m, used within reductions
     [file] varchar(128) NOT NULL, --/D File base name with visit spectrum and catalog information
     fiberid bigint NOT NULL, --/D Fiber ID for this visit
     plate varchar(32) NOT NULL, --/D Plate of this visit
@@ -144,7 +145,7 @@ CREATE TABLE apogeeStar (
 -------------------------------------------------------------------------------
     apstar_id varchar(64) NOT NULL, --/D Unique ID for combined star spectrum of form apogee.[telescope].[cs].apstar_version.location_id.apogee_id (Primary key)
     target_id varchar(64) NOT NULL, --/D target ID (Foreign key, of form [location_id].[apogee_id]) 
-    reduction_id varchar(32) NOT NULL, --/D ID star identification used within reductions
+    alt_id varchar(64) NOT NULL, --/D ID alternate star identification, for apo1m used within reductions
     [file] varchar(128) NOT NULL, --/D File base name with combined star spectrum 
     apogee_id varchar(32) NOT NULL, --/D 2MASS-style star identification  
     telescope varchar(32) NOT NULL, --/D Telescope where data was taken
@@ -190,6 +191,21 @@ CREATE TABLE apogeeStar (
     chi2_threshold real NOT NULL, --/D Threshold chi^2 for possible binary determination (not currently valid)
     stablerv_chi2_prob real NOT NULL, --/D Probability of obtaining observed chi^2 under assumption of stable RV
     apstar_version varchar(32) NOT NULL,  --/D Reduction version of spectrum combination
+    gaia_source_id bigint NOT NULL, --/D GAIA DR2 source id
+    gaia_parallax real NOT NULL, --/U mas --/D GAIA DR2 parallax
+    gaia_parallax_error real NOT NULL, --/U mas --/D GAIA DR2 parallax uncertainty
+    gaia_pmra real NOT NULL, --/U mas/yr --/D GAIA DR2 proper motion in RA
+    gaia_pmra_error real NOT NULL, --/U mas/yr --/D GAIA DR2 proper motion in RA uncertainty
+    gaia_pmdec real NOT NULL, --/U mas/yr --/D GAIA DR2 proper motion in DEC
+    gaia_pmdec_error real NOT NULL, --/U mas/yr --/D GAIA DR2 proper motion in DEC uncertainty
+    gaia_phot_g_mean_mag real NOT NULL, --/D GAIA DR2 g mean magnitude
+    gaia_phot_bp_mean_mag real NOT NULL, --/D GAIA DR2 Bp mean magnitude
+    gaia_phot_rp_mean_mag real NOT NULL, --/D GAIA DR2 Rp mean magnitude
+    gaia_radial_velocity real NOT NULL, --/U km/s --/D GAIA DR2 radial velocity
+    gaia_radial_velocity_error real NOT NULL, --/U km/s --/D GAIA DR2 radial velocity
+    gaia_r_est real NOT NULL, --/U pc --/D GAIA DR2 Bailer Jones r_est
+    gaia_r_lo real NOT NULL, --/U pc --/D GAIA DR2 Bailer Jones r_lo
+    gaia_r_hi real NOT NULL, --/U pc --/D GAIA DR2 Bailer Jones r_hi
     htmID bigint NOT NULL --/F NOFITS --/D HTM ID 
 )
 GO
@@ -265,9 +281,11 @@ CREATE TABLE aspcapStar (
     teff real NOT NULL,  --/U deg K --/D Empirically calibrated temperature from ASPCAP 
     teff_err real NOT NULL, --/U deg K  --/D external uncertainty estimate for calibrated temperature from ASPCAP
     teff_flag int NOT NULL, --/F paramflag 0 --/D PARAMFLAG for effective temperature(see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_PARAMFLAG)
+    teff_spec real NOT NULL,  --/U deg K --/D Spectroscopic (uncalibrated) temperature from ASPCAP 
     logg real NOT NULL, --/U dex --/D empirically calibrated log gravity from ASPCAP
     logg_err real NOT NULL, --/U dex --/D external uncertainty estimate for log gravity from ASPCAP
     logg_flag int NOT NULL, --/F paramflag 1 --/D PARAMFLAG for log g(see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_PARAMFLAG)
+    logg_spec real NOT NULL, --/U dex --/D spectroscopic (uncalibrated) log gravity from ASPCAP
     vmicro real NOT NULL, --/U km/s --/D microturbulent velocity (fit for dwarfs, f(log g) for giants)
     vmacro real NOT NULL, --/U km/s --/D macroturbulent velocity (f(log Teff,[M/H]) for giants)
     vsini real NOT NULL, --/U km/s --/D rotation+macroturbulent velocity (fit for dwarfs)
@@ -360,62 +378,67 @@ CREATE TABLE aspcapStar (
     rb_fe real NOT NULL, --/U dex --/D empirically calibrated [Rb/Fe] from ASPCAP 
     rb_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Rb/Fe] from ASPCAP 
     rb_fe_flag int NOT NULL, --/F elemflag 23 --/D ELEMFLAG for Rb (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
-    y_fe real NOT NULL, --/U dex --/D empirically calibrated [Y/Fe] from ASPCAP 
-    y_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Y/Fe] from ASPCAP 
-    y_fe_flag int NOT NULL, --/F elemflag 24 --/D ELEMFLAG for Y (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    ce_fe real NOT NULL, --/U dex --/D empirically calibrated [Ce/Fe] from ASPCAP 
+    ce_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Ce/Fe] from ASPCAP 
+    ce_fe_flag int NOT NULL, --/F elemflag 24 --/D ELEMFLAG for Ce (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
     nd_fe real NOT NULL, --/U dex --/D empirically calibrated [Nd/Fe] from ASPCAP 
     nd_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Nd/Fe] from ASPCAP 
     nd_fe_flag int NOT NULL, --/F elemflag 25 --/D ELEMFLAG for Nd (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
-    felem_c_m real NOT NULL, --/U dex --/F felem 0 --/D FERRE pipeline uncalibratied ratio original fit [C/M]
-    felem_c_m_err real NOT NULL, --/U dex --/F felem_err 0 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [C/M]
-    felem_ci_m real NOT NULL, --/U dex --/F felem 1 --/D FERRE pipeline uncalibratied ratio original fit [CI/M]
-    felem_ci_m_err real NOT NULL, --/U dex --/F felem_err 1 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [CI/M]
-    felem_n_m real NOT NULL, --/U dex --/F felem 2 --/D FERRE pipeline uncalibratied ratio original fit [N/M]
-    felem_n_m_err real NOT NULL, --/U dex --/F felem_err 2 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [N/M]
-    felem_o_m real NOT NULL, --/U dex --/F felem 3 --/D FERRE pipeline uncalibratied ratio original fit [O/M]
-    felem_o_m_err real NOT NULL, --/U dex --/F felem_err 3 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [O/M]
-    felem_na_h real NOT NULL, --/U dex --/F felem 4 --/D FERRE pipeline uncalibratied ratio original fit [Na/H]
-    felem_na_h_err real NOT NULL, --/U dex --/F felem_err 4 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Na/H]
-    felem_mg_m real NOT NULL, --/U dex --/F felem 5 --/D FERRE pipeline uncalibratied ratio original fit [Mg/M]
-    felem_mg_m_err real NOT NULL, --/U dex --/F felem_err 5 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Mg/M]
-    felem_al_h real NOT NULL, --/U deg K --/F felem 6 --/D FERRE pipeline uncalibratied ratio original fit [Al/H]
-    felem_al_h_err real NOT NULL, --/U deg K --/F felem_err 6 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Al/H]
-    felem_si_m real NOT NULL, --/U dex --/F felem 7 --/D FERRE pipeline uncalibratied ratio original fit [Si/M]
-    felem_si_m_err real NOT NULL, --/U dex --/F felem_err 7 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Si/M]
-    felem_p_m real NOT NULL, --/U dex --/F felem 8 --/D FERRE pipeline uncalibratied ratio original fit [P/M]
-    felem_p_m_err real NOT NULL, --/U dex --/F felem_err 8 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [P/M]
-    felem_s_m real NOT NULL, --/U dex --/F felem 9 --/D FERRE pipeline uncalibratied ratio original fit [S/M]
-    felem_s_m_err real NOT NULL, --/U dex --/F felem_err 9 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [S/M]
-    felem_k_h real NOT NULL, --/U dex --/F felem 10 --/D FERRE pipeline uncalibratied ratio original fit [K/H]
-    felem_k_h_err real NOT NULL, --/U dex --/F felem_err 10 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [K/H]
-    felem_ca_m real NOT NULL, --/U dex --/F felem 11 --/D FERRE pipeline uncalibratied ratio original fit [Ca/M]
-    felem_ca_m_err real NOT NULL, --/U dex --/F felem_err 11 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Ca/M]
-    felem_ti_m real NOT NULL, --/U dex --/F felem 12 --/D FERRE pipeline uncalibratied ratio original fit [Ti/M]
-    felem_ti_m_err real NOT NULL, --/U dex --/F felem_err 12 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Ti/M]
-    felem_tiii_m real NOT NULL, --/U dex --/F felem 13 --/D FERRE pipeline uncalibratied ratio original fit [TiII/M]
-    felem_tiii_m_err real NOT NULL, --/U dex --/F felem_err 13 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [TiII/M]
-    felem_v_h real NOT NULL, --/U dex --/F felem 14 --/D FERRE pipeline uncalibratied ratio original fit [V/H]
-    felem_v_h_err real NOT NULL, --/U dex --/F felem_err 14 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [V/H]
-    felem_cr_h real NOT NULL, --/U dex --/F felem 15 --/D FERRE pipeline uncalibratied ratio original fit [Cr/H]
-    felem_cr_h_err real NOT NULL, --/U dex --/F felem_err 15 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Cr/H]
-    felem_mn_h real NOT NULL, --/U dex --/F felem 16 --/D FERRE pipeline uncalibratied ratio original fit [Mn/H]
-    felem_mn_h_err real NOT NULL, --/U dex --/F felem_err 16 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Mn/H]
-    felem_fe_h real NOT NULL, --/U dex --/F felem 17 --/D FERRE pipeline uncalibratied ratio original fit [Fe/H]
-    felem_fe_h_err real NOT NULL, --/U dex --/F felem_err 17 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Fe/H]
-    felem_co_h real NOT NULL, --/U dex --/F felem 18 --/D FERRE pipeline uncalibratied ratio original fit [Co/H]
-    felem_co_h_err real NOT NULL, --/U dex --/F felem_err 18 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Co/H]
-    felem_ni_h real NOT NULL, --/U dex --/F felem 19 --/D FERRE pipeline uncalibratied ratio original fit [Ni/H]
-    felem_ni_h_err real NOT NULL, --/U dex --/F felem_err 19 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Ni/H]
-    felem_cu_h real NOT NULL, --/U dex --/F felem 20 --/D FERRE pipeline uncalibratied ratio original fit [Cu/H]
-    felem_cu_h_err real NOT NULL, --/U dex --/F felem_err 20 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Cu/H]
-    felem_ge_h real NOT NULL, --/U dex --/F felem 21 --/D FERRE pipeline uncalibratied ratio original fit [Ge/H]
-    felem_ge_h_err real NOT NULL, --/U dex --/F felem_err 21 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Ge/H]
-    felem_rb_h real NOT NULL, --/U dex --/F felem 23 --/D FERRE pipeline uncalibratied ratio original fit [Rb/H]
-    felem_rb_h_err real NOT NULL, --/U dex --/F felem_err 23 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Rb/H]
-    felem_y_h real NOT NULL, --/U dex --/F felem 24 --/D FERRE pipeline uncalibratied ratio original fit [Y/H]
-    felem_y_h_err real NOT NULL, --/U dex --/F felem_err 24 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Y/H]
-    felem_nd_h real NOT NULL, --/U dex --/F felem 25 --/D FERRE pipeline uncalibratied ratio original fit [Nd/H]
-    felem_nd_h_err real NOT NULL, --/U dex --/F felem_err 25 --/D FERRE pipeline uncalibratied ratio original fit uncertainty [Nd/H]
+    yb_fe real NOT NULL, --/U dex --/D empirically calibrated [Yb/Fe] from ASPCAP 
+    yb_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Yb/Fe] from ASPCAP 
+    yb_fe_flag int NOT NULL, --/F elemflag 24 --/D ELEMFLAG for Yb (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
+    felem_c_m real NOT NULL, --/U dex --/F felem 0 --/D original fit [C/M]
+    felem_c_m_err real NOT NULL, --/U dex --/F felem_err 0 --/D original fit uncertainty [C/M]
+    felem_ci_m real NOT NULL, --/U dex --/F felem 1 --/D original fit [CI/M]
+    felem_ci_m_err real NOT NULL, --/U dex --/F felem_err 1 --/D original fit uncertainty [CI/M]
+    felem_n_m real NOT NULL, --/U dex --/F felem 2 --/D original fit [N/M]
+    felem_n_m_err real NOT NULL, --/U dex --/F felem_err 2 --/D original fit uncertainty [N/M]
+    felem_o_m real NOT NULL, --/U dex --/F felem 3 --/D original fit [O/M]
+    felem_o_m_err real NOT NULL, --/U dex --/F felem_err 3 --/D original fit uncertainty [O/M]
+    felem_na_h real NOT NULL, --/U dex --/F felem 4 --/D original fit [Na/H]
+    felem_na_h_err real NOT NULL, --/U dex --/F felem_err 4 --/D original fit uncertainty [Na/H]
+    felem_mg_m real NOT NULL, --/U dex --/F felem 5 --/D original fit [Mg/M]
+    felem_mg_m_err real NOT NULL, --/U dex --/F felem_err 5 --/D original fit uncertainty [Mg/M]
+    felem_al_h real NOT NULL, --/U deg K --/F felem 6 --/D original fit [Al/H]
+    felem_al_h_err real NOT NULL, --/U deg K --/F felem_err 6 --/D original fit uncertainty [Al/H]
+    felem_si_m real NOT NULL, --/U dex --/F felem 7 --/D original fit [Si/M]
+    felem_si_m_err real NOT NULL, --/U dex --/F felem_err 7 --/D original fit uncertainty [Si/M]
+    felem_p_m real NOT NULL, --/U dex --/F felem 8 --/D original fit [P/M]
+    felem_p_m_err real NOT NULL, --/U dex --/F felem_err 8 --/D original fit uncertainty [P/M]
+    felem_s_m real NOT NULL, --/U dex --/F felem 9 --/D original fit [S/M]
+    felem_s_m_err real NOT NULL, --/U dex --/F felem_err 9 --/D original fit uncertainty [S/M]
+    felem_k_h real NOT NULL, --/U dex --/F felem 10 --/D original fit [K/H]
+    felem_k_h_err real NOT NULL, --/U dex --/F felem_err 10 --/D original fit uncertainty [K/H]
+    felem_ca_m real NOT NULL, --/U dex --/F felem 11 --/D original fit [Ca/M]
+    felem_ca_m_err real NOT NULL, --/U dex --/F felem_err 11 --/D original fit uncertainty [Ca/M]
+    felem_ti_m real NOT NULL, --/U dex --/F felem 12 --/D original fit [Ti/M]
+    felem_ti_m_err real NOT NULL, --/U dex --/F felem_err 12 --/D original fit uncertainty [Ti/M]
+    felem_tiii_m real NOT NULL, --/U dex --/F felem 13 --/D original fit [TiII/M]
+    felem_tiii_m_err real NOT NULL, --/U dex --/F felem_err 13 --/D original fit uncertainty [TiII/M]
+    felem_v_h real NOT NULL, --/U dex --/F felem 14 --/D original fit [V/H]
+    felem_v_h_err real NOT NULL, --/U dex --/F felem_err 14 --/D original fit uncertainty [V/H]
+    felem_cr_h real NOT NULL, --/U dex --/F felem 15 --/D original fit [Cr/H]
+    felem_cr_h_err real NOT NULL, --/U dex --/F felem_err 15 --/D original fit uncertainty [Cr/H]
+    felem_mn_h real NOT NULL, --/U dex --/F felem 16 --/D original fit [Mn/H]
+    felem_mn_h_err real NOT NULL, --/U dex --/F felem_err 16 --/D original fit uncertainty [Mn/H]
+    felem_fe_h real NOT NULL, --/U dex --/F felem 17 --/D original fit [Fe/H]
+    felem_fe_h_err real NOT NULL, --/U dex --/F felem_err 17 --/D original fit uncertainty [Fe/H]
+    felem_co_h real NOT NULL, --/U dex --/F felem 18 --/D original fit [Co/H]
+    felem_co_h_err real NOT NULL, --/U dex --/F felem_err 18 --/D original fit uncertainty [Co/H]
+    felem_ni_h real NOT NULL, --/U dex --/F felem 19 --/D original fit [Ni/H]
+    felem_ni_h_err real NOT NULL, --/U dex --/F felem_err 19 --/D original fit uncertainty [Ni/H]
+    felem_cu_h real NOT NULL, --/U dex --/F felem 20 --/D original fit [Cu/H]
+    felem_cu_h_err real NOT NULL, --/U dex --/F felem_err 20 --/D original fit uncertainty [Cu/H]
+    felem_ge_h real NOT NULL, --/U dex --/F felem 21 --/D original fit [Ge/H]
+    felem_ge_h_err real NOT NULL, --/U dex --/F felem_err 21 --/D original fit uncertainty [Ge/H]
+    felem_rb_h real NOT NULL, --/U dex --/F felem 23 --/D original fit [Rb/H]
+    felem_rb_h_err real NOT NULL, --/U dex --/F felem_err 23 --/D original fit uncertainty [Rb/H]
+    felem_ce_h real NOT NULL, --/U dex --/F felem 24 --/D original fit [Ce/H]
+    felem_ce_h_err real NOT NULL, --/U dex --/F felem_err 24 --/D original fit uncertainty [Ce/H]
+    felem_nd_h real NOT NULL, --/U dex --/F felem 25 --/D original fit [Nd/H]
+    felem_nd_h_err real NOT NULL, --/U dex --/F felem_err 25 --/D original fit uncertainty [Nd/H]
+    felem_yb_h real NOT NULL, --/U dex --/F felem 24 --/D original fit [Yb/H]
+    felem_yb_h_err real NOT NULL, --/U dex --/F felem_err 24 --/D original fit uncertainty [Yb/H]
 )
 GO
 
@@ -465,85 +488,85 @@ CREATE TABLE cannonStar (
 --/T contains the parameters resulting froom applying that method. More
 --/T information can be found at https://arxiv.org/abs/1501.07604.
 -------------------------------------------------------------------------------
-    apogee_id varchar(32) NOT NULL, --/D 2MASS-style star identification                                                                                                                                                                                                      
-    cannon_id varchar(64) NOT NULL, --/D Unique ID for Cannon results of form apogee.[telescope].[cs].results_version.location_id.star (Primary key)                                                                                                                          
-    filename varchar(128) NOT NULL DEFAULT(''), --/D Cannon file used                                                                                                                                                                                                                      
-    location_id bigint NOT NULL, --/D Location ID for the field this visit is in (Foreign key)                                                                                                                                                                                
-    field varchar(128) NOT NULL DEFAULT(''), --/D Name of field                                                                                                                                                                                                                           
-    teff real NOT NULL,  --/U deg K --/D effective temperature from Cannon analysis                                                                                                                                                                                           
-    logg real NOT NULL,  --/U dex --/D surface gravity from Cannon analysis                                                                                                                                                                                                   
-    m_h real NOT NULL,  --/U dex --/D [M/H] from Cannon analysis                                                                                                                                                                                                              
-    alpha_m real NOT NULL,  --/U dex --/D [alpha/H] from Cannon analysis                                                                                                                                                                                                      
-    fe_h real NOT NULL,  --/U dex --/D [Fe/H] from Cannon analysis                                                                                                                                                                                                            
-    c_h real NOT NULL,  --/U dex --/D [C/H] from Cannon analysis                                                                                                                                                                                                              
-    ci_h real NOT NULL,  --/U dex --/D [CI/H] from Cannon analysis                                                                                                                                                                                                            
-    n_h real NOT NULL,  --/U dex --/D [N/H] from Cannon analysis                                                                                                                                                                                                              
-    o_h real NOT NULL,  --/U dex --/D [O/H] from Cannon analysis                                                                                                                                                                                                              
-    na_h real NOT NULL,  --/U dex --/D [Na/H] from Cannon analysis                                                                                                                                                                                                            
-    mg_h real NOT NULL,  --/U dex --/D [Mg/H] from Cannon analysis                                                                                                                                                                                                            
-    al_h real NOT NULL,  --/U dex --/D [Al/H] from Cannon analysis                                                                                                                                                                                                            
-    si_h real NOT NULL,  --/U dex --/D [Si/H] from Cannon analysis                                                                                                                                                                                                            
-    p_h real NOT NULL,  --/U dex --/D [P/H] from Cannon analysis                                                                                                                                                                                                              
-    s_h real NOT NULL,  --/U dex --/D [S/H] from Cannon analysis                                                                                                                                                                                                              
-    k_h real NOT NULL,  --/U dex --/D [K/H] from Cannon analysis                                                                                                                                                                                                              
-    ca_h real NOT NULL,  --/U dex --/D [Ca/H] from Cannon analysis                                                                                                                                                                                                            
-    ti_h real NOT NULL,  --/U dex --/D [Ti/H] from Cannon analysis                                                                                                                                                                                                            
-    tiii_h real NOT NULL,  --/U dex --/D [TiII/H] from Cannon analysis                                                                                                                                                                                                        
-    v_h real NOT NULL,  --/U dex --/D [V/H] from Cannon analysis                                                                                                                                                                                                              
-    cr_h real NOT NULL,  --/U dex --/D [Cr/H] from Cannon analysis                                                                                                                                                                                                            
-    mn_h real NOT NULL,  --/U dex --/D [Mn/H] from Cannon analysis                                                                                                                                                                                                            
-    co_h real NOT NULL,  --/U dex --/D [Co/H] from Cannon analysis                                                                                                                                                                                                            
-    ni_h real NOT NULL,  --/U dex --/D [Ni/H] from Cannon analysis                                                                                                                                                                                                            
-    teff_rawerr real NOT NULL,  --/U deg K --/D raw uncertainty in effective temperature from Cannon analysis                                                                                                                                                                 
-    logg_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in surface gravity from Cannon analysis                                                                                                                                                                         
-    m_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [M/H] from Cannon analysis                                                                                                                                                                                    
-    alpha_m_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [alpha/H] from Cannon analysis                                                                                                                                                                            
-    fe_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Fe/H] from Cannon analysis                                                                                                                                                                                  
-    c_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [C/H] from Cannon analysis                                                                                                                                                                                    
-    ci_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [CI/H] from Cannon analysis                                                                                                                                                                                  
-    n_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [N/H] from Cannon analysis                                                                                                                                                                                    
-    o_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [O/H] from Cannon analysis                                                                                                                                                                                    
-    na_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Na/H] from Cannon analysis                                                                                                                                                                                  
-    mg_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Mg/H] from Cannon analysis                                                                                                                                                                                  
-    al_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Al/H] from Cannon analysis                                                                                                                                                                                  
-    si_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Si/H] from Cannon analysis                                                                                                                                                                                  
-    p_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [P/H] from Cannon analysis                                                                                                                                                                                    
-    s_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [S/H] from Cannon analysis                                                                                                                                                                                    
-    k_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [K/H] from Cannon analysis                                                                                                                                                                                    
-    ca_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Ca/H] from Cannon analysis                                                                                                                                                                                  
-    ti_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Ti/H] from Cannon analysis                                                                                                                                                                                  
-    tiii_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [TiII/H] from Cannon analysis                                                                                                                                                                              
-    v_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [V/H] from Cannon analysis                                                                                                                                                                                    
-    cr_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Cr/H] from Cannon analysis                                                                                                                                                                                  
-    mn_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Mn/H] from Cannon analysis                                                                                                                                                                                  
-    co_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Co/H] from Cannon analysis                                                                                                                                                                                  
-    ni_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Ni/H] from Cannon analysis                                                                                                                                                                                  
-    teff_err real NOT NULL,  --/U deg K --/D uncertainty in effective temperature from Cannon analysis                                                                                                                                                                        
-    logg_err real NOT NULL,  --/U dex --/D uncertainty in surface gravity from Cannon analysis                                                                                                                                                                                
-    m_h_err real NOT NULL,  --/U dex --/D uncertainty in [M/H] from Cannon analysis                                                                                                                                                                                           
-    alpha_m_err real NOT NULL,  --/U dex --/D uncertainty in [alpha/H] from Cannon analysis                                                                                                                                                                                   
-    fe_h_err real NOT NULL,  --/U dex --/D uncertainty in [Fe/H] from Cannon analysis                                                                                                                                                                                         
-    c_h_err real NOT NULL,  --/U dex --/D uncertainty in [C/H] from Cannon analysis                                                                                                                                                                                           
-    ci_h_err real NOT NULL,  --/U dex --/D uncertainty in [CI/H] from Cannon analysis                                                                                                                                                                                         
-    n_h_err real NOT NULL,  --/U dex --/D uncertainty in [N/H] from Cannon analysis                                                                                                                                                                                           
-    o_h_err real NOT NULL,  --/U dex --/D uncertainty in [O/H] from Cannon analysis                                                                                                                                                                                           
-    na_h_err real NOT NULL,  --/U dex --/D uncertainty in [Na/H] from Cannon analysis                                                                                                                                                                                         
-    mg_h_err real NOT NULL,  --/U dex --/D uncertainty in [Mg/H] from Cannon analysis                                                                                                                                                                                         
-    al_h_err real NOT NULL,  --/U dex --/D uncertainty in [Al/H] from Cannon analysis                                                                                                                                                                                         
-    si_h_err real NOT NULL,  --/U dex --/D uncertainty in [Si/H] from Cannon analysis                                                                                                                                                                                         
-    p_h_err real NOT NULL,  --/U dex --/D uncertainty in [P/H] from Cannon analysis                                                                                                                                                                                           
-    s_h_err real NOT NULL,  --/U dex --/D uncertainty in [S/H] from Cannon analysis                                                                                                                                                                                           
-    k_h_err real NOT NULL,  --/U dex --/D uncertainty in [K/H] from Cannon analysis                                                                                                                                                                                           
-    ca_h_err real NOT NULL,  --/U dex --/D uncertainty in [Ca/H] from Cannon analysis                                                                                                                                                                                         
-    ti_h_err real NOT NULL,  --/U dex --/D uncertainty in [Ti/H] from Cannon analysis                                                                                                                                                                                         
-    tiii_h_err real NOT NULL,  --/U dex --/D uncertainty in [TiII/H] from Cannon analysis                                                                                                                                                                                     
-    v_h_err real NOT NULL,  --/U dex --/D uncertainty in [V/H] from Cannon analysis                                                                                                                                                                                           
-    cr_h_err real NOT NULL,  --/U dex --/D uncertainty in [Cr/H] from Cannon analysis                                                                                                                                                                                         
-    mn_h_err real NOT NULL,  --/U dex --/D uncertainty in [Mn/H] from Cannon analysis                                                                                                                                                                                         
-    co_h_err real NOT NULL,  --/U dex --/D uncertainty in [Co/H] from Cannon analysis                                                                                                                                                                                         
-    ni_h_err real NOT NULL,  --/U dex --/D uncertainty in [Ni/H] from Cannon analysis                                                                                                                                                                                         
-    chi_sq real NOT NULL, --/D chi^2 from Cannon analysis                                                                                                                                                                                                                     
-    r_chi_sq real NOT NULL, --/D reduced chi^2 from Cannon analysis                                                                                                                                                                                                           
+    apogee_id varchar(32) NOT NULL, --/D 2MASS-style star identification
+    cannon_id varchar(64) NOT NULL, --/D Unique ID for Cannon results of form apogee.[telescope].[cs].results_version.location_id.star (Primary key)
+    filename varchar(128) NOT NULL DEFAULT(''), --/D Cannon file used 
+    location_id bigint NOT NULL, --/D Location ID for the field this visit is in (Foreign key)
+    field varchar(128) NOT NULL DEFAULT(''), --/D Name of field
+    teff real NOT NULL,  --/U deg K --/D effective temperature from Cannon analysis
+    logg real NOT NULL,  --/U dex --/D surface gravity from Cannon analysis
+    m_h real NOT NULL,  --/U dex --/D [M/H] from Cannon analysis
+    alpha_m real NOT NULL,  --/U dex --/D [alpha/H] from Cannon analysis
+    fe_h real NOT NULL,  --/U dex --/D [Fe/H] from Cannon analysis
+    c_h real NOT NULL,  --/U dex --/D [C/H] from Cannon analysis
+    ci_h real NOT NULL,  --/U dex --/D [CI/H] from Cannon analysis
+    n_h real NOT NULL,  --/U dex --/D [N/H] from Cannon analysis
+    o_h real NOT NULL,  --/U dex --/D [O/H] from Cannon analysis
+    na_h real NOT NULL,  --/U dex --/D [Na/H] from Cannon analysis
+    mg_h real NOT NULL,  --/U dex --/D [Mg/H] from Cannon analysis
+    al_h real NOT NULL,  --/U dex --/D [Al/H] from Cannon analysis
+    si_h real NOT NULL,  --/U dex --/D [Si/H] from Cannon analysis
+    p_h real NOT NULL,  --/U dex --/D [P/H] from Cannon analysis
+    s_h real NOT NULL,  --/U dex --/D [S/H] from Cannon analysis
+    k_h real NOT NULL,  --/U dex --/D [K/H] from Cannon analysis
+    ca_h real NOT NULL,  --/U dex --/D [Ca/H] from Cannon analysis
+    ti_h real NOT NULL,  --/U dex --/D [Ti/H] from Cannon analysis
+    tiii_h real NOT NULL,  --/U dex --/D [TiII/H] from Cannon analysis
+    v_h real NOT NULL,  --/U dex --/D [V/H] from Cannon analysis
+    cr_h real NOT NULL,  --/U dex --/D [Cr/H] from Cannon analysis
+    mn_h real NOT NULL,  --/U dex --/D [Mn/H] from Cannon analysis
+    co_h real NOT NULL,  --/U dex --/D [Co/H] from Cannon analysis
+    ni_h real NOT NULL,  --/U dex --/D [Ni/H] from Cannon analysis
+    teff_rawerr real NOT NULL,  --/U deg K --/D raw uncertainty in effective temperature from Cannon analysis
+    logg_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in surface gravity from Cannon analysis
+    m_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [M/H] from Cannon analysis
+    alpha_m_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [alpha/H] from Cannon analysis
+    fe_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Fe/H] from Cannon analysis
+    c_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [C/H] from Cannon analysis
+    ci_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [CI/H] from Cannon analysis
+    n_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [N/H] from Cannon analysis
+    o_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [O/H] from Cannon analysis
+    na_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Na/H] from Cannon analysis
+    mg_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Mg/H] from Cannon analysis
+    al_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Al/H] from Cannon analysis
+    si_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Si/H] from Cannon analysis
+    p_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [P/H] from Cannon analysis
+    s_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [S/H] from Cannon analysis
+    k_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [K/H] from Cannon analysis
+    ca_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Ca/H] from Cannon analysis
+    ti_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Ti/H] from Cannon analysis
+    tiii_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [TiII/H] from Cannon analysis
+    v_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [V/H] from Cannon analysis
+    cr_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Cr/H] from Cannon analysis
+    mn_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Mn/H] from Cannon analysis
+    co_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Co/H] from Cannon analysis
+    ni_h_rawerr real NOT NULL,  --/U dex --/D raw uncertainty in [Ni/H] from Cannon analysis
+    teff_err real NOT NULL,  --/U deg K --/D uncertainty in effective temperature from Cannon analysis
+    logg_err real NOT NULL,  --/U dex --/D uncertainty in surface gravity from Cannon analysis
+    m_h_err real NOT NULL,  --/U dex --/D uncertainty in [M/H] from Cannon analysis
+    alpha_m_err real NOT NULL,  --/U dex --/D uncertainty in [alpha/H] from Cannon analysis
+    fe_h_err real NOT NULL,  --/U dex --/D uncertainty in [Fe/H] from Cannon analysis
+    c_h_err real NOT NULL,  --/U dex --/D uncertainty in [C/H] from Cannon analysis
+    ci_h_err real NOT NULL,  --/U dex --/D uncertainty in [CI/H] from Cannon analysis
+    n_h_err real NOT NULL,  --/U dex --/D uncertainty in [N/H] from Cannon analysis
+    o_h_err real NOT NULL,  --/U dex --/D uncertainty in [O/H] from Cannon analysis
+    na_h_err real NOT NULL,  --/U dex --/D uncertainty in [Na/H] from Cannon analysis
+    mg_h_err real NOT NULL,  --/U dex --/D uncertainty in [Mg/H] from Cannon analysis
+    al_h_err real NOT NULL,  --/U dex --/D uncertainty in [Al/H] from Cannon analysis
+    si_h_err real NOT NULL,  --/U dex --/D uncertainty in [Si/H] from Cannon analysis
+    p_h_err real NOT NULL,  --/U dex --/D uncertainty in [P/H] from Cannon analysis
+    s_h_err real NOT NULL,  --/U dex --/D uncertainty in [S/H] from Cannon analysis
+    k_h_err real NOT NULL,  --/U dex --/D uncertainty in [K/H] from Cannon analysis
+    ca_h_err real NOT NULL,  --/U dex --/D uncertainty in [Ca/H] from Cannon analysis
+    ti_h_err real NOT NULL,  --/U dex --/D uncertainty in [Ti/H] from Cannon analysis
+    tiii_h_err real NOT NULL,  --/U dex --/D uncertainty in [TiII/H] from Cannon analysis
+    v_h_err real NOT NULL,  --/U dex --/D uncertainty in [V/H] from Cannon analysis
+    cr_h_err real NOT NULL,  --/U dex --/D uncertainty in [Cr/H] from Cannon analysis
+    mn_h_err real NOT NULL,  --/U dex --/D uncertainty in [Mn/H] from Cannon analysis
+    co_h_err real NOT NULL,  --/U dex --/D uncertainty in [Co/H] from Cannon analysis
+    ni_h_err real NOT NULL,  --/U dex --/D uncertainty in [Ni/H] from Cannon analysis
+    chi_sq real NOT NULL, --/D chi^2 from Cannon analysis
+    r_chi_sq real NOT NULL, --/D reduced chi^2 from Cannon analysis
 )
 GO
 
@@ -598,29 +621,51 @@ CREATE TABLE apogeeDesign (
 --/T for APOGEE spectra.
 -------------------------------------------------------------------------------
     designid varchar(64) NOT NULL, --/F design_id --/D Design ID from plate design (Primary key)
+    location_id bigint NOT NULL, --/D Location ID (Foreign key) 
     ra float NOT NULL, --/U deg --/D Right ascension, J2000, of plate center
     dec float NOT NULL, --/U deg --/D Declination, J2000, of plate center
-    location_id bigint NOT NULL, --/D Location ID (Foreign key) 
+    field_name varchar(128) NOT NULL, --/D Name of field
+    design_type varchar(128) NOT NULL, --/D Type of design
+    design_driver varchar(128) NOT NULL, --/D Driver for design
     radius real NOT NULL,  --/U deg --/D Utilized radius of plate
     shared tinyint NOT NULL, --/D If set to 1, a plate shared with another survey (0 if not)
     comments varchar(200) NOT NULL, --/D Additional comments on design
-    short_cohort_version [int] NOT NULL, --/D Which of this field's short cohorts is in this design
-    medium_cohort_version [int] NOT NULL, --/D Which of this field's medium cohorts is in this design
-    long_cohort_version [int] NOT NULL, --/D Which of this field's long cohorts is in this design
-    number_of_short_fibers [int] NOT NULL, --/D Number of fibers alloted to short cohort targets
-    number_of_medium_fibers [int] NOT NULL, --/D Number of fibers alloted to medium cohort targets
-    number_of_long_fibers [int] NOT NULL, --/D Number of fibers alloted to long cohort targets
-    short_cohort_min_h real NOT NULL, --/U mag --/D Minimum H mag of short cohort
-    short_cohort_max_h real NOT NULL, --/U mag --/D Maximum H mag of short cohort
-    medium_cohort_min_h real NOT NULL, --/U mag --/D Minimum H mag of medium cohort
-    medium_cohort_max_h real NOT NULL, --/U mag --/D Maximum H mag of medium cohort
-    long_cohort_min_h real NOT NULL, --/U mag --/D Minimum H mag of long cohort
-    long_cohort_max_h real NOT NULL, --/U mag --/D Maximum H mag of long cohort
-    dereddened_min_j_ks_color  real NOT NULL, --/D Minimum (J-Ks)o for this design; -1 if no color cut applied
     number_of_visits  [int] NOT NULL, --/D Total number of visits intended for this design
     number_of_tellurics  [int] NOT NULL, --/D Number of hot star tellurics on this design (tellurics/science targets may overlap)
     number_of_sky  [int] NOT NULL, --/D Number of sky targets on this design 
     number_of_science  [int] NOT NULL, --/D Number of science targets on this design (tellurics/science targets may overlap)
+    cohort_short_version [int] NOT NULL, --/D Which of this field's short cohorts is in this design
+    cohort_medium_version [int] NOT NULL, --/D Which of this field's medium cohorts is in this design
+    cohort_long_version [int] NOT NULL, --/D Which of this field's long cohorts is in this design
+    cohort_fraction_1 float NOT NULL, --/D Which of this field's long cohorts is in this design
+    cohort_fraction_2 float NOT NULL, --/D Which of this field's long cohorts is in this design
+    cohort_fraction_3 float NOT NULL, --/D Which of this field's long cohorts is in this design
+    cohort_min_h_1 float NOT NULL, --/D Minimum H mag for each cohort
+    cohort_min_h_2 float NOT NULL, --/D Minimum H mag for each cohort
+    cohort_min_h_3 float NOT NULL, --/D Minimum H mag for each cohort
+    cohort_max_h_1 float NOT NULL, --/D Minimum H mag for each cohort
+    cohort_max_h_2 float NOT NULL, --/D Minimum H mag for each cohort
+    cohort_max_h_3 float NOT NULL, --/D Minimum H mag for each cohort
+    cohort_number_of_visits_1 int NOT NULL, --/D Number of visits for each cohort
+    cohort_number_of_visits_2 int NOT NULL, --/D Number of visits for each cohort
+    cohort_number_of_visits_3 int NOT NULL, --/D Number of visits for each cohort
+    number_of_selection_bins int NOT NULL, --/D Number of selection bins
+    bin_fraction_1 float NOT NULL, --/D Number of selection bins (5 max)
+    bin_fraction_2 float NOT NULL, --/D Number of selection bins (5 max)
+    bin_fraction_3 float NOT NULL, --/D Number of selection bins (5 max)
+    bin_priority_1 float NOT NULL, --/D Bin priority
+    bin_priority_2 float NOT NULL, --/D Bin priority
+    bin_priority_3 float NOT NULL, --/D Bin priority
+    bin_use_wd_flag_1 float NOT NULL, --/D Use WD flag
+    bin_use_wd_flag_2 float NOT NULL, --/D Use WD flag
+    bin_use_wd_flag_3 float NOT NULL, --/D Use WD flag
+    bin_dereddened_min_jk_color_1 float NOT NULL, --/D Minimum J-K for this bin
+    bin_dereddened_min_jk_color_2 float NOT NULL, --/D Minimum J-K for this bin
+    bin_dereddened_min_jk_color_3 float NOT NULL, --/D Minimum J-K for this bin
+    bin_dereddened_max_jk_color_1 float NOT NULL, --/D Maximum J-K for this bin
+    bin_dereddened_max_jk_color_2 float NOT NULL, --/D Maximum J-K for this bin
+    bin_dereddened_max_jk_color_3 float NOT NULL, --/D Maximum J-K for this bin
+    platerun varchar(100) NOT NULL, --/D Platerun for original design
 )
 GO
 
@@ -640,7 +685,11 @@ CREATE TABLE apogeeField (
     location_id bigint NOT NULL, --/D Location ID (Primary key)
     ra float NOT NULL, --/U deg --/D Right ascension of field center (J2000)
     dec float NOT NULL, --/U deg --/D Declination of field center (J2000)
+    glon float NOT NULL, --/U deg --/D Galactic longitude of field center (J2000)
+    glat float NOT NULL, --/U deg --/D Galactic latitude of field center (J2000)
     expected_no_of_visits [int] NOT NULL, --/D Expected number of visits for this field (not necessarily the number of visits actually achieved)
+    expected_no_of_designs [int] NOT NULL, --/D Expected number of designs for this field 
+    no_of_designs_completed [int] NOT NULL, --/D number of designs completed for this field 
 )
 GO
 

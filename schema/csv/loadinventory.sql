@@ -150,7 +150,7 @@ INSERT Inventory VALUES('IndexMap','spStartStep','P');
 INSERT Inventory VALUES('IndexMap','spEndStep','P');
 INSERT Inventory VALUES('IndexMap','IndexMap','U');
 INSERT Inventory VALUES('IndexMap','fIndexName','F');
-INSERT Inventory VALUES('IndexMap','dbo.[spIndexCreate]','P');
+INSERT Inventory VALUES('IndexMap','spIndexCreate','P');
 INSERT Inventory VALUES('IndexMap','spIndexBuildList','P');
 INSERT Inventory VALUES('IndexMap','spIndexDropList','P');
 INSERT Inventory VALUES('IndexMap','spIndexBuildSelection','P');
@@ -279,6 +279,8 @@ INSERT Inventory VALUES('MangaTables','mangaPipe3D','U');
 INSERT Inventory VALUES('MangaTables','mangaDAPall','U');
 INSERT Inventory VALUES('MangaTables','mangaHIall','U');
 INSERT Inventory VALUES('MangaTables','mangaHIbonus','U');
+INSERT Inventory VALUES('MangaTables','mangaGalaxyZoo','U');
+INSERT Inventory VALUES('MangaTables','mangaAlfalfaDR15','U');
 INSERT Inventory VALUES('MastarTables','mastar_goodstars','U');
 INSERT Inventory VALUES('MastarTables','mastar_goodvisits','U');
 INSERT Inventory VALUES('QsoVarTables','qsoVarPTF','U');
@@ -322,6 +324,7 @@ INSERT Inventory VALUES('Views','sdssTilingBoundary','V');
 INSERT Inventory VALUES('Views','sdssTilingMask','V');
 INSERT Inventory VALUES('Views','TableDesc','V');
 INSERT Inventory VALUES('VacTables','spiders_quasar','U');
+INSERT Inventory VALUES('VacTables','PawlikMorph','U');
 INSERT Inventory VALUES('spSphericalLib','sph.fGetVersion','F');
 INSERT Inventory VALUES('spSphericalLib','sph.fGetVersions','F');
 INSERT Inventory VALUES('spSphericalLib','sph.fGetArea','F');
@@ -616,6 +619,6 @@ INSERT Inventory VALUES('spCosmology','fMathGetBin','F');
 GO
 
 ------------------------------------
-PRINT '606 lines inserted into Inventory'
+PRINT '609 lines inserted into Inventory'
 ------------------------------------
 GO
