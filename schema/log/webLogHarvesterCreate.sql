@@ -67,6 +67,9 @@
 -- 2008-09-15 Ani:  Modified spCopySqlLogs to test linked server connection before harvesting
 --                  a server, so it doesnt stop harvesting if there is a link error.  Also added
 --                  new table ErrorLog to record errors encountered with linked servers etc.
+-- 2018-11-14 Sue:  Added error handling try/catch to spCopySqlLogs.  Also set page_verify to checksum
+--					instead of torn_page
+-- 2018-11-14 Sue:  Added spCopyLocalCasJobsSqlLogs to this file
 --==================================================
 -- Create WebLog DB
 CREATE DATABASE [weblog]  ON 
@@ -85,7 +88,8 @@ GO
 exec sp_dboption N'weblog', N'trunc. log', N'true'
 GO
 
-exec sp_dboption N'weblog', N'torn page detection', N'true'
+
+alter database weblog set page_verify checksum
 GO
 
 exec sp_dboption N'weblog', N'read only', N'false'
@@ -840,7 +844,7 @@ if exists (select * from dbo.sysobjects where name = N'spCopySqlLogs')
 	drop procedure  spCopySqlLogs  
 GO
 --
-CREATE PROCEDURE spCopySqlLogs AS
+CREATE   PROCEDURE [dbo].[spCopySqlLogs] AS
 ----------------------------------------------------------
 --/H Copies recent SQL logs from SQL servers to the database
 --/U
@@ -853,10 +857,9 @@ CREATE PROCEDURE spCopySqlLogs AS
 ----------------------------------------------------------
 BEGIN
 	SET NOCOUNT ON
-	DECLARE @date varchar(32),			-- old date (when log was current)
+	DECLARE 
 		@newDate datetime,			-- new date (bringing log up to date)
 		@logID 	int, 				-- the id of this log source
-		@MinYY int, @minMM int, @minDD int,	-- yy mm dd verson of date
 	 	@command varchar(8000),			-- command to do file copy 
 		@instance VARCHAR(32), 			-- Which one V1, V2, ... 
 		@pathname VARCHAR(1000), 		-- name to find log
@@ -864,17 +867,147 @@ BEGIN
 	---------------------------------------
 	-- Get dates
 	SET @newDate = GETUTCDATE()
+	DECLARE SqlLogs CURSOR 
+	  FOR	SELECT logID, instance, pathname, tstamp  
+		FROM  LogSource
+		WHERE instance != 'CasJobs' and 
+			([service] = 'SQL' and method = 'TSQL' and isvisible = 1 and [status] = 'ACTIVE')
+	  FOR   UPDATE of tstamp
+	OPEN SqlLogs 
+	FETCH NEXT FROM SqlLogs INTO @logID, @instance, @pathname, @tstamp 
+	WHILE (@@fetch_status = 0)
+		BEGIN 
+	----------------------------------------------
+	-- clean out the sqllog for this source since the min time we have seen. 
+
+		DELETE SqlLogAll 
+			WHERE
+				logid = @logID
+				AND theTime > cast(@tStamp as varchar(35))
+ 	
+	----------------------------------------------
+	-- for each Active-TSQL LogSource, copy its log across.
+	-- test linked server connections
+		declare @ret int, @srv sysname, @len int, @end int, @msg varchar(128)
+		set @ret = -1 		
+		set @srv = @instance
+		begin try
+			exec @ret = sys.sp_testlinkedserver @srv
+			--print @srv + ' ok!'
+			set @ret = 0
+		end try
+		begin catch
+			
+			set @ret=sign(@@error);
+			set @msg = 'Failed to connect to server ' + @srv;
+			INSERT ErrorLog VALUES( getdate(), 'spCopySqlLogs', @msg ); 
+			--print 'caught error:' + @msg
+			--print error_message()
+		end catch
+		--linked server worked.  try to copy weblog.
+		if (@ret=0)
+		begin
+			
+				set @command = 	'Insert SqlLogAll '
+	     			+  ' Select '
+				+  ' DATEPART (yyyy , theTime ) as yy,'
+	      		+  ' DATEPART (  mm , theTime ) as mm,'
+	      		+  ' DATEPART (  dd , theTime ) as dd,'
+	      		+  ' DATEPART (  hh , theTime ) as hh,'
+	      		+  ' DATEPART (  mi , theTime ) as mi,'
+				+  ' DATEPART (  ss , theTime ) as ss,'
+				+  ' theTime, '
+				+  cast(@logID as varchar(10)) + ' as logid,'
+				+  ' clientIP, '
+				+  ' webserver, '
+				+  ' server,'
+				+  ' dbname,'
+				+  ' access,'
+				+  ' coalesce(elapsed, 99999999) as elapsed,' 
+				+  ' coalesce(busy, 99999999) as busy,'
+				+  ' coalesce(rows, 99999999) as rows,'
+				+  ' left(sql,7950) as statement, '
+				+  ' coalesce(error, -2) as error, '
+				+  ' coalesce(left(errorMessage,1000),''timeout'') as errorMesssage,'
+				+  ' isVisible'
+				+  ' from ' + @pathname + '.dbo.sqlLogUtc '
+				+  ' where theTime > ''' + cast(@tStamp as varchar(35))
+				+  ''' order by theTime desc ' ;
+				-- print @command
+				begin try
+	    			exec (@command)
+					--- mark that LogSource as current as of that time.
+					UPDATE LogSource set tstamp = @newDate WHERE CURRENT OF SqlLogs
+					
+				end try
+				begin catch
+					set @ret=sign(@@error);					
+					set @msg = error_message()
+					INSERT ErrorLog VALUES( getdate(), 'spCopySqlLogs', @msg );	
+					--print @msg
+	 			end catch
+		END
+		--get next LogSource
+		FETCH NEXT FROM SqlLogs INTO @logID, @instance, @pathname, @tstamp
+	END
+		-- all SQL Logs copied, close cursor and return. 
+	CLOSE SqlLogs
+	DEALLOCATE SqlLogs
+	EXEC spCopyLocalCasJobsSqlLogs
+    --===========================================================
+    -- weblog copy is complete.
+    --===========================================================
+    end
+go
+
+
+--==============================================================================
+drop procedure if exists [dbo].[spCopyLocalCasJobsSqlLogs]
+go
+
+CREATE PROCEDURE [dbo].[spCopyLocalCasJobsSqlLogs] AS
+----------------------------------------------------------
+--/H Copies recent SQL logs from the local CasJobs to the database
+--/U
+--/T Looks in the LogSource table for SQL logs that are 
+--/T  ACTIVE and accessible via the TSQL method
+--/T For each such weblog, it 
+--/T   deletes entries from that log created since the min-day of that log. 
+--/T   copies sql log records since then to the central SQL log.
+--/T   advances the minday timestamp of that sqllog in the logsource table.
+----------------------------------------------------------
+BEGIN
+
+
+	SET NOCOUNT ON
+	DECLARE @date varchar(32),			-- old date (when log was current)
+		@newDate datetime,			-- new date (bringing log up to date)
+		@logID 	int, 				-- the id of this log source
+		@MinYY int, @minMM int, @minDD int,	-- yy mm dd verson of date
+	 	@command nvarchar(1000),			-- command to do file copy 
+		@instance VARCHAR(32), 			-- Which one V1, V2, ... 
+		@pathname VARCHAR(1000), 		-- name to find log
+		@uri VARCHAR(1000), 		-- URI of casjobs service to use as requestor for log entry
+		@adminHost VARCHAR(64),		-- currently online CasJobs admin server
+		@tstamp DATETIME			-- how current is the database (last update time)
+	---------------------------------------
+	-- Get dates
+	SET @newDate = GETUTCDATE()
+	SELECT TOP 1 @adminHost = instance FROM LogSource WHERE [service] = 'CasJobs' and location='JHU' and status='ACTIVE'
+--	SET @command = 'SELECT @adminHost = host FROM ' + @instance + '.batchadmin.dbo.servers WHERE name = ''batch'' '
+--	EXEC sp_executesql @command, N'@adminHost varchar(32) output', @adminHost output 
 	SELECT 	@tstamp = min(tstamp),
 		@MinYY = datepart(yyyy,min(tstamp)),
 		@MinMM = datepart(mm,  min(tstamp)),
 		@MinDD = datepart(dd,  min(tstamp)),
 		@date  = convert(varchar(10),min(tstamp),120) -- get yyyy-mm-dd
 	FROM   LogSource
-	WHERE  instance != 'CasJobs' and 
-		([service] = 'SQL' and method = 'TSQL' and isvisible = 1 and [status] = 'ACTIVE')
-	 
+	WHERE  [service]='CasJobs' and location ='JHU' and method = 'TSQL' and isvisible = 1 and status = 'ACTIVE'
+       and instance = @adminHost 
+
 	----------------------------------------------
 	-- clean out the weblogs since the min time we have seen. 
+	
 	DELETE SqlLogAll 
 	   WHERE ( (yy > @MinYY) or
 	          (yy = @MinYY and mm > @MinMM) or   
@@ -882,74 +1015,59 @@ BEGIN
 	   AND logid IN
 		  (SELECT logid 
 		   FROM LOGSOURCE
-		   WHERE instance != 'CasJobs' and 
-		([service] = 'SQL' and method = 'TSQL' and isvisible = 1 and [status] = 'ACTIVE'))
- 	
+		   WHERE [service]='CasJobs' and location = 'JHU' and method = 'TSQL' and isvisible = 1 and status = 'ACTIVE')
+	
+
 	----------------------------------------------
 	-- for each Active-TSQL LogSource, copy its log across.
+	declare @msg varchar(128)
 	DECLARE SqlLogs CURSOR 
-	  FOR	SELECT logID, instance, pathname  
+	  FOR	SELECT logID, instance, pathname, uri  
 		FROM  LogSource
-		WHERE instance != 'CasJobs' and 
-		([service] = 'SQL' and method = 'TSQL' and isvisible = 1 and [status] = 'ACTIVE')
+		WHERE [service]='CasJobs' and location= 'JHU' and method = 'TSQL' and isvisible = 1 and status = 'ACTIVE'
 	  FOR   UPDATE of tstamp
 	OPEN SqlLogs 
-	FETCH NEXT FROM SqlLogs INTO @logID, @instance, @pathname  
+	FETCH NEXT FROM SqlLogs INTO @logID, @instance, @pathname, @uri  
 	WHILE (@@fetch_status = 0)
-	    BEGIN 
-		-- first check if linked server connection works, if not skip this server
-		declare @ret int, @srv nvarchar(128), @len int, @end int, @msg varchar(128)
-		set @end = charindex(']',@pathname,1);
-		if (@end > 2) 
-		    begin
-			set @len = @end - 2;
-			set @srv = substring(@pathname,2,@len);
-			begin try
-			    exec @ret = sys.sp_testlinkedserver @srv
-			end try
-			begin catch
-			    set @ret=sign(@@error);
-			    set @msg = 'Failed to connect to server ' + @srv;
-			    INSERT ErrorLog VALUES( getdate(), 'spCopySqlLogs', @msg ); 
-			end catch
-		    end
-		else
-		    set @ret = 0;
-		IF (@ret = 0) 		-- if link test succeeded
-		    BEGIN
-			set @command = 	
-			   ' Insert SqlLogAll '
-		     	+  ' Select '
-			+  ' DATEPART (yyyy , theTime ) as yy,'
-		      	+  ' DATEPART (  mm , theTime ) as mm,'
-		      	+  ' DATEPART (  dd , theTime ) as dd,'
-		      	+  ' DATEPART (  hh , theTime ) as hh,'
-		      	+  ' DATEPART (  mi , theTime ) as mi,'
-		      	+  ' DATEPART (  ss , theTime ) as ss,'
-		      	+  ' theTime, '
-			+  cast(@logID as varchar(10)) + ' as logid,'
-			+  ' clientIP, '
-			+  ' webserver, '
-			+  ' server,'
-			+  ' dbname,'
-			+  ' access,'
-			+  ' coalesce(elapsed, 99999999) as elapsed,' 
-			+  ' coalesce(busy, 99999999) as busy,'
-			+  ' coalesce(rows, 99999999) as rows,'
-			+  ' substring(sql,1,7950) as statement, '
-			+  ' coalesce(error, -2) as error, '
-			+  ' coalesce(errorMessage,''timeout'') as errorMesssage,'
-			+  ' isVisible'
-			+  ' from ' + @pathname + '.dbo.sqlLogUtc '
-			+  ' where theTime > ''' + substring(cast(@tStamp as varchar(35)),1,11) + ' 00:00:00''' 
-			+  ' order by theTime desc ' ;
-			--print @command
-		    	exec (@command)
-		 	--- mark that LogSource as current as of that time. 
-		 	UPDATE LogSource set tstamp = @newDate WHERE CURRENT OF SqlLogs
-		    END
+		BEGIN 
+		set @command = 	'Insert SqlLogAll '
+	     	+  ' Select '
+		+  ' DATEPART (yyyy , timeStart ) as yy,'
+	      	+  ' DATEPART (  mm , timeStart ) as mm,'
+	      	+  ' DATEPART (  dd , timeStart ) as dd,'
+	      	+  ' DATEPART (  hh , timeStart ) as hh,'
+	      	+  ' DATEPART (  mi , timeStart ) as mi,'
+	      	+  ' DATEPART (  ss , timeStart ) as ss,'
+	      	+  ' timeStart as theTime, '
+		+  cast(@logID as varchar(10)) + ' as logid,'
+		+  ' isnull(ip,'' '') as clientIP, '
+		+  ' '' ' + @uri + ' '' ' + ' as requestor, '
+		+  ' isnull(hostIP,'' '') as server,'
+		+  ' (case when target like ''DR%'' then ''Best''+target else target end) as dbname,'
+		+  ' ''casjobs'' as access,'
+		+  ' isnull((case when (datediff(ss,timeStart,timeEnd) < 80000) then datediff(ms,timeStart,timeEnd)/1000.0
+       else datediff(ss,timeStart,timeEnd) end),0) as elapsed,' 
+		+  ' 0 as busy,'
+		+  ' coalesce(rows, 99999999) as rows,'
+		+  ' substring(query,1,7950) as statement, '
+		+  ' (case when status=4 then 1 else 0 end) as error, '
+		+  ' '' '' as errorMesssage,'
+		+  ' 1 as isVisible'
+		+  ' from ' + @pathname
+		+  ' where timeStart > ''' + substring(cast(@tStamp as varchar(35)),1,11) + ' 00:00:00'''
+		+  ' order by theTime desc ' ;
+		-- print @command
+	    begin try
+			exec (@command)
+	 		--- mark that LogSource as current as of that time. 
+	 		UPDATE LogSource set tstamp = @newDate WHERE CURRENT OF SqlLogs
+		end try
+		begin catch 						
+			set @msg = error_message()
+			INSERT ErrorLog VALUES( getdate(), 'spCopyLocalCasJobsSqlLogs', @msg );	
+	 	end catch	 
 		-- get next LogSource
-		FETCH NEXT FROM SqlLogs INTO @logID, @instance, @pathname
+		FETCH NEXT FROM SqlLogs INTO @logID, @instance, @pathname, @uri
 		END
 	-- all SQL Logs copied, close cursor and return. 
 	CLOSE SqlLogs
@@ -958,8 +1076,8 @@ BEGIN
     -- weblog copy is complete.
     --===========================================================
     end
-GO
 
+go
 
 ----------------------------------------------------------------------
 if exists (select * from dbo.sysobjects where name = N'InsertFNALWeblog') 
