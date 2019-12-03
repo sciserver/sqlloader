@@ -255,6 +255,8 @@
 --*					(multi-DR) tables
 --*					TODO: fill in all rows, this data is sufficient for DR15 loading
 --* 2019-11-23 Ani: Added PKs for mangaGalaxyZoo and mangaAlfalfaDR15. (DR16)
+--*
+--* 2019-12-03 Sue: Adding PK to PawlikMorph (DR16)
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -499,6 +501,7 @@ INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'sdssEbossFirefly', 'spec
 INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'spiders_quasar', 'name', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mastar_goodstars', 'mangaid', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mastar_goodvisits', 'mangaid,mjd', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'PawlikMorph', 'mangaid', '', 'SPECTRO', 'page', 'SPEC', 0)
 
 -----------------------------------------------------
 -- Primary Keys for the TILES tables
