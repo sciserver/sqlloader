@@ -257,6 +257,7 @@
 --* 2019-11-23 Ani: Added PKs for mangaGalaxyZoo and mangaAlfalfaDR15. (DR16)
 --*
 --* 2019-12-03 Sue: Adding PK to PawlikMorph (DR16)
+--* 2019-12-04 Sue: Added spIndexCreate_print to generate sql for ad-hoc use / incremental loads
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
