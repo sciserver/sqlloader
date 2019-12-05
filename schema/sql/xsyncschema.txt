@@ -30,6 +30,7 @@
 -- 2014-11-05  Ani: Updates for DR12.
 -- 2014-12-05  Ani: Updates for DR12.
 -- 2015-02-09  Ani: Added PhotoZTables.sql.
+-- 2019-12-05  Ani: Added spApogee.sql (DR16).
 ------------------------------------------------------------------------------
 --------------------------
 -- metadata
@@ -55,6 +56,7 @@ IndexMap.sql
 -- WindowTables.sql
 -- ssppTables.sql
 -- ApogeeTables.sql
+spApogee.sql
 -- MangaTables.sql
 -- TilingTables.sql
 -- RegionTables.sql
@@ -79,13 +81,13 @@ spNearby.sql
 -- spCheckDB.sql
 -- spTestQueries.sql
 -- spDocSupport.sql
-spSQLSupport.sql
+-- spSQLSupport.sql
 -- spUrlFitsSupport.sql
 -- spNeighbor.sql
 -- spSetValues.sql
 spValidate.sql
 spPublish.sql
-spFinish.sql
+-- spFinish.sql
 -- spCopyDBSubset.sql
 -- spCosmology.sql
 --------------------------------

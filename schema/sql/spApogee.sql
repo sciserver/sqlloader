@@ -9,6 +9,7 @@
 --* 2016-05-18 Ani: Removed dbo. prefix from function definitions and also.
 --*                 trailing spaces from some functions.
 --* 2016-05-19 Ani: Removed multiple instances of links to flag docs.
+--* 2019-12-05 Ani: Replaced Y with Yb everywhere. (DR16)
 --======================================================================
 IF EXISTS (SELECT name FROM sysobjects 
            WHERE  name = N'fAspcapParamsAll' ) 
@@ -298,9 +299,9 @@ CREATE FUNCTION fAspcapElemsAll (@aspcap_id VARCHAR(64))
 --/T <li> rb_fe real NOT NULL,        -- empirically calibrated [Rb/Fe] from ASPCAP
 --/T <li> rb_fe_err real NOT NULL,    -- external uncertainty for empirically calibrated [Rb/Fe] from ASPCAP
 --/T <li> rb_fe_flag int NOT NULL,    -- ELEMFLAG for Rb
---/T <li> y_fe real NOT NULL,         -- empirically calibrated [Y/Fe] from ASPCAP
---/T <li> y_fe_err real NOT NULL,     -- external uncertainty for empirically calibrated [Y/Fe] from ASPCAP
---/T <li> y_fe_flag int NOT NULL,     -- ELEMFLAG for Y
+--/T <li> yb_fe real NOT NULL,         -- empirically calibrated [Yb/Fe] from ASPCAP
+--/T <li> yb_fe_err real NOT NULL,     -- external uncertainty for empirically calibrated [Yb/Fe] from ASPCAP
+--/T <li> yb_fe_flag int NOT NULL,     -- ELEMFLAG for Yb
 --/T <li> nd_fe real NOT NULL,        -- empirically calibrated [Nd/Fe] from ASPCAP
 --/T <li> nd_fe_err real NOT NULL,    -- external uncertainty for empirically calibrated [Nd/Fe] from ASPCAP
 --/T <li> nd_fe_flag int NOT NULL,    -- ELEMFLAG for Nd                  --/T <br> Sample call to return aspcap params
@@ -381,9 +382,9 @@ CREATE FUNCTION fAspcapElemsAll (@aspcap_id VARCHAR(64))
     rb_fe real NOT NULL,
     rb_fe_err real NOT NULL,
     rb_fe_flag int NOT NULL,
-    y_fe real NOT NULL,
-    y_fe_err real NOT NULL,
-    y_fe_flag int NOT NULL,
+    yb_fe real NOT NULL,
+    yb_fe_err real NOT NULL,
+    yb_fe_flag int NOT NULL,
     nd_fe real NOT NULL,
     nd_fe_err real NOT NULL,
     nd_fe_flag int NOT NULL
@@ -460,9 +461,9 @@ BEGIN
             rb_fe,
             rb_fe_err,
             rb_fe_flag,
-            y_fe,
-            y_fe_err,
-            y_fe_flag,
+            yb_fe,
+            yb_fe_err,
+            yb_fe_flag,
             nd_fe,
             nd_fe_err,
             nd_fe_flag
@@ -508,7 +509,7 @@ CREATE FUNCTION fAspcapElems (@aspcap_id VARCHAR(64))
 --/T <li> cu_fe real NOT NULL,          -- empirically calibrated [Cu/Fe] from ASPCAP
 --/T <li> ge_fe real NOT NULL,          -- empirically calibrated [Ge/Fe] from ASPCAP
 --/T <li> rb_fe real NOT NULL,          -- empirically calibrated [Rb/Fe] from ASPCAP
---/T <li> y_fe real NOT NULL,           -- empirically calibrated [Y/Fe] from ASPCAP
+--/T <li> yb_fe real NOT NULL,          -- empirically calibrated [Y/Fe] from ASPCAP
 --/T <li> nd_fe real NOT NULL,          -- empirically calibrated [Nd/Fe] from ASPCAP
 --/T <br> Sample call to get aspcap element abundances:
 --/T <br><samp>
@@ -541,7 +542,7 @@ CREATE FUNCTION fAspcapElems (@aspcap_id VARCHAR(64))
     cu_fe real NOT NULL,
     ge_fe real NOT NULL,
     rb_fe real NOT NULL,
-    y_fe real NOT NULL,
+    yb_fe real NOT NULL,
     nd_fe real NOT NULL
   ) AS 
 BEGIN
@@ -570,7 +571,7 @@ BEGIN
             cu_fe,
             ge_fe,
             rb_fe,
-            y_fe,
+            yb_fe,
             nd_fe
 		FROM aspcapStar WHERE aspcap_id = @aspcap_id
   RETURN
@@ -613,7 +614,7 @@ CREATE FUNCTION fAspcapElemErrs (@aspcap_id VARCHAR(64))
 --/T <li> cu_fe_err real NOT NULL,      -- external uncertainty for empirically calibrated [Cu/Fe] from ASPCAP
 --/T <li> ge_fe_err real NOT NULL,      -- external uncertainty for empirically calibrated [Ge/Fe] from ASPCAP
 --/T <li> rb_fe_err real NOT NULL,      -- external uncertainty for empirically calibrated [Rb/Fe] from ASPCAP
---/T <li> y_fe_err real NOT NULL,       -- external uncertainty for empirically calibrated [Y/Fe] from ASPCAP
+--/T <li> yb_fe_err real NOT NULL,      -- external uncertainty for empirically calibrated [Yb/Fe] from ASPCAP
 --/T <li> nd_fe_err real NOT NULL,      -- external uncertainty for empirically calibrated [Nd/Fe] from ASPCAP
 --/T <br> Sample call to get aspcap element abundance errors:
 --/T <br><samp>
@@ -646,7 +647,7 @@ CREATE FUNCTION fAspcapElemErrs (@aspcap_id VARCHAR(64))
     cu_fe_err real NOT NULL,
     ge_fe_err real NOT NULL,
     rb_fe_err real NOT NULL,
-    y_fe_err real NOT NULL,
+    yb_fe_err real NOT NULL,
     nd_fe_err real NOT NULL
   ) AS 
 BEGIN
@@ -675,7 +676,7 @@ BEGIN
             cu_fe_err,
             ge_fe_err,
             rb_fe_err,
-            y_fe_err,
+            yb_fe_err,
             nd_fe_err
 		FROM aspcapStar WHERE aspcap_id = @aspcap_id
   RETURN
@@ -718,7 +719,7 @@ CREATE FUNCTION fAspcapElemFlags (@aspcap_id VARCHAR(64))
 --/T <li> cu_fe_flag int NOT NULL,      -- ELEMFLAG for Cu
 --/T <li> ge_fe_flag int NOT NULL,      -- ELEMFLAG for Ge
 --/T <li> rb_fe_flag int NOT NULL,      -- ELEMFLAG for Rb
---/T <li> y_fe_flag int NOT NULL,       -- ELEMFLAG for Y
+--/T <li> yb_fe_flag int NOT NULL,      -- ELEMFLAG for Yb
 --/T <li> nd_fe_flag int NOT NULL,      -- ELEMFLAG for Nd
 --/T <br> Sample call to get aspcap element abundance flags:
 --/T <br><samp>
@@ -751,7 +752,7 @@ CREATE FUNCTION fAspcapElemFlags (@aspcap_id VARCHAR(64))
     cu_fe_flag int NOT NULL,
     ge_fe_flag int NOT NULL,
     rb_fe_flag int NOT NULL,
-    y_fe_flag int NOT NULL,
+    yb_fe_flag int NOT NULL,
     nd_fe_flag int NOT NULL
   ) AS 
 BEGIN
@@ -780,7 +781,7 @@ BEGIN
             cu_fe_flag,
             ge_fe_flag,
             rb_fe_flag,
-            y_fe_flag,
+            yb_fe_flag,
             nd_fe_flag
 		FROM aspcapStar WHERE aspcap_id = @aspcap_id
   RETURN
@@ -849,8 +850,8 @@ CREATE FUNCTION fAspcapFelemsAll (@aspcap_id VARCHAR(64))
 --/T <li> felem_ge_h_err real NOT NULL,         -- original fit uncertainty [Ge/H]
 --/T <li> felem_rb_h real NOT NULL,             -- original fit [Rb/H]
 --/T <li> felem_rb_h_err real NOT NULL,         -- original fit uncertainty [Rb/H]
---/T <li> felem_y_h real NOT NULL,              -- original fit [Y/H]
---/T <li> felem_y_h_err real NOT NULL,          -- original fit uncertainty [Y/H]
+--/T <li> felem_yb_h real NOT NULL,             -- original fit [Yb/H]
+--/T <li> felem_yb_h_err real NOT NULL,         -- original fit uncertainty [Yb/H]
 --/T <li> felem_nd_h real NOT NULL,             -- original fit [Nd/H]
 --/T <li> felem_nd_h_err real NOT NULL          -- original fit uncertainty [Nd/H]
 --/T <br> Sample call to get aspcap element abundances:
@@ -907,8 +908,8 @@ CREATE FUNCTION fAspcapFelemsAll (@aspcap_id VARCHAR(64))
     felem_ge_h_err real NOT NULL,
     felem_rb_h real NOT NULL,
     felem_rb_h_err real NOT NULL,
-    felem_y_h real NOT NULL,
-    felem_y_h_err real NOT NULL,
+    felem_yb_h real NOT NULL,
+    felem_yb_h_err real NOT NULL,
     felem_nd_h real NOT NULL,
     felem_nd_h_err real NOT NULL
   ) AS 
@@ -961,8 +962,8 @@ BEGIN
             felem_ge_h_err,
             felem_rb_h,
             felem_rb_h_err,
-            felem_y_h,
-            felem_y_h_err,
+            felem_yb_h,
+            felem_yb_h_err,
             felem_nd_h,
             felem_nd_h_err
 		FROM aspcapStar WHERE aspcap_id = @aspcap_id
@@ -1008,7 +1009,7 @@ CREATE FUNCTION fAspcapFelems (@aspcap_id VARCHAR(64))
 --/T <li> felem_cu_h real NOT NULL,     -- original fit [Cu/H]
 --/T <li> felem_ge_h real NOT NULL,     -- original fit [Ge/H]
 --/T <li> felem_rb_h real NOT NULL,     -- original fit [Rb/H]
---/T <li> felem_y_h real NOT NULL,      -- original fit [Y/H]
+--/T <li> felem_yb_h real NOT NULL,     -- original fit [Yb/H]
 --/T <li> felem_nd_h real NOT NULL,     -- original fit [Nd/H]
 --/T <br> Sample call to get aspcap element abundances:
 --/T <br><samp>
@@ -1041,7 +1042,7 @@ CREATE FUNCTION fAspcapFelems (@aspcap_id VARCHAR(64))
     felem_cu_h real NOT NULL,
     felem_ge_h real NOT NULL,
     felem_rb_h real NOT NULL,
-    felem_y_h real NOT NULL,
+    felem_yb_h real NOT NULL,
     felem_nd_h real NOT NULL
   ) AS 
 BEGIN
@@ -1070,7 +1071,7 @@ BEGIN
             felem_cu_h,
             felem_ge_h,
             felem_rb_h,
-            felem_y_h,
+            felem_yb_h,
             felem_nd_h
 		FROM aspcapStar WHERE aspcap_id = @aspcap_id
   RETURN
@@ -1115,7 +1116,7 @@ CREATE FUNCTION fAspcapFelemErrs (@aspcap_id VARCHAR(64))
 --/T <li> felem_cu_h_err real NOT NULL,         -- original fit uncertainty [Cu/H]
 --/T <li> felem_ge_h_err real NOT NULL,         -- original fit uncertainty [Ge/H]
 --/T <li> felem_rb_h_err real NOT NULL,         -- original fit uncertainty [Rb/H]
---/T <li> felem_y_h_err real NOT NULL,          -- original fit uncertainty [Y/H]
+--/T <li> felem_yb_h_err real NOT NULL,         -- original fit uncertainty [Yb/H]
 --/T <li> felem_nd_h_err real NOT NULL          -- original fit uncertainty [Nd/H]
 --/T <br> Sample call to get aspcap element abundances:
 --/T <br><samp>
@@ -1148,7 +1149,7 @@ CREATE FUNCTION fAspcapFelemErrs (@aspcap_id VARCHAR(64))
     felem_cu_h_err real NOT NULL,
     felem_ge_h_err real NOT NULL,
     felem_rb_h_err real NOT NULL,
-    felem_y_h_err real NOT NULL,
+    felem_yb_h_err real NOT NULL,
     felem_nd_h_err real NOT NULL
   ) AS 
 BEGIN
@@ -1177,7 +1178,7 @@ BEGIN
             felem_cu_h_err,
             felem_ge_h_err,
             felem_rb_h_err,
-            felem_y_h_err,
+            felem_yb_h_err,
             felem_nd_h_err
 		FROM aspcapStar WHERE aspcap_id = @aspcap_id
   RETURN
