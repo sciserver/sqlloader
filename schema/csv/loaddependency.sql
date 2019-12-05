@@ -14,6 +14,8 @@ INSERT Dependency VALUES('ConstantSupport','fSpecDescription','fSpecZWarningN');
 INSERT Dependency VALUES('FrameTables','spComputeFrameHTM','fEqFromMuNu');
 INSERT Dependency VALUES('FrameTables','spComputeFrameHTM','fHtmXyz');
 INSERT Dependency VALUES('FrameTables','spMakeFrame','fTileFileName');
+INSERT Dependency VALUES('IndexMap','dbo.[spIndexCreate_print]','fIndexName');
+INSERT Dependency VALUES('IndexMap','dbo.[spIndexCreate_print]','spIndexBuildList');
 INSERT Dependency VALUES('IndexMap','spDropIndexAll','spIndexDrop');
 INSERT Dependency VALUES('IndexMap','spEndStep','spEndStep');
 INSERT Dependency VALUES('IndexMap','spEndStep','spNewPhase');
@@ -426,6 +428,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '416 lines inserted into Dependency'
+PRINT '418 lines inserted into Dependency'
 ------------------------------------
 GO

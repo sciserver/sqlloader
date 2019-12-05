@@ -151,6 +151,7 @@ INSERT Inventory VALUES('IndexMap','spEndStep','P');
 INSERT Inventory VALUES('IndexMap','IndexMap','U');
 INSERT Inventory VALUES('IndexMap','fIndexName','F');
 INSERT Inventory VALUES('IndexMap','spIndexCreate','P');
+INSERT Inventory VALUES('IndexMap','dbo.[spIndexCreate_print]','P');
 INSERT Inventory VALUES('IndexMap','spIndexBuildList','P');
 INSERT Inventory VALUES('IndexMap','spIndexDropList','P');
 INSERT Inventory VALUES('IndexMap','spIndexBuildSelection','P');
@@ -619,6 +620,6 @@ INSERT Inventory VALUES('spCosmology','fMathGetBin','F');
 GO
 
 ------------------------------------
-PRINT '609 lines inserted into Inventory'
+PRINT '610 lines inserted into Inventory'
 ------------------------------------
 GO

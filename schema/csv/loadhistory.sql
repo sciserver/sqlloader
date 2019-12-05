@@ -334,6 +334,8 @@ INSERT History VALUES('IndexMap','2018-07-23','Ani','Added PKs for Mastar tables
 INSERT History VALUES('IndexMap','2018-07-25','Ani','Fixed PK for mangaHIbonus (added bonusid), fixed typo in sdssEbossFirefly PK name. (DR15) ');
 INSERT History VALUES('IndexMap','2018-08-02','Sue','Changes to IndexMap for compression, filegroups, and common vs DR-specific (multi-DR) tables TODO: fill in all rows, this data is sufficient for DR15 loading ');
 INSERT History VALUES('IndexMap','2019-11-23','Ani','Added PKs for mangaGalaxyZoo and mangaAlfalfaDR15. (DR16) ');
+INSERT History VALUES('IndexMap','2019-12-03','Sue','Adding PK to PawlikMorph (DR16) ');
+INSERT History VALUES('IndexMap','2019-12-04','Sue','Added spIndexCreate_print to generate sql for ad-hoc use / incremental loads ');
 INSERT History VALUES('PhotoTables','2009-04-27','Ani','Swapped in updated schema for photo tables for SDSS-III. Added new table Run. ');
 INSERT History VALUES('PhotoTables','2009-05-05','Ani','Added loadVersion to Field table. ');
 INSERT History VALUES('PhotoTables','2009-06-11','Ani','Added nProf_[ugriz] to Field table. ');
@@ -776,6 +778,7 @@ INSERT History VALUES('spApogee','2016-04-27','Ani','Created inital version as p
 INSERT History VALUES('spApogee','2016-05-13','Ani','Updated description of fAspcapFelem* functions. ');
 INSERT History VALUES('spApogee','2016-05-18','Ani','Removed dbo. prefix from function definitions and also. trailing spaces from some functions. ');
 INSERT History VALUES('spApogee','2016-05-19','Ani','Removed multiple instances of links to flag docs. ');
+INSERT History VALUES('spApogee','2019-12-05','Ani','Replaced Y with Yb everywhere. (DR16) ');
 INSERT History VALUES('spCoordinate','2004-02-13','Ani','Fixed bugs in fCoordsFromEq, fLambdaFromEq and fEtaFromEq (PR #5865). ');
 INSERT History VALUES('spCoordinate','2004-03-18','Alex','extracted coordinate related stuff from spBoundary.sql ');
 INSERT History VALUES('spCoordinate','2004-06-10','Alex','added support for Galactic coordinates ');
@@ -1287,6 +1290,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1277 lines inserted into History'
+PRINT '1280 lines inserted into History'
 ------------------------------------
 GO
