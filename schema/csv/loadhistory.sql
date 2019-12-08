@@ -698,6 +698,7 @@ INSERT History VALUES('VacTables','2018-07-17','Ani','Created file. ');
 INSERT History VALUES('VacTables','2018-07-26','Ani','Updated schema as per latest version in sas/sql. (DR14-mini) ');
 INSERT History VALUES('VacTables','2018-07-29','Ani','Updated schema as per latest version in sas/sql, where several columns were changed to float from real. (DR14-mini) ');
 INSERT History VALUES('VacTables','2019-09-27','Ani','Added PawlikMorph table, updated spiders_quasar. (DR16) ');
+INSERT History VALUES('VacTables','2019-12-06','Ani','Added erratum to spiders_quasar table description. ');
 INSERT History VALUES('spHtmCSharp','2005-05-01','Jim','started ');
 INSERT History VALUES('spHtmCSharp','2005-05-02','Jim','removed fHtmLookup and fHtmLookupError added fHtmToString ');
 INSERT History VALUES('spHtmCSharp','2005-05-05','GYF','added .pdb to assembly for symbolic debugging added fHtmToName (faster than fHtmToString and reports error) ');
@@ -1290,6 +1291,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1280 lines inserted into History'
+PRINT '1281 lines inserted into History'
 ------------------------------------
 GO
