@@ -53,6 +53,7 @@
 --* 2010-12-10 Ani: Changed PubHistory.nrows to bigint from int.
 --* 2013-07-10 Ani: Added admin table SkipFinishPhases.
 --* 2018-08-13 Sue: Removing QueryResults table, moving to weblog db
+--* 2019-12-05 Sue: changed varchar to sysname in Diagnostics / SiteDiagnostics
 --=================================================================
 SET NOCOUNT ON;
 GO
@@ -366,7 +367,7 @@ CREATE TABLE Diagnostics (
 --/T stored procedure spMakeDiagnostics. The table was
 --/T replicated upon the creation of the database into SiteDiagnostics.
 -------------------------------------------------
-	[name]	varchar(64)	not null,	--/D Name of object --/K ID_IDENTIFIER
+	[name]	sysname	not null,	--/D Name of object --/K ID_IDENTIFIER
 	[type]	varchar(8)	not null,	--/D System type of the object (U:table, V:view, F: function, P: stored proc) --/K CODE_MISc
 	[count] bigint				--/D Optional row count, where applicable  --/K NUMBER
 )
@@ -389,7 +390,7 @@ CREATE TABLE [SiteDiagnostics] (
 --/T these can be dynamically updated. This was generated from the
 --/T Diagnostics table when the DB was created.
 -------------------------------------------------
-	[name]	varchar(64)	not null,	--/D Name of object --/K ID_IDENTIFIER
+	[name]	sysname	not null,	--/D Name of object --/K ID_IDENTIFIER
 	[type]	varchar(8)	not null,	--/D System type of the object (U:table, V:view, F: function, P: stored proc) --/K ???
 	[count] bigint				--/D Optional row count, where applicable --/K NUMBER
 )
