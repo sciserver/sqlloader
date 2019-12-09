@@ -300,6 +300,10 @@
 --*                 mode phase in spFinishStep.
 --* 2018-07-30 Sue: Updated spSetVersion with option to not update all statistics,
 --*		    Call with @updateAllStats bit = 0 to skip update.  
+--* 2019-12-09 Ani: Updated spSyncrhonize to do two passes for the forward
+--*                 photo-spectro match: first do sciencprimary spectrum
+--*                 and then any other spectra. Also made the SpecPhotoAll
+--*                 rebuild input parameter-driven.
 ---====================================================================
 SET NOCOUNT ON;
 GO
@@ -2226,7 +2230,8 @@ GO
 --
 CREATE PROCEDURE spSynchronize (
 	@taskid int, 
-	@stepid int
+	@stepid int,
+	@buildSpecPhotoAll tinyint=1	
 )
 -------------------------------------------------------------
 --/H  Finish Spectro object (do photo Spectro matchup)
@@ -2234,11 +2239,13 @@ CREATE PROCEDURE spSynchronize (
 --/T <p> parameters:   
 --/T <li> taskid int,   		-- Task identifier
 --/T <li> stepid int	   		-- Step identifier
+--/T <li> buildSpecPhotoAll tinyint	-- boolean that is 1 (default) if re-
+--/T                                    -- build of SpecPhotoAll table needed
 --/T <li> returns  0 if OK, non zero if something wrong  
 --/T <br>
 --/T Sample call:<br>
 --/T <samp> 
---/T <br> exec  spSynchronize @taskid , @stepid  
+--/T <br> exec  spSynchronize @taskid , @stepid, 0  
 --/T </samp> 
 --/T <br>  
 ------------------------------------------------------------- 
@@ -2271,6 +2278,16 @@ AS BEGIN
 	COMMIT TRANSACTION
 	SET  @msg = 'Set specobjid to 0 for ' + str(@rows) + ' PhotoObjAll rows.'
 	EXEC spNewPhase @taskid, @stepid, 'Synchronize', 'OK', @msg;
+	-- First try to match each photoobj with its scienceprimary spectrum
+	BEGIN TRANSACTION
+	    UPDATE p
+		SET p.specobjid=s.specobjid
+		FROM PhotoObjAll p WITH (tablock)
+		     JOIN SpecObj s ON p.objid=s.bestobjid
+		OPTION (MAXDOP 1)	
+	    SET  @rows = ROWCOUNT_BIG();
+	COMMIT TRANSACTION
+	-- Then match remaining ones with other spectra 
 	BEGIN TRANSACTION
 	    UPDATE p
 		SET p.specobjid=s.specobjid
@@ -2279,14 +2296,15 @@ AS BEGIN
 		WHERE
 		    p.specobjid=0
 		OPTION (MAXDOP 1)	
-	    SET  @rows = ROWCOUNT_BIG();
+	    SET  @rows = @rows + ROWCOUNT_BIG();
 	COMMIT TRANSACTION
 	IF (@rows = 0)
 	   SELECT @rows=COUNT(*) FROM PhotoObjAll WHERE specobjid != 0
 	SET  @msg = 'Updated unset specObjID links for ' + str(@rows) + ' PhotoObjAll rows.'
 	EXEC spNewPhase @taskid, @stepid, 'Synchronize', 'OK', @msg;
 	-----------------------------------------------------
-	EXEC spBuildSpecPhotoAll @taskid, @stepid
+	IF (@buildSphecPhotoAll = 1)
+	   EXEC spBuildSpecPhotoAll @taskid, @stepid
 
 	-- generate completion message.
 	SET @msg = 'spSynchronize finished in '  
