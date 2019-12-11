@@ -113,12 +113,13 @@ BEGIN
 		EXEC sp_msforeachtable 'sp_spaceused ''?'''
 
 	-- strip the qualified table name to just the table name (remove schema name and square brackets)
-
+	/*
 	UPDATE r
 
 	    SET r.table_name = SUBSTRING(table_name, CHARINDEX('[',table_name,2)+1, (LEN(table_name)-  CHARINDEX('[',table_name,2) - 1) )
 
     	FROM #trows r
+	*/
 		
 
 	UPDATE d
