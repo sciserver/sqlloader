@@ -304,6 +304,7 @@
 --*                 photo-spectro match: first do sciencprimary spectrum
 --*                 and then any other spectra. Also made the SpecPhotoAll
 --*                 rebuild input parameter-driven.
+--* 2019-12-17 Ani: Removed transactions and MAXDOP from spSynchronize.
 ---====================================================================
 SET NOCOUNT ON;
 GO
@@ -2231,21 +2232,20 @@ GO
 CREATE PROCEDURE spSynchronize (
 	@taskid int, 
 	@stepid int,
-	@buildSpecPhotoAll tinyint=1	
+	@buildSpecPhotoAll bit = 1
 )
 -------------------------------------------------------------
 --/H  Finish Spectro object (do photo Spectro matchup)
 --/A --------------------------------------------------------
 --/T <p> parameters:   
---/T <li> taskid int,   		-- Task identifier
---/T <li> stepid int	   		-- Step identifier
---/T <li> buildSpecPhotoAll tinyint	-- boolean that is 1 (default) if re-
---/T                                    -- build of SpecPhotoAll table needed
+--/T <li> taskid int,   	-- Task identifier
+--/T <li> stepid int	   	-- Step identifier
+--/T <li> buildSpecPhotoAll     -- 0 to omit SpecPhotoAll rebuild
 --/T <li> returns  0 if OK, non zero if something wrong  
 --/T <br>
 --/T Sample call:<br>
 --/T <samp> 
---/T <br> exec  spSynchronize @taskid , @stepid, 0  
+--/T <br> exec  spSynchronize @taskid , @stepid , 0
 --/T </samp> 
 --/T <br>  
 ------------------------------------------------------------- 
@@ -2266,45 +2266,43 @@ AS BEGIN
 	-- Put out step greeting.
 	EXEC spNewPhase @taskid, @stepid, 'Synchronize', 'OK', 'spSynchronize called';
 	------------------------------------------------------
-	--- First set PhotoObjAll.specobjid to 0 
-	BEGIN TRANSACTION
-	    UPDATE p
+	--- First set PhotoObjAll.specobjid column to 0 
+	UPDATE p
 		SET p.specobjid=0
-		FROM PhotoObjAll p WITH (tablock)
-		WHERE 
-		    p.specobjid != 0
-		OPTION (MAXDOP 1)	
-	    SET  @rows = ROWCOUNT_BIG();
-	COMMIT TRANSACTION
+	FROM PhotoObjAll p WITH (tablock)	-- tablock avoids excessive logging
+	WHERE 
+		p.specobjid != 0	-- since less than 1% are usually non-zero, this makes it faster
+	SET  @rows = ROWCOUNT_BIG();
 	SET  @msg = 'Set specobjid to 0 for ' + str(@rows) + ' PhotoObjAll rows.'
 	EXEC spNewPhase @taskid, @stepid, 'Synchronize', 'OK', @msg;
-	-- First try to match each photoobj with its scienceprimary spectrum
-	BEGIN TRANSACTION
-	    UPDATE p
+
+	-- Next set all the possible SpecObj (scienceprimary spectra) links
+	UPDATE p
 		SET p.specobjid=s.specobjid
-		FROM PhotoObjAll p WITH (tablock)
-		     JOIN SpecObj s ON p.objid=s.bestobjid
-		OPTION (MAXDOP 1)	
-	    SET  @rows = ROWCOUNT_BIG();
-	COMMIT TRANSACTION
-	-- Then match remaining ones with other spectra 
-	BEGIN TRANSACTION
-	    UPDATE p
+	FROM PhotoObjAll p WITH (tablock)
+		JOIN SpecObj s ON p.objid=s.bestobjid
+	SET  @rows = ROWCOUNT_BIG();
+	SET  @msg = 'Set specobjid links to SpecObj for ' + str(@rows) + ' PhotoObjAll rows.'
+	EXEC spNewPhase @taskid, @stepid, 'Synchronize', 'OK', @msg;
+
+	-- Next set the remaining SpecObjAll (non-scienceprimary spectra) links
+	UPDATE p
 		SET p.specobjid=s.specobjid
-		FROM PhotoObjAll p WITH (tablock)
-		     JOIN SpecObjAll s ON p.objid=s.bestobjid
-		WHERE
-		    p.specobjid=0
-		OPTION (MAXDOP 1)	
-	    SET  @rows = @rows + ROWCOUNT_BIG();
-	COMMIT TRANSACTION
-	IF (@rows = 0)
-	   SELECT @rows=COUNT(*) FROM PhotoObjAll WHERE specobjid != 0
-	SET  @msg = 'Updated unset specObjID links for ' + str(@rows) + ' PhotoObjAll rows.'
+	FROM PhotoObjAll p WITH (tablock)
+		JOIN SpecObjAll s ON p.objid=s.bestobjid
+	WHERE
+		p.specobjid=0		-- only set those that are not already set
+	SET  @rows = ROWCOUNT_BIG();
+	SET  @msg = 'Set specobjid links to SpecObjAll for an additional ' + str(@rows) + ' PhotoObjAll rows.'
+	EXEC spNewPhase @taskid, @stepid, 'Synchronize', 'OK', @msg;
+
+	-- Print total number of specobjid links set
+	SELECT @rows=COUNT(*) FROM PhotoObjAll WHERE specobjid != 0
+	SET  @msg = 'Set specObjID links for ' + str(@rows) + ' PhotoObjAll rows in toto.'
 	EXEC spNewPhase @taskid, @stepid, 'Synchronize', 'OK', @msg;
 	-----------------------------------------------------
-	IF (@buildSphecPhotoAll = 1)
-	   EXEC spBuildSpecPhotoAll @taskid, @stepid
+	-- Rebuild SpecPhotoAll view if directed to do so
+	IF (@buildSpecPhotoAll = 1) EXEC spBuildSpecPhotoAll @taskid, @stepid
 
 	-- generate completion message.
 	SET @msg = 'spSynchronize finished in '  
