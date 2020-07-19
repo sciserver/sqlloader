@@ -108,6 +108,7 @@
 --*					Commented out code to set DB compatibility level to SQL2005
 --* 2018-03-29 Sue: Fixed spec functions to return numeric(20) instead of bigint
 --* 2019-01016 Sue: fGetObjectsEq now returns numeric(20) instead of bigint
+--* 2020-02-11 Sue: changed apstar_id from varchar(50) to (64) in  fGetNearbyApogeeStarEq
 
 --=====================================================================
 SET NOCOUNT ON;
@@ -1404,7 +1405,7 @@ CREATE FUNCTION fGetNearbyApogeeStarEq (@ra float, @dec float, @r float)
 -------------------------------------------------------------
 --/T There is no limit on the number of objects returned, but there are about 40 per sq arcmin.
 --/T <p>returned table:  
---/T <li> apstar_id varchar(50) NOT NULL,      -- Combined star spectrum unique ID
+--/T <li> apstar_id varchar(64) NOT NULL,      -- Combined star spectrum unique ID
 --/T <li> star varchar(32) NOT NULL,           -- 2MASS-style star id
 --/T <li> ra float NOT NULL,            -- Right Ascension
 --/T <li> dec float NOT NULL,		-- declination
@@ -1421,7 +1422,7 @@ CREATE FUNCTION fGetNearbyApogeeStarEq (@ra float, @dec float, @r float)
 --/T <br>see also fGetNearestApogeeStarEq
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
-    apstar_id varchar(50) NOT NULL,
+    apstar_id varchar(64) NOT NULL,
     apogee_id varchar(32) NOT NULL,
     ra float NOT NULL,
     dec float NOT NULL,
@@ -1470,7 +1471,7 @@ CREATE FUNCTION fGetNearestApogeeStarEq (@ra float, @dec float, @r float)
 -------------------------------------------------------------
 --/T There is no limit on the number of objects returned, but there are about 40 per sq arcmin.
 --/T <p>returned table:  
---/T <li> apstar_id varchar(50) NOT NULL,      -- Combined star spectrum unique ID
+--/T <li> apstar_id varchar(64) NOT NULL,      -- Combined star spectrum unique ID
 --/T <li> star varchar(32) NOT NULL,           -- 2MASS-style star id
 --/T <li> ra float NOT NULL,            -- Right Ascension
 --/T <li> dec float NOT NULL,		-- declination
@@ -1487,7 +1488,7 @@ CREATE FUNCTION fGetNearestApogeeStarEq (@ra float, @dec float, @r float)
 --/T <br>see also fGetNearbyApogeeStarEq
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
-    apstar_id varchar(50) NOT NULL,
+    apstar_id varchar(64) NOT NULL,
     apogee_id varchar(32) NOT NULL,
     ra float NOT NULL,
     dec float NOT NULL,
