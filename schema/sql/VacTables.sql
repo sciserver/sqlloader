@@ -10,6 +10,8 @@
 --* 2018-07-29  Ani: Updated schema as per latest version in sas/sql, where
 --*                  several columns were changed to float from real. (DR14-mini)
 --* 2019-09-27  Ani: Added PawlikMorph table, updated spiders_quasar. (DR16)
+--* 2019-12-06  Ani: Added erratum to spiders_quasar table description.
+--* 2020-07-17  Ani: Updated spiders_quasar for DR16+.
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -32,36 +34,43 @@ CREATE TABLE spiders_quasar (
 -------------------------------------------------------------------------------
 --/T This table contains data for the SPIDERS (SPectroscopic IDentification
 --/T of ERosita  Sources) quasar spectroscopic followup Value Added Catalog
---/T (VAC) based on SDSS DR14.
+--/T (VAC) based on SDSS DR14. <br>
+--/T <font color='red'>
+--/T Erratum: An error was found affecting the 2RXS flux and luminosity
+--/T columns in the DR16 version of the VAC (not the DR14 version); <br>
+--/T f_class_2RXS, errf_class_2RXS, f_bay_2RXS, errf_bay_2RXS, fden_class_2RXS,
+--/T errfden_class_2RXS, fden_bay_2RXS, errfden_bay_2RXS, l_class_2RXS,
+--/T errl_class_2RXS, l_bay_2RXS, errl_bay_2RXS, l2keV_class_2RXS,
+--/T errl2keV_class_2RXS, l2keV_bay_2RXS, and errl2keV_bay_2RXS.
+--/T <br>
+--/T A version of the VAC with the error corrected is available at <br>
+--/T http://www.mpe.mpg.de/XraySurveys/SPIDERS/SPIDERS_AGN/
+--/T </font>
 -------------------------------------------------------------------------------
   xray_detection 		varchar(16) NOT NULL,		--/D Flag indicating whether the X-ray source was detected in the 2RXS or XMMSL2 survey.
-  name 					varchar(32) NOT NULL,       --/D IAU name of the X-ray detection.
-  RA					float NOT NULL,				--/D Right ascension of the X-ray detection (J2000).
-  DEC					float NOT NULL,				--/D Declination of the X-ray detection (J2000).
-  ExiML_2RXS			real NOT NULL,				--/D Existence likelihood of the 2RXS X-ray detection.
-  ExpTime_2RXS			real NOT NULL,				--/D Exposure time of the 2RXS X-ray detection.
-  DETML_XMMSL2			real NOT NULL, 				--/D Detection likelihood of the XMMSL2 detection in the 0.2-12 keV range. 
-  ExpTime_XMMSL2		real NOT NULL,				--/D Exposure time of the XMMSL2 X-ray detection.
-  f_class_2RXS			real NOT NULL,				--/D Classical flux in the 0.1-2.4 keV range (2RXS).
-  errf_class_2RXS		real NOT NULL,				--/D Uncertainty in the classical flux in the 0.1-2.4 keV range (2RXS).
-  f_bay_2RXS			real NOT NULL,				--/D Bayesian flux in the 0.1-2.4 keV range (2RXS).
-  errf_bay_2RXS			real NOT NULL,				--/D Uncertainty in the Bayesian flux in the 0.1-2.4 keV range (2RXS).
-  fden_class_2RXS		real NOT NULL,				--/D Classical flux density at 2 keV (2RXS).
-  errfden_class_2RXS	real NOT NULL,				--/D Uncertainty in the classical flux density at 2 keV (2RXS).
-  fden_bay_2RXS			real NOT NULL,				--/D Bayesian flux density at 2 keV (2RXS).
-  errfden_bay_2RXS		real NOT NULL,				--/D Uncertainty in the Bayesian flux density at 2 keV (2RXS).
-  l_class_2RXS			real NOT NULL,				--/D Classical luminosity in the 0.1-2.4 keV range (2RXS).
-  errl_class_2RXS		real NOT NULL,				--/D Uncertainty in the classical luminosity in the 0.1-2.4 keV range (2RXS).
-  l_bay_2RXS			real NOT NULL,				--/D Bayesian luminosity in the 0.1-2.4 keV range (2RXS).
-  errl_bay_2RXS			real NOT NULL,				--/D Uncertainty in the Bayesian luminosity in the 0.1-2.4 keV range (2RXS).
-  l2keV_class_2RXS		real NOT NULL,				--/D Classical monochromatic luminosity at 2 keV (2RXS).
-  errl2keV_class_2RXS	real NOT NULL,				--/D Uncertainty in the classical monochromatic luminosity at 2 keV (2RXS).
-  l2keV_bay_2RXS		real NOT NULL,				--/D Bayesian monochromatic luminosity at 2 keV (2RXS).
-  errl2keV_bay_2RXS		real NOT NULL,				--/D Uncertainty in the Bayesian monochromatic luminosity at 2 keV (2RXS).
-  f_XMMSL2				real NOT NULL,				--/D Flux in the 0.2-12 keV range (XMMSL2; Saxton et al. (2008)).
+  name 					varchar(32) NOT NULL,       --/D Name of the X-ray detection (Saxton et al. 2008, Boller et al. 2016).
+  RA					float NOT NULL,				--/D Right ascension of the X-ray detection (J2000; Saxton et al. 2008, Boller et al. 2016).
+  DEC					float NOT NULL,				--/D Declination of the X-ray detection (J2000; Saxton et al. 2008, Boller et al. 2016).
+  ExiML_2RXS			real NOT NULL,				--/D Existence likelihood of the 2RXS X-ray detection (Boller et al. 2016).
+  ExpTime_2RXS			real NOT NULL,				--/D Exposure time of the 2RXS X-ray detection (Boller et al. 2016).
+  DETML_XMMSL2			real NOT NULL, 				--/D Detection likelihood of the XMMSL2 detection in the 0.2-12 keV range (Saxton et al. 2008).
+  ExpTime_XMMSL2		real NOT NULL,				--/D Exposure time of the XMMSL2 X-ray detection (Saxton et al. 2008).
+  f_class_2RXS			real NOT NULL,				--/D Classical flux in the observed-frame 0.1-2.4 keV range (2RXS).
+  errf_class_2RXS		real NOT NULL,				--/D Uncertainty in the classical flux in the observed-frame 0.1-2.4 keV range (2RXS).
+  f_bay_2RXS			real NOT NULL,				--/D Bayesian flux in the observed-frame 0.1-2.4 keV range (2RXS).
+  errf_bay_2RXS			real NOT NULL,				--/D Uncertainty in the Bayesian flux in the observed-frame 0.1-2.4 keV range (2RXS).
+  l_class_2RXS			float NOT NULL,				--/D Classical luminosity in the observed-frame 0.1-2.4 keV range (derived from f_class_2RXS; no k-correction applied) (2RXS).
+  errl_class_2RXS		float NOT NULL,				--/D Uncertainty in the classical luminosity in the observed-frame 0.1-2.4 keV range (derived from errf_class_2RXS; no k-correction applied) (2RXS).
+  l_bay_2RXS			float NOT NULL,				--/D Bayesian luminosity in the observed-frame 0.1-2.4 keV range (derived from f_bay_2RXS; no k-correction applied) (2RXS).
+  errl_bay_2RXS			float NOT NULL,				--/D Uncertainty in the Bayesian luminosity in the observed-frame 0.1-2.4 keV range (derived from errf_bay_2RXS; no k-correction applied) (2RXS).
+  l2keV_class_2RXS		float NOT NULL,				--/D Classical monochromatic luminosity at rest-frame 2 keV (2RXS).
+  errl2keV_class_2RXS	float NOT NULL,				--/D Uncertainty in the classical monochromatic luminosity at rest-frame 2 keV (2RXS).
+  l2keV_bay_2RXS		float NOT NULL,				--/D Bayesian monochromatic luminosity at rest-frame 2 keV (2RXS).
+  errl2keV_bay_2RXS		float NOT NULL,				--/D Uncertainty in the Bayesian monochromatic luminosity at rest-frame 2 keV (2RXS).
+  f_XMMSL2				real NOT NULL,				--/D Flux in the 0.2-12 keV range (XMMSL2; Saxton et al. 2008).
   errf_XMMSL2			real NOT NULL,				--/D Uncertainty in the flux in the 0.2-12 keV range (XMMSL2; Saxton et al. (2008)).
-  l_XMMSL2				real NOT NULL,				--/D Luminosity in the 0.2-12 keV range (XMMSL2; Saxton et al. (2008)).
-  errl_XMMSL2			real NOT NULL,				--/D Uncertainty in the luminosity in the 0.2-12keV range (XMMSL2; Saxton et al. (2008)).
+  l_XMMSL2				float NOT NULL,				--/D Luminosity in the 0.2-12 keV range (derived from f_XMMSL2; no k-correction applied) (XMMSL2).
+  errl_XMMSL2			float NOT NULL,				--/D Uncertainty in the luminosity in the 0.2-12 keV range (derived from errf_XMMSL2; no k-correction applied) (XMMSL2).
   Plate					int NOT NULL,			--/D SDSS plate number.
   MJD					int NOT NULL,			--/D MJD that the SDSS spectrum was taken.
   FiberID				int NOT NULL,			--/D SDSS fiber identification.
@@ -206,17 +215,17 @@ CREATE TABLE spiders_quasar (
   r_feII    			real NOT NULL,				--/D Flux ratio of the 4434-4684 Ang FeII emission to the broad component of H beta.
   OIII_Hbeta_ratio    	real NOT NULL,				--/D Flux ratio of [OIII]5007 Ang to H beta.
   virialfwhm_mgII    	real NOT NULL,				--/D FWHM of the MgII broad line profile.
-  errvirialfwhm_mgII1    real NOT NULL,				--/D Uncertainty in the FWHM of the MgII broad line profile.
+  errvirialfwhm_mgII    real NOT NULL,				--/D Uncertainty in the FWHM of the MgII broad line profile.
   virialfwhm_hb    		real NOT NULL,				--/D FWHM of the H beta broad line profile.
   errvirialfwhm_hb    	real NOT NULL,				--/D Uncertainty in the FWHM of the H beta broad line profile.
   mgII_chi    			real NOT NULL,				--/D Reduced chi-squared of the fit to the MgII region.
   hb_chi    			real NOT NULL,				--/D Reduced chi-squared of the fit to the H beta region.
-  l2500          		float NOT NULL,				--/D Monochromatic luminosity at 2500 Ang.
-  errl2500          	float NOT NULL,				--/D Uncertainty in the monochromatic luminosity at 2500 Ang.
-  l3000          		float NOT NULL,				--/D Monochromatic luminosity at 3000 Ang.
-  errl3000          	float NOT NULL,				--/D Uncertainty in the monochromatic luminosity at 3000 Ang.
-  l5100          		float NOT NULL,				--/D Monochromatic luminosity at 5100 Ang.
-  errl5100          	float NOT NULL,				--/D Uncertainty in the monochromatic luminosity at 5100 Ang.
+  l_2500          		float NOT NULL,				--/D Monochromatic luminosity at 2500 Ang.
+  errl_2500          	float NOT NULL,				--/D Uncertainty in the monochromatic luminosity at 2500 Ang.
+  l_3000          		float NOT NULL,				--/D Monochromatic luminosity at 3000 Ang.
+  errl_3000          	float NOT NULL,				--/D Uncertainty in the monochromatic luminosity at 3000 Ang.
+  l_5100          		float NOT NULL,				--/D Monochromatic luminosity at 5100 Ang.
+  errl_5100          	float NOT NULL,				--/D Uncertainty in the monochromatic luminosity at 5100 Ang.
   l_bol1          		float NOT NULL,				--/D Bolometric luminosity derived from the monochromatic luminosity at 3000 Ang.
   errl_bol1          	float NOT NULL,				--/D Uncertainty in the bolometric luminosity derived from the monochromatic luminosity at 3000 Ang.
   l_bol2          		float NOT NULL,				--/D Bolometric luminosity derived from the monochromatic luminosity at 5100 Ang.
@@ -235,7 +244,7 @@ CREATE TABLE spiders_quasar (
   erredd_ratio1    		real NOT NULL,				--/D Uncertainty in the Eddington ratio defined as l_bol1/l_edd1.
   edd_ratio2    		real NOT NULL,				--/D Eddington ratio defined as l_bol2/l_edd2.
   erredd_ratio2    		real NOT NULL,				--/D Uncertainty in the Eddington ratio defined as l_bol2/l_edd2.
-  flag_abs    			smallint NOT NULL,				--/D Flag indicating whether or not strong absorption lines have been observed in the spectrum. flag_abs is set to either 0 (no absorption present) or 1 (absorption present).
+  flag_abs    			real NOT NULL,				--/D Flag indicating whether or not strong absorption lines have been observed in the spectrum. flag_abs is set to either 0 (spectrum not inspected for absorption lines/no absorption present) or 1 (absorption present).
 )
 GO
 

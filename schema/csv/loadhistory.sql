@@ -699,6 +699,7 @@ INSERT History VALUES('VacTables','2018-07-26','Ani','Updated schema as per late
 INSERT History VALUES('VacTables','2018-07-29','Ani','Updated schema as per latest version in sas/sql, where several columns were changed to float from real. (DR14-mini) ');
 INSERT History VALUES('VacTables','2019-09-27','Ani','Added PawlikMorph table, updated spiders_quasar. (DR16) ');
 INSERT History VALUES('VacTables','2019-12-06','Ani','Added erratum to spiders_quasar table description. ');
+INSERT History VALUES('VacTables','2020-07-17','Ani','Updated spiders_quasar for DR16+. ');
 INSERT History VALUES('spHtmCSharp','2005-05-01','Jim','started ');
 INSERT History VALUES('spHtmCSharp','2005-05-02','Jim','removed fHtmLookup and fHtmLookupError added fHtmToString ');
 INSERT History VALUES('spHtmCSharp','2005-05-05','GYF','added .pdb to assembly for symbolic debugging added fHtmToName (faster than fHtmToString and reports error) ');
@@ -956,6 +957,7 @@ INSERT History VALUES('spUrlFitsSupport','2015-01-15','Ani','Updated specById fi
 INSERT History VALUES('spUrlFitsSupport','2016-07-29','Ani','Replaced "boss" with "eboss" for SAS file paths. ');
 INSERT History VALUES('spUrlFitsSupport','2016-07-30','Ani','Added fGetUrlMangaCube to return MaNGA data cube URL. ');
 INSERT History VALUES('spUrlFitsSupport','2016-11-14','Sue','added order by s.FiberID to spGetFiberList ');
+INSERT History VALUES('spUrlFitsSupport','2020-05-20','Ani','Updated fGetUrlFitsSpectrum for DR16 change in spec files path (added "full/" to path). ');
 INSERT History VALUES('spNeighbor','2004-08-30','Alex','Moved here spNeighbors and spBuildMatchTables ');
 INSERT History VALUES('spNeighbor','2004-10-10','Jim+Alex','updated spBuildMatchTables ');
 INSERT History VALUES('spNeighbor','2004-10-10','Alex+Jim','Tied into load framework to record messages.  Added code to drop/build indices and foreign keys.  Optimized triple computation.  ');
@@ -1271,6 +1273,8 @@ INSERT History VALUES('spFinish','2017-05-15','Ani','Updated spFinishStep to ski
 INSERT History VALUES('spFinish','2017-07-10','Ani','Commented out call to spNeighbors as precaution. ');
 INSERT History VALUES('spFinish','2017-07-11','Ani','Updated spBuildSpecPhotoAll for compressed version. Added support for "commonExit" as a valid resume mode phase in spFinishStep. ');
 INSERT History VALUES('spFinish','2018-07-30','Sue','Updated spSetVersion with option to not update all statistics, Call with @updateAllStats bit = 0 to skip update.   ');
+INSERT History VALUES('spFinish','2019-12-09','Ani','Updated spSyncrhonize to do two passes for the forward photo-spectro match: first do sciencprimary spectrum and then any other spectra. Also made the SpecPhotoAll rebuild input parameter-driven. ');
+INSERT History VALUES('spFinish','2019-12-17','Ani','Removed transactions and MAXDOP from spSynchronize. ');
 INSERT History VALUES('spCopyDbSubset','2004-09-15','Jim','copy all of TilingGeometry, TilingRun, and TileAll so region code works  2004-10-07 Alex, Jim: DR3 starting ');
 INSERT History VALUES('spCopyDbSubset','2004-11-15','Jim','parameterized it  ');
 INSERT History VALUES('spCopyDbSubset','2005-01-28','Jim','BestTarget2Sector replaces Best2Sector. ');
@@ -1291,6 +1295,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1281 lines inserted into History'
+PRINT '1285 lines inserted into History'
 ------------------------------------
 GO

@@ -75,6 +75,8 @@
 --* 2016-07-29 Ani: Replaced "boss" with "eboss" for SAS file paths.
 --* 2016-07-30 Ani: Added fGetUrlMangaCube to return MaNGA data cube URL.
 --* 2016-11-14 Sue: added order by s.FiberID to spGetFiberList
+--* 2020-05-20 Ani: Updated fGetUrlFitsSpectrum for DR16 change in spec
+--*            files path (added "full/" to path).
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 
@@ -542,7 +544,7 @@ BEGIN
 	SET @oplate = substring('0000',1,4-len(@plate)) + @plate;
 	SET @ofiber = substring( '0000',1,4-len(@fiber)) + @fiber;
 	SET @link = @link + 'sas/dr' + @release + '/' + @survey + '/spectro/redux/' +
-		@rerun + '/spectra/' + @oplate + '/spec-' + @oplate + '-' + 
+		@rerun + '/spectra/full/' + @oplate + '/spec-' + @oplate + '-' + 
 		@mjd + '-' + @ofiber + '.fits';
 	RETURN @link;
 END

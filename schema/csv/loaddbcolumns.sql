@@ -8577,33 +8577,29 @@ INSERT DBColumns VALUES('marvelsStar','HIP_PLX','','','','Hipparcos Parallax (in
 INSERT DBColumns VALUES('marvelsStar','HIP_PLX_E','','','','Error in Hipparcos Parallax (in mas)','0');
 INSERT DBColumns VALUES('marvelsStar','HIP_SPTYPE','','','','Hipparcos Spectral Type','0');
 INSERT DBColumns VALUES('spiders_quasar','xray_detection','','','','Flag indicating whether the X-ray source was detected in the 2RXS or XMMSL2 survey.','0');
-INSERT DBColumns VALUES('spiders_quasar','name','','','','IAU name of the X-ray detection.','0');
-INSERT DBColumns VALUES('spiders_quasar','RA','','','','Right ascension of the X-ray detection (J2000).','0');
-INSERT DBColumns VALUES('spiders_quasar','DEC','','','','Declination of the X-ray detection (J2000).','0');
-INSERT DBColumns VALUES('spiders_quasar','ExiML_2RXS','','','','Existence likelihood of the 2RXS X-ray detection.','0');
-INSERT DBColumns VALUES('spiders_quasar','ExpTime_2RXS','','','','Exposure time of the 2RXS X-ray detection.','0');
-INSERT DBColumns VALUES('spiders_quasar','DETML_XMMSL2','','','','Detection likelihood of the XMMSL2 detection in the 0.2-12 keV range.','0');
-INSERT DBColumns VALUES('spiders_quasar','ExpTime_XMMSL2','','','','Exposure time of the XMMSL2 X-ray detection.','0');
-INSERT DBColumns VALUES('spiders_quasar','f_class_2RXS','','','','Classical flux in the 0.1-2.4 keV range (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','errf_class_2RXS','','','','Uncertainty in the classical flux in the 0.1-2.4 keV range (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','f_bay_2RXS','','','','Bayesian flux in the 0.1-2.4 keV range (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','errf_bay_2RXS','','','','Uncertainty in the Bayesian flux in the 0.1-2.4 keV range (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','fden_class_2RXS','','','','Classical flux density at 2 keV (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','errfden_class_2RXS','','','','Uncertainty in the classical flux density at 2 keV (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','fden_bay_2RXS','','','','Bayesian flux density at 2 keV (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','errfden_bay_2RXS','','','','Uncertainty in the Bayesian flux density at 2 keV (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','l_class_2RXS','','','','Classical luminosity in the 0.1-2.4 keV range (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','errl_class_2RXS','','','','Uncertainty in the classical luminosity in the 0.1-2.4 keV range (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','l_bay_2RXS','','','','Bayesian luminosity in the 0.1-2.4 keV range (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','errl_bay_2RXS','','','','Uncertainty in the Bayesian luminosity in the 0.1-2.4 keV range (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','l2keV_class_2RXS','','','','Classical monochromatic luminosity at 2 keV (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','errl2keV_class_2RXS','','','','Uncertainty in the classical monochromatic luminosity at 2 keV (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','l2keV_bay_2RXS','','','','Bayesian monochromatic luminosity at 2 keV (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','errl2keV_bay_2RXS','','','','Uncertainty in the Bayesian monochromatic luminosity at 2 keV (2RXS).','0');
-INSERT DBColumns VALUES('spiders_quasar','f_XMMSL2','','','','Flux in the 0.2-12 keV range (XMMSL2; Saxton et al. (2008)).','0');
+INSERT DBColumns VALUES('spiders_quasar','name','','','','Name of the X-ray detection (Saxton et al. 2008, Boller et al. 2016).','0');
+INSERT DBColumns VALUES('spiders_quasar','RA','','','','Right ascension of the X-ray detection (J2000; Saxton et al. 2008, Boller et al. 2016).','0');
+INSERT DBColumns VALUES('spiders_quasar','DEC','','','','Declination of the X-ray detection (J2000; Saxton et al. 2008, Boller et al. 2016).','0');
+INSERT DBColumns VALUES('spiders_quasar','ExiML_2RXS','','','','Existence likelihood of the 2RXS X-ray detection (Boller et al. 2016).','0');
+INSERT DBColumns VALUES('spiders_quasar','ExpTime_2RXS','','','','Exposure time of the 2RXS X-ray detection (Boller et al. 2016).','0');
+INSERT DBColumns VALUES('spiders_quasar','DETML_XMMSL2','','','','Detection likelihood of the XMMSL2 detection in the 0.2-12 keV range (Saxton et al. 2008).','0');
+INSERT DBColumns VALUES('spiders_quasar','ExpTime_XMMSL2','','','','Exposure time of the XMMSL2 X-ray detection (Saxton et al. 2008).','0');
+INSERT DBColumns VALUES('spiders_quasar','f_class_2RXS','','','','Classical flux in the observed-frame 0.1-2.4 keV range (2RXS).','0');
+INSERT DBColumns VALUES('spiders_quasar','errf_class_2RXS','','','','Uncertainty in the classical flux in the observed-frame 0.1-2.4 keV range (2RXS).','0');
+INSERT DBColumns VALUES('spiders_quasar','f_bay_2RXS','','','','Bayesian flux in the observed-frame 0.1-2.4 keV range (2RXS).','0');
+INSERT DBColumns VALUES('spiders_quasar','errf_bay_2RXS','','','','Uncertainty in the Bayesian flux in the observed-frame 0.1-2.4 keV range (2RXS).','0');
+INSERT DBColumns VALUES('spiders_quasar','l_class_2RXS','','','','Classical luminosity in the observed-frame 0.1-2.4 keV range (derived from f_class_2RXS; no k-correction applied) (2RXS).','0');
+INSERT DBColumns VALUES('spiders_quasar','errl_class_2RXS','','','','Uncertainty in the classical luminosity in the observed-frame 0.1-2.4 keV range (derived from errf_class_2RXS; no k-correction applied) (2RXS).','0');
+INSERT DBColumns VALUES('spiders_quasar','l_bay_2RXS','','','','Bayesian luminosity in the observed-frame 0.1-2.4 keV range (derived from f_bay_2RXS; no k-correction applied) (2RXS).','0');
+INSERT DBColumns VALUES('spiders_quasar','errl_bay_2RXS','','','','Uncertainty in the Bayesian luminosity in the observed-frame 0.1-2.4 keV range (derived from errf_bay_2RXS; no k-correction applied) (2RXS).','0');
+INSERT DBColumns VALUES('spiders_quasar','l2keV_class_2RXS','','','','Classical monochromatic luminosity at rest-frame 2 keV (2RXS).','0');
+INSERT DBColumns VALUES('spiders_quasar','errl2keV_class_2RXS','','','','Uncertainty in the classical monochromatic luminosity at rest-frame 2 keV (2RXS).','0');
+INSERT DBColumns VALUES('spiders_quasar','l2keV_bay_2RXS','','','','Bayesian monochromatic luminosity at rest-frame 2 keV (2RXS).','0');
+INSERT DBColumns VALUES('spiders_quasar','errl2keV_bay_2RXS','','','','Uncertainty in the Bayesian monochromatic luminosity at rest-frame 2 keV (2RXS).','0');
+INSERT DBColumns VALUES('spiders_quasar','f_XMMSL2','','','','Flux in the 0.2-12 keV range (XMMSL2; Saxton et al. 2008).','0');
 INSERT DBColumns VALUES('spiders_quasar','errf_XMMSL2','','','','Uncertainty in the flux in the 0.2-12 keV range (XMMSL2; Saxton et al. (2008)).','0');
-INSERT DBColumns VALUES('spiders_quasar','l_XMMSL2','','','','Luminosity in the 0.2-12 keV range (XMMSL2; Saxton et al. (2008)).','0');
-INSERT DBColumns VALUES('spiders_quasar','errl_XMMSL2','','','','Uncertainty in the luminosity in the 0.2-12keV range (XMMSL2; Saxton et al. (2008)).','0');
+INSERT DBColumns VALUES('spiders_quasar','l_XMMSL2','','','','Luminosity in the 0.2-12 keV range (derived from f_XMMSL2; no k-correction applied) (XMMSL2).','0');
+INSERT DBColumns VALUES('spiders_quasar','errl_XMMSL2','','','','Uncertainty in the luminosity in the 0.2-12 keV range (derived from errf_XMMSL2; no k-correction applied) (XMMSL2).','0');
 INSERT DBColumns VALUES('spiders_quasar','Plate','','','','SDSS plate number.','0');
 INSERT DBColumns VALUES('spiders_quasar','MJD','','','','MJD that the SDSS spectrum was taken.','0');
 INSERT DBColumns VALUES('spiders_quasar','FiberID','','','','SDSS fiber identification.','0');
@@ -8748,17 +8744,17 @@ INSERT DBColumns VALUES('spiders_quasar','errfwhm_feII2','','','','Uncertainty i
 INSERT DBColumns VALUES('spiders_quasar','r_feII','','','','Flux ratio of the 4434-4684 Ang FeII emission to the broad component of H beta.','0');
 INSERT DBColumns VALUES('spiders_quasar','OIII_Hbeta_ratio','','','','Flux ratio of [OIII]5007 Ang to H beta.','0');
 INSERT DBColumns VALUES('spiders_quasar','virialfwhm_mgII','','','','FWHM of the MgII broad line profile.','0');
-INSERT DBColumns VALUES('spiders_quasar','errvirialfwhm_mgII1','','','','Uncertainty in the FWHM of the MgII broad line profile.','0');
+INSERT DBColumns VALUES('spiders_quasar','errvirialfwhm_mgII','','','','Uncertainty in the FWHM of the MgII broad line profile.','0');
 INSERT DBColumns VALUES('spiders_quasar','virialfwhm_hb','','','','FWHM of the H beta broad line profile.','0');
 INSERT DBColumns VALUES('spiders_quasar','errvirialfwhm_hb','','','','Uncertainty in the FWHM of the H beta broad line profile.','0');
 INSERT DBColumns VALUES('spiders_quasar','mgII_chi','','','','Reduced chi-squared of the fit to the MgII region.','0');
 INSERT DBColumns VALUES('spiders_quasar','hb_chi','','','','Reduced chi-squared of the fit to the H beta region.','0');
-INSERT DBColumns VALUES('spiders_quasar','l2500','','','','Monochromatic luminosity at 2500 Ang.','0');
-INSERT DBColumns VALUES('spiders_quasar','errl2500','','','','Uncertainty in the monochromatic luminosity at 2500 Ang.','0');
-INSERT DBColumns VALUES('spiders_quasar','l3000','','','','Monochromatic luminosity at 3000 Ang.','0');
-INSERT DBColumns VALUES('spiders_quasar','errl3000','','','','Uncertainty in the monochromatic luminosity at 3000 Ang.','0');
-INSERT DBColumns VALUES('spiders_quasar','l5100','','','','Monochromatic luminosity at 5100 Ang.','0');
-INSERT DBColumns VALUES('spiders_quasar','errl5100','','','','Uncertainty in the monochromatic luminosity at 5100 Ang.','0');
+INSERT DBColumns VALUES('spiders_quasar','l_2500','','','','Monochromatic luminosity at 2500 Ang.','0');
+INSERT DBColumns VALUES('spiders_quasar','errl_2500','','','','Uncertainty in the monochromatic luminosity at 2500 Ang.','0');
+INSERT DBColumns VALUES('spiders_quasar','l_3000','','','','Monochromatic luminosity at 3000 Ang.','0');
+INSERT DBColumns VALUES('spiders_quasar','errl_3000','','','','Uncertainty in the monochromatic luminosity at 3000 Ang.','0');
+INSERT DBColumns VALUES('spiders_quasar','l_5100','','','','Monochromatic luminosity at 5100 Ang.','0');
+INSERT DBColumns VALUES('spiders_quasar','errl_5100','','','','Uncertainty in the monochromatic luminosity at 5100 Ang.','0');
 INSERT DBColumns VALUES('spiders_quasar','l_bol1','','','','Bolometric luminosity derived from the monochromatic luminosity at 3000 Ang.','0');
 INSERT DBColumns VALUES('spiders_quasar','errl_bol1','','','','Uncertainty in the bolometric luminosity derived from the monochromatic luminosity at 3000 Ang.','0');
 INSERT DBColumns VALUES('spiders_quasar','l_bol2','','','','Bolometric luminosity derived from the monochromatic luminosity at 5100 Ang.','0');
@@ -8777,7 +8773,7 @@ INSERT DBColumns VALUES('spiders_quasar','edd_ratio1','','','','Eddington ratio 
 INSERT DBColumns VALUES('spiders_quasar','erredd_ratio1','','','','Uncertainty in the Eddington ratio defined as l_bol1/l_edd1.','0');
 INSERT DBColumns VALUES('spiders_quasar','edd_ratio2','','','','Eddington ratio defined as l_bol2/l_edd2.','0');
 INSERT DBColumns VALUES('spiders_quasar','erredd_ratio2','','','','Uncertainty in the Eddington ratio defined as l_bol2/l_edd2.','0');
-INSERT DBColumns VALUES('spiders_quasar','flag_abs','','','','Flag indicating whether or not strong absorption lines have been observed in the spectrum. flag_abs is set to either 0 (no absorption present) or 1 (absorption present).','0');
+INSERT DBColumns VALUES('spiders_quasar','flag_abs','','','','Flag indicating whether or not strong absorption lines have been observed in the spectrum. flag_abs is set to either 0 (spectrum not inspected for absorption lines/no absorption present) or 1 (absorption present).','0');
 INSERT DBColumns VALUES('PawlikMorph','mangaID','','','','MaNGA ID string','0');
 INSERT DBColumns VALUES('PawlikMorph','plateifu','','','','String combination of PLATE-IFU to ease searching','0');
 INSERT DBColumns VALUES('PawlikMorph','run','','','','Run number','0');
@@ -8823,6 +8819,6 @@ INSERT DBColumns VALUES('PawlikMorph','warningflag','','','','flag indicating un
 
 GO
 ----------------------------- 
-PRINT '8813 lines inserted into DBColumns '
+PRINT '8809 lines inserted into DBColumns '
 ----------------------------- 
 
