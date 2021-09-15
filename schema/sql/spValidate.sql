@@ -97,6 +97,10 @@
 --*                 duplicate target_ids.
 --* 2019-11-23 Ani: Added mangaGalaxyZoo and mangaAlfalfaDR15 to
 --*                 spValidateManga.
+--* 2021-06-18 Ani: Swapped in MaNGA DR17 (GZ) VACs.
+--* 2021-07-12 Ani: Changed mastar_goodvisits PK for DR17.
+--* 2021-07-28 Ani: Changed apogeeStarVisit, apogeeObject PKs for DR17.
+--* 2021-07-30 Ani: Added Mastar VACs (DR17).
 --====================================================================
 SET NOCOUNT ON;
 GO
@@ -1576,9 +1580,19 @@ AS BEGIN
 	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mangaTarget',          	'mangaID',	@error OUTPUT
 	set @summary = @summary + @error;
  
-	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mangaHIall',          	'plateIFU',	@error OUTPUT
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mangaHIall',          	'plateIFU,session',	@error OUTPUT
 	set @summary = @summary + @error;
  
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'MaNGA_GZ2',          	'plateIFU',	@error OUTPUT
+	set @summary = @summary + @error;
+ 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'MaNGA_GZD_auto',      	'plateIFU',	@error OUTPUT
+	set @summary = @summary + @error;
+ 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'MaNGA_gzUKIDSS_rhdebiased',      	'mangaID',	@error OUTPUT
+	set @summary = @summary + @error;
+ 
+/* not updated for DR17
 	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mangaHIbonus',          	'mangaID,bonusiD',	@error OUTPUT
 	set @summary = @summary + @error;
  
@@ -1587,7 +1601,7 @@ AS BEGIN
  
 	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mangaAlfalfaDR15',      	'plateIFU',	@error OUTPUT
 	set @summary = @summary + @error;
- 
+ */
 	-- generate completion message.
 
 	IF @summary = 0 
@@ -1734,7 +1748,19 @@ AS BEGIN
 	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mastar_goodstars',          	'mangaid',	@error OUTPUT
 	set @summary = @summary + @error;
  
-	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mastar_goodvisits',          'mangaid,mjd',	@error OUTPUT
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mastar_goodvisits',          'plate,ifudesign,mjd',	@error OUTPUT
+	set @summary = @summary + @error;
+ 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mastar_goodstars_xmatch_gaiadr2',          	'mangaid',	@error OUTPUT
+	set @summary = @summary + @error;
+ 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mastar_goodstars_xmatch_gaiaedr3',          'mangaid',	@error OUTPUT
+	set @summary = @summary + @error;
+ 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mastar_goodstars_params',          	'mangaid',	@error OUTPUT
+	set @summary = @summary + @error;
+ 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mastar_goodvisits_params',          'plate,ifudesign,mjd',	@error OUTPUT
 	set @summary = @summary + @error;
  
 	-- generate completion message.
@@ -1921,7 +1947,7 @@ AS BEGIN
                 
 	IF @summary = 0
             BEGIN
-	    	exec dbo.spTestUniqueKey  @taskid , @stepid,  'apogeeObject', 'target_id', @error OUTPUT
+	    	exec dbo.spTestUniqueKey  @taskid , @stepid,  'apogeeObject', 'target_id,alt_id', @error OUTPUT
 --		set @summary = @summary + @error;
             END
 
@@ -1935,7 +1961,7 @@ AS BEGIN
                 
 	IF @summary = 0
             BEGIN
-	    	exec dbo.spTestUniqueKey  @taskid , @stepid,  'apogeeStarVisit', 'visit_id', @error OUTPUT
+	    	exec dbo.spTestUniqueKey  @taskid , @stepid,  'apogeeStarVisit', 'visit_id,apstar_id', @error OUTPUT
 		set @summary = @summary + @error;
             END
 

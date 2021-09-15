@@ -36,6 +36,7 @@
 --*                  IFUDESIGNSIZE to int from real after confirmation from K
 --*                  Masters. Also chamged MANGA_TILEID to int from real. DR16
 --* 2019-10-24  Ani: Added mangaAlfalfaDR15 VAC table. DR16
+--* 2021-06-18  Ani: Updated mangaDRPall, mangaDAPall, added GZ VACs (DR17).
 ---=========================================================
 
 --=========================================================
@@ -54,16 +55,16 @@ CREATE TABLE mangaDRPall (
 --/T for a target.
 ------------------------------------------------------------------------------
     plate  int  NOT NULL,   --/U --/D Plate ID
-    ifudsgn  varchar(32)  NOT NULL, --/U --/D IFU design id (e.g. 12701)
-    plateifu  varchar(32)  NOT NULL, --/U --/D Plate+ifudesign name for this object (e.g. 7443-12701)
-    mangaid  varchar(32)  NOT NULL,  --/U --/D MaNGA ID for this object (e.g. 1-114145)
-    versdrp2  varchar(32)  NOT NULL, --/U --/D Version of DRP used for 2d reductions
-    versdrp3  varchar(32)  NOT NULL, --/U --/D Version of DRP used for 3d reductions
-    verscore  varchar(32)  NOT NULL, --/U --/D Version of mangacore used for reductions
-    versutil  varchar(32)  NOT NULL, --/U --/D Version of idlutils used for reductions
-    versprim  varchar(32)  NOT NULL, --/U --/D Version of mangapreim used for reductions
-    platetyp  varchar(32)  NOT NULL, --/U --/D Plate type (e.g. MANGA, APOGEE-2&MANGA)
-    srvymode  varchar(32)  NOT NULL, --/U --/D Survey mode (e.g. MANGA dither, MANGA stare, APOGEE lead)
+    ifudsgn  varchar(40)  NOT NULL, --/U --/D IFU design id (e.g. 12701)
+    plateifu  varchar(40)  NOT NULL, --/U --/D Plate+ifudesign name for this object (e.g. 7443-12701)
+    mangaid  varchar(40)  NOT NULL,  --/U --/D MaNGA ID for this object (e.g. 1-114145)
+    versdrp2  varchar(40)  NOT NULL, --/U --/D Version of DRP used for 2d reductions
+    versdrp3  varchar(40)  NOT NULL, --/U --/D Version of DRP used for 3d reductions
+    verscore  varchar(40)  NOT NULL, --/U --/D Version of mangacore used for reductions
+    versutil  varchar(40)  NOT NULL, --/U --/D Version of idlutils used for reductions
+    versprim  varchar(40)  NOT NULL, --/U --/D Version of mangapreim used for reductions
+    platetyp  varchar(40)  NOT NULL, --/U --/D Plate type (e.g. MANGA, APOGEE-2&MANGA)
+    srvymode  varchar(40)  NOT NULL, --/U --/D Survey mode (e.g. MANGA dither, MANGA stare, APOGEE lead)
     objra  float  NOT NULL,   --/U degrees --/D Right ascension of the science object in J2000
     objdec  float  NOT NULL,   --/U degrees --/D Declination of the science object in J2000
     ifuglon  float  NOT NULL,   --/U degrees --/D Galactic longitude corresponding to IFURA/DEC
@@ -76,9 +77,9 @@ CREATE TABLE mangaDRPall (
     drp3qual  int  NOT NULL,   --/U --/D Quality bitmask
     bluesn2  real  NOT NULL,   --/U --/D Total blue SN2 across all nexp exposures
     redsn2  real  NOT NULL,   --/U --/D Total red SN2 across all nexp exposures
-    harname  varchar(64)  NOT NULL, --/U --/D IFU harness name
+    harname  varchar(60)  NOT NULL, --/U --/D IFU harness name
     frlplug  int  NOT NULL,   --/U --/D Frplug hardware code
-    cartid  varchar(32)  NOT NULL, --/U --/D Cartridge ID number
+    cartid  varchar(40)  NOT NULL, --/U --/D Cartridge ID number
     designid  int  NOT NULL,   --/U --/D  Design ID number
     cenra  float  NOT NULL,   --/U degrees --/D Plate center right ascension in J2000
     cendec  float  NOT NULL,   --/U degrees --/D Plate center declination in J2000
@@ -102,9 +103,9 @@ CREATE TABLE mangaDRPall (
     mngtarg2  bigint  NOT NULL,   --/U --/D Manga-target2 maskbit for galaxy target catalog
     mngtarg3  bigint  NOT NULL,   --/U --/D Manga-target3 maskbit for galaxy target catalog
     catidnum  bigint  NOT NULL,   --/U --/D Primary target input catalog (leading digits of mangaid)
-    plttarg  varchar(32)  NOT NULL, --/U --/D plateTarget reference file appropriate for this target
+    plttarg  varchar(40)  NOT NULL, --/U --/D plateTarget reference file appropriate for this target
     manga_tileid  int  NOT NULL,   --/U  --/D The ID of the tile to which this object has been allocated
-    nsa_iauname  varchar(32)  NOT NULL,   --/U  --/D IAU-style designation based on RA/Dec (NSA)
+    nsa_iauname  varchar(20)  NOT NULL,   --/U  --/D IAU-style designation based on RA/Dec (NSA)
     ifutargetsize int NOT NULL, --/U fibers --/D The ideal IFU size for this object. The intended IFU size is equal to IFUTargetSize except if IFUTargetSize > 127 when it is 127, or < 19 when it is 19
     ifudesignsize int NOT NULL, --/U fibers --/D The allocated IFU size (0 = "unallocated")
     ifudesignwrongsize int NOT NULL, --/U fibers --/D The allocated IFU size if the intended IFU size was not available
@@ -127,7 +128,7 @@ CREATE TABLE mangaDRPall (
     nsa_field  int  NOT NULL,   --/U   --/D SDSS field ID covering the target
     nsa_run  int  NOT NULL,   --/U   --/D SDSS run ID covering the target
     nsa_camcol int NOT NULL, --/U --/D SDSS camcol ID covering the catalog position.
-    nsa_version  varchar(32)  NOT NULL,   --/U   --/D Version of NSA catalogue used to select these targets
+    nsa_version  varchar(10)  NOT NULL,   --/U   --/D Version of NSA catalogue used to select these targets
     nsa_nsaid  int  NOT NULL,   --/U   --/D The NSAID field in the NSA catalogue referenced in nsa_version.
     nsa_nsaid_v1b int NOT NULL, --/U --/D The NSAID of the target in the NSA_v1b_0_0_v2 catalogue (if applicable).
     nsa_z real NOT NULL, --/D Heliocentric redshift (NSA)
@@ -212,11 +213,8 @@ CREATE TABLE mangaDRPall (
     nsa_extinction_r real NOT NULL, --/F nsa_extinction 4 --/U mag --/D Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in SDSS r-band (NSA)
     nsa_extinction_i real NOT NULL, --/F nsa_extinction 5 --/U mag --/D Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in SDSS i-band (NSA)
     nsa_extinction_z real NOT NULL, --/F nsa_extinction 6 --/U mag --/D Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in SDSS z-band (NSA)
-    htmID bigint NOT NULL  --/F NOFITS --/D 20-level deep Hierarchical Triangular Mesh ID 
-)
-GO
---
-
+    htmID bigint NOT NULL  --/F NOFITS --/D 20-level deep Hierarchical Triangular Mesh ID
+);
 
 
 --=========================================================
@@ -231,10 +229,10 @@ CREATE TABLE mangatarget (
 ------------------------------------------------------------------------------
 --/H MaNGA Target Catalog
 ------------------------------------------------------------------------------
---/T The MaNGA targeting catalog, v1_2_18. This table contains the details of
+--/T The MaNGA targeting catalog, v1_2_27. This table contains the details of
 --/T the three main MaNGA samples, Primary, Secondary and Color-Enhanced, as
 --/T well as the ancillary targets. In addition to the targeting information
---/T there are details of the tile and IFU allocation as of 03/10/2016. This
+--/T there are details of the tile and IFU allocation as of 02/02/2018. This
 --/T tiling and allocation details may change slightly as the survey evolves.
 --/T Also included are various useful parameters from the NASA-Sloan Atlas
 --/T (NSA) catalog, v1_0_1, which was used to select almost all of the targets.
@@ -340,13 +338,13 @@ CREATE TABLE mangatarget (
     nsa_extinction_r real NOT NULL, --/F nsa_extinction 4 --/U mag --/D Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in SDSS r-band (NSA)
     nsa_extinction_i real NOT NULL, --/F nsa_extinction 5 --/U mag --/D Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in SDSS i-band (NSA)
     nsa_extinction_z real NOT NULL, --/F nsa_extinction 6 --/U mag --/D Galactic extinction from Schlegel, Finkbeiner, and Davis (1997), in SDSS z-band (NSA)
-    nsa_iauname VARCHAR(32) NOT NULL, --/D IAU-style designation based on RA/Dec (NSA)
+    nsa_iauname varchar(20) NOT NULL, --/D IAU-style designation based on RA/Dec (NSA)
     nsa_subdir varchar(128) NOT NULL, --/D Subdirectory for images in the NSA 'detect' directory (NSA)
     nsa_pid int NOT NULL, --/D Parent id within mosaic for this object (NSA)
     nsa_nsaid int NOT NULL, --/D Unique ID within NSA v1 catalog (NSA)
     catind int NOT NULL, --/D Zero-indexed row within the input NSA v1 catalog (NSA)
     manga_target1 bigint NOT NULL, --/D Targeting bitmask for main sample targets
-    mangaID varchar(32) NOT NULL, --/D Unique ID for each manga target
+    mangaID varchar(20) NOT NULL, --/D Unique ID for each manga target
     zmin real NOT NULL, --/D The minimum redshift at which the galaxy could still have been included in the Primary sample
     zmax real NOT NULL, --/D The maximum redshift at which the galaxy could still have been included in the Primary sample
     szmin real NOT NULL, --/D The minimum redshift at which the galaxy could still have been included in the Secondary sample
@@ -363,7 +361,36 @@ CREATE TABLE mangatarget (
     psweight real NOT NULL, --/D The volume weight for the combined Primary and full Secondary samples. Corrects the MaNGA selection to a volume limited sample
     esweight real NOT NULL, --/D The volume weight for the combined Primary+ and full Secondary samples. Corrects the MaNGA selection to a volume limited sample
     ranflag bit NOT NULL, --/D Set to 1 if a target is to be included after random sampling to produce the correct proportions of each sample, otherwise 0
-    manga_tileids int NOT NULL, --/D IDs of all tiles that overlap a galaxy's position
+    manga_tileids_0 int NOT NULL, --/F manga_tileids 0 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_1 int NOT NULL, --/F manga_tileids 1 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_2 int NOT NULL, --/F manga_tileids 2 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_3 int NOT NULL, --/F manga_tileids 3 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_4 int NOT NULL, --/F manga_tileids 4 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_5 int NOT NULL, --/F manga_tileids 5 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_6 int NOT NULL, --/F manga_tileids 6 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_7 int NOT NULL, --/F manga_tileids 7 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_8 int NOT NULL, --/F manga_tileids 8 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_9 int NOT NULL, --/F manga_tileids 9 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_10 int NOT NULL, --/F manga_tileids 10 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_11 int NOT NULL, --/F manga_tileids 11 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_12 int NOT NULL, --/F manga_tileids 12 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_13 int NOT NULL, --/F manga_tileids 13 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_14 int NOT NULL, --/F manga_tileids 14 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_15 int NOT NULL, --/F manga_tileids 15 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_16 int NOT NULL, --/F manga_tileids 16 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_17 int NOT NULL, --/F manga_tileids 17 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_18 int NOT NULL, --/F manga_tileids 18 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_19 int NOT NULL, --/F manga_tileids 19 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_20 int NOT NULL, --/F manga_tileids 20 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_21 int NOT NULL, --/F manga_tileids 21 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_22 int NOT NULL, --/F manga_tileids 22 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_23 int NOT NULL, --/F manga_tileids 23 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_24 int NOT NULL, --/F manga_tileids 24 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_25 int NOT NULL, --/F manga_tileids 25 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_26 int NOT NULL, --/F manga_tileids 26 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_27 int NOT NULL, --/F manga_tileids 27 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_28 int NOT NULL, --/F manga_tileids 28 --/D IDs of all tiles that overlap a galaxy's position.
+    manga_tileids_29 int NOT NULL, --/F manga_tileids 29 --/D IDs of all tiles that overlap a galaxy's position.
     manga_tileid int NOT NULL, --/D The ID of the tile to which this object has been allocated
     tilera float NOT NULL, --/U deg --/D The Right Ascension (J2000) of the tile to which this object has been allocated
     tiledec float NOT NULL, --/U deg --/D The Declination (J2000) of the tile to which this object has been allocated
@@ -389,6 +416,7 @@ GO
 --
 
 
+/* leave as is for DR17
 --=========================================================
 IF EXISTS (SELECT name FROM sysobjects
          WHERE xtype='U' AND name = 'nsatlas')
@@ -397,7 +425,7 @@ GO
 --
 EXEC spSetDefaultFileGroup 'nsatlas'
 GO
-CREATE TABLE nsatlas (
+-- CREATE TABLE nsatlas (
 ------------------------------------------------------------------------------
 --/H NASA-Sloan Atlas catalog
 ------------------------------------------------------------------------------
@@ -703,6 +731,8 @@ CREATE TABLE nsatlas (
 )
 GO
 --
+*/  -- leave as is for DR17
+
 
 
 --=========================================================
@@ -904,7 +934,7 @@ CREATE TABLE mangaDAPall (
     plate int NOT NULL, --/U  --/D Plate number  
     ifudesign int NOT NULL, --/U  --/D IFU design number  
     plateifu varchar(32) NOT NULL, --/U  --/D String combination of PLATE-IFU to ease searching  
-    mangaid varchar(32) NOT NULL, --/U  --/D MaNGA ID string  
+    mangaid varchar(16) NOT NULL, --/U  --/D MaNGA ID string  
     drpallindx int NOT NULL, --/U  --/D Row index of the observation in the DRPall file  
     mode varchar(16) NOT NULL, --/U  --/D 3D mode of the DRP file (CUBE or RSS)  
     daptype varchar(32) NOT NULL, --/U  --/D Keyword of the analysis approach used (e.g., HYB10-GAU-MILESHC)  
@@ -971,7 +1001,7 @@ CREATE TABLE mangaDAPall (
     stellar_vel_lo_clip real NOT NULL, --/U km/s --/D Stellar velocity at 2.5% growth after iteratively clipping 3-sigma outliers.  
     stellar_vel_hi_clip real NOT NULL, --/U km/s --/D Stellar velocity at 97.5% growth after iteratively clipping 3-sigma outliers.  
     stellar_sigma_1re real NOT NULL, --/U km/s --/D Flux-weighted mean stellar velocity dispersion of all spaxels within 1 R_{e}.  
-    stellar_cont_rchi2_1re real NOT NULL, --/U  --/D Median reduced chi^{2} of the stellar-continuum fit within 1 R_{e}.  
+    stellar_rchi2_1re real NOT NULL, --/U  --/D Median reduced chi^{2} of the stellar-continuum fit within 1 R_{e}.  
     ha_z real NOT NULL, --/U  --/D Flux-weighted mean redshift of the Hα line within a 2.5 arcsec aperture at the galaxy center.  
     ha_gvel_lo real NOT NULL, --/U km/s --/D Gaussian-fitted velocity of the H-alpha line at 2.5% growth of all valid spaxels.  
     ha_gvel_hi real NOT NULL, --/U km/s --/D Gaussian-fitted velocity of the H-alpha line at 97.5% growth of all valid spaxels.  
@@ -980,314 +1010,497 @@ CREATE TABLE mangaDAPall (
     ha_gsigma_1re real NOT NULL, --/U km/s --/D Flux-weighted H-alpha velocity dispersion (from Gaussian fit) of all spaxels within 1 R_{e}.  
     ha_gsigma_hi real NOT NULL, --/U km/s --/D H-alpha velocity dispersion (from Gaussian fit) at 97.5% growth of all valid spaxels.  
     ha_gsigma_hi_clip real NOT NULL, --/U km/s --/D H-alpha velocity dispersion (from Gaussian fit) at 97.5% growth after iteratively clipping 3-sigma outliers.  
+    emline_rchi2_1re real NOT NULL, --/U  --/D Median reduced chi^{2} of the continuum+emission-line fit within 1 R_{e}.  
     emline_sflux_cen_oiid_3728 real NOT NULL, --/F EMLINE_SFLUX_CEN 0 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OIId_3728.  
     emline_sflux_cen_oii_3729 real NOT NULL, --/F EMLINE_SFLUX_CEN 1 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OII_3729.  
-    emline_sflux_cen_hthe_3798 real NOT NULL, --/F EMLINE_SFLUX_CEN 2 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hthe_3798.  
-    emline_sflux_cen_heta_3836 real NOT NULL, --/F EMLINE_SFLUX_CEN 3 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Heta_3836.  
-    emline_sflux_cen_neiii_3869 real NOT NULL, --/F EMLINE_SFLUX_CEN 4 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NeIII_3869.  
-    emline_sflux_cen_hzet_3890 real NOT NULL, --/F EMLINE_SFLUX_CEN 5 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hzet_3890.  
-    emline_sflux_cen_neiii_3968 real NOT NULL, --/F EMLINE_SFLUX_CEN 6 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NeIII_3968.  
-    emline_sflux_cen_heps_3971 real NOT NULL, --/F EMLINE_SFLUX_CEN 7 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Heps_3971.  
-    emline_sflux_cen_hdel_4102 real NOT NULL, --/F EMLINE_SFLUX_CEN 8 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hdel_4102.  
-    emline_sflux_cen_hgam_4341 real NOT NULL, --/F EMLINE_SFLUX_CEN 9 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hgam_4341.  
-    emline_sflux_cen_heii_4687 real NOT NULL, --/F EMLINE_SFLUX_CEN 10 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for HeII_4687.  
-    emline_sflux_cen_hb_4862 real NOT NULL, --/F EMLINE_SFLUX_CEN 11 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hb_4862.  
-    emline_sflux_cen_oiii_4960 real NOT NULL, --/F EMLINE_SFLUX_CEN 12 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OIII_4960.  
-    emline_sflux_cen_oiii_5008 real NOT NULL, --/F EMLINE_SFLUX_CEN 13 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OIII_5008.  
-    emline_sflux_cen_hei_5877 real NOT NULL, --/F EMLINE_SFLUX_CEN 14 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for HeI_5877.  
-    emline_sflux_cen_oi_6302 real NOT NULL, --/F EMLINE_SFLUX_CEN 15 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OI_6302.  
-    emline_sflux_cen_oi_6365 real NOT NULL, --/F EMLINE_SFLUX_CEN 16 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OI_6365.  
-    emline_sflux_cen_nii_6549 real NOT NULL, --/F EMLINE_SFLUX_CEN 17 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NII_6549.  
-    emline_sflux_cen_ha_6564 real NOT NULL, --/F EMLINE_SFLUX_CEN 18 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Ha_6564.  
-    emline_sflux_cen_nii_6585 real NOT NULL, --/F EMLINE_SFLUX_CEN 19 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NII_6585.  
-    emline_sflux_cen_sii_6718 real NOT NULL, --/F EMLINE_SFLUX_CEN 20 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for SII_6718.  
-    emline_sflux_cen_sii_6732 real NOT NULL, --/F EMLINE_SFLUX_CEN 21 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for SII_6732.  
+    emline_sflux_cen_h12_3751 real NOT NULL, --/F EMLINE_SFLUX_CEN 2 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for H12_3751.  
+    emline_sflux_cen_h11_3771 real NOT NULL, --/F EMLINE_SFLUX_CEN 3 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for H11_3771.  
+    emline_sflux_cen_hthe_3798 real NOT NULL, --/F EMLINE_SFLUX_CEN 4 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hthe_3798.  
+    emline_sflux_cen_heta_3836 real NOT NULL, --/F EMLINE_SFLUX_CEN 5 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Heta_3836.  
+    emline_sflux_cen_neiii_3869 real NOT NULL, --/F EMLINE_SFLUX_CEN 6 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NeIII_3869.
+    emline_sflux_cen_hei_3889 real NOT NULL, --/F EMLINE_SFLUX_CEN 7 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for HeI_3889.  
+    emline_sflux_cen_hzet_3890 real NOT NULL, --/F EMLINE_SFLUX_CEN 8 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hzet_3890.  
+    emline_sflux_cen_neiii_3968 real NOT NULL, --/F EMLINE_SFLUX_CEN 9 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NeIII_3968.
+    emline_sflux_cen_heps_3971 real NOT NULL, --/F EMLINE_SFLUX_CEN 10 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Heps_3971.  
+    emline_sflux_cen_hdel_4102 real NOT NULL, --/F EMLINE_SFLUX_CEN 11 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hdel_4102.  
+    emline_sflux_cen_hgam_4341 real NOT NULL, --/F EMLINE_SFLUX_CEN 12 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hgam_4341.  
+    emline_sflux_cen_heii_4687 real NOT NULL, --/F EMLINE_SFLUX_CEN 13 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for HeII_4687.  
+    emline_sflux_cen_hb_4862 real NOT NULL, --/F EMLINE_SFLUX_CEN 14 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hb_4862.  
+    emline_sflux_cen_oiii_4960 real NOT NULL, --/F EMLINE_SFLUX_CEN 15 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OIII_4960.  
+    emline_sflux_cen_oiii_5008 real NOT NULL, --/F EMLINE_SFLUX_CEN 16 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OIII_5008.  
+    emline_sflux_cen_ni_5199 real NOT NULL, --/F EMLINE_SFLUX_CEN 17 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NI_5199.  
+    emline_sflux_cen_ni_5201 real NOT NULL, --/F EMLINE_SFLUX_CEN 18 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NI_5201.  
+    emline_sflux_cen_hei_5877 real NOT NULL, --/F EMLINE_SFLUX_CEN 19 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for HeI_5877.  
+    emline_sflux_cen_oi_6302 real NOT NULL, --/F EMLINE_SFLUX_CEN 20 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OI_6302.  
+    emline_sflux_cen_oi_6365 real NOT NULL, --/F EMLINE_SFLUX_CEN 21 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OI_6365.  
+    emline_sflux_cen_nii_6549 real NOT NULL, --/F EMLINE_SFLUX_CEN 22 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NII_6549.  
+    emline_sflux_cen_ha_6564 real NOT NULL, --/F EMLINE_SFLUX_CEN 23 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Ha_6564.  
+    emline_sflux_cen_nii_6585 real NOT NULL, --/F EMLINE_SFLUX_CEN 24 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NII_6585.  
+    emline_sflux_cen_sii_6718 real NOT NULL, --/F EMLINE_SFLUX_CEN 25 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for SII_6718.  
+    emline_sflux_cen_sii_6732 real NOT NULL, --/F EMLINE_SFLUX_CEN 26 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for SII_6732.  
+    emline_sflux_cen_hei_7067 real NOT NULL, --/F EMLINE_SFLUX_CEN 27 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for HeI_7067.  
+    emline_sflux_cen_ariii_7137 real NOT NULL, --/F EMLINE_SFLUX_CEN 28 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for ArIII_7137.
+    emline_sflux_cen_ariii_7753 real NOT NULL, --/F EMLINE_SFLUX_CEN 29 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for ArIII_7753.
+    emline_sflux_cen_peta_9017 real NOT NULL, --/F EMLINE_SFLUX_CEN 30 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Peta_9017.  
+    emline_sflux_cen_siii_9071 real NOT NULL, --/F EMLINE_SFLUX_CEN 31 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for SIII_9071.  
+    emline_sflux_cen_pzet_9231 real NOT NULL, --/F EMLINE_SFLUX_CEN 32 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Pzet_9231.  
+    emline_sflux_cen_siii_9533 real NOT NULL, --/F EMLINE_SFLUX_CEN 33 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for SIII_9533.  
+    emline_sflux_cen_peps_9548 real NOT NULL, --/F EMLINE_SFLUX_CEN 34 --/U  --/D Summed emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Peps_9548.  
     emline_sflux_1re_oiid_3728 real NOT NULL, --/F EMLINE_SFLUX_1RE 0 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OIId_3728.  
     emline_sflux_1re_oii_3729 real NOT NULL, --/F EMLINE_SFLUX_1RE 1 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OII_3729.  
-    emline_sflux_1re_hthe_3798 real NOT NULL, --/F EMLINE_SFLUX_1RE 2 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hthe_3798.  
-    emline_sflux_1re_heta_3836 real NOT NULL, --/F EMLINE_SFLUX_1RE 3 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Heta_3836.  
-    emline_sflux_1re_neiii_3869 real NOT NULL, --/F EMLINE_SFLUX_1RE 4 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NeIII_3869.  
-    emline_sflux_1re_hzet_3890 real NOT NULL, --/F EMLINE_SFLUX_1RE 5 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hzet_3890.  
-    emline_sflux_1re_neiii_3968 real NOT NULL, --/F EMLINE_SFLUX_1RE 6 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NeIII_3968.  
-    emline_sflux_1re_heps_3971 real NOT NULL, --/F EMLINE_SFLUX_1RE 7 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Heps_3971.  
-    emline_sflux_1re_hdel_4102 real NOT NULL, --/F EMLINE_SFLUX_1RE 8 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hdel_4102.  
-    emline_sflux_1re_hgam_4341 real NOT NULL, --/F EMLINE_SFLUX_1RE 9 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hgam_4341.  
-    emline_sflux_1re_heii_4687 real NOT NULL, --/F EMLINE_SFLUX_1RE 10 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for HeII_4687.  
-    emline_sflux_1re_hb_4862 real NOT NULL, --/F EMLINE_SFLUX_1RE 11 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hb_4862.  
-    emline_sflux_1re_oiii_4960 real NOT NULL, --/F EMLINE_SFLUX_1RE 12 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OIII_4960.  
-    emline_sflux_1re_oiii_5008 real NOT NULL, --/F EMLINE_SFLUX_1RE 13 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OIII_5008.  
-    emline_sflux_1re_hei_5877 real NOT NULL, --/F EMLINE_SFLUX_1RE 14 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for HeI_5877.  
-    emline_sflux_1re_oi_6302 real NOT NULL, --/F EMLINE_SFLUX_1RE 15 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OI_6302.  
-    emline_sflux_1re_oi_6365 real NOT NULL, --/F EMLINE_SFLUX_1RE 16 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OI_6365.  
-    emline_sflux_1re_nii_6549 real NOT NULL, --/F EMLINE_SFLUX_1RE 17 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NII_6549.  
-    emline_sflux_1re_ha_6564 real NOT NULL, --/F EMLINE_SFLUX_1RE 18 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Ha_6564.  
-    emline_sflux_1re_nii_6585 real NOT NULL, --/F EMLINE_SFLUX_1RE 19 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NII_6585.  
-    emline_sflux_1re_sii_6718 real NOT NULL, --/F EMLINE_SFLUX_1RE 20 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for SII_6718.  
-    emline_sflux_1re_sii_6732 real NOT NULL, --/F EMLINE_SFLUX_1RE 21 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for SII_6732.  
+    emline_sflux_1re_h12_3751 real NOT NULL, --/F EMLINE_SFLUX_1RE 2 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for H12_3751.  
+    emline_sflux_1re_h11_3771 real NOT NULL, --/F EMLINE_SFLUX_1RE 3 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for H11_3771.  
+    emline_sflux_1re_hthe_3798 real NOT NULL, --/F EMLINE_SFLUX_1RE 4 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hthe_3798.  
+    emline_sflux_1re_heta_3836 real NOT NULL, --/F EMLINE_SFLUX_1RE 5 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Heta_3836.  
+    emline_sflux_1re_neiii_3869 real NOT NULL, --/F EMLINE_SFLUX_1RE 6 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NeIII_3869.
+    emline_sflux_1re_hei_3889 real NOT NULL, --/F EMLINE_SFLUX_1RE 7 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for HeI_3889.  
+    emline_sflux_1re_hzet_3890 real NOT NULL, --/F EMLINE_SFLUX_1RE 8 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hzet_3890.  
+    emline_sflux_1re_neiii_3968 real NOT NULL, --/F EMLINE_SFLUX_1RE 9 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NeIII_3968.
+    emline_sflux_1re_heps_3971 real NOT NULL, --/F EMLINE_SFLUX_1RE 10 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Heps_3971.  
+    emline_sflux_1re_hdel_4102 real NOT NULL, --/F EMLINE_SFLUX_1RE 11 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hdel_4102.  
+    emline_sflux_1re_hgam_4341 real NOT NULL, --/F EMLINE_SFLUX_1RE 12 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hgam_4341.  
+    emline_sflux_1re_heii_4687 real NOT NULL, --/F EMLINE_SFLUX_1RE 13 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for HeII_4687.  
+    emline_sflux_1re_hb_4862 real NOT NULL, --/F EMLINE_SFLUX_1RE 14 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hb_4862.  
+    emline_sflux_1re_oiii_4960 real NOT NULL, --/F EMLINE_SFLUX_1RE 15 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OIII_4960.  
+    emline_sflux_1re_oiii_5008 real NOT NULL, --/F EMLINE_SFLUX_1RE 16 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OIII_5008.  
+    emline_sflux_1re_ni_5199 real NOT NULL, --/F EMLINE_SFLUX_1RE 17 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NI_5199.  
+    emline_sflux_1re_ni_5201 real NOT NULL, --/F EMLINE_SFLUX_1RE 18 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NI_5201.  
+    emline_sflux_1re_hei_5877 real NOT NULL, --/F EMLINE_SFLUX_1RE 19 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for HeI_5877.  
+    emline_sflux_1re_oi_6302 real NOT NULL, --/F EMLINE_SFLUX_1RE 20 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OI_6302.  
+    emline_sflux_1re_oi_6365 real NOT NULL, --/F EMLINE_SFLUX_1RE 21 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OI_6365.  
+    emline_sflux_1re_nii_6549 real NOT NULL, --/F EMLINE_SFLUX_1RE 22 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NII_6549.  
+    emline_sflux_1re_ha_6564 real NOT NULL, --/F EMLINE_SFLUX_1RE 23 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Ha_6564.  
+    emline_sflux_1re_nii_6585 real NOT NULL, --/F EMLINE_SFLUX_1RE 24 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NII_6585.  
+    emline_sflux_1re_sii_6718 real NOT NULL, --/F EMLINE_SFLUX_1RE 25 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for SII_6718.  
+    emline_sflux_1re_sii_6732 real NOT NULL, --/F EMLINE_SFLUX_1RE 26 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for SII_6732.  
+    emline_sflux_1re_hei_7067 real NOT NULL, --/F EMLINE_SFLUX_1RE 27 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for HeI_7067.  
+    emline_sflux_1re_ariii_7137 real NOT NULL, --/F EMLINE_SFLUX_1RE 28 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for ArIII_7137.
+    emline_sflux_1re_ariii_7753 real NOT NULL, --/F EMLINE_SFLUX_1RE 29 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for ArIII_7753.
+    emline_sflux_1re_peta_9017 real NOT NULL, --/F EMLINE_SFLUX_1RE 30 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Peta_9017.  
+    emline_sflux_1re_siii_9071 real NOT NULL, --/F EMLINE_SFLUX_1RE 31 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for SIII_9071.  
+    emline_sflux_1re_pzet_9231 real NOT NULL, --/F EMLINE_SFLUX_1RE 32 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Pzet_9231.  
+    emline_sflux_1re_siii_9533 real NOT NULL, --/F EMLINE_SFLUX_1RE 33 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for SIII_9533.  
+    emline_sflux_1re_peps_9548 real NOT NULL, --/F EMLINE_SFLUX_1RE 34 --/U  --/D Summed emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Peps_9548.  
     emline_sflux_tot_oiid_3728 real NOT NULL, --/F EMLINE_SFLUX_TOT 0 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for OIId_3728.  
     emline_sflux_tot_oii_3729 real NOT NULL, --/F EMLINE_SFLUX_TOT 1 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for OII_3729.  
-    emline_sflux_tot_hthe_3798 real NOT NULL, --/F EMLINE_SFLUX_TOT 2 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Hthe_3798.  
-    emline_sflux_tot_heta_3836 real NOT NULL, --/F EMLINE_SFLUX_TOT 3 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Heta_3836.  
-    emline_sflux_tot_neiii_3869 real NOT NULL, --/F EMLINE_SFLUX_TOT 4 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for NeIII_3869.  
-    emline_sflux_tot_hzet_3890 real NOT NULL, --/F EMLINE_SFLUX_TOT 5 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Hzet_3890.  
-    emline_sflux_tot_neiii_3968 real NOT NULL, --/F EMLINE_SFLUX_TOT 6 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for NeIII_3968.  
-    emline_sflux_tot_heps_3971 real NOT NULL, --/F EMLINE_SFLUX_TOT 7 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Heps_3971.  
-    emline_sflux_tot_hdel_4102 real NOT NULL, --/F EMLINE_SFLUX_TOT 8 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Hdel_4102.  
-    emline_sflux_tot_hgam_4341 real NOT NULL, --/F EMLINE_SFLUX_TOT 9 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Hgam_4341.  
-    emline_sflux_tot_heii_4687 real NOT NULL, --/F EMLINE_SFLUX_TOT 10 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for HeII_4687.  
-    emline_sflux_tot_hb_4862 real NOT NULL, --/F EMLINE_SFLUX_TOT 11 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Hb_4862.  
-    emline_sflux_tot_oiii_4960 real NOT NULL, --/F EMLINE_SFLUX_TOT 12 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for OIII_4960.  
-    emline_sflux_tot_oiii_5008 real NOT NULL, --/F EMLINE_SFLUX_TOT 13 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for OIII_5008.  
-    emline_sflux_tot_hei_5877 real NOT NULL, --/F EMLINE_SFLUX_TOT 14 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for HeI_5877.  
-    emline_sflux_tot_oi_6302 real NOT NULL, --/F EMLINE_SFLUX_TOT 15 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for OI_6302.  
-    emline_sflux_tot_oi_6365 real NOT NULL, --/F EMLINE_SFLUX_TOT 16 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for OI_6365.  
-    emline_sflux_tot_nii_6549 real NOT NULL, --/F EMLINE_SFLUX_TOT 17 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for NII_6549.  
-    emline_sflux_tot_ha_6564 real NOT NULL, --/F EMLINE_SFLUX_TOT 18 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Ha_6564.  
-    emline_sflux_tot_nii_6585 real NOT NULL, --/F EMLINE_SFLUX_TOT 19 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for NII_6585.  
-    emline_sflux_tot_sii_6718 real NOT NULL, --/F EMLINE_SFLUX_TOT 20 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for SII_6718.  
-    emline_sflux_tot_sii_6732 real NOT NULL, --/F EMLINE_SFLUX_TOT 21 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for SII_6732.  
+    emline_sflux_tot_h12_3751 real NOT NULL, --/F EMLINE_SFLUX_TOT 2 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for H12_3751.  
+    emline_sflux_tot_h11_3771 real NOT NULL, --/F EMLINE_SFLUX_TOT 3 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for H11_3771.  
+    emline_sflux_tot_hthe_3798 real NOT NULL, --/F EMLINE_SFLUX_TOT 4 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Hthe_3798.  
+    emline_sflux_tot_heta_3836 real NOT NULL, --/F EMLINE_SFLUX_TOT 5 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Heta_3836.  
+    emline_sflux_tot_neiii_3869 real NOT NULL, --/F EMLINE_SFLUX_TOT 6 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for NeIII_3869.
+    emline_sflux_tot_hei_3889 real NOT NULL, --/F EMLINE_SFLUX_TOT 7 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for HeI_3889.  
+    emline_sflux_tot_hzet_3890 real NOT NULL, --/F EMLINE_SFLUX_TOT 8 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Hzet_3890.  
+    emline_sflux_tot_neiii_3968 real NOT NULL, --/F EMLINE_SFLUX_TOT 9 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for NeIII_3968.
+    emline_sflux_tot_heps_3971 real NOT NULL, --/F EMLINE_SFLUX_TOT 10 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Heps_3971.  
+    emline_sflux_tot_hdel_4102 real NOT NULL, --/F EMLINE_SFLUX_TOT 11 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Hdel_4102.  
+    emline_sflux_tot_hgam_4341 real NOT NULL, --/F EMLINE_SFLUX_TOT 12 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Hgam_4341.  
+    emline_sflux_tot_heii_4687 real NOT NULL, --/F EMLINE_SFLUX_TOT 13 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for HeII_4687.  
+    emline_sflux_tot_hb_4862 real NOT NULL, --/F EMLINE_SFLUX_TOT 14 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Hb_4862.  
+    emline_sflux_tot_oiii_4960 real NOT NULL, --/F EMLINE_SFLUX_TOT 15 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for OIII_4960.  
+    emline_sflux_tot_oiii_5008 real NOT NULL, --/F EMLINE_SFLUX_TOT 16 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for OIII_5008.  
+    emline_sflux_tot_ni_5199 real NOT NULL, --/F EMLINE_SFLUX_TOT 17 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for NI_5199.  
+    emline_sflux_tot_ni_5201 real NOT NULL, --/F EMLINE_SFLUX_TOT 18 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for NI_5201.  
+    emline_sflux_tot_hei_5877 real NOT NULL, --/F EMLINE_SFLUX_TOT 19 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for HeI_5877.  
+    emline_sflux_tot_oi_6302 real NOT NULL, --/F EMLINE_SFLUX_TOT 20 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for OI_6302.  
+    emline_sflux_tot_oi_6365 real NOT NULL, --/F EMLINE_SFLUX_TOT 21 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for OI_6365.  
+    emline_sflux_tot_nii_6549 real NOT NULL, --/F EMLINE_SFLUX_TOT 22 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for NII_6549.  
+    emline_sflux_tot_ha_6564 real NOT NULL, --/F EMLINE_SFLUX_TOT 23 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Ha_6564.  
+    emline_sflux_tot_nii_6585 real NOT NULL, --/F EMLINE_SFLUX_TOT 24 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for NII_6585.  
+    emline_sflux_tot_sii_6718 real NOT NULL, --/F EMLINE_SFLUX_TOT 25 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for SII_6718.  
+    emline_sflux_tot_sii_6732 real NOT NULL, --/F EMLINE_SFLUX_TOT 26 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for SII_6732.  
+    emline_sflux_tot_hei_7067 real NOT NULL, --/F EMLINE_SFLUX_TOT 27 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for HeI_7067.  
+    emline_sflux_tot_ariii_7137 real NOT NULL, --/F EMLINE_SFLUX_TOT 28 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for ArIII_7137.
+    emline_sflux_tot_ariii_7753 real NOT NULL, --/F EMLINE_SFLUX_TOT 29 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for ArIII_7753.
+    emline_sflux_tot_peta_9017 real NOT NULL, --/F EMLINE_SFLUX_TOT 30 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Peta_9017.  
+    emline_sflux_tot_siii_9071 real NOT NULL, --/F EMLINE_SFLUX_TOT 31 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for SIII_9071.  
+    emline_sflux_tot_pzet_9231 real NOT NULL, --/F EMLINE_SFLUX_TOT 32 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Pzet_9231.  
+    emline_sflux_tot_siii_9533 real NOT NULL, --/F EMLINE_SFLUX_TOT 33 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for SIII_9533.  
+    emline_sflux_tot_peps_9548 real NOT NULL, --/F EMLINE_SFLUX_TOT 34 --/U  --/D Total integrated flux of each summed emission measurement within the full MaNGA field-of-view.  Measurements specifically for Peps_9548.  
     emline_ssb_1re_oiid_3728 real NOT NULL, --/F EMLINE_SSB_1RE 0 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for OIId_3728.  
     emline_ssb_1re_oii_3729 real NOT NULL, --/F EMLINE_SSB_1RE 1 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for OII_3729.  
-    emline_ssb_1re_hthe_3798 real NOT NULL, --/F EMLINE_SSB_1RE 2 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hthe_3798.  
-    emline_ssb_1re_heta_3836 real NOT NULL, --/F EMLINE_SSB_1RE 3 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Heta_3836.  
-    emline_ssb_1re_neiii_3869 real NOT NULL, --/F EMLINE_SSB_1RE 4 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3869.  
-    emline_ssb_1re_hzet_3890 real NOT NULL, --/F EMLINE_SSB_1RE 5 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hzet_3890.  
-    emline_ssb_1re_neiii_3968 real NOT NULL, --/F EMLINE_SSB_1RE 6 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3968.  
-    emline_ssb_1re_heps_3971 real NOT NULL, --/F EMLINE_SSB_1RE 7 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Heps_3971.  
-    emline_ssb_1re_hdel_4102 real NOT NULL, --/F EMLINE_SSB_1RE 8 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hdel_4102.  
-    emline_ssb_1re_hgam_4341 real NOT NULL, --/F EMLINE_SSB_1RE 9 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hgam_4341.  
-    emline_ssb_1re_heii_4687 real NOT NULL, --/F EMLINE_SSB_1RE 10 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for HeII_4687.  
-    emline_ssb_1re_hb_4862 real NOT NULL, --/F EMLINE_SSB_1RE 11 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hb_4862.  
-    emline_ssb_1re_oiii_4960 real NOT NULL, --/F EMLINE_SSB_1RE 12 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for OIII_4960.  
-    emline_ssb_1re_oiii_5008 real NOT NULL, --/F EMLINE_SSB_1RE 13 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for OIII_5008.  
-    emline_ssb_1re_hei_5877 real NOT NULL, --/F EMLINE_SSB_1RE 14 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for HeI_5877.  
-    emline_ssb_1re_oi_6302 real NOT NULL, --/F EMLINE_SSB_1RE 15 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for OI_6302.  
-    emline_ssb_1re_oi_6365 real NOT NULL, --/F EMLINE_SSB_1RE 16 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for OI_6365.  
-    emline_ssb_1re_nii_6549 real NOT NULL, --/F EMLINE_SSB_1RE 17 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for NII_6549.  
-    emline_ssb_1re_ha_6564 real NOT NULL, --/F EMLINE_SSB_1RE 18 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Ha_6564.  
-    emline_ssb_1re_nii_6585 real NOT NULL, --/F EMLINE_SSB_1RE 19 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for NII_6585.  
-    emline_ssb_1re_sii_6718 real NOT NULL, --/F EMLINE_SSB_1RE 20 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for SII_6718.  
-    emline_ssb_1re_sii_6732 real NOT NULL, --/F EMLINE_SSB_1RE 21 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for SII_6732.  
+    emline_ssb_1re_h12_3751 real NOT NULL, --/F EMLINE_SSB_1RE 2 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for H12_3751.  
+    emline_ssb_1re_h11_3771 real NOT NULL, --/F EMLINE_SSB_1RE 3 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for H11_3771.  
+    emline_ssb_1re_hthe_3798 real NOT NULL, --/F EMLINE_SSB_1RE 4 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hthe_3798.  
+    emline_ssb_1re_heta_3836 real NOT NULL, --/F EMLINE_SSB_1RE 5 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Heta_3836.  
+    emline_ssb_1re_neiii_3869 real NOT NULL, --/F EMLINE_SSB_1RE 6 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3869.
+    emline_ssb_1re_hei_3889 real NOT NULL, --/F EMLINE_SSB_1RE 7 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for HeI_3889.  
+    emline_ssb_1re_hzet_3890 real NOT NULL, --/F EMLINE_SSB_1RE 8 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hzet_3890.  
+    emline_ssb_1re_neiii_3968 real NOT NULL, --/F EMLINE_SSB_1RE 9 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3968.
+    emline_ssb_1re_heps_3971 real NOT NULL, --/F EMLINE_SSB_1RE 10 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Heps_3971.  
+    emline_ssb_1re_hdel_4102 real NOT NULL, --/F EMLINE_SSB_1RE 11 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hdel_4102.  
+    emline_ssb_1re_hgam_4341 real NOT NULL, --/F EMLINE_SSB_1RE 12 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hgam_4341.  
+    emline_ssb_1re_heii_4687 real NOT NULL, --/F EMLINE_SSB_1RE 13 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for HeII_4687.  
+    emline_ssb_1re_hb_4862 real NOT NULL, --/F EMLINE_SSB_1RE 14 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hb_4862.  
+    emline_ssb_1re_oiii_4960 real NOT NULL, --/F EMLINE_SSB_1RE 15 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for OIII_4960.  
+    emline_ssb_1re_oiii_5008 real NOT NULL, --/F EMLINE_SSB_1RE 16 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for OIII_5008.  
+    emline_ssb_1re_ni_5199 real NOT NULL, --/F EMLINE_SSB_1RE 17 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for NI_5199.  
+    emline_ssb_1re_ni_5201 real NOT NULL, --/F EMLINE_SSB_1RE 18 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for NI_5201.  
+    emline_ssb_1re_hei_5877 real NOT NULL, --/F EMLINE_SSB_1RE 19 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for HeI_5877.  
+    emline_ssb_1re_oi_6302 real NOT NULL, --/F EMLINE_SSB_1RE 20 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for OI_6302.  
+    emline_ssb_1re_oi_6365 real NOT NULL, --/F EMLINE_SSB_1RE 21 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for OI_6365.  
+    emline_ssb_1re_nii_6549 real NOT NULL, --/F EMLINE_SSB_1RE 22 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for NII_6549.  
+    emline_ssb_1re_ha_6564 real NOT NULL, --/F EMLINE_SSB_1RE 23 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Ha_6564.  
+    emline_ssb_1re_nii_6585 real NOT NULL, --/F EMLINE_SSB_1RE 24 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for NII_6585.  
+    emline_ssb_1re_sii_6718 real NOT NULL, --/F EMLINE_SSB_1RE 25 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for SII_6718.  
+    emline_ssb_1re_sii_6732 real NOT NULL, --/F EMLINE_SSB_1RE 26 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for SII_6732.  
+    emline_ssb_1re_hei_7067 real NOT NULL, --/F EMLINE_SSB_1RE 27 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for HeI_7067.  
+    emline_ssb_1re_ariii_7137 real NOT NULL, --/F EMLINE_SSB_1RE 28 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for ArIII_7137.
+    emline_ssb_1re_ariii_7753 real NOT NULL, --/F EMLINE_SSB_1RE 29 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for ArIII_7753.
+    emline_ssb_1re_peta_9017 real NOT NULL, --/F EMLINE_SSB_1RE 30 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Peta_9017.  
+    emline_ssb_1re_siii_9071 real NOT NULL, --/F EMLINE_SSB_1RE 31 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for SIII_9071.  
+    emline_ssb_1re_pzet_9231 real NOT NULL, --/F EMLINE_SSB_1RE 32 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Pzet_9231.  
+    emline_ssb_1re_siii_9533 real NOT NULL, --/F EMLINE_SSB_1RE 33 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for SIII_9533.  
+    emline_ssb_1re_peps_9548 real NOT NULL, --/F EMLINE_SSB_1RE 34 --/U  --/D Mean emission-line surface-brightness from the summed flux measurements within 1 R_{e}.  Measurements specifically for Peps_9548.  
     emline_ssb_peak_oiid_3728 real NOT NULL, --/F EMLINE_SSB_PEAK 0 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for OIId_3728.  
     emline_ssb_peak_oii_3729 real NOT NULL, --/F EMLINE_SSB_PEAK 1 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for OII_3729.  
-    emline_ssb_peak_hthe_3798 real NOT NULL, --/F EMLINE_SSB_PEAK 2 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Hthe_3798.  
-    emline_ssb_peak_heta_3836 real NOT NULL, --/F EMLINE_SSB_PEAK 3 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Heta_3836.  
-    emline_ssb_peak_neiii_3869 real NOT NULL, --/F EMLINE_SSB_PEAK 4 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for NeIII_3869.  
-    emline_ssb_peak_hzet_3890 real NOT NULL, --/F EMLINE_SSB_PEAK 5 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Hzet_3890.  
-    emline_ssb_peak_neiii_3968 real NOT NULL, --/F EMLINE_SSB_PEAK 6 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for NeIII_3968.  
-    emline_ssb_peak_heps_3971 real NOT NULL, --/F EMLINE_SSB_PEAK 7 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Heps_3971.  
-    emline_ssb_peak_hdel_4102 real NOT NULL, --/F EMLINE_SSB_PEAK 8 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Hdel_4102.  
-    emline_ssb_peak_hgam_4341 real NOT NULL, --/F EMLINE_SSB_PEAK 9 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Hgam_4341.  
-    emline_ssb_peak_heii_4687 real NOT NULL, --/F EMLINE_SSB_PEAK 10 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for HeII_4687.  
-    emline_ssb_peak_hb_4862 real NOT NULL, --/F EMLINE_SSB_PEAK 11 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Hb_4862.  
-    emline_ssb_peak_oiii_4960 real NOT NULL, --/F EMLINE_SSB_PEAK 12 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for OIII_4960.  
-    emline_ssb_peak_oiii_5008 real NOT NULL, --/F EMLINE_SSB_PEAK 13 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for OIII_5008.  
-    emline_ssb_peak_hei_5877 real NOT NULL, --/F EMLINE_SSB_PEAK 14 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for HeI_5877.  
-    emline_ssb_peak_oi_6302 real NOT NULL, --/F EMLINE_SSB_PEAK 15 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for OI_6302.  
-    emline_ssb_peak_oi_6365 real NOT NULL, --/F EMLINE_SSB_PEAK 16 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for OI_6365.  
-    emline_ssb_peak_nii_6549 real NOT NULL, --/F EMLINE_SSB_PEAK 17 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for NII_6549.  
-    emline_ssb_peak_ha_6564 real NOT NULL, --/F EMLINE_SSB_PEAK 18 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Ha_6564.  
-    emline_ssb_peak_nii_6585 real NOT NULL, --/F EMLINE_SSB_PEAK 19 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for NII_6585.  
-    emline_ssb_peak_sii_6718 real NOT NULL, --/F EMLINE_SSB_PEAK 20 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for SII_6718.  
-    emline_ssb_peak_sii_6732 real NOT NULL, --/F EMLINE_SSB_PEAK 21 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for SII_6732.  
+    emline_ssb_peak_h12_3751 real NOT NULL, --/F EMLINE_SSB_PEAK 2 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for H12_3751.  
+    emline_ssb_peak_h11_3771 real NOT NULL, --/F EMLINE_SSB_PEAK 3 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for H11_3771.  
+    emline_ssb_peak_hthe_3798 real NOT NULL, --/F EMLINE_SSB_PEAK 4 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Hthe_3798.  
+    emline_ssb_peak_heta_3836 real NOT NULL, --/F EMLINE_SSB_PEAK 5 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Heta_3836.  
+    emline_ssb_peak_neiii_3869 real NOT NULL, --/F EMLINE_SSB_PEAK 6 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for NeIII_3869.
+    emline_ssb_peak_hei_3889 real NOT NULL, --/F EMLINE_SSB_PEAK 7 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for HeI_3889.  
+    emline_ssb_peak_hzet_3890 real NOT NULL, --/F EMLINE_SSB_PEAK 8 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Hzet_3890.  
+    emline_ssb_peak_neiii_3968 real NOT NULL, --/F EMLINE_SSB_PEAK 9 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for NeIII_3968.
+    emline_ssb_peak_heps_3971 real NOT NULL, --/F EMLINE_SSB_PEAK 10 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Heps_3971.  
+    emline_ssb_peak_hdel_4102 real NOT NULL, --/F EMLINE_SSB_PEAK 11 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Hdel_4102.  
+    emline_ssb_peak_hgam_4341 real NOT NULL, --/F EMLINE_SSB_PEAK 12 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Hgam_4341.  
+    emline_ssb_peak_heii_4687 real NOT NULL, --/F EMLINE_SSB_PEAK 13 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for HeII_4687.  
+    emline_ssb_peak_hb_4862 real NOT NULL, --/F EMLINE_SSB_PEAK 14 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Hb_4862.  
+    emline_ssb_peak_oiii_4960 real NOT NULL, --/F EMLINE_SSB_PEAK 15 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for OIII_4960.  
+    emline_ssb_peak_oiii_5008 real NOT NULL, --/F EMLINE_SSB_PEAK 16 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for OIII_5008.  
+    emline_ssb_peak_ni_5199 real NOT NULL, --/F EMLINE_SSB_PEAK 17 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for NI_5199.  
+    emline_ssb_peak_ni_5201 real NOT NULL, --/F EMLINE_SSB_PEAK 18 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for NI_5201.  
+    emline_ssb_peak_hei_5877 real NOT NULL, --/F EMLINE_SSB_PEAK 19 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for HeI_5877.  
+    emline_ssb_peak_oi_6302 real NOT NULL, --/F EMLINE_SSB_PEAK 20 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for OI_6302.  
+    emline_ssb_peak_oi_6365 real NOT NULL, --/F EMLINE_SSB_PEAK 21 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for OI_6365.  
+    emline_ssb_peak_nii_6549 real NOT NULL, --/F EMLINE_SSB_PEAK 22 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for NII_6549.  
+    emline_ssb_peak_ha_6564 real NOT NULL, --/F EMLINE_SSB_PEAK 23 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Ha_6564.  
+    emline_ssb_peak_nii_6585 real NOT NULL, --/F EMLINE_SSB_PEAK 24 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for NII_6585.  
+    emline_ssb_peak_sii_6718 real NOT NULL, --/F EMLINE_SSB_PEAK 25 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for SII_6718.  
+    emline_ssb_peak_sii_6732 real NOT NULL, --/F EMLINE_SSB_PEAK 26 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for SII_6732.  
+    emline_ssb_peak_hei_7067 real NOT NULL, --/F EMLINE_SSB_PEAK 27 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for HeI_7067.  
+    emline_ssb_peak_ariii_7137 real NOT NULL, --/F EMLINE_SSB_PEAK 28 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for ArIII_7137.
+    emline_ssb_peak_ariii_7753 real NOT NULL, --/F EMLINE_SSB_PEAK 29 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for ArIII_7753.
+    emline_ssb_peak_peta_9017 real NOT NULL, --/F EMLINE_SSB_PEAK 30 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Peta_9017.  
+    emline_ssb_peak_siii_9071 real NOT NULL, --/F EMLINE_SSB_PEAK 31 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for SIII_9071.  
+    emline_ssb_peak_pzet_9231 real NOT NULL, --/F EMLINE_SSB_PEAK 32 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Pzet_9231.  
+    emline_ssb_peak_siii_9533 real NOT NULL, --/F EMLINE_SSB_PEAK 33 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for SIII_9533.  
+    emline_ssb_peak_peps_9548 real NOT NULL, --/F EMLINE_SSB_PEAK 34 --/U  --/D Peak summed-flux emission-line surface brightness.  Measurements specifically for Peps_9548.  
     emline_sew_1re_oiid_3728 real NOT NULL, --/F EMLINE_SEW_1RE 0 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for OIId_3728.  
     emline_sew_1re_oii_3729 real NOT NULL, --/F EMLINE_SEW_1RE 1 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for OII_3729.  
-    emline_sew_1re_hthe_3798 real NOT NULL, --/F EMLINE_SEW_1RE 2 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hthe_3798.  
-    emline_sew_1re_heta_3836 real NOT NULL, --/F EMLINE_SEW_1RE 3 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Heta_3836.  
-    emline_sew_1re_neiii_3869 real NOT NULL, --/F EMLINE_SEW_1RE 4 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3869.  
-    emline_sew_1re_hzet_3890 real NOT NULL, --/F EMLINE_SEW_1RE 5 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hzet_3890.  
-    emline_sew_1re_neiii_3968 real NOT NULL, --/F EMLINE_SEW_1RE 6 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3968.  
-    emline_sew_1re_heps_3971 real NOT NULL, --/F EMLINE_SEW_1RE 7 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Heps_3971.  
-    emline_sew_1re_hdel_4102 real NOT NULL, --/F EMLINE_SEW_1RE 8 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hdel_4102.  
-    emline_sew_1re_hgam_4341 real NOT NULL, --/F EMLINE_SEW_1RE 9 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hgam_4341.  
-    emline_sew_1re_heii_4687 real NOT NULL, --/F EMLINE_SEW_1RE 10 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for HeII_4687.  
-    emline_sew_1re_hb_4862 real NOT NULL, --/F EMLINE_SEW_1RE 11 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hb_4862.  
-    emline_sew_1re_oiii_4960 real NOT NULL, --/F EMLINE_SEW_1RE 12 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for OIII_4960.  
-    emline_sew_1re_oiii_5008 real NOT NULL, --/F EMLINE_SEW_1RE 13 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for OIII_5008.  
-    emline_sew_1re_hei_5877 real NOT NULL, --/F EMLINE_SEW_1RE 14 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for HeI_5877.  
-    emline_sew_1re_oi_6302 real NOT NULL, --/F EMLINE_SEW_1RE 15 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for OI_6302.  
-    emline_sew_1re_oi_6365 real NOT NULL, --/F EMLINE_SEW_1RE 16 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for OI_6365.  
-    emline_sew_1re_nii_6549 real NOT NULL, --/F EMLINE_SEW_1RE 17 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for NII_6549.  
-    emline_sew_1re_ha_6564 real NOT NULL, --/F EMLINE_SEW_1RE 18 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Ha_6564.  
-    emline_sew_1re_nii_6585 real NOT NULL, --/F EMLINE_SEW_1RE 19 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for NII_6585.  
-    emline_sew_1re_sii_6718 real NOT NULL, --/F EMLINE_SEW_1RE 20 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for SII_6718.  
-    emline_sew_1re_sii_6732 real NOT NULL, --/F EMLINE_SEW_1RE 21 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for SII_6732.  
-    emline_sew_peak_oiid_3728 real NOT NULL, --/F EMLINE_SEW_PEAK 0 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for OIId_3728.  
-    emline_sew_peak_oii_3729 real NOT NULL, --/F EMLINE_SEW_PEAK 1 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for OII_3729.  
-    emline_sew_peak_hthe_3798 real NOT NULL, --/F EMLINE_SEW_PEAK 2 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for Hthe_3798.  
-    emline_sew_peak_heta_3836 real NOT NULL, --/F EMLINE_SEW_PEAK 3 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for Heta_3836.  
-    emline_sew_peak_neiii_3869 real NOT NULL, --/F EMLINE_SEW_PEAK 4 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for NeIII_3869.  
-    emline_sew_peak_hzet_3890 real NOT NULL, --/F EMLINE_SEW_PEAK 5 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for Hzet_3890.  
-    emline_sew_peak_neiii_3968 real NOT NULL, --/F EMLINE_SEW_PEAK 6 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for NeIII_3968.  
-    emline_sew_peak_heps_3971 real NOT NULL, --/F EMLINE_SEW_PEAK 7 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for Heps_3971.  
-    emline_sew_peak_hdel_4102 real NOT NULL, --/F EMLINE_SEW_PEAK 8 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for Hdel_4102.  
-    emline_sew_peak_hgam_4341 real NOT NULL, --/F EMLINE_SEW_PEAK 9 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for Hgam_4341.  
-    emline_sew_peak_heii_4687 real NOT NULL, --/F EMLINE_SEW_PEAK 10 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for HeII_4687.  
-    emline_sew_peak_hb_4862 real NOT NULL, --/F EMLINE_SEW_PEAK 11 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for Hb_4862.  
-    emline_sew_peak_oiii_4960 real NOT NULL, --/F EMLINE_SEW_PEAK 12 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for OIII_4960.  
-    emline_sew_peak_oiii_5008 real NOT NULL, --/F EMLINE_SEW_PEAK 13 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for OIII_5008.  
-    emline_sew_peak_hei_5877 real NOT NULL, --/F EMLINE_SEW_PEAK 14 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for HeI_5877.  
-    emline_sew_peak_oi_6302 real NOT NULL, --/F EMLINE_SEW_PEAK 15 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for OI_6302.  
-    emline_sew_peak_oi_6365 real NOT NULL, --/F EMLINE_SEW_PEAK 16 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for OI_6365.  
-    emline_sew_peak_nii_6549 real NOT NULL, --/F EMLINE_SEW_PEAK 17 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for NII_6549.  
-    emline_sew_peak_ha_6564 real NOT NULL, --/F EMLINE_SEW_PEAK 18 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for Ha_6564.  
-    emline_sew_peak_nii_6585 real NOT NULL, --/F EMLINE_SEW_PEAK 19 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for NII_6585.  
-    emline_sew_peak_sii_6718 real NOT NULL, --/F EMLINE_SEW_PEAK 20 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for SII_6718.  
-    emline_sew_peak_sii_6732 real NOT NULL, --/F EMLINE_SEW_PEAK 21 --/U  --/D Peak emission-line equivalent width from the summed flux measurements.  Measurements specifically for SII_6732.  
+    emline_sew_1re_h12_3751 real NOT NULL, --/F EMLINE_SEW_1RE 2 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for H12_3751.  
+    emline_sew_1re_h11_3771 real NOT NULL, --/F EMLINE_SEW_1RE 3 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for H11_3771.  
+    emline_sew_1re_hthe_3798 real NOT NULL, --/F EMLINE_SEW_1RE 4 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hthe_3798.  
+    emline_sew_1re_heta_3836 real NOT NULL, --/F EMLINE_SEW_1RE 5 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Heta_3836.  
+    emline_sew_1re_neiii_3869 real NOT NULL, --/F EMLINE_SEW_1RE 6 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3869.
+    emline_sew_1re_hei_3889 real NOT NULL, --/F EMLINE_SEW_1RE 7 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for HeI_3889.  
+    emline_sew_1re_hzet_3890 real NOT NULL, --/F EMLINE_SEW_1RE 8 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hzet_3890.  
+    emline_sew_1re_neiii_3968 real NOT NULL, --/F EMLINE_SEW_1RE 9 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3968.
+    emline_sew_1re_heps_3971 real NOT NULL, --/F EMLINE_SEW_1RE 10 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Heps_3971.  
+    emline_sew_1re_hdel_4102 real NOT NULL, --/F EMLINE_SEW_1RE 11 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hdel_4102.  
+    emline_sew_1re_hgam_4341 real NOT NULL, --/F EMLINE_SEW_1RE 12 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hgam_4341.  
+    emline_sew_1re_heii_4687 real NOT NULL, --/F EMLINE_SEW_1RE 13 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for HeII_4687.  
+    emline_sew_1re_hb_4862 real NOT NULL, --/F EMLINE_SEW_1RE 14 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Hb_4862.  
+    emline_sew_1re_oiii_4960 real NOT NULL, --/F EMLINE_SEW_1RE 15 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for OIII_4960.  
+    emline_sew_1re_oiii_5008 real NOT NULL, --/F EMLINE_SEW_1RE 16 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for OIII_5008.  
+    emline_sew_1re_ni_5199 real NOT NULL, --/F EMLINE_SEW_1RE 17 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for NI_5199.  
+    emline_sew_1re_ni_5201 real NOT NULL, --/F EMLINE_SEW_1RE 18 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for NI_5201.  
+    emline_sew_1re_hei_5877 real NOT NULL, --/F EMLINE_SEW_1RE 19 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for HeI_5877.  
+    emline_sew_1re_oi_6302 real NOT NULL, --/F EMLINE_SEW_1RE 20 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for OI_6302.  
+    emline_sew_1re_oi_6365 real NOT NULL, --/F EMLINE_SEW_1RE 21 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for OI_6365.  
+    emline_sew_1re_nii_6549 real NOT NULL, --/F EMLINE_SEW_1RE 22 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for NII_6549.  
+    emline_sew_1re_ha_6564 real NOT NULL, --/F EMLINE_SEW_1RE 23 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Ha_6564.  
+    emline_sew_1re_nii_6585 real NOT NULL, --/F EMLINE_SEW_1RE 24 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for NII_6585.  
+    emline_sew_1re_sii_6718 real NOT NULL, --/F EMLINE_SEW_1RE 25 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for SII_6718.  
+    emline_sew_1re_sii_6732 real NOT NULL, --/F EMLINE_SEW_1RE 26 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for SII_6732.  
+    emline_sew_1re_hei_7067 real NOT NULL, --/F EMLINE_SEW_1RE 27 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for HeI_7067.  
+    emline_sew_1re_ariii_7137 real NOT NULL, --/F EMLINE_SEW_1RE 28 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for ArIII_7137.
+    emline_sew_1re_ariii_7753 real NOT NULL, --/F EMLINE_SEW_1RE 29 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for ArIII_7753.
+    emline_sew_1re_peta_9017 real NOT NULL, --/F EMLINE_SEW_1RE 30 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Peta_9017.  
+    emline_sew_1re_siii_9071 real NOT NULL, --/F EMLINE_SEW_1RE 31 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for SIII_9071.  
+    emline_sew_1re_pzet_9231 real NOT NULL, --/F EMLINE_SEW_1RE 32 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Pzet_9231.  
+    emline_sew_1re_siii_9533 real NOT NULL, --/F EMLINE_SEW_1RE 33 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for SIII_9533.  
+    emline_sew_1re_peps_9548 real NOT NULL, --/F EMLINE_SEW_1RE 34 --/U  --/D Mean emission-line equivalent width from the summed flux measurements within 1 R_{e}.  Measurements specifically for Peps_9548.  
+    emline_sew_peak_oiid_3728 real NOT NULL, --/F EMLINE_SSB_PEAK 0 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for OIId_3728.  
+    emline_sew_peak_oii_3729 real NOT NULL, --/F EMLINE_SSB_PEAK 1 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for OII_3729.  
+    emline_sew_peak_h12_3751 real NOT NULL, --/F EMLINE_SSB_PEAK 2 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for H12_3751.  
+    emline_sew_peak_h11_3771 real NOT NULL, --/F EMLINE_SSB_PEAK 3 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for H11_3771.  
+    emline_sew_peak_hthe_3798 real NOT NULL, --/F EMLINE_SSB_PEAK 4 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for Hthe_3798.  
+    emline_sew_peak_heta_3836 real NOT NULL, --/F EMLINE_SSB_PEAK 5 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for Heta_3836.  
+    emline_sew_peak_neiii_3869 real NOT NULL, --/F EMLINE_SSB_PEAK 6 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for NeIII_3869.
+    emline_sew_peak_hei_3889 real NOT NULL, --/F EMLINE_SSB_PEAK 7 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for HeI_3889.  
+    emline_sew_peak_hzet_3890 real NOT NULL, --/F EMLINE_SSB_PEAK 8 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for Hzet_3890.  
+    emline_sew_peak_neiii_3968 real NOT NULL, --/F EMLINE_SSB_PEAK 9 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for NeIII_3968.
+    emline_sew_peak_heps_3971 real NOT NULL, --/F EMLINE_SSB_PEAK 10 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for Heps_3971.  
+    emline_sew_peak_hdel_4102 real NOT NULL, --/F EMLINE_SSB_PEAK 11 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for Hdel_4102.  
+    emline_sew_peak_hgam_4341 real NOT NULL, --/F EMLINE_SSB_PEAK 12 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for Hgam_4341.  
+    emline_sew_peak_heii_4687 real NOT NULL, --/F EMLINE_SSB_PEAK 13 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for HeII_4687.  
+    emline_sew_peak_hb_4862 real NOT NULL, --/F EMLINE_SSB_PEAK 14 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for Hb_4862.  
+    emline_sew_peak_oiii_4960 real NOT NULL, --/F EMLINE_SSB_PEAK 15 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for OIII_4960.  
+    emline_sew_peak_oiii_5008 real NOT NULL, --/F EMLINE_SSB_PEAK 16 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for OIII_5008.  
+    emline_sew_peak_ni_5199 real NOT NULL, --/F EMLINE_SSB_PEAK 17 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for NI_5199.  
+    emline_sew_peak_ni_5201 real NOT NULL, --/F EMLINE_SSB_PEAK 18 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for NI_5201.  
+    emline_sew_peak_hei_5877 real NOT NULL, --/F EMLINE_SSB_PEAK 19 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for HeI_5877.  
+    emline_sew_peak_oi_6302 real NOT NULL, --/F EMLINE_SSB_PEAK 20 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for OI_6302.  
+    emline_sew_peak_oi_6365 real NOT NULL, --/F EMLINE_SSB_PEAK 21 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for OI_6365.  
+    emline_sew_peak_nii_6549 real NOT NULL, --/F EMLINE_SSB_PEAK 22 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for NII_6549.  
+    emline_sew_peak_ha_6564 real NOT NULL, --/F EMLINE_SSB_PEAK 23 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for Ha_6564.  
+    emline_sew_peak_nii_6585 real NOT NULL, --/F EMLINE_SSB_PEAK 24 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for NII_6585.  
+    emline_sew_peak_sii_6718 real NOT NULL, --/F EMLINE_SSB_PEAK 25 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for SII_6718.  
+    emline_sew_peak_sii_6732 real NOT NULL, --/F EMLINE_SSB_PEAK 26 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for SII_6732.  
+    emline_sew_peak_hei_7067 real NOT NULL, --/F EMLINE_SSB_PEAK 27 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for HeI_7067.  
+    emline_sew_peak_ariii_7137 real NOT NULL, --/F EMLINE_SSB_PEAK 28 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for ArIII_7137.
+    emline_sew_peak_ariii_7753 real NOT NULL, --/F EMLINE_SSB_PEAK 29 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for ArIII_7753.
+    emline_sew_peak_peta_9017 real NOT NULL, --/F EMLINE_SSB_PEAK 30 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for Peta_9017.  
+    emline_sew_peak_siii_9071 real NOT NULL, --/F EMLINE_SSB_PEAK 31 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for SIII_9071.  
+    emline_sew_peak_pzet_9231 real NOT NULL, --/F EMLINE_SSB_PEAK 32 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for Pzet_9231.  
+    emline_sew_peak_siii_9533 real NOT NULL, --/F EMLINE_SSB_PEAK 33 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for SIII_9533.  
+    emline_sew_peak_peps_9548 real NOT NULL, --/F EMLINE_SSB_PEAK 34 --/U  --/D Peak summed-flux emission-line equivalent width.  Measurements specifically for Peps_9548.  
     emline_gflux_cen_oii_3727 real NOT NULL, --/F EMLINE_GFLUX_CEN 0 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OII_3727.  
     emline_gflux_cen_oii_3729 real NOT NULL, --/F EMLINE_GFLUX_CEN 1 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OII_3729.  
-    emline_gflux_cen_hthe_3798 real NOT NULL, --/F EMLINE_GFLUX_CEN 2 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hthe_3798.  
-    emline_gflux_cen_heta_3836 real NOT NULL, --/F EMLINE_GFLUX_CEN 3 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Heta_3836.  
-    emline_gflux_cen_neiii_3869 real NOT NULL, --/F EMLINE_GFLUX_CEN 4 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NeIII_3869.  
-    emline_gflux_cen_hzet_3890 real NOT NULL, --/F EMLINE_GFLUX_CEN 5 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hzet_3890.  
-    emline_gflux_cen_neiii_3968 real NOT NULL, --/F EMLINE_GFLUX_CEN 6 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NeIII_3968.  
-    emline_gflux_cen_heps_3971 real NOT NULL, --/F EMLINE_GFLUX_CEN 7 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Heps_3971.  
-    emline_gflux_cen_hdel_4102 real NOT NULL, --/F EMLINE_GFLUX_CEN 8 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hdel_4102.  
-    emline_gflux_cen_hgam_4341 real NOT NULL, --/F EMLINE_GFLUX_CEN 9 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hgam_4341.  
-    emline_gflux_cen_heii_4687 real NOT NULL, --/F EMLINE_GFLUX_CEN 10 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for HeII_4687.  
-    emline_gflux_cen_hb_4862 real NOT NULL, --/F EMLINE_GFLUX_CEN 11 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hb_4862.  
-    emline_gflux_cen_oiii_4960 real NOT NULL, --/F EMLINE_GFLUX_CEN 12 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OIII_4960.  
-    emline_gflux_cen_oiii_5008 real NOT NULL, --/F EMLINE_GFLUX_CEN 13 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OIII_5008.  
-    emline_gflux_cen_hei_5877 real NOT NULL, --/F EMLINE_GFLUX_CEN 14 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for HeI_5877.  
-    emline_gflux_cen_oi_6302 real NOT NULL, --/F EMLINE_GFLUX_CEN 15 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OI_6302.  
-    emline_gflux_cen_oi_6365 real NOT NULL, --/F EMLINE_GFLUX_CEN 16 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OI_6365.  
-    emline_gflux_cen_nii_6549 real NOT NULL, --/F EMLINE_GFLUX_CEN 17 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NII_6549.  
-    emline_gflux_cen_ha_6564 real NOT NULL, --/F EMLINE_GFLUX_CEN 18 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Ha_6564.  
-    emline_gflux_cen_nii_6585 real NOT NULL, --/F EMLINE_GFLUX_CEN 19 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NII_6585.  
-    emline_gflux_cen_sii_6718 real NOT NULL, --/F EMLINE_GFLUX_CEN 20 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for SII_6718.  
-    emline_gflux_cen_sii_6732 real NOT NULL, --/F EMLINE_GFLUX_CEN 21 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for SII_6732.  
+    emline_gflux_cen_h12_3751 real NOT NULL, --/F EMLINE_GFLUX_CEN 2 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for H12_3751.  
+    emline_gflux_cen_h11_3771 real NOT NULL, --/F EMLINE_GFLUX_CEN 3 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for H11_3771.  
+    emline_gflux_cen_hthe_3798 real NOT NULL, --/F EMLINE_GFLUX_CEN 4 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hthe_3798.  
+    emline_gflux_cen_heta_3836 real NOT NULL, --/F EMLINE_GFLUX_CEN 5 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Heta_3836.  
+    emline_gflux_cen_neiii_3869 real NOT NULL, --/F EMLINE_GFLUX_CEN 6 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NeIII_3869.
+    emline_gflux_cen_hei_3889 real NOT NULL, --/F EMLINE_GFLUX_CEN 7 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for HeI_3889.  
+    emline_gflux_cen_hzet_3890 real NOT NULL, --/F EMLINE_GFLUX_CEN 8 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hzet_3890.  
+    emline_gflux_cen_neiii_3968 real NOT NULL, --/F EMLINE_GFLUX_CEN 9 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NeIII_3968.
+    emline_gflux_cen_heps_3971 real NOT NULL, --/F EMLINE_GFLUX_CEN 10 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Heps_3971.  
+    emline_gflux_cen_hdel_4102 real NOT NULL, --/F EMLINE_GFLUX_CEN 11 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hdel_4102.  
+    emline_gflux_cen_hgam_4341 real NOT NULL, --/F EMLINE_GFLUX_CEN 12 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hgam_4341.  
+    emline_gflux_cen_heii_4687 real NOT NULL, --/F EMLINE_GFLUX_CEN 13 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for HeII_4687.  
+    emline_gflux_cen_hb_4862 real NOT NULL, --/F EMLINE_GFLUX_CEN 14 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Hb_4862.  
+    emline_gflux_cen_oiii_4960 real NOT NULL, --/F EMLINE_GFLUX_CEN 15 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OIII_4960.  
+    emline_gflux_cen_oiii_5008 real NOT NULL, --/F EMLINE_GFLUX_CEN 16 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OIII_5008.  
+    emline_gflux_cen_ni_5199 real NOT NULL, --/F EMLINE_GFLUX_CEN 17 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NI_5199.  
+    emline_gflux_cen_ni_5201 real NOT NULL, --/F EMLINE_GFLUX_CEN 18 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NI_5201.  
+    emline_gflux_cen_hei_5877 real NOT NULL, --/F EMLINE_GFLUX_CEN 19 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for HeI_5877.  
+    emline_gflux_cen_oi_6302 real NOT NULL, --/F EMLINE_GFLUX_CEN 20 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OI_6302.  
+    emline_gflux_cen_oi_6365 real NOT NULL, --/F EMLINE_GFLUX_CEN 21 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for OI_6365.  
+    emline_gflux_cen_nii_6549 real NOT NULL, --/F EMLINE_GFLUX_CEN 22 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NII_6549.  
+    emline_gflux_cen_ha_6564 real NOT NULL, --/F EMLINE_GFLUX_CEN 23 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Ha_6564.  
+    emline_gflux_cen_nii_6585 real NOT NULL, --/F EMLINE_GFLUX_CEN 24 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for NII_6585.  
+    emline_gflux_cen_sii_6718 real NOT NULL, --/F EMLINE_GFLUX_CEN 25 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for SII_6718.  
+    emline_gflux_cen_sii_6732 real NOT NULL, --/F EMLINE_GFLUX_CEN 26 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for SII_6732.  
+    emline_gflux_cen_hei_7067 real NOT NULL, --/F EMLINE_GFLUX_CEN 27 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for HeI_7067.  
+    emline_gflux_cen_ariii_7137 real NOT NULL, --/F EMLINE_GFLUX_CEN 28 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for ArIII_7137.
+    emline_gflux_cen_ariii_7753 real NOT NULL, --/F EMLINE_GFLUX_CEN 29 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for ArIII_7753.
+    emline_gflux_cen_peta_9017 real NOT NULL, --/F EMLINE_GFLUX_CEN 30 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Peta_9017.  
+    emline_gflux_cen_siii_9071 real NOT NULL, --/F EMLINE_GFLUX_CEN 31 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for SIII_9071.  
+    emline_gflux_cen_pzet_9231 real NOT NULL, --/F EMLINE_GFLUX_CEN 32 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Pzet_9231.  
+    emline_gflux_cen_siii_9533 real NOT NULL, --/F EMLINE_GFLUX_CEN 33 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for SIII_9533.  
+    emline_gflux_cen_peps_9548 real NOT NULL, --/F EMLINE_GFLUX_CEN 34 --/U  --/D Gaussian-fitted emission-line flux integrated within a 2.5 arcsec aperture at the galaxy center.  Measurements specifically for Peps_9548.  
     emline_gflux_1re_oii_3727 real NOT NULL, --/F EMLINE_GFLUX_1RE 0 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OII_3727.  
     emline_gflux_1re_oii_3729 real NOT NULL, --/F EMLINE_GFLUX_1RE 1 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OII_3729.  
-    emline_gflux_1re_hthe_3798 real NOT NULL, --/F EMLINE_GFLUX_1RE 2 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hthe_3798.  
-    emline_gflux_1re_heta_3836 real NOT NULL, --/F EMLINE_GFLUX_1RE 3 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Heta_3836.  
-    emline_gflux_1re_neiii_3869 real NOT NULL, --/F EMLINE_GFLUX_1RE 4 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NeIII_3869.  
-    emline_gflux_1re_hzet_3890 real NOT NULL, --/F EMLINE_GFLUX_1RE 5 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hzet_3890.  
-    emline_gflux_1re_neiii_3968 real NOT NULL, --/F EMLINE_GFLUX_1RE 6 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NeIII_3968.  
-    emline_gflux_1re_heps_3971 real NOT NULL, --/F EMLINE_GFLUX_1RE 7 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Heps_3971.  
-    emline_gflux_1re_hdel_4102 real NOT NULL, --/F EMLINE_GFLUX_1RE 8 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hdel_4102.  
-    emline_gflux_1re_hgam_4341 real NOT NULL, --/F EMLINE_GFLUX_1RE 9 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hgam_4341.  
-    emline_gflux_1re_heii_4687 real NOT NULL, --/F EMLINE_GFLUX_1RE 10 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for HeII_4687.  
-    emline_gflux_1re_hb_4862 real NOT NULL, --/F EMLINE_GFLUX_1RE 11 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hb_4862.  
-    emline_gflux_1re_oiii_4960 real NOT NULL, --/F EMLINE_GFLUX_1RE 12 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OIII_4960.  
-    emline_gflux_1re_oiii_5008 real NOT NULL, --/F EMLINE_GFLUX_1RE 13 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OIII_5008.  
-    emline_gflux_1re_hei_5877 real NOT NULL, --/F EMLINE_GFLUX_1RE 14 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for HeI_5877.  
-    emline_gflux_1re_oi_6302 real NOT NULL, --/F EMLINE_GFLUX_1RE 15 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OI_6302.  
-    emline_gflux_1re_oi_6365 real NOT NULL, --/F EMLINE_GFLUX_1RE 16 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OI_6365.  
-    emline_gflux_1re_nii_6549 real NOT NULL, --/F EMLINE_GFLUX_1RE 17 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NII_6549.  
-    emline_gflux_1re_ha_6564 real NOT NULL, --/F EMLINE_GFLUX_1RE 18 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Ha_6564.  
-    emline_gflux_1re_nii_6585 real NOT NULL, --/F EMLINE_GFLUX_1RE 19 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NII_6585.  
-    emline_gflux_1re_sii_6718 real NOT NULL, --/F EMLINE_GFLUX_1RE 20 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for SII_6718.  
-    emline_gflux_1re_sii_6732 real NOT NULL, --/F EMLINE_GFLUX_1RE 21 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for SII_6732.  
+    emline_gflux_1re_h12_3751 real NOT NULL, --/F EMLINE_GFLUX_1RE 2 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for H12_3751.  
+    emline_gflux_1re_h11_3771 real NOT NULL, --/F EMLINE_GFLUX_1RE 3 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for H11_3771.  
+    emline_gflux_1re_hthe_3798 real NOT NULL, --/F EMLINE_GFLUX_1RE 4 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hthe_3798.  
+    emline_gflux_1re_heta_3836 real NOT NULL, --/F EMLINE_GFLUX_1RE 5 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Heta_3836.  
+    emline_gflux_1re_neiii_3869 real NOT NULL, --/F EMLINE_GFLUX_1RE 6 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NeIII_3869.
+    emline_gflux_1re_hei_3889 real NOT NULL, --/F EMLINE_GFLUX_1RE 7 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for HeI_3889.  
+    emline_gflux_1re_hzet_3890 real NOT NULL, --/F EMLINE_GFLUX_1RE 8 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hzet_3890.  
+    emline_gflux_1re_neiii_3968 real NOT NULL, --/F EMLINE_GFLUX_1RE 9 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NeIII_3968.
+    emline_gflux_1re_heps_3971 real NOT NULL, --/F EMLINE_GFLUX_1RE 10 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Heps_3971.  
+    emline_gflux_1re_hdel_4102 real NOT NULL, --/F EMLINE_GFLUX_1RE 11 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hdel_4102.  
+    emline_gflux_1re_hgam_4341 real NOT NULL, --/F EMLINE_GFLUX_1RE 12 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hgam_4341.  
+    emline_gflux_1re_heii_4687 real NOT NULL, --/F EMLINE_GFLUX_1RE 13 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for HeII_4687.  
+    emline_gflux_1re_hb_4862 real NOT NULL, --/F EMLINE_GFLUX_1RE 14 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Hb_4862.  
+    emline_gflux_1re_oiii_4960 real NOT NULL, --/F EMLINE_GFLUX_1RE 15 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OIII_4960.  
+    emline_gflux_1re_oiii_5008 real NOT NULL, --/F EMLINE_GFLUX_1RE 16 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OIII_5008.  
+    emline_gflux_1re_ni_5199 real NOT NULL, --/F EMLINE_GFLUX_1RE 17 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NI_5199.  
+    emline_gflux_1re_ni_5201 real NOT NULL, --/F EMLINE_GFLUX_1RE 18 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NI_5201.  
+    emline_gflux_1re_hei_5877 real NOT NULL, --/F EMLINE_GFLUX_1RE 19 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for HeI_5877.  
+    emline_gflux_1re_oi_6302 real NOT NULL, --/F EMLINE_GFLUX_1RE 20 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OI_6302.  
+    emline_gflux_1re_oi_6365 real NOT NULL, --/F EMLINE_GFLUX_1RE 21 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for OI_6365.  
+    emline_gflux_1re_nii_6549 real NOT NULL, --/F EMLINE_GFLUX_1RE 22 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NII_6549.  
+    emline_gflux_1re_ha_6564 real NOT NULL, --/F EMLINE_GFLUX_1RE 23 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Ha_6564.  
+    emline_gflux_1re_nii_6585 real NOT NULL, --/F EMLINE_GFLUX_1RE 24 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for NII_6585.  
+    emline_gflux_1re_sii_6718 real NOT NULL, --/F EMLINE_GFLUX_1RE 25 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for SII_6718.  
+    emline_gflux_1re_sii_6732 real NOT NULL, --/F EMLINE_GFLUX_1RE 26 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for SII_6732.  
+    emline_gflux_1re_hei_7067 real NOT NULL, --/F EMLINE_GFLUX_1RE 27 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for HeI_7067.  
+    emline_gflux_1re_ariii_7137 real NOT NULL, --/F EMLINE_GFLUX_1RE 28 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for ArIII_7137.
+    emline_gflux_1re_ariii_7753 real NOT NULL, --/F EMLINE_GFLUX_1RE 29 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for ArIII_7753.
+    emline_gflux_1re_peta_9017 real NOT NULL, --/F EMLINE_GFLUX_1RE 30 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Peta_9017.  
+    emline_gflux_1re_siii_9071 real NOT NULL, --/F EMLINE_GFLUX_1RE 31 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for SIII_9071.  
+    emline_gflux_1re_pzet_9231 real NOT NULL, --/F EMLINE_GFLUX_1RE 32 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Pzet_9231.  
+    emline_gflux_1re_siii_9533 real NOT NULL, --/F EMLINE_GFLUX_1RE 33 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for SIII_9533.  
+    emline_gflux_1re_peps_9548 real NOT NULL, --/F EMLINE_GFLUX_1RE 34 --/U  --/D Gaussian-fitted emission-line flux integrated within 1 effective-radius aperture at the galaxy.  Measurements specifically for Peps_9548.  
     emline_gflux_tot_oii_3727 real NOT NULL, --/F EMLINE_GFLUX_TOT 0 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for OII_3727.  
     emline_gflux_tot_oii_3729 real NOT NULL, --/F EMLINE_GFLUX_TOT 1 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for OII_3729.  
-    emline_gflux_tot_hthe_3798 real NOT NULL, --/F EMLINE_GFLUX_TOT 2 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Hthe_3798.  
-    emline_gflux_tot_heta_3836 real NOT NULL, --/F EMLINE_GFLUX_TOT 3 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Heta_3836.  
-    emline_gflux_tot_neiii_3869 real NOT NULL, --/F EMLINE_GFLUX_TOT 4 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for NeIII_3869.  
-    emline_gflux_tot_hzet_3890 real NOT NULL, --/F EMLINE_GFLUX_TOT 5 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Hzet_3890.  
-    emline_gflux_tot_neiii_3968 real NOT NULL, --/F EMLINE_GFLUX_TOT 6 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for NeIII_3968.  
-    emline_gflux_tot_heps_3971 real NOT NULL, --/F EMLINE_GFLUX_TOT 7 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Heps_3971.  
-    emline_gflux_tot_hdel_4102 real NOT NULL, --/F EMLINE_GFLUX_TOT 8 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Hdel_4102.  
-    emline_gflux_tot_hgam_4341 real NOT NULL, --/F EMLINE_GFLUX_TOT 9 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Hgam_4341.  
-    emline_gflux_tot_heii_4687 real NOT NULL, --/F EMLINE_GFLUX_TOT 10 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for HeII_4687.  
-    emline_gflux_tot_hb_4862 real NOT NULL, --/F EMLINE_GFLUX_TOT 11 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Hb_4862.  
-    emline_gflux_tot_oiii_4960 real NOT NULL, --/F EMLINE_GFLUX_TOT 12 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for OIII_4960.  
-    emline_gflux_tot_oiii_5008 real NOT NULL, --/F EMLINE_GFLUX_TOT 13 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for OIII_5008.  
-    emline_gflux_tot_hei_5877 real NOT NULL, --/F EMLINE_GFLUX_TOT 14 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for HeI_5877.  
-    emline_gflux_tot_oi_6302 real NOT NULL, --/F EMLINE_GFLUX_TOT 15 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for OI_6302.  
-    emline_gflux_tot_oi_6365 real NOT NULL, --/F EMLINE_GFLUX_TOT 16 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for OI_6365.  
-    emline_gflux_tot_nii_6549 real NOT NULL, --/F EMLINE_GFLUX_TOT 17 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for NII_6549.  
-    emline_gflux_tot_ha_6564 real NOT NULL, --/F EMLINE_GFLUX_TOT 18 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Ha_6564.  
-    emline_gflux_tot_nii_6585 real NOT NULL, --/F EMLINE_GFLUX_TOT 19 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for NII_6585.  
-    emline_gflux_tot_sii_6718 real NOT NULL, --/F EMLINE_GFLUX_TOT 20 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for SII_6718.  
-    emline_gflux_tot_sii_6732 real NOT NULL, --/F EMLINE_GFLUX_TOT 21 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for SII_6732.  
+    emline_gflux_tot_h12_3751 real NOT NULL, --/F EMLINE_GFLUX_TOT 2 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for H12_3751.  
+    emline_gflux_tot_h11_3771 real NOT NULL, --/F EMLINE_GFLUX_TOT 3 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for H11_3771.  
+    emline_gflux_tot_hthe_3798 real NOT NULL, --/F EMLINE_GFLUX_TOT 4 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Hthe_3798.  
+    emline_gflux_tot_heta_3836 real NOT NULL, --/F EMLINE_GFLUX_TOT 5 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Heta_3836.  
+    emline_gflux_tot_neiii_3869 real NOT NULL, --/F EMLINE_GFLUX_TOT 6 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for NeIII_3869.
+    emline_gflux_tot_hei_3889 real NOT NULL, --/F EMLINE_GFLUX_TOT 7 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for HeI_3889.  
+    emline_gflux_tot_hzet_3890 real NOT NULL, --/F EMLINE_GFLUX_TOT 8 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Hzet_3890.  
+    emline_gflux_tot_neiii_3968 real NOT NULL, --/F EMLINE_GFLUX_TOT 9 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for NeIII_3968.
+    emline_gflux_tot_heps_3971 real NOT NULL, --/F EMLINE_GFLUX_TOT 10 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Heps_3971.  
+    emline_gflux_tot_hdel_4102 real NOT NULL, --/F EMLINE_GFLUX_TOT 11 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Hdel_4102.  
+    emline_gflux_tot_hgam_4341 real NOT NULL, --/F EMLINE_GFLUX_TOT 12 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Hgam_4341.  
+    emline_gflux_tot_heii_4687 real NOT NULL, --/F EMLINE_GFLUX_TOT 13 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for HeII_4687.  
+    emline_gflux_tot_hb_4862 real NOT NULL, --/F EMLINE_GFLUX_TOT 14 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Hb_4862.  
+    emline_gflux_tot_oiii_4960 real NOT NULL, --/F EMLINE_GFLUX_TOT 15 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for OIII_4960.  
+    emline_gflux_tot_oiii_5008 real NOT NULL, --/F EMLINE_GFLUX_TOT 16 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for OIII_5008.  
+    emline_gflux_tot_ni_5199 real NOT NULL, --/F EMLINE_GFLUX_TOT 17 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for NI_5199.  
+    emline_gflux_tot_ni_5201 real NOT NULL, --/F EMLINE_GFLUX_TOT 18 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for NI_5201.  
+    emline_gflux_tot_hei_5877 real NOT NULL, --/F EMLINE_GFLUX_TOT 19 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for HeI_5877.  
+    emline_gflux_tot_oi_6302 real NOT NULL, --/F EMLINE_GFLUX_TOT 20 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for OI_6302.  
+    emline_gflux_tot_oi_6365 real NOT NULL, --/F EMLINE_GFLUX_TOT 21 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for OI_6365.  
+    emline_gflux_tot_nii_6549 real NOT NULL, --/F EMLINE_GFLUX_TOT 22 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for NII_6549.  
+    emline_gflux_tot_ha_6564 real NOT NULL, --/F EMLINE_GFLUX_TOT 23 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Ha_6564.  
+    emline_gflux_tot_nii_6585 real NOT NULL, --/F EMLINE_GFLUX_TOT 24 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for NII_6585.  
+    emline_gflux_tot_sii_6718 real NOT NULL, --/F EMLINE_GFLUX_TOT 25 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for SII_6718.  
+    emline_gflux_tot_sii_6732 real NOT NULL, --/F EMLINE_GFLUX_TOT 26 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for SII_6732.  
+    emline_gflux_tot_hei_7067 real NOT NULL, --/F EMLINE_GFLUX_TOT 27 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for HeI_7067.  
+    emline_gflux_tot_ariii_7137 real NOT NULL, --/F EMLINE_GFLUX_TOT 28 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for ArIII_7137.
+    emline_gflux_tot_ariii_7753 real NOT NULL, --/F EMLINE_GFLUX_TOT 29 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for ArIII_7753.
+    emline_gflux_tot_peta_9017 real NOT NULL, --/F EMLINE_GFLUX_TOT 30 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Peta_9017.  
+    emline_gflux_tot_siii_9071 real NOT NULL, --/F EMLINE_GFLUX_TOT 31 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for SIII_9071.  
+    emline_gflux_tot_pzet_9231 real NOT NULL, --/F EMLINE_GFLUX_TOT 32 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Pzet_9231.  
+    emline_gflux_tot_siii_9533 real NOT NULL, --/F EMLINE_GFLUX_TOT 33 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for SIII_9533.  
+    emline_gflux_tot_peps_9548 real NOT NULL, --/F EMLINE_GFLUX_TOT 34 --/U  --/D Total integrated flux of the Gaussian fit to each emission line within the full MaNGA field-of-view.  Measurements specifically for Peps_9548.  
     emline_gsb_1re_oii_3727 real NOT NULL, --/F EMLINE_GSB_1RE 0 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OII_3727.  
     emline_gsb_1re_oii_3729 real NOT NULL, --/F EMLINE_GSB_1RE 1 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OII_3729.  
-    emline_gsb_1re_hthe_3798 real NOT NULL, --/F EMLINE_GSB_1RE 2 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hthe_3798.  
-    emline_gsb_1re_heta_3836 real NOT NULL, --/F EMLINE_GSB_1RE 3 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Heta_3836.  
-    emline_gsb_1re_neiii_3869 real NOT NULL, --/F EMLINE_GSB_1RE 4 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3869.  
-    emline_gsb_1re_hzet_3890 real NOT NULL, --/F EMLINE_GSB_1RE 5 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hzet_3890.  
-    emline_gsb_1re_neiii_3968 real NOT NULL, --/F EMLINE_GSB_1RE 6 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3968.  
-    emline_gsb_1re_heps_3971 real NOT NULL, --/F EMLINE_GSB_1RE 7 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Heps_3971.  
-    emline_gsb_1re_hdel_4102 real NOT NULL, --/F EMLINE_GSB_1RE 8 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hdel_4102.  
-    emline_gsb_1re_hgam_4341 real NOT NULL, --/F EMLINE_GSB_1RE 9 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hgam_4341.  
-    emline_gsb_1re_heii_4687 real NOT NULL, --/F EMLINE_GSB_1RE 10 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for HeII_4687.  
-    emline_gsb_1re_hb_4862 real NOT NULL, --/F EMLINE_GSB_1RE 11 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hb_4862.  
-    emline_gsb_1re_oiii_4960 real NOT NULL, --/F EMLINE_GSB_1RE 12 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OIII_4960.  
-    emline_gsb_1re_oiii_5008 real NOT NULL, --/F EMLINE_GSB_1RE 13 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OIII_5008.  
-    emline_gsb_1re_hei_5877 real NOT NULL, --/F EMLINE_GSB_1RE 14 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for HeI_5877.  
-    emline_gsb_1re_oi_6302 real NOT NULL, --/F EMLINE_GSB_1RE 15 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OI_6302.  
-    emline_gsb_1re_oi_6365 real NOT NULL, --/F EMLINE_GSB_1RE 16 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OI_6365.  
-    emline_gsb_1re_nii_6549 real NOT NULL, --/F EMLINE_GSB_1RE 17 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NII_6549.  
-    emline_gsb_1re_ha_6564 real NOT NULL, --/F EMLINE_GSB_1RE 18 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Ha_6564.  
-    emline_gsb_1re_nii_6585 real NOT NULL, --/F EMLINE_GSB_1RE 19 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NII_6585.  
-    emline_gsb_1re_sii_6718 real NOT NULL, --/F EMLINE_GSB_1RE 20 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for SII_6718.  
-    emline_gsb_1re_sii_6732 real NOT NULL, --/F EMLINE_GSB_1RE 21 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for SII_6732.  
+    emline_gsb_1re_h12_3751 real NOT NULL, --/F EMLINE_GSB_1RE 2 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for H12_3751.  
+    emline_gsb_1re_h11_3771 real NOT NULL, --/F EMLINE_GSB_1RE 3 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for H11_3771.  
+    emline_gsb_1re_hthe_3798 real NOT NULL, --/F EMLINE_GSB_1RE 4 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hthe_3798.  
+    emline_gsb_1re_heta_3836 real NOT NULL, --/F EMLINE_GSB_1RE 5 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Heta_3836.  
+    emline_gsb_1re_neiii_3869 real NOT NULL, --/F EMLINE_GSB_1RE 6 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3869.
+    emline_gsb_1re_hei_3889 real NOT NULL, --/F EMLINE_GSB_1RE 7 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for HeI_3889.  
+    emline_gsb_1re_hzet_3890 real NOT NULL, --/F EMLINE_GSB_1RE 8 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hzet_3890.  
+    emline_gsb_1re_neiii_3968 real NOT NULL, --/F EMLINE_GSB_1RE 9 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3968.
+    emline_gsb_1re_heps_3971 real NOT NULL, --/F EMLINE_GSB_1RE 10 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Heps_3971.  
+    emline_gsb_1re_hdel_4102 real NOT NULL, --/F EMLINE_GSB_1RE 11 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hdel_4102.  
+    emline_gsb_1re_hgam_4341 real NOT NULL, --/F EMLINE_GSB_1RE 12 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hgam_4341.  
+    emline_gsb_1re_heii_4687 real NOT NULL, --/F EMLINE_GSB_1RE 13 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for HeII_4687.  
+    emline_gsb_1re_hb_4862 real NOT NULL, --/F EMLINE_GSB_1RE 14 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hb_4862.  
+    emline_gsb_1re_oiii_4960 real NOT NULL, --/F EMLINE_GSB_1RE 15 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OIII_4960.  
+    emline_gsb_1re_oiii_5008 real NOT NULL, --/F EMLINE_GSB_1RE 16 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OIII_5008.  
+    emline_gsb_1re_ni_5199 real NOT NULL, --/F EMLINE_GSB_1RE 17 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NI_5199.  
+    emline_gsb_1re_ni_5201 real NOT NULL, --/F EMLINE_GSB_1RE 18 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NI_5201.  
+    emline_gsb_1re_hei_5877 real NOT NULL, --/F EMLINE_GSB_1RE 19 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for HeI_5877.  
+    emline_gsb_1re_oi_6302 real NOT NULL, --/F EMLINE_GSB_1RE 20 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OI_6302.  
+    emline_gsb_1re_oi_6365 real NOT NULL, --/F EMLINE_GSB_1RE 21 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OI_6365.  
+    emline_gsb_1re_nii_6549 real NOT NULL, --/F EMLINE_GSB_1RE 22 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NII_6549.  
+    emline_gsb_1re_ha_6564 real NOT NULL, --/F EMLINE_GSB_1RE 23 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Ha_6564.  
+    emline_gsb_1re_nii_6585 real NOT NULL, --/F EMLINE_GSB_1RE 24 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NII_6585.  
+    emline_gsb_1re_sii_6718 real NOT NULL, --/F EMLINE_GSB_1RE 25 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for SII_6718.  
+    emline_gsb_1re_sii_6732 real NOT NULL, --/F EMLINE_GSB_1RE 26 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for SII_6732.  
+    emline_gsb_1re_hei_7067 real NOT NULL, --/F EMLINE_GSB_1RE 27 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for HeI_7067.  
+    emline_gsb_1re_ariii_7137 real NOT NULL, --/F EMLINE_GSB_1RE 28 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for ArIII_7137.
+    emline_gsb_1re_ariii_7753 real NOT NULL, --/F EMLINE_GSB_1RE 29 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for ArIII_7753.
+    emline_gsb_1re_peta_9017 real NOT NULL, --/F EMLINE_GSB_1RE 30 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Peta_9017.  
+    emline_gsb_1re_siii_9071 real NOT NULL, --/F EMLINE_GSB_1RE 31 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for SIII_9071.  
+    emline_gsb_1re_pzet_9231 real NOT NULL, --/F EMLINE_GSB_1RE 32 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Pzet_9231.  
+    emline_gsb_1re_siii_9533 real NOT NULL, --/F EMLINE_GSB_1RE 33 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for SIII_9533.  
+    emline_gsb_1re_peps_9548 real NOT NULL, --/F EMLINE_GSB_1RE 34 --/U  --/D Mean emission-line surface-brightness from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Peps_9548.  
     emline_gsb_peak_oii_3727 real NOT NULL, --/F EMLINE_GSB_PEAK 0 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for OII_3727.  
     emline_gsb_peak_oii_3729 real NOT NULL, --/F EMLINE_GSB_PEAK 1 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for OII_3729.  
-    emline_gsb_peak_hthe_3798 real NOT NULL, --/F EMLINE_GSB_PEAK 2 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Hthe_3798.  
-    emline_gsb_peak_heta_3836 real NOT NULL, --/F EMLINE_GSB_PEAK 3 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Heta_3836.  
-    emline_gsb_peak_neiii_3869 real NOT NULL, --/F EMLINE_GSB_PEAK 4 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for NeIII_3869.  
-    emline_gsb_peak_hzet_3890 real NOT NULL, --/F EMLINE_GSB_PEAK 5 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Hzet_3890.  
-    emline_gsb_peak_neiii_3968 real NOT NULL, --/F EMLINE_GSB_PEAK 6 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for NeIII_3968.  
-    emline_gsb_peak_heps_3971 real NOT NULL, --/F EMLINE_GSB_PEAK 7 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Heps_3971.  
-    emline_gsb_peak_hdel_4102 real NOT NULL, --/F EMLINE_GSB_PEAK 8 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Hdel_4102.  
-    emline_gsb_peak_hgam_4341 real NOT NULL, --/F EMLINE_GSB_PEAK 9 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Hgam_4341.  
-    emline_gsb_peak_heii_4687 real NOT NULL, --/F EMLINE_GSB_PEAK 10 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for HeII_4687.  
-    emline_gsb_peak_hb_4862 real NOT NULL, --/F EMLINE_GSB_PEAK 11 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Hb_4862.  
-    emline_gsb_peak_oiii_4960 real NOT NULL, --/F EMLINE_GSB_PEAK 12 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for OIII_4960.  
-    emline_gsb_peak_oiii_5008 real NOT NULL, --/F EMLINE_GSB_PEAK 13 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for OIII_5008.  
-    emline_gsb_peak_hei_5877 real NOT NULL, --/F EMLINE_GSB_PEAK 14 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for HeI_5877.  
-    emline_gsb_peak_oi_6302 real NOT NULL, --/F EMLINE_GSB_PEAK 15 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for OI_6302.  
-    emline_gsb_peak_oi_6365 real NOT NULL, --/F EMLINE_GSB_PEAK 16 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for OI_6365.  
-    emline_gsb_peak_nii_6549 real NOT NULL, --/F EMLINE_GSB_PEAK 17 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for NII_6549.  
-    emline_gsb_peak_ha_6564 real NOT NULL, --/F EMLINE_GSB_PEAK 18 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Ha_6564.  
-    emline_gsb_peak_nii_6585 real NOT NULL, --/F EMLINE_GSB_PEAK 19 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for NII_6585.  
-    emline_gsb_peak_sii_6718 real NOT NULL, --/F EMLINE_GSB_PEAK 20 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for SII_6718.  
-    emline_gsb_peak_sii_6732 real NOT NULL, --/F EMLINE_GSB_PEAK 21 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for SII_6732.  
+    emline_gsb_peak_h12_3751 real NOT NULL, --/F EMLINE_GSB_PEAK 2 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for H12_3751.  
+    emline_gsb_peak_h11_3771 real NOT NULL, --/F EMLINE_GSB_PEAK 3 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for H11_3771.  
+    emline_gsb_peak_hthe_3798 real NOT NULL, --/F EMLINE_GSB_PEAK 4 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Hthe_3798.  
+    emline_gsb_peak_heta_3836 real NOT NULL, --/F EMLINE_GSB_PEAK 5 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Heta_3836.  
+    emline_gsb_peak_neiii_3869 real NOT NULL, --/F EMLINE_GSB_PEAK 6 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for NeIII_3869.
+    emline_gsb_peak_hei_3889 real NOT NULL, --/F EMLINE_GSB_PEAK 7 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for HeI_3889.  
+    emline_gsb_peak_hzet_3890 real NOT NULL, --/F EMLINE_GSB_PEAK 8 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Hzet_3890.  
+    emline_gsb_peak_neiii_3968 real NOT NULL, --/F EMLINE_GSB_PEAK 9 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for NeIII_3968.
+    emline_gsb_peak_heps_3971 real NOT NULL, --/F EMLINE_GSB_PEAK 10 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Heps_3971.  
+    emline_gsb_peak_hdel_4102 real NOT NULL, --/F EMLINE_GSB_PEAK 11 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Hdel_4102.  
+    emline_gsb_peak_hgam_4341 real NOT NULL, --/F EMLINE_GSB_PEAK 12 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Hgam_4341.  
+    emline_gsb_peak_heii_4687 real NOT NULL, --/F EMLINE_GSB_PEAK 13 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for HeII_4687.  
+    emline_gsb_peak_hb_4862 real NOT NULL, --/F EMLINE_GSB_PEAK 14 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Hb_4862.  
+    emline_gsb_peak_oiii_4960 real NOT NULL, --/F EMLINE_GSB_PEAK 15 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for OIII_4960.  
+    emline_gsb_peak_oiii_5008 real NOT NULL, --/F EMLINE_GSB_PEAK 16 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for OIII_5008.  
+    emline_gsb_peak_ni_5199 real NOT NULL, --/F EMLINE_GSB_PEAK 17 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for NI_5199.  
+    emline_gsb_peak_ni_5201 real NOT NULL, --/F EMLINE_GSB_PEAK 18 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for NI_5201.  
+    emline_gsb_peak_hei_5877 real NOT NULL, --/F EMLINE_GSB_PEAK 19 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for HeI_5877.  
+    emline_gsb_peak_oi_6302 real NOT NULL, --/F EMLINE_GSB_PEAK 20 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for OI_6302.  
+    emline_gsb_peak_oi_6365 real NOT NULL, --/F EMLINE_GSB_PEAK 21 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for OI_6365.  
+    emline_gsb_peak_nii_6549 real NOT NULL, --/F EMLINE_GSB_PEAK 22 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for NII_6549.  
+    emline_gsb_peak_ha_6564 real NOT NULL, --/F EMLINE_GSB_PEAK 23 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Ha_6564.  
+    emline_gsb_peak_nii_6585 real NOT NULL, --/F EMLINE_GSB_PEAK 24 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for NII_6585.  
+    emline_gsb_peak_sii_6718 real NOT NULL, --/F EMLINE_GSB_PEAK 25 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for SII_6718.  
+    emline_gsb_peak_sii_6732 real NOT NULL, --/F EMLINE_GSB_PEAK 26 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for SII_6732.  
+    emline_gsb_peak_hei_7067 real NOT NULL, --/F EMLINE_GSB_PEAK 27 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for HeI_7067.  
+    emline_gsb_peak_ariii_7137 real NOT NULL, --/F EMLINE_GSB_PEAK 28 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for ArIII_7137.
+    emline_gsb_peak_ariii_7753 real NOT NULL, --/F EMLINE_GSB_PEAK 29 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for ArIII_7753.
+    emline_gsb_peak_peta_9017 real NOT NULL, --/F EMLINE_GSB_PEAK 30 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Peta_9017.  
+    emline_gsb_peak_siii_9071 real NOT NULL, --/F EMLINE_GSB_PEAK 31 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for SIII_9071.  
+    emline_gsb_peak_pzet_9231 real NOT NULL, --/F EMLINE_GSB_PEAK 32 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Pzet_9231.  
+    emline_gsb_peak_siii_9533 real NOT NULL, --/F EMLINE_GSB_PEAK 33 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for SIII_9533.  
+    emline_gsb_peak_peps_9548 real NOT NULL, --/F EMLINE_GSB_PEAK 34 --/U  --/D Peak Gaussian-fitted emission-line surface brightness.  Measurements specifically for Peps_9548.  
     emline_gew_1re_oii_3727 real NOT NULL, --/F EMLINE_GEW_1RE 0 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OII_3727.  
     emline_gew_1re_oii_3729 real NOT NULL, --/F EMLINE_GEW_1RE 1 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OII_3729.  
-    emline_gew_1re_hthe_3798 real NOT NULL, --/F EMLINE_GEW_1RE 2 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hthe_3798.  
-    emline_gew_1re_heta_3836 real NOT NULL, --/F EMLINE_GEW_1RE 3 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Heta_3836.  
-    emline_gew_1re_neiii_3869 real NOT NULL, --/F EMLINE_GEW_1RE 4 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3869.  
-    emline_gew_1re_hzet_3890 real NOT NULL, --/F EMLINE_GEW_1RE 5 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hzet_3890.  
-    emline_gew_1re_neiii_3968 real NOT NULL, --/F EMLINE_GEW_1RE 6 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3968.  
-    emline_gew_1re_heps_3971 real NOT NULL, --/F EMLINE_GEW_1RE 7 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Heps_3971.  
-    emline_gew_1re_hdel_4102 real NOT NULL, --/F EMLINE_GEW_1RE 8 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hdel_4102.  
-    emline_gew_1re_hgam_4341 real NOT NULL, --/F EMLINE_GEW_1RE 9 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hgam_4341.  
-    emline_gew_1re_heii_4687 real NOT NULL, --/F EMLINE_GEW_1RE 10 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for HeII_4687.  
-    emline_gew_1re_hb_4862 real NOT NULL, --/F EMLINE_GEW_1RE 11 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hb_4862.  
-    emline_gew_1re_oiii_4960 real NOT NULL, --/F EMLINE_GEW_1RE 12 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OIII_4960.  
-    emline_gew_1re_oiii_5008 real NOT NULL, --/F EMLINE_GEW_1RE 13 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OIII_5008.  
-    emline_gew_1re_hei_5877 real NOT NULL, --/F EMLINE_GEW_1RE 14 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for HeI_5877.  
-    emline_gew_1re_oi_6302 real NOT NULL, --/F EMLINE_GEW_1RE 15 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OI_6302.  
-    emline_gew_1re_oi_6365 real NOT NULL, --/F EMLINE_GEW_1RE 16 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OI_6365.  
-    emline_gew_1re_nii_6549 real NOT NULL, --/F EMLINE_GEW_1RE 17 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NII_6549.  
-    emline_gew_1re_ha_6564 real NOT NULL, --/F EMLINE_GEW_1RE 18 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Ha_6564.  
-    emline_gew_1re_nii_6585 real NOT NULL, --/F EMLINE_GEW_1RE 19 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NII_6585.  
-    emline_gew_1re_sii_6718 real NOT NULL, --/F EMLINE_GEW_1RE 20 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for SII_6718.  
-    emline_gew_1re_sii_6732 real NOT NULL, --/F EMLINE_GEW_1RE 21 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for SII_6732.  
-    emline_gew_peak_oii_3727 real NOT NULL, --/F EMLINE_GEW_PEAK 0 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for OII_3727.  
-    emline_gew_peak_oii_3729 real NOT NULL, --/F EMLINE_GEW_PEAK 1 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for OII_3729.  
-    emline_gew_peak_hthe_3798 real NOT NULL, --/F EMLINE_GEW_PEAK 2 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for Hthe_3798.  
-    emline_gew_peak_heta_3836 real NOT NULL, --/F EMLINE_GEW_PEAK 3 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for Heta_3836.  
-    emline_gew_peak_neiii_3869 real NOT NULL, --/F EMLINE_GEW_PEAK 4 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for NeIII_3869.  
-    emline_gew_peak_hzet_3890 real NOT NULL, --/F EMLINE_GEW_PEAK 5 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for Hzet_3890.  
-    emline_gew_peak_neiii_3968 real NOT NULL, --/F EMLINE_GEW_PEAK 6 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for NeIII_3968.  
-    emline_gew_peak_heps_3971 real NOT NULL, --/F EMLINE_GEW_PEAK 7 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for Heps_3971.  
-    emline_gew_peak_hdel_4102 real NOT NULL, --/F EMLINE_GEW_PEAK 8 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for Hdel_4102.  
-    emline_gew_peak_hgam_4341 real NOT NULL, --/F EMLINE_GEW_PEAK 9 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for Hgam_4341.  
-    emline_gew_peak_heii_4687 real NOT NULL, --/F EMLINE_GEW_PEAK 10 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for HeII_4687.  
-    emline_gew_peak_hb_4862 real NOT NULL, --/F EMLINE_GEW_PEAK 11 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for Hb_4862.  
-    emline_gew_peak_oiii_4960 real NOT NULL, --/F EMLINE_GEW_PEAK 12 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for OIII_4960.  
-    emline_gew_peak_oiii_5008 real NOT NULL, --/F EMLINE_GEW_PEAK 13 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for OIII_5008.  
-    emline_gew_peak_hei_5877 real NOT NULL, --/F EMLINE_GEW_PEAK 14 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for HeI_5877.  
-    emline_gew_peak_oi_6302 real NOT NULL, --/F EMLINE_GEW_PEAK 15 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for OI_6302.  
-    emline_gew_peak_oi_6365 real NOT NULL, --/F EMLINE_GEW_PEAK 16 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for OI_6365.  
-    emline_gew_peak_nii_6549 real NOT NULL, --/F EMLINE_GEW_PEAK 17 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for NII_6549.  
-    emline_gew_peak_ha_6564 real NOT NULL, --/F EMLINE_GEW_PEAK 18 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for Ha_6564.  
-    emline_gew_peak_nii_6585 real NOT NULL, --/F EMLINE_GEW_PEAK 19 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for NII_6585.  
-    emline_gew_peak_sii_6718 real NOT NULL, --/F EMLINE_GEW_PEAK 20 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for SII_6718.  
-    emline_gew_peak_sii_6732 real NOT NULL, --/F EMLINE_GEW_PEAK 21 --/U  --/D Peak emission-line equivalent width from the Gaussian-fitted flux measurements.  Measurements specifically for SII_6732.  
+    emline_gew_1re_h12_3751 real NOT NULL, --/F EMLINE_GEW_1RE 2 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for H12_3751.  
+    emline_gew_1re_h11_3771 real NOT NULL, --/F EMLINE_GEW_1RE 3 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for H11_3771.  
+    emline_gew_1re_hthe_3798 real NOT NULL, --/F EMLINE_GEW_1RE 4 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hthe_3798.  
+    emline_gew_1re_heta_3836 real NOT NULL, --/F EMLINE_GEW_1RE 5 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Heta_3836.  
+    emline_gew_1re_neiii_3869 real NOT NULL, --/F EMLINE_GEW_1RE 6 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3869.
+    emline_gew_1re_hei_3889 real NOT NULL, --/F EMLINE_GEW_1RE 7 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for HeI_3889.  
+    emline_gew_1re_hzet_3890 real NOT NULL, --/F EMLINE_GEW_1RE 8 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hzet_3890.  
+    emline_gew_1re_neiii_3968 real NOT NULL, --/F EMLINE_GEW_1RE 9 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NeIII_3968.
+    emline_gew_1re_heps_3971 real NOT NULL, --/F EMLINE_GEW_1RE 10 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Heps_3971.  
+    emline_gew_1re_hdel_4102 real NOT NULL, --/F EMLINE_GEW_1RE 11 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hdel_4102.  
+    emline_gew_1re_hgam_4341 real NOT NULL, --/F EMLINE_GEW_1RE 12 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hgam_4341.  
+    emline_gew_1re_heii_4687 real NOT NULL, --/F EMLINE_GEW_1RE 13 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for HeII_4687.  
+    emline_gew_1re_hb_4862 real NOT NULL, --/F EMLINE_GEW_1RE 14 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Hb_4862.  
+    emline_gew_1re_oiii_4960 real NOT NULL, --/F EMLINE_GEW_1RE 15 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OIII_4960.  
+    emline_gew_1re_oiii_5008 real NOT NULL, --/F EMLINE_GEW_1RE 16 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OIII_5008.  
+    emline_gew_1re_ni_5199 real NOT NULL, --/F EMLINE_GEW_1RE 17 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NI_5199.  
+    emline_gew_1re_ni_5201 real NOT NULL, --/F EMLINE_GEW_1RE 18 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NI_5201.  
+    emline_gew_1re_hei_5877 real NOT NULL, --/F EMLINE_GEW_1RE 19 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for HeI_5877.  
+    emline_gew_1re_oi_6302 real NOT NULL, --/F EMLINE_GEW_1RE 20 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OI_6302.  
+    emline_gew_1re_oi_6365 real NOT NULL, --/F EMLINE_GEW_1RE 21 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for OI_6365.  
+    emline_gew_1re_nii_6549 real NOT NULL, --/F EMLINE_GEW_1RE 22 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NII_6549.  
+    emline_gew_1re_ha_6564 real NOT NULL, --/F EMLINE_GEW_1RE 23 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Ha_6564.  
+    emline_gew_1re_nii_6585 real NOT NULL, --/F EMLINE_GEW_1RE 24 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for NII_6585.  
+    emline_gew_1re_sii_6718 real NOT NULL, --/F EMLINE_GEW_1RE 25 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for SII_6718.  
+    emline_gew_1re_sii_6732 real NOT NULL, --/F EMLINE_GEW_1RE 26 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for SII_6732.  
+    emline_gew_1re_hei_7067 real NOT NULL, --/F EMLINE_GEW_1RE 27 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for HeI_7067.  
+    emline_gew_1re_ariii_7137 real NOT NULL, --/F EMLINE_GEW_1RE 28 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for ArIII_7137.
+    emline_gew_1re_ariii_7753 real NOT NULL, --/F EMLINE_GEW_1RE 29 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for ArIII_7753.
+    emline_gew_1re_peta_9017 real NOT NULL, --/F EMLINE_GEW_1RE 30 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Peta_9017.  
+    emline_gew_1re_siii_9071 real NOT NULL, --/F EMLINE_GEW_1RE 31 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for SIII_9071.  
+    emline_gew_1re_pzet_9231 real NOT NULL, --/F EMLINE_GEW_1RE 32 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Pzet_9231.  
+    emline_gew_1re_siii_9533 real NOT NULL, --/F EMLINE_GEW_1RE 33 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for SIII_9533.  
+    emline_gew_1re_peps_9548 real NOT NULL, --/F EMLINE_GEW_1RE 34 --/U  --/D Mean emission-line equivalent width from the Gaussian-fitted flux measurements within 1 R_{e}.  Measurements specifically for Peps_9548.  
+    emline_gew_peak_oii_3727 real NOT NULL, --/F EMLINE_GEW_PEAK 0 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for OII_3727.  
+    emline_gew_peak_oii_3729 real NOT NULL, --/F EMLINE_GEW_PEAK 1 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for OII_3729.  
+    emline_gew_peak_h12_3751 real NOT NULL, --/F EMLINE_GEW_PEAK 2 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for H12_3751.  
+    emline_gew_peak_h11_3771 real NOT NULL, --/F EMLINE_GEW_PEAK 3 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for H11_3771.  
+    emline_gew_peak_hthe_3798 real NOT NULL, --/F EMLINE_GEW_PEAK 4 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for Hthe_3798.  
+    emline_gew_peak_heta_3836 real NOT NULL, --/F EMLINE_GEW_PEAK 5 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for Heta_3836.  
+    emline_gew_peak_neiii_3869 real NOT NULL, --/F EMLINE_GEW_PEAK 6 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for NeIII_3869.
+    emline_gew_peak_hei_3889 real NOT NULL, --/F EMLINE_GEW_PEAK 7 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for HeI_3889.  
+    emline_gew_peak_hzet_3890 real NOT NULL, --/F EMLINE_GEW_PEAK 8 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for Hzet_3890.  
+    emline_gew_peak_neiii_3968 real NOT NULL, --/F EMLINE_GEW_PEAK 9 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for NeIII_3968.
+    emline_gew_peak_heps_3971 real NOT NULL, --/F EMLINE_GEW_PEAK 10 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for Heps_3971.  
+    emline_gew_peak_hdel_4102 real NOT NULL, --/F EMLINE_GEW_PEAK 11 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for Hdel_4102.  
+    emline_gew_peak_hgam_4341 real NOT NULL, --/F EMLINE_GEW_PEAK 12 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for Hgam_4341.  
+    emline_gew_peak_heii_4687 real NOT NULL, --/F EMLINE_GEW_PEAK 13 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for HeII_4687.  
+    emline_gew_peak_hb_4862 real NOT NULL, --/F EMLINE_GEW_PEAK 14 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for Hb_4862.  
+    emline_gew_peak_oiii_4960 real NOT NULL, --/F EMLINE_GEW_PEAK 15 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for OIII_4960.  
+    emline_gew_peak_oiii_5008 real NOT NULL, --/F EMLINE_GEW_PEAK 16 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for OIII_5008.  
+    emline_gew_peak_ni_5199 real NOT NULL, --/F EMLINE_GEW_PEAK 17 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for NI_5199.  
+    emline_gew_peak_ni_5201 real NOT NULL, --/F EMLINE_GEW_PEAK 18 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for NI_5201.  
+    emline_gew_peak_hei_5877 real NOT NULL, --/F EMLINE_GEW_PEAK 19 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for HeI_5877.  
+    emline_gew_peak_oi_6302 real NOT NULL, --/F EMLINE_GEW_PEAK 20 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for OI_6302.  
+    emline_gew_peak_oi_6365 real NOT NULL, --/F EMLINE_GEW_PEAK 21 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for OI_6365.  
+    emline_gew_peak_nii_6549 real NOT NULL, --/F EMLINE_GEW_PEAK 22 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for NII_6549.  
+    emline_gew_peak_ha_6564 real NOT NULL, --/F EMLINE_GEW_PEAK 23 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for Ha_6564.  
+    emline_gew_peak_nii_6585 real NOT NULL, --/F EMLINE_GEW_PEAK 24 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for NII_6585.  
+    emline_gew_peak_sii_6718 real NOT NULL, --/F EMLINE_GEW_PEAK 25 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for SII_6718.  
+    emline_gew_peak_sii_6732 real NOT NULL, --/F EMLINE_GEW_PEAK 26 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for SII_6732.  
+    emline_gew_peak_hei_7067 real NOT NULL, --/F EMLINE_GEW_PEAK 27 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for HeI_7067.  
+    emline_gew_peak_ariii_7137 real NOT NULL, --/F EMLINE_GEW_PEAK 28 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for ArIII_7137.
+    emline_gew_peak_ariii_7753 real NOT NULL, --/F EMLINE_GEW_PEAK 29 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for ArIII_7753.
+    emline_gew_peak_peta_9017 real NOT NULL, --/F EMLINE_GEW_PEAK 30 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for Peta_9017.  
+    emline_gew_peak_siii_9071 real NOT NULL, --/F EMLINE_GEW_PEAK 31 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for SIII_9071.  
+    emline_gew_peak_pzet_9231 real NOT NULL, --/F EMLINE_GEW_PEAK 32 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for Pzet_9231.  
+    emline_gew_peak_siii_9533 real NOT NULL, --/F EMLINE_GEW_PEAK 33 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for SIII_9533.  
+    emline_gew_peak_peps_9548 real NOT NULL, --/F EMLINE_GEW_PEAK 34 --/U  --/D Peak Gaussian-fitted emission-line equivalent width.  Measurements specifically for Peps_9548.  
     specindex_lo_cn1 real NOT NULL, --/F SPECINDEX_LO 0 --/U mag --/D Spectral index at 2.5% growth of all valid spaxels.  Measurements specifically for CN1.  
     specindex_lo_cn2 real NOT NULL, --/F SPECINDEX_LO 1 --/U mag --/D Spectral index at 2.5% growth of all valid spaxels.  Measurements specifically for CN2.  
     specindex_lo_ca4227 real NOT NULL, --/F SPECINDEX_LO 2 --/U ang --/D Spectral index at 2.5% growth of all valid spaxels.  Measurements specifically for Ca4227.  
@@ -1536,44 +1749,56 @@ EXEC spSetDefaultFileGroup 'mangaHIall'
 GO
 CREATE TABLE mangaHIall (
 ------------------------------------------------------------------------------
---/H Catalogue of Observed MaNGA Targets under program AGBT16A_095
+--/H A catalog of integrated HI properties for MaNGA galaxies
 ------------------------------------------------------------------------------
---/T Measured parameters for all MaNGA targets observed with the Green Bank
---/T Telescope under project AGBT16A_095.  All measurements were made on
---/T baselined spectra after hanning and boxcar smoothing to a final
---/T resolution of 10 km/s'
+--/T Measured parameters for all SDSS-IV MaNGA targets observed with the
+--/T Green Bank Telescope (under projects AGBT16A_095, AGBT17A_012,
+--/T AGBT19A_127,
+--/T AGBT20B_033) or in the ALFALFA survey.  All measurements were made on
+--/T baselined spectra after hanning and boxcar smoothing to a final resolution
+--/T of 10 km/s. For further details, see Masters et al. (2019, MNRAS, 488,
+--/T 3396) and Stark et al. (2021, MNRAS, 503, 1345).
 ------------------------------------------------------------------------------
-	mangaid		varchar(32) NOT NULL, --/U    --/D MaNGA ID
-	plateifu	varchar(32) NOT NULL, --/U    --/D plate-ifu of MaNGA observation
-	ra	      	float NOT NULL, --/U deg  	    --/D Right Ascension, J2000 (objra from DRPAll file)   --/F objra
-	dec	      	float NOT NULL, --/U deg  	    --/D Declination, J2000 (objdec from DRPAll file)   --/F objdec
-	vopt		real NOT NULL, 	    --/U km/s   --/D Optical velocity - used to set centre frequency of radio observation
-	sessions	varchar(32) NOT NULL, --/U    --/D Session(s) of AGBT16A_095 target was observed in. In format AA-BB-CC (e.g. if observed in three sessions). --/F session
-	exp	      	real NOT NULL, 	    --/U s   --/D Total integration time with GBT
-	rms	      	real NOT NULL, 	    --/U mJy   --/D rms noise in signal free part of HI spectrum
-	logHIlim200kms	real NOT NULL, 	    --/U    --/D For non-detections, the log of the HI mass limit (in solar masses) assuming a width of 200 km/s and D = vopt/70 Mpc/km/s
-	peak		real NOT NULL, 	    --/U mJy   --/D The peak HI flux
-	snr		real NOT NULL, 	    --/U    --/D The peak S/N ratio
-	fHI		real NOT NULL, 	    --/U Jy km/s   --/D The integrated flux of the HI line
-	logMHI		real NOT NULL, 	    --/U    --/D Log of the HI mass (in solar masses) assuming D = vopt/70 Mpc/km/s
-	vHI		real NOT NULL, 	    --/U km/s   --/D Centroid of the HI line detection
-	evHI		real NOT NULL, 	    --/U km/s   --/D Error on vHI --/F ev
-	WM50		real NOT NULL, 	    --/U km/s   --/D Width of the HI line measured at 50% of the median of the two peaks
-	WP50		real NOT NULL, 	    --/U km/s   --/D Width of the HI line measured at 50% of the peak of the HI line
-	WP20		real NOT NULL, 	    --/U km/s   --/D Width of the HI line measured at 20% of the peak of the HI line
-	W2P50		real NOT NULL, 	    --/U km/s   --/D Width of the HI line measured at 50% of the peak on either side
-	WF50		real NOT NULL, 	    --/U km/s   --/D Width of the HI line measured at 50% of the peak on fits to the sides of the profile
-	Pr		real NOT NULL, 	    --/U mJy   --/D The peak HI flux in the high velocity peak
-	Pl		real NOT NULL, 	    --/U mJy   --/D The peak HI flux in the low velocity peak
-	ar		real NOT NULL, 	    --/U    --/D fit parameter for high velocity side of profile
-	br		real NOT NULL, 	    --/U    --/D fit parameter for high velocity side of profile
-	al		real NOT NULL, 	    --/U    --/D fit parameter for low velocity side of profile
-	bl		real NOT NULL, 	    --/U    --/D fit parameter for low velocity side of profile
+    plateifu varchar(20) NOT NULL, --/D PLATE-IFU designation of MaNGA observation
+    mangaid varchar(10) NOT NULL,  --/D PLATE-IFU designation of MaNGA observation
+    objra float NOT NULL, --/U deg --/D Right Ascension, J2000 (objra from DRPAll file)
+    objdec float NOT NULL, --/U deg --/D Declination, J2000 (objdec from DRPAll file)
+    logmstars float NOT NULL, --/U Msun/h^2 --/D log of stellar mass (taken from DRPAll file)
+    sini float NOT NULL,  --/D sine of inclination  estimated from sersic elpetro axial ratio (from DRPAll file)
+    vopt real NOT NULL, --/U km/s  --/D Optical velocity - used to set centre frequency of radio observation
+    session varchar(80) NOT NULL,  --/D GBT program session during which target was observed. In format AA-BB-CC (e.g. if observed in three sessions), where AA, BB, CC are the session IDs. Set to "ALFALFA" if data from ALFALFA survey.
+    exp real NOT NULL, --/U sec --/D Total on-source integration time
+    rms real NOT NULL, --/U mJy  --/D rms noise in signal free part of HI spectrum
+    loghilim200kms real NOT NULL, --/U Msun --/D For non-detections, the log of the maximum HI mass (in solar masses) which would be missed, assuming it's spread across a width of 200 km/s and D = vopt/70 Mpc/km/s
+    peak real NOT NULL, --/U Jy --/D The peak HI flux density
+    snr real NOT NULL,  --/D The peak S/N ratio defined as (peak-rms)/rms
+    fhi real NOT NULL, --/U Jy km/s --/D The integrated flux of the HI line
+    efhi real NOT NULL, --/U Jy km/s --/D Uncertainty on the integrated flux of the HI line
+    logmhi real NOT NULL, --/U Msun --/D Log of the HI mass (in solar masses) assuming D = vopt/70 Mpc/km/s
+    vhi real NOT NULL, --/U km/s --/D Centroid of the HI line detection
+    ev real NOT NULL, --/U km/s --/D Uncertainty on vHI
+    wm50 real NOT NULL, --/U km/s --/D Width of the HI line measured at 50% of the median of the two peaks
+    wp50 real NOT NULL, --/U km/s --/D Width of the HI line measured at 50% of the peak of the HI line
+    wp20 real NOT NULL, --/U km/s --/D Width of the HI line measured at 20% of the peak of the HI line
+    w2p50 real NOT NULL, --/U km/s --/D Width of the HI line measured at 50% of the peak on either side
+    wf50 real NOT NULL, --/U km/s --/D Width of the HI line measured at 50% of the peak on fits to the sides of the profile
+    dw real NOT NULL, --/U km/s --/D Correction for instrumental broadening applied to all GBT observations.
+    pr real NOT NULL, --/U mJy --/D The peak HI flux in the high velocity peak
+    pl real NOT NULL, --/U mJy --/D The peak HI flux in the low velocity peak
+    ar real NOT NULL, --/U mJy --/D fit parameter for high velocity side of profile
+    br real NOT NULL, --/U mJy s/km --/D fit parameter for high velocity side of profile
+    al real NOT NULL, --/U mJy --/D fit parameter for low velocity side of profile
+    bl real NOT NULL, --/U mJy s/km --/D fit parameter for low velocity side of profile
+    negdet smallint NOT NULL,  --/D Flag indicating whether the profile measurements may be corrupted by a negative signal caused by a source in the OFF beam (Set to 1 if corrupted, otherwise 0)
+    blstruct smallint NOT NULL,  --/D Flag indicating whether the profile measurements may be corrupted by strong baseline variations on scales comparable to galaxy HI profile widths (Set to 1 if corrupted, otherwise 0)
+    conflag smallint NOT NULL,  --/D Flag indicating whether the profile measurements may be unreliable due to multiple galaxies within the beam and at similar redshift (Set to 1 if likely confused, otherwise 0)
+    confprob float NOT NULL,  --/D Probability that more than 20% of integrated flux is from galaxies other than primary target
 )
 GO
 --
 
 
+/* leave as is for DR17
 
 --=========================================================
 IF EXISTS (SELECT name FROM sysobjects
@@ -1583,7 +1808,7 @@ GO
 --
 EXEC spSetDefaultFileGroup 'mangaHIbonus'
 GO
-CREATE TABLE mangaHIbonus (
+-- CREATE TABLE mangaHIbonus (
 ------------------------------------------------------------------------------
 --/H Catalogue of bonus detections under program AGBT16A_095
 ------------------------------------------------------------------------------
@@ -1632,7 +1857,7 @@ GO
 --
 EXEC spSetDefaultFileGroup 'mangaGalaxyZoo'
 GO
-CREATE TABLE mangaGalaxyZoo (
+-- CREATE TABLE mangaGalaxyZoo (
 ------------------------------------------------------------------------------
 --/H Galaxy Zoo classifications for all MaNGA target galaxies
 --/T This tables contains one entry per MaNGA target galaxy.
@@ -1838,7 +2063,7 @@ GO
 --
 EXEC spSetDefaultFileGroup 'mangaAlfalfaDR15'
 GO
-CREATE TABLE mangaAlfalfaDR15 (
+-- CREATE TABLE mangaAlfalfaDR15 (
 ------------------------------------------------------------------------------
 --/H LFALFA data for the currently public MaNGA sample
 ------------------------------------------------------------------------------
@@ -1868,6 +2093,521 @@ CREATE TABLE mangaAlfalfaDR15 (
 )
 GO
 --
+
+*/  -- leave as is for DR17
+
+
+-- New MaNGA DR17 VACs
+--
+--=========================================================
+IF EXISTS (SELECT name FROM sysobjects
+         WHERE xtype='U' AND name = 'MaNGA_GZ2')
+	DROP TABLE MaNGA_GZ2
+GO
+--
+EXEC spSetDefaultFileGroup 'MaNGA_GZ2'
+GO
+CREATE TABLE MaNGA_GZ2(
+-------------------------------------------------------------------------------
+--/H This table contains Galaxy Zoo 2 classifications for most MaNGA galaxies.
+-------------------------------------------------------------------------------
+--/T This table contains a match between various iterations of Galaxy Zoo and
+--/T final MaNGA galaxies. The galaxies in this table were obtained from two
+--/T different sources. 
+--/T Most (>80%) of the galaxies in this table come from a match of the MaNGA
+--/T galaxies with Galaxy Zoo 2 (GZ2, Willett 2013, MNRAS, 435, 2835) on RA
+--/T and DEC, with a matching radius of 5 arcseconds. Only the closest match
+--/T was kept. In this table, we used the version of GZ2 with the debiasing
+--/T method described in Hart et al. 2016, MNRAS, 461, 3663.
+--/T For the remaining MaNGA galaxies without a counterpart in GZ2, we turned
+--/T to a previously released VAC, described here:
+--/T https://www.sdss.org/dr16/data_access/value-added-catalogs/?
+--/T vac_id=manga-morphologies-from-galaxy-zoo.
+--/T If that galaxy can be found in this VAC, we copied its information for
+--/T there. The column ‘in_GZ2’ describes whether a galaxy came from matching
+--/T with GZ2 or from the older VAC.
+--/T Every task and answer pair in the GZ decision tree is noted as follows:
+--/T t#_task_test_a#_answer_text_suffix, where "suffix" can be one of:
+--/T "count", "weight", "fraction", "weighted_fraction", "debiased" or "flag".
+--/T We strongly encourage the use of the ‘_debiased’ fractions. For more
+--/T information on these columns, please refer to Willett et al. 2013, MNRAS,
+--/T 435, 2835. 
+-------------------------------------------------------------------------------
+PLATEIFU varchar(12) NOT NULL, --/D MaNGA PLATE-IFU
+MANGAID varchar(10) NOT NULL, --/D MaNGA ID
+OBJRA float NOT NULL, --/U deg --/D RA of the galaxy center in MaNGA
+OBJDEC float NOT NULL, --/U deg --/D DEC of the galaxy center in MaNGA
+Z float NOT NULL, --/D Redshift of the galaxy in MaNGA
+MNGTARG1 int NOT NULL, --/D Main survey targeting bit in MaNGA
+MNGTARG2 int NOT NULL, --/D Non-galaxy targeting bit in MaNGA
+MNGTARG3 int NOT NULL, --/D Ancillary targeting bit in MaNGA
+IFUDESIGNSIZE int NOT NULL, --/D Design size for the IFU in MaNGA
+crossmatch_separation float NOT NULL, --/U arcsec --/D Separation on sky between MaNGA target and matched GZ2 target
+dr7objid bigint NOT NULL, --/D Unique DR7 identifier composed from [skyVersion,rerun,run,camcol,field,obj]
+gz2_class varchar(10) NOT NULL, --/D Class in GZ2
+total_classifications int NOT NULL, --/D Amount of unique classifications in GZ2
+total_votes int NOT NULL, --/D Total amount of votes in GZ2
+in_GZ2 bit NOT NULL, --/D 1 if from GZ2, 0 if from previous VAC 
+t01_smooth_or_features_a01_smooth_count int NOT NULL, --/D Raw GZ vote count
+t01_smooth_or_features_a01_smooth_weight real NOT NULL, --/D User weighted vote count
+t01_smooth_or_features_a01_smooth_fraction real NOT NULL, --/D Raw GZ vote fraction
+t01_smooth_or_features_a01_smooth_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t01_smooth_or_features_a01_smooth_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t01_smooth_or_features_a01_smooth_flag int NOT NULL, --/D GZ flag
+t01_smooth_or_features_a02_features_or_disk_count int NOT NULL, --/D Raw GZ vote count
+t01_smooth_or_features_a02_features_or_disk_weight real NOT NULL, --/D User weighted vote count
+t01_smooth_or_features_a02_features_or_disk_fraction real NOT NULL, --/D Raw GZ vote fraction
+t01_smooth_or_features_a02_features_or_disk_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t01_smooth_or_features_a02_features_or_disk_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t01_smooth_or_features_a02_features_or_disk_flag int NOT NULL, --/D GZ flag
+t01_smooth_or_features_a03_star_or_artifact_count int NOT NULL, --/D Raw GZ vote count
+t01_smooth_or_features_a03_star_or_artifact_weight real NOT NULL, --/D User weighted vote count
+t01_smooth_or_features_a03_star_or_artifact_fraction real NOT NULL, --/D Raw GZ vote fraction
+t01_smooth_or_features_a03_star_or_artifact_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t01_smooth_or_features_a03_star_or_artifact_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t01_smooth_or_features_a03_star_or_artifact_flag int NOT NULL, --/D GZ flag
+t02_edgeon_a04_yes_count int NOT NULL, --/D Raw GZ vote count
+t02_edgeon_a04_yes_weight real NOT NULL, --/D User weighted vote count
+t02_edgeon_a04_yes_fraction real NOT NULL, --/D Raw GZ vote fraction
+t02_edgeon_a04_yes_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t02_edgeon_a04_yes_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t02_edgeon_a04_yes_flag int NOT NULL, --/D GZ flag
+t02_edgeon_a05_no_count int NOT NULL, --/D Raw GZ vote count
+t02_edgeon_a05_no_weight real NOT NULL, --/D User weighted vote count
+t02_edgeon_a05_no_fraction real NOT NULL, --/D Raw GZ vote fraction
+t02_edgeon_a05_no_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t02_edgeon_a05_no_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t02_edgeon_a05_no_flag int NOT NULL, --/D GZ flag
+t03_bar_a06_bar_count int NOT NULL, --/D Raw GZ vote count
+t03_bar_a06_bar_weight real NOT NULL, --/D User weighted vote count
+t03_bar_a06_bar_fraction real NOT NULL, --/D Raw GZ vote fraction
+t03_bar_a06_bar_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t03_bar_a06_bar_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t03_bar_a06_bar_flag int NOT NULL, --/D GZ flag
+t03_bar_a07_no_bar_count int NOT NULL, --/D Raw GZ vote count
+t03_bar_a07_no_bar_weight real NOT NULL, --/D User weighted vote count
+t03_bar_a07_no_bar_fraction real NOT NULL, --/D Raw GZ vote fraction
+t03_bar_a07_no_bar_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t03_bar_a07_no_bar_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t03_bar_a07_no_bar_flag int NOT NULL, --/D GZ flag
+t04_spiral_a08_spiral_count int NOT NULL, --/D Raw GZ vote count
+t04_spiral_a08_spiral_weight real NOT NULL, --/D User weighted vote count
+t04_spiral_a08_spiral_fraction real NOT NULL, --/D Raw GZ vote fraction
+t04_spiral_a08_spiral_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t04_spiral_a08_spiral_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t04_spiral_a08_spiral_flag int NOT NULL, --/D GZ flag
+t04_spiral_a09_no_spiral_count int NOT NULL, --/D Raw GZ vote count
+t04_spiral_a09_no_spiral_weight real NOT NULL, --/D User weighted vote count
+t04_spiral_a09_no_spiral_fraction real NOT NULL, --/D Raw GZ vote fraction
+t04_spiral_a09_no_spiral_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t04_spiral_a09_no_spiral_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t04_spiral_a09_no_spiral_flag int NOT NULL, --/D GZ flag
+t05_bulge_prominence_a10_no_bulge_count int NOT NULL, --/D Raw GZ vote count
+t05_bulge_prominence_a10_no_bulge_weight real NOT NULL, --/D User weighted vote count
+t05_bulge_prominence_a10_no_bulge_fraction real NOT NULL, --/D Raw GZ vote fraction
+t05_bulge_prominence_a10_no_bulge_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t05_bulge_prominence_a10_no_bulge_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t05_bulge_prominence_a10_no_bulge_flag int NOT NULL, --/D GZ flag
+t05_bulge_prominence_a11_just_noticeable_count int NOT NULL, --/D Raw GZ vote count
+t05_bulge_prominence_a11_just_noticeable_weight real NOT NULL, --/D User weighted vote count
+t05_bulge_prominence_a11_just_noticeable_fraction real NOT NULL, --/D Raw GZ vote fraction
+t05_bulge_prominence_a11_just_noticeable_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t05_bulge_prominence_a11_just_noticeable_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t05_bulge_prominence_a11_just_noticeable_flag int NOT NULL, --/D GZ flag
+t05_bulge_prominence_a12_obvious_count int NOT NULL, --/D Raw GZ vote count
+t05_bulge_prominence_a12_obvious_weight real NOT NULL, --/D User weighted vote count
+t05_bulge_prominence_a12_obvious_fraction real NOT NULL, --/D Raw GZ vote fraction
+t05_bulge_prominence_a12_obvious_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t05_bulge_prominence_a12_obvious_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t05_bulge_prominence_a12_obvious_flag int NOT NULL, --/D GZ flag
+t05_bulge_prominence_a13_dominant_count int NOT NULL, --/D Raw GZ vote count
+t05_bulge_prominence_a13_dominant_weight real NOT NULL, --/D User weighted vote count
+t05_bulge_prominence_a13_dominant_fraction real NOT NULL, --/D Raw GZ vote fraction
+t05_bulge_prominence_a13_dominant_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t05_bulge_prominence_a13_dominant_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t05_bulge_prominence_a13_dominant_flag int NOT NULL, --/D GZ flag
+t06_odd_a14_yes_count int NOT NULL, --/D Raw GZ vote count
+t06_odd_a14_yes_weight real NOT NULL, --/D User weighted vote count
+t06_odd_a14_yes_fraction real NOT NULL, --/D Raw GZ vote fraction
+t06_odd_a14_yes_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t06_odd_a14_yes_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t06_odd_a14_yes_flag int NOT NULL, --/D GZ flag
+t06_odd_a15_no_count int NOT NULL, --/D Raw GZ vote count
+t06_odd_a15_no_weight real NOT NULL, --/D User weighted vote count
+t06_odd_a15_no_fraction real NOT NULL, --/D Raw GZ vote fraction
+t06_odd_a15_no_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t06_odd_a15_no_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t06_odd_a15_no_flag int NOT NULL, --/D GZ flag
+t07_rounded_a16_completely_round_count int NOT NULL, --/D Raw GZ vote count
+t07_rounded_a16_completely_round_weight real NOT NULL, --/D User weighted vote count
+t07_rounded_a16_completely_round_fraction real NOT NULL, --/D Raw GZ vote fraction
+t07_rounded_a16_completely_round_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t07_rounded_a16_completely_round_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t07_rounded_a16_completely_round_flag int NOT NULL, --/D GZ flag
+t07_rounded_a17_in_between_count int NOT NULL, --/D Raw GZ vote count
+t07_rounded_a17_in_between_weight real NOT NULL, --/D User weighted vote count
+t07_rounded_a17_in_between_fraction real NOT NULL, --/D Raw GZ vote fraction
+t07_rounded_a17_in_between_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t07_rounded_a17_in_between_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t07_rounded_a17_in_between_flag int NOT NULL, --/D GZ flag
+t07_rounded_a18_cigar_shaped_count int NOT NULL, --/D Raw GZ vote count
+t07_rounded_a18_cigar_shaped_weight real NOT NULL, --/D User weighted vote count
+t07_rounded_a18_cigar_shaped_fraction real NOT NULL, --/D Raw GZ vote fraction
+t07_rounded_a18_cigar_shaped_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t07_rounded_a18_cigar_shaped_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t07_rounded_a18_cigar_shaped_flag int NOT NULL, --/D GZ flag
+t08_odd_feature_a19_ring_count int NOT NULL, --/D Raw GZ vote count
+t08_odd_feature_a19_ring_weight real NOT NULL, --/D User weighted vote count
+t08_odd_feature_a19_ring_fraction real NOT NULL, --/D Raw GZ vote fraction
+t08_odd_feature_a19_ring_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t08_odd_feature_a19_ring_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t08_odd_feature_a19_ring_flag int NOT NULL, --/D GZ flag
+t08_odd_feature_a20_lens_or_arc_count int NOT NULL, --/D Raw GZ vote count
+t08_odd_feature_a20_lens_or_arc_weight real NOT NULL, --/D User weighted vote count
+t08_odd_feature_a20_lens_or_arc_fraction real NOT NULL, --/D Raw GZ vote fraction
+t08_odd_feature_a20_lens_or_arc_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t08_odd_feature_a20_lens_or_arc_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t08_odd_feature_a20_lens_or_arc_flag int NOT NULL, --/D GZ flag
+t08_odd_feature_a21_disturbed_count int NOT NULL, --/D Raw GZ vote count
+t08_odd_feature_a21_disturbed_weight real NOT NULL, --/D User weighted vote count
+t08_odd_feature_a21_disturbed_fraction real NOT NULL, --/D Raw GZ vote fraction
+t08_odd_feature_a21_disturbed_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t08_odd_feature_a21_disturbed_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t08_odd_feature_a21_disturbed_flag int NOT NULL, --/D GZ flag
+t08_odd_feature_a22_irregular_count int NOT NULL, --/D Raw GZ vote count
+t08_odd_feature_a22_irregular_weight real NOT NULL, --/D User weighted vote count
+t08_odd_feature_a22_irregular_fraction real NOT NULL, --/D Raw GZ vote fraction
+t08_odd_feature_a22_irregular_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t08_odd_feature_a22_irregular_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t08_odd_feature_a22_irregular_flag int NOT NULL, --/D GZ flag
+t08_odd_feature_a23_other_count int NOT NULL, --/D Raw GZ vote count
+t08_odd_feature_a23_other_weight real NOT NULL, --/D User weighted vote count
+t08_odd_feature_a23_other_fraction real NOT NULL, --/D Raw GZ vote fraction
+t08_odd_feature_a23_other_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t08_odd_feature_a23_other_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t08_odd_feature_a23_other_flag int NOT NULL, --/D GZ flag
+t08_odd_feature_a24_merger_count int NOT NULL, --/D Raw GZ vote count
+t08_odd_feature_a24_merger_weight real NOT NULL, --/D User weighted vote count
+t08_odd_feature_a24_merger_fraction real NOT NULL, --/D Raw GZ vote fraction
+t08_odd_feature_a24_merger_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t08_odd_feature_a24_merger_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t08_odd_feature_a24_merger_flag int NOT NULL, --/D GZ flag
+t08_odd_feature_a38_dust_lane_count int NOT NULL, --/D Raw GZ vote count
+t08_odd_feature_a38_dust_lane_weight real NOT NULL, --/D User weighted vote count
+t08_odd_feature_a38_dust_lane_fraction real NOT NULL, --/D Raw GZ vote fraction
+t08_odd_feature_a38_dust_lane_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t08_odd_feature_a38_dust_lane_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t08_odd_feature_a38_dust_lane_flag int NOT NULL, --/D GZ flag
+t09_bulge_shape_a25_rounded_count int NOT NULL, --/D Raw GZ vote count
+t09_bulge_shape_a25_rounded_weight real NOT NULL, --/D User weighted vote count
+t09_bulge_shape_a25_rounded_fraction real NOT NULL, --/D Raw GZ vote fraction
+t09_bulge_shape_a25_rounded_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t09_bulge_shape_a25_rounded_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t09_bulge_shape_a25_rounded_flag int NOT NULL, --/D GZ flag
+t09_bulge_shape_a26_boxy_count int NOT NULL, --/D Raw GZ vote count
+t09_bulge_shape_a26_boxy_weight real NOT NULL, --/D User weighted vote count
+t09_bulge_shape_a26_boxy_fraction real NOT NULL, --/D Raw GZ vote fraction
+t09_bulge_shape_a26_boxy_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t09_bulge_shape_a26_boxy_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t09_bulge_shape_a26_boxy_flag int NOT NULL, --/D GZ flag
+t09_bulge_shape_a27_no_bulge_count int NOT NULL, --/D Raw GZ vote count
+t09_bulge_shape_a27_no_bulge_weight real NOT NULL, --/D User weighted vote count
+t09_bulge_shape_a27_no_bulge_fraction real NOT NULL, --/D Raw GZ vote fraction
+t09_bulge_shape_a27_no_bulge_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t09_bulge_shape_a27_no_bulge_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t09_bulge_shape_a27_no_bulge_flag int NOT NULL, --/D GZ flag
+t10_arms_winding_a28_tight_count int NOT NULL, --/D Raw GZ vote count
+t10_arms_winding_a28_tight_weight real NOT NULL, --/D User weighted vote count
+t10_arms_winding_a28_tight_fraction real NOT NULL, --/D Raw GZ vote fraction
+t10_arms_winding_a28_tight_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t10_arms_winding_a28_tight_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t10_arms_winding_a28_tight_flag int NOT NULL, --/D GZ flag
+t10_arms_winding_a29_medium_count int NOT NULL, --/D Raw GZ vote count
+t10_arms_winding_a29_medium_weight real NOT NULL, --/D User weighted vote count
+t10_arms_winding_a29_medium_fraction real NOT NULL, --/D Raw GZ vote fraction
+t10_arms_winding_a29_medium_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t10_arms_winding_a29_medium_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t10_arms_winding_a29_medium_flag int NOT NULL, --/D GZ flag
+t10_arms_winding_a30_loose_count int NOT NULL, --/D Raw GZ vote count
+t10_arms_winding_a30_loose_weight real NOT NULL, --/D User weighted vote count
+t10_arms_winding_a30_loose_fraction real NOT NULL, --/D Raw GZ vote fraction
+t10_arms_winding_a30_loose_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t10_arms_winding_a30_loose_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t10_arms_winding_a30_loose_flag int NOT NULL, --/D GZ flag
+t11_arms_number_a31_1_count int NOT NULL, --/D Raw GZ vote count
+t11_arms_number_a31_1_weight real NOT NULL, --/D User weighted vote count
+t11_arms_number_a31_1_fraction real NOT NULL, --/D Raw GZ vote fraction
+t11_arms_number_a31_1_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t11_arms_number_a31_1_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t11_arms_number_a31_1_flag int NOT NULL, --/D GZ flag
+t11_arms_number_a32_2_count int NOT NULL, --/D Raw GZ vote count
+t11_arms_number_a32_2_weight real NOT NULL, --/D User weighted vote count
+t11_arms_number_a32_2_fraction real NOT NULL, --/D Raw GZ vote fraction
+t11_arms_number_a32_2_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t11_arms_number_a32_2_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t11_arms_number_a32_2_flag int NOT NULL, --/D GZ flag
+t11_arms_number_a33_3_count int NOT NULL, --/D Raw GZ vote count
+t11_arms_number_a33_3_weight real NOT NULL, --/D User weighted vote count
+t11_arms_number_a33_3_fraction real NOT NULL, --/D Raw GZ vote fraction
+t11_arms_number_a33_3_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t11_arms_number_a33_3_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t11_arms_number_a33_3_flag int NOT NULL, --/D GZ flag
+t11_arms_number_a34_4_count int NOT NULL, --/D Raw GZ vote count
+t11_arms_number_a34_4_weight real NOT NULL, --/D User weighted vote count
+t11_arms_number_a34_4_fraction real NOT NULL, --/D Raw GZ vote fraction
+t11_arms_number_a34_4_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t11_arms_number_a34_4_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t11_arms_number_a34_4_flag int NOT NULL, --/D GZ flag
+t11_arms_number_a36_more_than_4_count int NOT NULL, --/D Raw GZ vote count
+t11_arms_number_a36_more_than_4_weight real NOT NULL, --/D User weighted vote count
+t11_arms_number_a36_more_than_4_fraction real NOT NULL, --/D Raw GZ vote fraction
+t11_arms_number_a36_more_than_4_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t11_arms_number_a36_more_than_4_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t11_arms_number_a36_more_than_4_flag int NOT NULL, --/D GZ flag
+t11_arms_number_a37_cant_tell_count int NOT NULL, --/D Raw GZ vote count
+t11_arms_number_a37_cant_tell_weight real NOT NULL, --/D User weighted vote count
+t11_arms_number_a37_cant_tell_fraction real NOT NULL, --/D Raw GZ vote fraction
+t11_arms_number_a37_cant_tell_weighted_fraction real NOT NULL, --/D User weighted vote fraction
+t11_arms_number_a37_cant_tell_debiased real NOT NULL, --/D Debiased GZ vote fraction
+t11_arms_number_a37_cant_tell_flag int NOT NULL, --/D GZ flag
+)
+GO
+
+
+--=========================================================
+IF EXISTS (SELECT name FROM sysobjects
+         WHERE xtype='U' AND name = 'MaNGA_GZD_auto')
+	DROP TABLE MaNGA_GZD_auto
+GO
+--
+EXEC spSetDefaultFileGroup 'MaNGA_GZD_auto'
+GO
+--
+CREATE TABLE MaNGA_GZD_auto(
+-------------------------------------------------------------------------------
+--/H This table contains the automated Galaxy Zoo DECaLS classifications for 
+--/H MaNGA galaxies that have them.
+-------------------------------------------------------------------------------
+--/T This table contains a match between the automated Galaxy Zoo DECaLS (GZD)
+--/T classifications and the final MaNGA galaxies. The match was done on the
+--/T NSA IAUNAME. 
+--/T However, there was a very small subset of MaNGA galaxies without an NSA
+--/T IAUNAME. These were matched on RA and DEC with the GZD sample and only
+--/T included in this table after visual inspection by the authors. There are
+--/T only 15 galaxies added this way, and their NSA_IAUNAME was set to their
+--/T iauname in GZD. 
+--/T For more information on Galaxy Zoo DECaLS, please refer to Walmsley et
+--/T al. 2021, arXiv:2102.08414. 
+-------------------------------------------------------------------------------
+PLATEIFU varchar(12) NOT NULL, --/D MaNGA PLATE-IFU
+MANGAID varchar(10) NOT NULL, --/D MaNGA ID
+NSA_IAUNAME varchar(20) NOT NULL, --/D NSA IAU name
+OBJRA float NOT NULL, --/U deg --/D RA of the galaxy center in MaNGA
+OBJDEC float NOT NULL, --/U deg --/D DEC of the galaxy center in MaNGA
+Z float NOT NULL, --/D Redshift of the galaxy in MaNGA
+MNGTARG1 int NOT NULL, --/D Main survey targeting bit in MaNGA
+MNGTARG2 int NOT NULL, --/D Non-galaxy targeting bit in MaNGA
+MNGTARG3 int NOT NULL, --/D Ancillary targeting bit in MaNGA
+IFUDESIGNSIZE int NOT NULL, --/D Design size for the IFU in MaNGA
+smooth_or_featured_smooth_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F smooth-or-featured_smooth_concentration
+smooth_or_featured_featured_or_disk_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F smooth-or-featured_featured-or-disk_concentration
+smooth_or_featured_artifact_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F smooth-or-featured_artifact_concentration
+disk_edge_on_yes_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F disk-edge-on_yes_concentration
+disk_edge_on_no_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F disk-edge-on_no_concentration
+has_spiral_arms_yes_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F has-spiral-arms_yes_concentration
+has_spiral_arms_no_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F has-spiral-arms_no_concentration
+bar_strong_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors
+bar_weak_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors
+bar_no_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors
+bulge_size_dominant_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F bulge-size_dominant_concentration
+bulge_size_large_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F bulge-size_large_concentration
+bulge_size_moderate_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F bulge-size_moderate_concentration
+bulge_size_small_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F bulge-size_small_concentration
+bulge_size_none_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F bulge-size_none_concentration
+how_rounded_round_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F how-rounded_round_concentration
+how_rounded_in_between_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F how-rounded_in-between_concentration
+how_rounded_cigar_shaped_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F how-rounded_cigar-shaped_concentration
+edge_on_bulge_boxy_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F edge-on-bulge_boxy_concentration
+edge_on_bulge_none_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F edge-on-bulge_none_concentration
+edge_on_bulge_rounded_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F edge-on-bulge_rounded_concentration
+spiral_winding_tight_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F spiral-winding_tight_concentration
+spiral_winding_medium_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F spiral-winding_medium_concentration
+spiral_winding_loose_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F spiral-winding_loose_concentration
+spiral_arm_count_1_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F spiral-arm-count_1_concentration
+spiral_arm_count_2_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F spiral-arm-count_2_concentration
+spiral_arm_count_3_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F spiral-arm-count_3_concentration
+spiral_arm_count_4_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F spiral-arm-count_4_concentration
+spiral_arm_count_more_than_4_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F spiral-arm-count_more-than-4_concentration
+spiral_arm_count_cant_tell_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F spiral-arm-count_cant-tell_concentration
+merging_none_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors
+merging_minor_disturbance_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F merging_minor-disturbance_concentration
+merging_major_disturbance_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors --/F merging_major-disturbance_concentration
+merging_merger_concentration VARCHAR(512) NOT NULL, --/D Dirichlet concentration parameters that encode the posteriors
+smooth_or_featured_smooth_fraction real NOT NULL, --/D GZ vote fraction --/F smooth-or-featured_smooth_fraction
+smooth_or_featured_featured_or_disk_fraction real NOT NULL, --/D GZ vote fraction --/F smooth-or-featured_featured-or-disk_fraction
+smooth_or_featured_artifact_fraction real NOT NULL, --/D GZ vote fraction --/F smooth-or-featured_artifact_fraction
+disk_edge_on_yes_fraction real NOT NULL, --/D GZ vote fraction --/F disk-edge-on_yes_fraction
+disk_edge_on_no_fraction real NOT NULL, --/D GZ vote fraction --/F disk-edge-on_no_fraction
+has_spiral_arms_yes_fraction real NOT NULL, --/D GZ vote fraction --/F has-spiral-arms_yes_fraction
+has_spiral_arms_no_fraction real NOT NULL, --/D GZ vote fraction --/F has-spiral-arms_no_fraction
+bar_strong_fraction real NOT NULL, --/D GZ vote fraction
+bar_weak_fraction real NOT NULL, --/D GZ vote fraction
+bar_no_fraction real NOT NULL, --/D GZ vote fraction
+bulge_size_dominant_fraction real NOT NULL, --/D GZ vote fraction --/F bulge-size_dominant_fraction
+bulge_size_large_fraction real NOT NULL, --/D GZ vote fraction --/F bulge-size_large_fraction
+bulge_size_moderate_fraction real NOT NULL, --/D GZ vote fraction --/F bulge-size_moderate_fraction
+bulge_size_small_fraction real NOT NULL, --/D GZ vote fraction --/F bulge-size_small_fraction
+bulge_size_none_fraction real NOT NULL, --/D GZ vote fraction --/F bulge-size_none_fraction
+how_rounded_round_fraction real NOT NULL, --/D GZ vote fraction --/F how-rounded_round_fraction
+how_rounded_in_between_fraction real NOT NULL, --/D GZ vote fraction --/F how-rounded_in-between_fraction
+how_rounded_cigar_shaped_fraction real NOT NULL, --/D GZ vote fraction --/F how-rounded_cigar-shaped_fraction
+edge_on_bulge_boxy_fraction real NOT NULL, --/D GZ vote fraction --/F edge-on-bulge_boxy_fraction
+edge_on_bulge_none_fraction real NOT NULL, --/D GZ vote fraction --/F edge-on-bulge_none_fraction
+edge_on_bulge_rounded_fraction real NOT NULL, --/D GZ vote fraction --/F edge-on-bulge_rounded_fraction
+spiral_winding_tight_fraction real NOT NULL, --/D GZ vote fraction --/F spiral-winding_tight_fraction
+spiral_winding_medium_fraction real NOT NULL, --/D GZ vote fraction --/F spiral-winding_medium_fraction
+spiral_winding_loose_fraction real NOT NULL, --/D GZ vote fraction --/F spiral-winding_loose_fraction
+spiral_arm_count_1_fraction real NOT NULL, --/D GZ vote fraction --/F spiral-arm-count_1_fraction
+spiral_arm_count_2_fraction real NOT NULL, --/D GZ vote fraction --/F spiral-arm-count_2_fraction
+spiral_arm_count_3_fraction real NOT NULL, --/D GZ vote fraction --/F spiral-arm-count_3_fraction
+spiral_arm_count_4_fraction real NOT NULL, --/D GZ vote fraction --/F spiral-arm-count_4_fraction
+spiral_arm_count_more_than_4_fraction real NOT NULL, --/D GZ vote fraction --/F spiral-arm-count_more-than-4_fraction
+spiral_arm_count_cant_tell_fraction real NOT NULL, --/D GZ vote fraction --/F spiral-arm-count_cant-tell_fraction
+merging_none_fraction real NOT NULL, --/D GZ vote fraction
+merging_minor_disturbance_fraction real NOT NULL, --/D GZ vote fraction --/F merging_minor-disturbance_fraction
+merging_major_disturbance_fraction real NOT NULL, --/D GZ vote fraction --/F merging_major-disturbance_fraction
+merging_merger_fraction real NOT NULL, --/D GZ vote fraction
+smooth_or_featured_proportion_volunteers_asked real NOT NULL, --/D Estimated fraction of volunteers that would have been asked that question --/F smooth-or-featured_proportion_volunteers_asked
+disk_edge_on_proportion_volunteers_asked real NOT NULL, --/D Estimated fraction of volunteers that would have been asked that question --/F disk-edge-on_proportion_volunteers_asked
+has_spiral_arms_proportion_volunteers_asked real NOT NULL, --/D Estimated fraction of volunteers that would have been asked that question --/F has-spiral-arms_proportion_volunteers_asked
+bar_proportion_volunteers_asked real NOT NULL, --/D Estimated fraction of volunteers that would have been asked that question
+bulge_size_proportion_volunteers_asked real NOT NULL, --/D Estimated fraction of volunteers that would have been asked that question --/F bulge-size_proportion_volunteers_asked
+how_rounded_proportion_volunteers_asked real NOT NULL, --/D Estimated fraction of volunteers that would have been asked that question --/F how-rounded_proportion_volunteers_asked
+edge_on_bulge_proportion_volunteers_asked real NOT NULL, --/D Estimated fraction of volunteers that would have been asked that question --/F edge-on-bulge_proportion_volunteers_asked
+spiral_winding_proportion_volunteers_asked real NOT NULL, --/D Estimated fraction of volunteers that would have been asked that question --/F spiral-winding_proportion_volunteers_asked
+spiral_arm_count_proportion_volunteers_asked real NOT NULL, --/D Estimated fraction of volunteers that would have been asked that question --/F spiral-arm-count_proportion_volunteers_asked
+merging_proportion_volunteers_asked real NOT NULL, --/D Estimated fraction of volunteers that would have been asked that question
+)
+GO
+
+
+--=========================================================
+IF EXISTS (SELECT name FROM sysobjects
+         WHERE xtype='U' AND name = 'MaNGA_gzUKIDSS_rhdebiased')
+	DROP TABLE MaNGA_gzUKIDSS_rhdebiased
+GO
+--
+EXEC spSetDefaultFileGroup 'MaNGA_gzUKIDSS_rhdebiased'
+GO
+--
+CREATE TABLE MaNGA_gzUKIDSS_rhdebiased(
+-------------------------------------------------------------------------------
+--/H This table contains a match between the Galaxy Zoo classifications based on UKIDSS images and the final MaNGA galaxies.
+--/T This table contains a match between the Galaxy Zoo classifications based on UKIDSS images and the final MaNGA galaxies. The match was done using RA, Dec. 
+--/T For more information on Galaxy Zoo UKIDSS, please see Galloway 2017 (a PhD thesis submitted to the University of Minnesota). 
+-------------------------------------------------------------------------------
+MANGAID varchar(10) NOT NULL, --/D MaNGA ID
+OBJRA float NOT NULL, --/U deg --/D RA of the galaxy center in MaNGA
+OBJDEC float NOT NULL, --/U deg --/D DEC of the galaxy center in MaNGA
+MNGTARG1 int NOT NULL, --/D Main survey targeting bit in MaNGA
+MNGTARG2 int NOT NULL, --/D Non-galaxy targeting bit in MaNGA
+MNGTARG3 int NOT NULL, --/D Ancillary targeting bit in MaNGA
+NSA_IAUNAME varchar(20) NOT NULL, --/D NSA IAU name
+IFUDESIGNSIZE int NOT NULL, --/D Design size for the IFU in MaNGA
+Z float NOT NULL, --/D Redshift of the galaxy in MaNGA
+Ymag real NOT NULL, --/U mag --/D Y-band magnitude
+e_Ymag real NOT NULL, --/U mag --/D error on the Y-band magnitude
+Jmag real NOT NULL, --/U mag --/D J-band magnitude
+e_Jmag real NOT NULL, --/U mag --/D error on the J-band magnitude
+Hmag real NOT NULL, --/U mag --/D H-band magnitude
+e_Hmag real NOT NULL, --/U mag --/D error on the H-band magnitude
+Kmag real NOT NULL, --/U mag --/D K-band magnitude
+e_Kmag real NOT NULL, --/U mag --/D error on the K-band magnitude
+UKIDSS_url varchar(90) NOT NULL, --/D url for the UKIDSS images
+subject_id varchar(24) NOT NULL, --/D Zooniverse ID
+t00_smooth_or_features_a0_smooth_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t00_smooth_or_features_a1_features_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t00_smooth_or_features_a2_artifact_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t00_smooth_or_features_count_weighted_ukidss real NOT NULL, --/D GZ weighted vote count
+t01_disk_edge_on_a0_yes_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t01_disk_edge_on_a1_no_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t01_disk_edge_on_count_weighted_ukidss real NOT NULL, --/D GZ weighted vote count
+t02_bar_a0_bar_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t02_bar_a1_no_bar_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t02_bar_count_weighted_ukidss real NOT NULL, --/D GZ weighted vote count
+t03_spiral_a0_spiral_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t03_spiral_a1_no_spiral_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t03_spiral_count_weighted_ukidss real NOT NULL, --/D GZ weighted vote count
+t04_bulge_prominence_a0_no_bulge_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t04_bulge_prominence_a1_just_noticeable_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t04_bulge_prominence_a2_obvious_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t04_bulge_prominence_a3_dominant_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t04_bulge_prominence_count_weighted_ukidss real NOT NULL, --/D GZ weighted vote count
+t05_odd_a0_yes_weighted_fraction real NOT NULL, --/D GZ weighted vote fraction
+t05_odd_a1_no_weighted_fraction real NOT NULL, --/D GZ weighted vote fraction
+t05_odd_count_weighted real NOT NULL, --/D GZ weighted vote count
+t06_odd_feature_x0_ring_weighted_fraction real NOT NULL, --/D GZ weighted vote fraction
+t06_odd_feature_x1_lens_weighted_fraction real NOT NULL, --/D GZ weighted vote fraction
+t06_odd_feature_x2_disturbed_weighted_fraction real NOT NULL, --/D GZ weighted vote fraction
+t06_odd_feature_x3_irregular_weighted_fraction real NOT NULL, --/D GZ weighted vote fraction
+t06_odd_feature_x4_other_weighted_fraction real NOT NULL, --/D GZ weighted vote fraction
+t06_odd_feature_x5_merger_weighted_fraction real NOT NULL, --/D GZ weighted vote fraction
+t06_odd_feature_x6_dustlane_weighted_fraction real NOT NULL, --/D GZ weighted vote fraction
+t06_odd_feature_a0_discuss_weighted_fraction real NOT NULL, --/D GZ weighted vote fraction
+t06_odd_feature_count_weighted real NOT NULL, --/D GZ weighted vote count
+t07_rounded_a0_completely_round_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t07_rounded_a1_in_between_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t07_rounded_a2_cigar_shaped_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t07_rounded_count_weighted_ukidss real NOT NULL, --/D GZ weighted vote count
+t08_bulge_shape_a0_rounded_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t08_bulge_shape_a1_boxy_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t08_bulge_shape_a2_no_bulge_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t08_bulge_shape_count_weighted_ukidss real NOT NULL, --/D GZ weighted vote count
+t09_arms_winding_a0_tight_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t09_arms_winding_a1_medium_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t09_arms_winding_a2_loose_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t09_arms_winding_count_weighted_ukidss real NOT NULL, --/D GZ weighted vote count
+t10_arms_number_a0_1_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t10_arms_number_a1_2_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t10_arms_number_a2_3_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t10_arms_number_a3_4_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t10_arms_number_a4_more_than_4_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t10_arms_number_a5_cant_tell_weighted_fraction_ukidss real NOT NULL, --/D GZ weighted vote fraction
+t10_arms_number_count_weighted_ukidss real NOT NULL, --/D GZ weighted vote count
+t11_discuss_a0_yes_weighted_fraction real NOT NULL, --/D GZ weighted vote fraction
+t11_discuss_a1_no_weighted_fraction real NOT NULL, --/D GZ weighted vote fraction
+t11_discuss_count_weighted real NOT NULL, --/D GZ weighted vote count
+t00_smooth_or_features_a0_smooth_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t00_smooth_or_features_a1_features_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t00_smooth_or_features_a2_artifact_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t01_disk_edge_on_a0_yes_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t01_disk_edge_on_a1_no_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t07_rounded_a0_completely_round_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t07_rounded_a1_in_between_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t07_rounded_a2_cigar_shaped_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t03_spiral_a0_spiral_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t03_spiral_a1_no_spiral_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t08_bulge_shape_a0_rounded_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t08_bulge_shape_a1_boxy_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t08_bulge_shape_a2_no_bulge_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t04_bulge_prominence_a0_no_bulge_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t04_bulge_prominence_a1_just_noticeable_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t04_bulge_prominence_a2_obvious_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t04_bulge_prominence_a3_dominant_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t09_arms_winding_a0_tight_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t09_arms_winding_a1_medium_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t09_arms_winding_a2_loose_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t10_arms_number_a0_1_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t10_arms_number_a1_2_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t10_arms_number_a2_3_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t10_arms_number_a3_4_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t10_arms_number_a4_more_than_4_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t10_arms_number_a5_cant_tell_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t02_bar_a0_bar_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+t02_bar_a1_no_bar_debiased_rh_ukidss real NOT NULL, --/D GZ debiased vote fraction
+)
+
+
 
 EXEC spSetDefaultFileGroup 'PrimaryFileGroup'
 GO

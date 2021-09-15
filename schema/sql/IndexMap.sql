@@ -257,7 +257,17 @@
 --* 2019-11-23 Ani: Added PKs for mangaGalaxyZoo and mangaAlfalfaDR15. (DR16)
 --*
 --* 2019-12-03 Sue: Adding PK to PawlikMorph (DR16)
---* 2019-12-04 Sue: Added spIndexCreate_print to generate sql for ad-hoc use / incremental loads
+--* 2019-12-04 Sue: Added spIndexCreate_print to generate sql for ad-hoc use
+--*                 incremental loads.
+--* 2021-07-12 Ani: Updated PK for mastars_goodvisits to plate,ifudesign,mjd
+--*                 for DR17.
+--* 2021-07-28 Ani: Updated PKs for apogeeStarVisit, apogeeObject to include
+--*                 2 columns, for uniqueness. (DR17)
+--* 2021-07-30 Ani: Added PKs for Mastar VACs (DR17).
+--* 2021-08-05 Ani: Added PK for SDSS17Pipe3D_v3_1_1 VAC (DR17).
+--* 2021-08-05 Ani: Added PK for apogee_starhorse VAC (DR17).
+--* 2021-08-06 Ani: Added PKs for apogeeDistMass, ebossMCPM VACs (DR17).
+--* 2021-08-06 Ani: Added PKs for mangaFirefly_mastar, mangaFirefly_miles VACs (DR17).
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -473,8 +483,8 @@ INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'apogeeStar', 'apstar_id'
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'aspcapStar', 'aspcap_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'apogeePlate', 'plate_visit_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'aspcapStarCovar', 'aspcap_covar_id,aspcap_id', '', 'SPECTRO', 'page', 'SPEC', 0)
-INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'apogeeObject', 'target_id', '', 'SPECTRO', 'page', 'SPEC', 0)
-INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'apogeeStarVisit', 'visit_id', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'apogeeObject', 'target_id,alt_id', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'apogeeStarVisit', 'visit_id,apstar_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'apogeeStarAllVisit', 'visit_id,apstar_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'cannonStar', 'cannon_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaDAPall', 'plateIFU,daptype', '', 'SPECTRO', 'page', 'SPEC', 0)
@@ -483,8 +493,11 @@ INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaTarget', 'mangaID',
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'nsatlas', 'nsaID', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaFirefly', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaPipe3D', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
-INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaHIall', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaHIall', 'plateIFU,session', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaHIbonus', 'plateIFU,bonusid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'manga_GZ2', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'manga_GZD_auto', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'manga_gzUKIDSS_rhdebiased', 'mangaID', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaGalaxyZoo', 'nsa_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaAlfalfaDR15', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'qsoVarPTF', 'VAR_OBJID', '', 'SPECTRO', 'page', 'SPEC', 0)
@@ -501,9 +514,18 @@ INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'sppTargets', 'TARGETID',
 INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'sdssEbossFirefly', 'specObjID', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'spiders_quasar', 'name', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mastar_goodstars', 'mangaid', '', 'SPECTRO', 'page', 'SPEC', 0)
-INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mastar_goodvisits', 'mangaid,mjd', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mastar_goodvisits', 'plate,ifudesign,mjd', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mastar_goodstars_xmatch_gaiadr2', 'mangaid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mastar_goodstars_xmatch_gaiaedr3', 'mangaid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mastar_goodstars_params', 'mangaid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mastar_goodvisits_params', 'plate,ifudesign,mjd', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'PawlikMorph', 'mangaid', '', 'SPECTRO', 'page', 'SPEC', 0)
-
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'apogee_starhorse', 'aspcap_id,apstar_id', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'apogeeDistMass', 'apstar_id', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'SDSS17Pipe3D_v3_1_1', 'name', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaFirefly_mastar', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaFirefly_miles', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'ebossMCPM', 'CATALOGID,MCPM_RUN', '', 'SPECTRO', 'page', 'SPEC', 0)
 -----------------------------------------------------
 -- Primary Keys for the TILES tables
 -----------------------------------------------------

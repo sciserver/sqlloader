@@ -60,6 +60,7 @@
 ' 2018-07-19    Added mastar batch.
 ' 2019-11-19    Added Apogee2Object files.
 ' 2019-11-24    Added MangaGalaxyZoo and MangaAlfalfaDR15.
+' 2021-06-18    Added updated MaNGA GZ tables for DR17.
 '==============================================================
 
 Option Explicit
@@ -185,10 +186,12 @@ Public Sub CheckDir (root,level)
 	ElseIf ( theexporttype = "forced" ) Then
 		s = s & "(^sqlWISE_forced_target-2-" & rootname & "-*[0-9]*_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "manga" ) Then
-		s = s & "(^sql(MangaDAPall|MangaDRPall|MangaTarget|MangaHIall|MangaHIbonus|MangaGalaxyZoo|MangaAlfalfaDR15)" & "*\.csv$)"
+		s = s & "(^sql(MangaDAPall|MangaDRPall|MangaTarget|MangaHIall|Manga_gz2|Manga_gz_ukidss|Manga_gzd_auto)" & "-[0-9]*\.csv$)"
+'		s = s & "(^sql(MangaDAPall|MangaDRPall|MangaTarget|MangaHIall|MangaHIbonus|MangaGalaxyZoo|MangaAlfalfaDR15)" & "*\.csv$)"
 '		s = s & "(^sql(MangaDAPall|MangaDRPall|MangaTarget|MangaHIall|MangaHIbonus|MangaGalaxyZoo|MangaAlfalfaDR15)" & "-v[0-9]*_[0-9]*_[0-9]*\.csv_[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "mastar" ) Then
-		s = s & "(^sql(MastarGoodStars|MastarGoodVisits)" & "-v[0-9]*_[0-9]*_[0-9]*\.csv$)"
+'		s = s & "(^sql(MastarGoodStars|MastarGoodVisits|MastarGoodstarsCrossmatch_GaiaDR2_2MASS_SIMBAD_PS1|)" & "-v[0-9]*_[0-9]*_[0-9]*\.csv$)"
+		s = s & "(^sql(MastarGoodStars|MastarGoodVisits)" & "[\-_a-zA-Z0-9]*\.csv$)"
 	ElseIf ( theexporttype = "nsa" ) Then
 		s = s & "(^sqlNSA" & "-v[0-9]*_[0-9]*_[0-9]*\.csv_[0-9]*\.csv$)"
 	Else
@@ -246,9 +249,11 @@ Public Sub CheckDir (root,level)
 	'
 	rg.Pattern = "^#"
 	Set inStream = fso.OpenTextFile(root.Path & "\csv_ready")       
+	Debug "Logfile"
 	Do While Not (inStream.atEndOfStream)
 		buf = inStream.ReadLine
 		If Not rg.Test(buf) Then
+			Debug "root: " & root & ", buf: " & buf
 			LogFile root, buf
 		End If
 	Loop

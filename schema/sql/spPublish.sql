@@ -79,6 +79,8 @@
 --* 2018-06-13 Ani: Added mangaHIall and mangaHIbonus to spPublishManga. (DR15)
 --* 2018-07-23 Ani: Added spPublishMastar. (DR15)
 --* 2019-11-24 Ani: Added mangaGalaxyZoo, mangaAlfalfaDR15 to PublishManga (DR16).
+--* 2021-06-18 Ani: Swapped in MaNGA DR17 (GZ) VACs.
+--* 2021-07-30 Ani: Added Mastar VACs (DR17).
 ----------------------------------------------------------------------
 -- We are not copying 
 -- DBcolumns, DBObjects, DBViewCols, DataConstants, Globe,Glossary, 
@@ -730,6 +732,16 @@ AS BEGIN
 	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mangaHIall', @firstTime 
 	set @summary = @summary + @err 
 
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'MaNGA_GZ2', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'MaNGA_GZD_auto', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'MaNGA_gzUKIDSS_rhdebiased', @firstTime 
+	set @summary = @summary + @err 
+
+/* not updated for DR17
 	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mangaHIbonus', @firstTime 
 	set @summary = @summary + @err 
 
@@ -738,6 +750,7 @@ AS BEGIN
 
 	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mangaAlfalfaDR15', @firstTime 
 	set @summary = @summary + @err 
+*/
 
 	--------------------------------------------------
 	set @message = 'Publish of database ' + @fromDB + ' to database ' + @toDB + ' found ' + str(@summary) + ' errors.' 
@@ -836,6 +849,18 @@ AS BEGIN
 	set @summary = @summary + @err 
 
 	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mastar_goodvisits', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mastar_goodstars_xmatch_gaiadr2', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mastar_goodstars_xmatch_gaiaedr3', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mastar_goodstars_params', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mastar_goodvisits_params', @firstTime 
 	set @summary = @summary + @err 
 
 	--------------------------------------------------

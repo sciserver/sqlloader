@@ -77,6 +77,10 @@
 --* 2016-11-14 Sue: added order by s.FiberID to spGetFiberList
 --* 2020-05-20 Ani: Updated fGetUrlFitsSpectrum for DR16 change in spec
 --*            files path (added "full/" to path).
+--* 2021-08-17 Ani: Updated fGetUrlFitsSpectrum: changed "full/" to "lite/"
+--*            in path, since this works for all DRs). RTicket#84834
+--* 2021-08-18 Ani: Fixed another bug in fGetUrlFitsSpectrum to allow 
+--*            5-digit plate numbers in the path.
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 
@@ -541,10 +545,13 @@ BEGIN
             SET @survey = 'sdss'
 	ELSE
 	    SET @survey = 'eboss'
-	SET @oplate = substring('0000',1,4-len(@plate)) + @plate;
+	IF len(@plate) > 4
+		SET @oplate = @plate
+	ELSE
+		SET @oplate = substring('0000',1,4-len(@plate)) + @plate;
 	SET @ofiber = substring( '0000',1,4-len(@fiber)) + @fiber;
 	SET @link = @link + 'sas/dr' + @release + '/' + @survey + '/spectro/redux/' +
-		@rerun + '/spectra/full/' + @oplate + '/spec-' + @oplate + '-' + 
+		@rerun + '/spectra/lite/' + @oplate + '/spec-' + @oplate + '-' + 
 		@mjd + '-' + @ofiber + '.fits';
 	RETURN @link;
 END

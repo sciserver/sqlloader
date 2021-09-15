@@ -1,9 +1,9 @@
---======================================================================
+--=============================================================================
 --   ApogeeTables.sql
 --   2013-02-05 Mike Blanton & Ani Thakar
-------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 --  APOGEE schema for SkyServer  Feb-05-2013
-------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- History:
 --* 2013-04-25 Ani: Added htmID to apogeeStar.
 --* 2013-05-22 Ani: Updated schema with v302 changes, added 
@@ -40,20 +40,24 @@
 --* 2014-11-25 Ani: Incorporated schema changes for DR12 (new columns
 --*            param_m_h_err and param_alpha_m_err in aspcapStar) and
 --*            changed http bitmask help links to internal info links.
---^ 2016-03-16 DR13 updates.
---^ 2016-03-30 More DR13 updates - ce_* and felem_ce* columns removed..
---^ 2016-05-13 Updated felem* column descriptions in aspcapStar as per Jen
+--* 2016-03-16 DR13 updates.
+--* 2016-03-30 More DR13 updates - ce_* and felem_ce* columns removed..
+--* 2016-05-13 Updated felem* column descriptions in aspcapStar as per Jen
 --*            Sobeck.
---^ 2017-04-11 Added the DR14 schema updates, including new table
+--* 2017-04-11 Added the DR14 schema updates, including new table
 --*            cannonStar.
---^ 2017-04-19 Updated cannonStar schema from SVN, added default values for
+--* 2017-04-19 Updated cannonStar schema from SVN, added default values for
 --*            cannonStar.filename and field columns because the CSVs have
 --*            NULL values.
 --* 2017-05-06 Added columns to apogeeVisit and apogeeStar for DR14.
 --* 2018-07-18 Removed conditional DROP TABLE from tables that do not
 --*            get recreated with each release (apogeeDesign/Field/Object).
 --* 2019-11-14 DR16 schema changes.
-------------------------------------------------------------------------
+--* 2021-06-23 DR17 schema changes.
+--* 2021-06-23 Fixed bug in ApogeeStar, put "file" column name in []. Also
+--*            commented out cannonStar which is not reloaded in DR17.
+--* 2021-07-28 Updated ApogeeVisit - added new "field" column (DR17).
+-------------------------------------------------------------------------------
 
 SET NOCOUNT ON;
 GO
@@ -75,7 +79,7 @@ CREATE TABLE apogeeVisit (
 --/T This table corresponds to the data in a single spectrum visit in APOGEE 
 -------------------------------------------------------------------------------
     visit_id varchar(64) NOT NULL, --/D Unique ID for visit spectrum, of form apogee.[telescope].[cs].[apred_version].plate.mjd.fiberid (Primary key)
-    apred_version varchar(32) NOT NULL, --/D Visit reduction pipeline version (e.g. "r3")
+    apred_version varchar(32) NOT NULL, --/F NOFITS --/D Visit reduction pipeline version (e.g. "r3")
     apogee_id varchar(64) NOT NULL, --/D 2MASS-style star identification  
     target_id varchar(64) NOT NULL, --/D target ID (Foreign key, of form [location_id].[apogee_id])  
     alt_id varchar(64) NOT NULL, --/D alternate ID star identification, for apo1m, used within reductions
@@ -85,28 +89,27 @@ CREATE TABLE apogeeVisit (
     mjd bigint NOT NULL, --/D MJD of this visit
     telescope varchar(32) NOT NULL, --/D Telescope where data was taken
     location_id bigint NOT NULL, --/D Location ID for the field this visit is in (Foreign key)
+    field varchar(128) NOT NULL, --/D Name of field
     ra float NOT NULL, --/U deg --/D Right ascension, J2000
     dec float NOT NULL, --/U deg --/D Declination, J2000
     glon float NOT NULL, --/U deg --/D Galactic longitude
     glat float NOT NULL, --/U deg --/D Galactic latitude
     apogee_target1 bigint NOT NULL, --/D APOGEE target flag (first 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET1)
     apogee_target2 bigint NOT NULL, --/D APOGEE target flag (second 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET2)
-    apogee_target3 bigint NOT NULL, --/D APOGEE target flag (third 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET2)
     apogee2_target1 bigint NOT NULL, --/D APOGEE target flag (first 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET1)
     apogee2_target2 bigint NOT NULL, --/D APOGEE target flag (second 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET2)
     apogee2_target3 bigint NOT NULL, --/D APOGEE target flag (third 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET2)
+    apogee2_target4 bigint NOT NULL, --/D APOGEE target flag (fourth 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET2)
     min_h real NOT NULL, --/D minimum H mag for cohort for main survey target
     max_h real NOT NULL, --/D maximum H mag for cohort for main survey target
     min_jk real NOT NULL, --/D minimum J-K mag for cohort for main survey target
     max_jk real NOT NULL, --/D maximum J-K mag for cohort for main survey target
     survey varchar(100) NOT NULL, --/D Name of survey (apogee/apogee2/apo1m)
-    extratarg bigint NOT NULL, --/D Shorthand flag to denote not a main survey object (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_EXTRATARG)
     snr real NOT NULL, --/D Median signal-to-noise ratio per pixel
     starflag bigint NOT NULL, --/D Bit mask with APOGEE star flags (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_STARFLAG)
     dateobs varchar(100) NOT NULL, --/D Date of observation (YYYY-MM-DDTHH:MM:SS.SSS) 
     jd float NOT NULL, --/D Julian date of observation	
     bc real NOT NULL, --/U km/s --/D Barycentric correction (VHELIO - VREL)
-    vtype real NOT NULL, --/D Radial velocity method (1 = chi-squared, 2 = cross-correlation, 3 = refined cross-correlation)
     vrel real NOT NULL, --/U km/s --/D Derived radial velocity 
     vrelerr real NOT NULL, --/U km/s --/D Derived radial velocity error
     vhelio real NOT NULL, --/U km/s --/D Derived heliocentric radial velocity 
@@ -116,14 +119,12 @@ CREATE TABLE apogeeVisit (
     rv_logg real NOT NULL, --/U dex --/D Log gravity of radial velocity template
     rv_alpha real NOT NULL, --/D [alpha/M] alpha-element abundance
     rv_carb real NOT NULL, --/D [C/H] carbon abundance
-    synthfile varchar(100) NOT NULL, --/D File name of synthetic grid
-    estvtype bigint NOT NULL, --/D Initial radial velocity method for individual visit RV estimate (1 = chi-squared, 2 = cross-correlation)
-    estvrel real NOT NULL, --/U km/s --/D Initial radial velocity for individual visit RV estimate
-    estvrelerr real NOT NULL, --/U km/s --/D Error in initial radial velocity for individual visit RV estimate
-    estvhelio real NOT NULL, --/U km/s --/D Initial heliocentric radial velocity for individual visit RV estimate
-    synthvrel real NOT NULL, --/U km/s --/D Radial velocity from cross-correlation of individual visit against final template
-    synthvrelerr real NOT NULL, --/U km/s --/D Radial velocity error from cross-correlation of individual visit against final template
-    synthvhelio real NOT NULL, --/U km/s --/D Heliocentric radial velocity from cross-correlation of individual visit against final template
+    xcorr_vrel real NOT NULL, --/U km/s --/D Initial radial velocity for individual visit RV estimate
+    xcorr_vrelerr real NOT NULL, --/U km/s --/D Error in initial radial velocity for individual visit RV estimate
+    xcorr_vhelio real NOT NULL, --/U km/s --/D Initial heliocentric radial velocity for individual visit RV estimate
+    rv_chi2 real NOT NULL, --/D Chi2 of RV fit
+    ccfwhm real NOT NULL, --/D FWHM of RV cross correlation function
+    autofwhm real NOT NULL, --/D FWHM of RV autocorrelation function
 )
 GO
 
@@ -145,7 +146,7 @@ CREATE TABLE apogeeStar (
 -------------------------------------------------------------------------------
     apstar_id varchar(64) NOT NULL, --/D Unique ID for combined star spectrum of form apogee.[telescope].[cs].apstar_version.location_id.apogee_id (Primary key)
     target_id varchar(64) NOT NULL, --/D target ID (Foreign key, of form [location_id].[apogee_id]) 
-    alt_id varchar(64) NOT NULL, --/D ID alternate star identification, for apo1m used within reductions
+    alt_id varchar(32) NOT NULL, --/D ID alternate star identification, for apo1m used within reductions
     [file] varchar(128) NOT NULL, --/D File base name with combined star spectrum 
     apogee_id varchar(32) NOT NULL, --/D 2MASS-style star identification  
     telescope varchar(32) NOT NULL, --/D Telescope where data was taken
@@ -157,55 +158,50 @@ CREATE TABLE apogeeStar (
     glat float NOT NULL, --/U deg --/D Galactic latitude
     apogee_target1 bigint NOT NULL, --/D APOGEE target flag (first 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET1)
     apogee_target2 bigint NOT NULL, --/D APOGEE target flag (second 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET2)
-    apogee_target3 bigint NOT NULL, --/D APOGEE target flag (third 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET2)
     apogee2_target1 bigint NOT NULL, --/D APOGEE target flag (first 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET1)
     apogee2_target2 bigint NOT NULL, --/D APOGEE target flag (second 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET2)
     apogee2_target3 bigint NOT NULL, --/D APOGEE target flag (third 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET2)
-    min_h real NOT NULL, --/D minimum H mag for cohort for main survey target
-    max_h real NOT NULL, --/D maximum H mag for cohort for main survey target
-    min_jk real NOT NULL, --/D minimum J-K mag for cohort for main survey target
-    max_jk real NOT NULL, --/D maximum J-K mag for cohort for main survey target
+    apogee2_target4 bigint NOT NULL, --/D APOGEE target flag (fourth 64 bits) (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_TARGET2)
+    min_h real NOT NULL, --/D minimum H mag for cohort for main survey target 
+    max_h real NOT NULL, --/D maximum H mag for cohort for main survey target 
+    min_jk real NOT NULL, --/D minimum J-K mag for cohort for main survey target 
+    max_jk real NOT NULL, --/D maximum J-K mag for cohort for main survey target 
     survey varchar(100) NOT NULL, --/D Name of survey (apogee/apogee2/apo1m)
     extratarg bigint NOT NULL, --/D Shorthand flag to denote not a main survey object (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_EXTRATARG)
     nvisits bigint NOT NULL, --/D Number of visits contributing to the combined spectrum
-    commiss bigint NOT NULL, --/D Set to 1 if this is commissioning data
     snr real NOT NULL, --/D Median signal-to-noise ratio per pixel
     starflag bigint NOT NULL, --/D Bit mask with APOGEE star flags; each bit is set here if it is set in any visit (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_STARFLAG)
     andflag bigint NOT NULL, --/D AND of visit bit mask with APOGEE star flags; each bit is set if set in all visits (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_STARFLAG)
     vhelio_avg real NOT NULL, --/U km/s --/D Signal-to-noise weighted average of heliocentric radial velocity, as determined relative to combined spectrum, with zeropoint from xcorr of combined spectrum with best-fitting template
     vscatter real NOT NULL, --/U km/s --/D Standard deviation of scatter of individual visit RVs around average
     verr real NOT NULL, --/U km/s --/D  Weighted error of heliocentric RV
-    verr_med real NOT NULL, --/U km/s --/D  Median of individual visit RV errors
-    synthvhelio_avg real NOT NULL, --/U km/s --/D Signal-to-noise weighted average of heliocentric radial velocity relative to single best-fit synthetic template
-    synthvscatter real NOT NULL, --/U km/s --/D Standard deviation of scatter of visit radial velocities determined from combined spectrum and best-fit synthetic template
-    synthverr real NOT NULL, --/U km/s --/D Error in signal-to-noise weighted average of heliocentric radial velocity relative to single best-fit synthetic template
-    synthverr_med real NOT NULL, --/U km/s --/D Median of individual visit synthetic RV errors
     rv_teff real NOT NULL, --/U deg K --/D effective temperature from RV template match
     rv_logg real NOT NULL, --/U dex --/D log g from RV template match
     rv_feh real NOT NULL, --/U dex --/D [Fe/H] from RV template match
+    rv_alpha real NOT NULL, --/D [alpha/M] alpha-element abundance
+    rv_carb real NOT NULL, --/D [C/H] carbon abundance
     rv_ccfwhm real NOT NULL, --/U km/s --/D FWHM of cross-correlation peak from combined vs best-match synthetic spectrum
     rv_autofwhm real NOT NULL, --/U km/s --/D FWHM of auto-correlation of best-match synthetic spectrum
-    synthscatter real NOT NULL, --/U km/s --/D scatter between RV using combined spectrum and RV using synthetic spectrum
-    stablerv_chi2 real NOT NULL, --/D Chi-squared of RV distribution under assumption of a stable single-valued RV; perhaps not currently useful because of issues with understanding RV errors
-    stablerv_rchi2 real NOT NULL, --/D Reduced chi^2 of RV distribution
-    chi2_threshold real NOT NULL, --/D Threshold chi^2 for possible binary determination (not currently valid)
-    stablerv_chi2_prob real NOT NULL, --/D Probability of obtaining observed chi^2 under assumption of stable RV
-    apstar_version varchar(32) NOT NULL,  --/D Reduction version of spectrum combination
-    gaia_source_id bigint NOT NULL, --/D GAIA DR2 source id
-    gaia_parallax real NOT NULL, --/U mas --/D GAIA DR2 parallax
-    gaia_parallax_error real NOT NULL, --/U mas --/D GAIA DR2 parallax uncertainty
-    gaia_pmra real NOT NULL, --/U mas/yr --/D GAIA DR2 proper motion in RA
-    gaia_pmra_error real NOT NULL, --/U mas/yr --/D GAIA DR2 proper motion in RA uncertainty
-    gaia_pmdec real NOT NULL, --/U mas/yr --/D GAIA DR2 proper motion in DEC
-    gaia_pmdec_error real NOT NULL, --/U mas/yr --/D GAIA DR2 proper motion in DEC uncertainty
-    gaia_phot_g_mean_mag real NOT NULL, --/D GAIA DR2 g mean magnitude
-    gaia_phot_bp_mean_mag real NOT NULL, --/D GAIA DR2 Bp mean magnitude
-    gaia_phot_rp_mean_mag real NOT NULL, --/D GAIA DR2 Rp mean magnitude
-    gaia_radial_velocity real NOT NULL, --/U km/s --/D GAIA DR2 radial velocity
-    gaia_radial_velocity_error real NOT NULL, --/U km/s --/D GAIA DR2 radial velocity
-    gaia_r_est real NOT NULL, --/U pc --/D GAIA DR2 Bailer Jones r_est
-    gaia_r_lo real NOT NULL, --/U pc --/D GAIA DR2 Bailer Jones r_lo
-    gaia_r_hi real NOT NULL, --/U pc --/D GAIA DR2 Bailer Jones r_hi
+    rv_flag bigint NOT NULL, --/D Bitmask for RV determination
+    n_components int NOT NULL, --/D Number of components from RV cross correlation
+    gaiaedr3_source_id bigint NOT NULL, --/D GAIA EDR3 source id
+    gaiaedr3_parallax real NOT NULL, --/U mas --/D GAIA EDR3 parallax
+    gaiaedr3_parallax_error real NOT NULL, --/U mas --/D GAIA EDR3 parallax uncertainty
+    gaiaedr3_pmra real NOT NULL, --/U mas/yr --/D GAIA EDR3 proper motion in RA
+    gaiaedr3_pmra_error real NOT NULL, --/U mas/yr --/D GAIA EDR3 proper motion in RA uncertainty
+    gaiaedr3_pmdec real NOT NULL, --/U mas/yr --/D GAIA EDR3 proper motion in DEC
+    gaiaedr3_pmdec_error real NOT NULL, --/U mas/yr --/D GAIA EDR3 proper motion in DEC uncertainty
+    gaiaedr3_phot_g_mean_mag real NOT NULL, --/D GAIA EDR3 g mean magnitude
+    gaiaedr3_phot_bp_mean_mag real NOT NULL, --/D GAIA EDR3 Bp mean magnitude
+    gaiaedr3_phot_rp_mean_mag real NOT NULL, --/D GAIA EDR3 Rp mean magnitude
+    gaiaedr3_dr2_radial_velocity real NOT NULL, --/U km/s --/D GAIA EDR3 radial velocity
+    gaiaedr3_dr2_radial_velocity_error real NOT NULL, --/U km/s --/D GAIA EDR3 radial velocity
+    gaiaedr3_r_med_geo real NOT NULL, --/U pc --/D GAIA EDR3 Bailer Jones r_med_geo
+    gaiaedr3_r_lo_geo real NOT NULL, --/U pc --/D GAIA EDR3 Bailer Jones r_lo_geo
+    gaiaedr3_r_hi_geo real NOT NULL, --/U pc --/D GAIA EDR3 Bailer Jones r_hi_geo
+    gaiaedr3_r_med_photogeo real NOT NULL, --/U pc --/D GAIA EDR3 Bailer Jones r_med_photogeo
+    gaiaedr3_r_lo_photogeo real NOT NULL, --/U pc --/D GAIA EDR3 Bailer Jones r_lo_photogeo
+    gaiaedr3_r_hi_photogeo real NOT NULL, --/U pc --/D GAIA EDR3 Bailer Jones r_hi_photogeo
     htmID bigint NOT NULL --/F NOFITS --/D HTM ID 
 )
 GO
@@ -272,12 +268,10 @@ CREATE TABLE aspcapStar (
 --
 --/T This table contains the data in the ASPCAP entry for an APOGEE star. 
 -------------------------------------------------------------------------------
-    apstar_id varchar(64) NOT NULL, --/D Unique ID of combined star spectrum on which these results are based (Foreign key)
-    target_id varchar(64) NOT NULL, --/D target ID (Foreign key, of form [location_id].[apogee_id]) 
-    aspcap_id varchar(64) NOT NULL, --/D Unique ID for ASPCAP results of form apogee.[telescope].[cs].results_version.location_id.star (Primary key)
     apogee_id varchar(32) NOT NULL, --/D 2MASS-style star identification  
-    aspcap_version varchar(32) NOT NULL, --/D reduction version of ASPCAP 
-    results_version varchar(32) NOT NULL, --/D reduction version of for post-processing
+    target_id varchar(64) NOT NULL, --/D target ID (Foreign key, of form [location_id].[apogee_id]) 
+    apstar_id varchar(72) NOT NULL, --/D Unique ID of combined star spectrum on which these results are based (Foreign key)
+    aspcap_id varchar(72) NOT NULL, --/D Unique ID for ASPCAP results of form apogee.[telescope].[cs].results_version.location_id.star (Primary key)
     teff real NOT NULL,  --/U deg K --/D Empirically calibrated temperature from ASPCAP 
     teff_err real NOT NULL, --/U deg K  --/D external uncertainty estimate for calibrated temperature from ASPCAP
     teff_flag int NOT NULL, --/F paramflag 0 --/D PARAMFLAG for effective temperature(see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_PARAMFLAG)
@@ -296,8 +290,11 @@ CREATE TABLE aspcapStar (
     alpha_m_err real NOT NULL, --/U dex --/D calibrated [M/H] uncertainty
     alpha_m_flag int NOT NULL, --/F paramflag 6 --/D PARAMFLAG for [alpha/M] (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_PARAMFLAG)
     aspcap_chi2 real NOT NULL, --/D chi^2 of ASPCAP fit
-    aspcap_class varchar(100) NOT NULL, --/D Temperature class of best-fitting spectrum
+    aspcap_grid varchar(12) NOT NULL, --/D Temperature class of best-fitting spectrum
     aspcapflag bigint NOT NULL, --/D Bitmask flag relating results of ASPCAP (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ASPCAPFLAG)
+    frac_badpix real NOT NULL, --/D fraction of bad pixels in spectrum
+    frac_lowsnr real NOT NULL, --/D fraction of low S/N pixels in spectrum
+    frac_sigsky real NOT NULL, --/D fraction of pixels with significant sky emission in spectrum
     fparam_teff real NOT NULL, --/U deg K --/F fparam 0 --/D original fit temperature
     fparam_logg real NOT NULL, --/U dex --/F fparam 1 --/D original fit log g from 6-parameter FERRE fit
     fparam_logvmicro real NOT NULL, --/F fparam 2 --/D log10 of the fit microturbulent velocity in km/s from 6-parameter FERRE fit 
@@ -372,21 +369,9 @@ CREATE TABLE aspcapStar (
     cu_fe real NOT NULL, --/U dex --/D empirically calibrated [Cu/Fe] from ASPCAP 
     cu_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Cu/Fe] from ASPCAP 
     cu_fe_flag int NOT NULL, --/F elemflag 20 --/D ELEMFLAG for Cu (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
-    ge_fe real NOT NULL, --/U dex --/D empirically calibrated [Ge/Fe] from ASPCAP 
-    ge_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Ge/Fe] from ASPCAP 
-    ge_fe_flag int NOT NULL, --/F elemflag 21 --/D ELEMFLAG for Ge (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
-    rb_fe real NOT NULL, --/U dex --/D empirically calibrated [Rb/Fe] from ASPCAP 
-    rb_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Rb/Fe] from ASPCAP 
-    rb_fe_flag int NOT NULL, --/F elemflag 23 --/D ELEMFLAG for Rb (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
     ce_fe real NOT NULL, --/U dex --/D empirically calibrated [Ce/Fe] from ASPCAP 
     ce_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Ce/Fe] from ASPCAP 
     ce_fe_flag int NOT NULL, --/F elemflag 24 --/D ELEMFLAG for Ce (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
-    nd_fe real NOT NULL, --/U dex --/D empirically calibrated [Nd/Fe] from ASPCAP 
-    nd_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Nd/Fe] from ASPCAP 
-    nd_fe_flag int NOT NULL, --/F elemflag 25 --/D ELEMFLAG for Nd (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
-    yb_fe real NOT NULL, --/U dex --/D empirically calibrated [Yb/Fe] from ASPCAP 
-    yb_fe_err real NOT NULL, --/U dex --/D external uncertainty for empirically calibrated [Yb/Fe] from ASPCAP 
-    yb_fe_flag int NOT NULL, --/F elemflag 24 --/D ELEMFLAG for Yb (see http://www.sdss.org/dr12/algorithms/bitmasks/#APOGEE_ELEMFLAG)
     felem_c_m real NOT NULL, --/U dex --/F felem 0 --/D original fit [C/M]
     felem_c_m_err real NOT NULL, --/U dex --/F felem_err 0 --/D original fit uncertainty [C/M]
     felem_ci_m real NOT NULL, --/U dex --/F felem 1 --/D original fit [CI/M]
@@ -470,6 +455,7 @@ GO
 
 
 
+/* DR17 no cannonStar reload
 
 --=============================================================
 IF EXISTS (SELECT name FROM sysobjects
@@ -570,6 +556,7 @@ CREATE TABLE cannonStar (
 )
 GO
 
+*/  -- DR17 no cannonStar reload
 
 
 
@@ -591,7 +578,7 @@ CREATE TABLE apogeePlate (
     location_id bigint NOT NULL, --/D Location ID (Foreign key) 
     plate varchar(32) NOT NULL, --/D Plate of this visit
     mjd bigint NOT NULL, --/D MJD of this visit
-    apred_version varchar(32) NOT NULL, --/D Visit reduction pipeline version
+    apred_version varchar(32) NOT NULL, --/D Visit reduction pipeline version --/F NOFITS
     name varchar(50) NOT NULL, --/D Name of location that this plate belongs to
     racen float NOT NULL, --/U deg --/D Right ascension, J2000, of plate center
     deccen float NOT NULL, --/U deg --/D Declination, J2000, of plate center
@@ -609,7 +596,33 @@ CREATE TABLE apogeePlate (
 )
 GO
 
--- The remaining tables do not get recreated each time (so no DROP TABLE).
+-- The remaining tables do not get recreated each time, so comment out the
+-- following block of 3 statements when they are not to be recreated.
+
+-- /* start of commented block 
+
+--=============================================================
+IF EXISTS (SELECT name FROM sysobjects
+	WHERE xtype='U' AND name = 'apogeeDesign')
+	DROP TABLE apogeeDesign
+GO
+--
+--=============================================================
+IF EXISTS (SELECT name FROM sysobjects
+	WHERE xtype='U' AND name = 'apogeeObject')
+	DROP TABLE apogeeObject
+GO
+--
+--=============================================================
+IF EXISTS (SELECT name FROM sysobjects
+	WHERE xtype='U' AND name = 'apogeeField')
+	DROP TABLE apogeeField
+GO
+--
+
+-- end of commented block */
+
+
 
 EXEC spSetDefaultFileGroup 'apogeeDesign'
 GO

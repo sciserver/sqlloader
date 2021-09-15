@@ -10,7 +10,7 @@ GO
 RECONFIGURE WITH OVERRIDE
 GO
 
-EXEC spLoadMetaData 0,0, 'C:\sqlLoader\schema\csv\', 1
+EXEC spLoadMetaData 1,4305, 'C:\sqlLoader\schema\csv\', 1
 
 -- To disable the feature.
 EXEC sp_configure 'xp_cmdshell', 0
