@@ -971,6 +971,8 @@ INSERT History VALUES('spUrlFitsSupport','2016-07-29','Ani','Replaced "boss" wit
 INSERT History VALUES('spUrlFitsSupport','2016-07-30','Ani','Added fGetUrlMangaCube to return MaNGA data cube URL. ');
 INSERT History VALUES('spUrlFitsSupport','2016-11-14','Sue','added order by s.FiberID to spGetFiberList ');
 INSERT History VALUES('spUrlFitsSupport','2020-05-20','Ani','Updated fGetUrlFitsSpectrum for DR16 change in spec files path (added "full/" to path). ');
+INSERT History VALUES('spUrlFitsSupport','2021-08-17','Ani','Updated fGetUrlFitsSpectrum: changed "full/" to "lite/" in path, since this works for all DRs). RTicket#84834 ');
+INSERT History VALUES('spUrlFitsSupport','2021-08-18','Ani','Fixed another bug in fGetUrlFitsSpectrum to allow  5-digit plate numbers in the path. ');
 INSERT History VALUES('spNeighbor','2004-08-30','Alex','Moved here spNeighbors and spBuildMatchTables ');
 INSERT History VALUES('spNeighbor','2004-10-10','Jim+Alex','updated spBuildMatchTables ');
 INSERT History VALUES('spNeighbor','2004-10-10','Alex+Jim','Tied into load framework to record messages.  Added code to drop/build indices and foreign keys.  Optimized triple computation.  ');
@@ -1314,6 +1316,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1304 lines inserted into History'
+PRINT '1306 lines inserted into History'
 ------------------------------------
 GO
