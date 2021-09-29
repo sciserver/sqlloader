@@ -268,6 +268,8 @@
 --* 2021-08-05 Ani: Added PK for apogee_starhorse VAC (DR17).
 --* 2021-08-06 Ani: Added PKs for apogeeDistMass, ebossMCPM VACs (DR17).
 --* 2021-08-06 Ani: Added PKs for mangaFirefly_mastar, mangaFirefly_miles VACs (DR17).
+--* 2021-09-23 Ani: Removed QueryResults PK.
+--* 2021-09-29 Ani: Replaced SDSS17Pipe3D_v3_1_1 with managaPipe3D (table renamed) (DR17).
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -404,7 +406,6 @@ INSERT [dbo].[IndexMap]   VALUES ('K', 'primary key', 'PartitionMap', 'fileGroup
 INSERT [dbo].[IndexMap]   VALUES ('K', 'primary key', 'FileGroupMap', 'tableName', '', 'META', NULL, NULL, 0)
 INSERT [dbo].[IndexMap]   VALUES ('K', 'primary key', 'IndexMap', 'indexmapid', '', 'META', NULL, NULL, 0)
 INSERT [dbo].[IndexMap]   VALUES ('K', 'primary key', 'PubHistory', 'name,loadversion', '', 'META', NULL, NULL, 0)
-INSERT [dbo].[IndexMap]   VALUES ('K', 'primary key', 'QueryResults', 'query, time', '', 'META', NULL, NULL, 0)
 INSERT [dbo].[IndexMap]   VALUES ('K', 'primary key', 'RecentQueries', 'ipAddr,lastQueryTime', '', 'META', NULL, NULL, 0)
 INSERT [dbo].[IndexMap]   VALUES ('K', 'primary key', 'RunShift', 'run', '', 'META', NULL, NULL, 0)
 INSERT [dbo].[IndexMap]   VALUES ('K', 'primary key', 'Versions', 'version', '', 'META', NULL, NULL, 0)
@@ -492,7 +493,7 @@ INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaDRPall', 'plateIFU'
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaTarget', 'mangaID', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'nsatlas', 'nsaID', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaFirefly', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
-INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaPipe3D', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaPipe3D', 'name', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaHIall', 'plateIFU,session', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaHIbonus', 'plateIFU,bonusid', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'manga_GZ2', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
@@ -522,7 +523,7 @@ INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mastar_goodvisits_params
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'PawlikMorph', 'mangaid', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'apogee_starhorse', 'aspcap_id,apstar_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'apogeeDistMass', 'apstar_id', '', 'SPECTRO', 'page', 'SPEC', 0)
-INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'SDSS17Pipe3D_v3_1_1', 'name', '', 'SPECTRO', 'page', 'SPEC', 0)
+-- INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'SDSS17Pipe3D_v3_1_1', 'name', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaFirefly_mastar', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaFirefly_miles', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'ebossMCPM', 'CATALOGID,MCPM_RUN', '', 'SPECTRO', 'page', 'SPEC', 0)

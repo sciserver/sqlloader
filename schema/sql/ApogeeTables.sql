@@ -455,7 +455,7 @@ GO
 
 
 
-/* DR17 no cannonStar reload
+-- DR17 no cannonStar reload
 
 --=============================================================
 IF EXISTS (SELECT name FROM sysobjects
@@ -556,7 +556,7 @@ CREATE TABLE cannonStar (
 )
 GO
 
-*/  -- DR17 no cannonStar reload
+-- DR17 no cannonStar reload
 
 
 

@@ -267,16 +267,21 @@ INSERT Inventory VALUES('ApogeeTables','apogeeStarVisit','U');
 INSERT Inventory VALUES('ApogeeTables','apogeeStarAllVisit','U');
 INSERT Inventory VALUES('ApogeeTables','aspcapStar','U');
 INSERT Inventory VALUES('ApogeeTables','aspcapStarCovar','U');
+INSERT Inventory VALUES('ApogeeTables','cannonStar','U');
 INSERT Inventory VALUES('ApogeeTables','apogeePlate','U');
 INSERT Inventory VALUES('ApogeeTables','apogeeDesign','U');
 INSERT Inventory VALUES('ApogeeTables','apogeeField','U');
 INSERT Inventory VALUES('ApogeeTables','apogeeObject','U');
 INSERT Inventory VALUES('MangaTables','mangaDRPall','U');
 INSERT Inventory VALUES('MangaTables','mangatarget','U');
+INSERT Inventory VALUES('MangaTables','nsatlas','U');
 INSERT Inventory VALUES('MangaTables','mangaFirefly','U');
 INSERT Inventory VALUES('MangaTables','mangaPipe3D','U');
 INSERT Inventory VALUES('MangaTables','mangaDAPall','U');
 INSERT Inventory VALUES('MangaTables','mangaHIall','U');
+INSERT Inventory VALUES('MangaTables','mangaHIbonus','U');
+INSERT Inventory VALUES('MangaTables','mangaGalaxyZoo','U');
+INSERT Inventory VALUES('MangaTables','mangaAlfalfaDR15','U');
 INSERT Inventory VALUES('MangaTables','MaNGA_GZ2','U');
 INSERT Inventory VALUES('MangaTables','MaNGA_GZD_auto','U');
 INSERT Inventory VALUES('MangaTables','MaNGA_gzUKIDSS_rhdebiased','U');
@@ -328,7 +333,6 @@ INSERT Inventory VALUES('Views','sdssTilingMask','V');
 INSERT Inventory VALUES('Views','TableDesc','V');
 INSERT Inventory VALUES('VacTables','spiders_quasar','U');
 INSERT Inventory VALUES('VacTables','PawlikMorph','U');
-INSERT Inventory VALUES('VacTables','SDSS17Pipe3D_v3_1_1','U');
 INSERT Inventory VALUES('VacTables','apogee_starhorse','U');
 INSERT Inventory VALUES('VacTables','apogeeDistMass','U');
 INSERT Inventory VALUES('VacTables','ebossMCPM','U');
@@ -628,6 +632,6 @@ INSERT Inventory VALUES('spCosmology','fMathGetBin','F');
 GO
 
 ------------------------------------
-PRINT '618 lines inserted into Inventory'
+PRINT '622 lines inserted into Inventory'
 ------------------------------------
 GO

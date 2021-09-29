@@ -343,6 +343,8 @@ INSERT History VALUES('IndexMap','2021-08-05','Ani','Added PK for SDSS17Pipe3D_v
 INSERT History VALUES('IndexMap','2021-08-05','Ani','Added PK for apogee_starhorse VAC (DR17). ');
 INSERT History VALUES('IndexMap','2021-08-06','Ani','Added PKs for apogeeDistMass, ebossMCPM VACs (DR17). ');
 INSERT History VALUES('IndexMap','2021-08-06','Ani','Added PKs for mangaFirefly_mastar, mangaFirefly_miles VACs (DR17). ');
+INSERT History VALUES('IndexMap','2021-09-23','Ani','Removed QueryResults PK. ');
+INSERT History VALUES('IndexMap','2021-09-29','Ani','Replaced SDSS17Pipe3D_v3_1_1 with managaPipe3D (table renamed) (DR17). ');
 INSERT History VALUES('PhotoTables','2009-04-27','Ani','Swapped in updated schema for photo tables for SDSS-III. Added new table Run. ');
 INSERT History VALUES('PhotoTables','2009-05-05','Ani','Added loadVersion to Field table. ');
 INSERT History VALUES('PhotoTables','2009-06-11','Ani','Added nProf_[ugriz] to Field table. ');
@@ -633,6 +635,8 @@ INSERT History VALUES('MangaTables','2019-07-30','Ani','Added mangaGalaxyZoo tab
 INSERT History VALUES('MangaTables','2019-07-31','Ani','Changed nsa_id in mangaGalaxyZoo to int from bigint, IFUDESIGNSIZE to int from real after confirmation from K Masters. Also chamged MANGA_TILEID to int from real. DR16 ');
 INSERT History VALUES('MangaTables','2019-10-24','Ani','Added mangaAlfalfaDR15 VAC table. DR16 ');
 INSERT History VALUES('MangaTables','2021-06-18','Ani','Updated mangaDRPall, mangaDAPall, added GZ VACs (DR17). ');
+INSERT History VALUES('MangaTables','2021-09-22','Ani','Added note about mangaFirefly table being superseded in DR17. ');
+INSERT History VALUES('MangaTables','2021-09-29','Ani','Replaced current mangaPipe3D with SDSS17Pipe3D_v3_1_1 (DR17). ');
 INSERT History VALUES('MastarTables','2018-07-24','Ani','Adapted from sas-sql/mastarall.sql. ');
 INSERT History VALUES('MastarTables','2018-07-24','Ani','Flipped the float/real types for coords and mags, and changed psfMag_[ugriz] to psfMag_[12345] as per  Renbin''s request. ');
 INSERT History VALUES('MastarTables','2021-07-01','Ani','Updates for DR17. ');
@@ -713,6 +717,7 @@ INSERT History VALUES('VacTables','2021-08-04','Ani','Added SDSS17Pipe3D_v3_1_1 
 INSERT History VALUES('VacTables','2021-08-05','Ani','Added apogee_starhorse VAC table. (DR17). ');
 INSERT History VALUES('VacTables','2021-08-06','Ani','Added apogeeDistMass, ebossMCPM VAC tables. (DR17). ');
 INSERT History VALUES('VacTables','2021-08-11','Ani','Added mangaFirefly_mastar,_miles VAC tables. (DR17). ');
+INSERT History VALUES('VacTables','2021-09-29','Ani','Moved SDSS17Pipe3D_v3_1_1 to MangaTables (as mangaPipe3D) (DR17). ');
 INSERT History VALUES('spHtmCSharp','2005-05-01','Jim','started ');
 INSERT History VALUES('spHtmCSharp','2005-05-02','Jim','removed fHtmLookup and fHtmLookupError added fHtmToString ');
 INSERT History VALUES('spHtmCSharp','2005-05-05','GYF','added .pdb to assembly for symbolic debugging added fHtmToName (faster than fHtmToString and reports error) ');
@@ -1316,6 +1321,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1306 lines inserted into History'
+PRINT '1311 lines inserted into History'
 ------------------------------------
 GO
