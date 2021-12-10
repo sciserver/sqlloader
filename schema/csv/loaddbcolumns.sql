@@ -5112,6 +5112,7 @@ INSERT DBColumns VALUES('apogeeStar','gaiaedr3_r_med_photogeo','pc','','','GAIA 
 INSERT DBColumns VALUES('apogeeStar','gaiaedr3_r_lo_photogeo','pc','','','GAIA EDR3 Bailer Jones r_lo_photogeo','0');
 INSERT DBColumns VALUES('apogeeStar','gaiaedr3_r_hi_photogeo','pc','','','GAIA EDR3 Bailer Jones r_hi_photogeo','0');
 INSERT DBColumns VALUES('apogeeStar','htmID','','','','HTM ID','0');
+INSERT DBColumns VALUES('apogeeStar','commiss','','','','Indicates if this is commissioning data','0');
 INSERT DBColumns VALUES('apogeeStarVisit','visit_id','','','','Unique ID for visit spectrum, of form apogee.[telescope].[cs].[apred_version].plate.mjd.fiberid','0');
 INSERT DBColumns VALUES('apogeeStarVisit','apstar_id','','','','Unique ID for combined star spectrum of form apogee.[telescope].[cs].apstar_version.location_id.apogee_id','0');
 INSERT DBColumns VALUES('apogeeStarAllVisit','visit_id','','','','Unique ID for visit spectrum, of form apogee.[telescope].[cs].[apred_version].plate.mjd.fiberid','0');
@@ -10481,6 +10482,6 @@ INSERT DBColumns VALUES('mangaFirefly_mastar','MW_Z_ZEROPOINT_ERROR','','','','E
 
 GO
 ----------------------------- 
-PRINT '10471 lines inserted into DBColumns '
+PRINT '10472 lines inserted into DBColumns '
 ----------------------------- 
 
