@@ -2,6 +2,9 @@
 # right now this parses the mssql_*.sql files and generates lists of the info needed to generate the IndexMap.sql file
 # TODO: actually generate the IndexMap.sql for these tables, etc
 
+from asyncore import write
+
+
 pks = []
 indexes = []
 fks = []
@@ -63,15 +66,31 @@ print(pks, '\n\n')
 print(indexes, '\n\n')
 print(fks, '\n\n')
 '''
-
+#pk:
 #INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'PhotoObjAll', 'objID', '', 'PHOTO', 'PAGE', 'PHOTO', 1)
 
 def write_pks(_pks):
     for _pk in _pks:
-         print(f'INSERT  [dbo].[IndexMap]   VALUES  (\'K\', \'primary key\', \'{_pk[1]}\', \'{_pk[2]}\', \'\', \'PHOTO\', \'PAGE\', \'PHOTO\', 1)')
+         print(f'INSERT  [dbo].[IndexMap]   VALUES  (\'{_pk[0]}\', \'primary key\', \'{_pk[1]}\', \'{_pk[2]}\', \'\', \'PHOTO\', \'PAGE\', \'PHOTO\', 1)')
+#idx:
+#INSERT [dbo].[IndexMap]   VALUES ( 'I', 'index', 'TwoMass', 'ra', '', 'PHOTO', 'PAGE', 'PHOTO', 1)
+def write_indexes(_indexes):
+    for _idx in _indexes:
+        print(f'INSERT [dbo].[IndexMap]   VALUES ( \'{_idx[0]}\', \'index\', \'{_idx[1]}\',  \'{_idx[2]}\', \'\', \'PHOTO\', \'PAGE\', \'PHOTO\', 1)')
+#fks:
+#INSERT IndexMap Values('F','foreign key', 'PhotoObjDR7', 	'dr8objID'	,'PhotoObjAll(objID)'	,'SCHEMA');
+# i added the extra columns for compression, etc -- don't know if this is actually needed, will check w ani
+def write_fks(_fks):
+    for _fk in _fks:
+        print(f'INSERT IndexMap Values(\'{_fk[0]}\',\'foreign key\', \'{_fk[1]}\', 	\'{_fk[2]}\'	,\'{_fk[3]}\',	\'SCHEMA\',\'PAGE\',\'SCHEMA\', 1);')
+
+
+
 
 
 write_pks(pks)
+write_indexes(indexes)
+write_fks(fks)
 
 
 
