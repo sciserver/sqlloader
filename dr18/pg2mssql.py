@@ -72,7 +72,7 @@ for table in tables:
             #print(tablename)
             #print(f'DROP TABLE IF EXISTS {tablename}')
             t.write(f'DROP TABLE IF EXISTS {tablename}\n')
-        t.write(line.replace('minidb.', 'dbo.').replace('boolean','bit').replace('character varying', 'varchar').replace('text', 'varchar(1000)').replace('character', 'varchar').replace('plan', 'planname'))
+        t.write(line.replace('minidb.', 'dbo.').replace('boolean','bit').replace('character varying', 'varchar').replace('text', 'varchar(500)').replace('character', 'varchar').replace('plan', 'planname'))
 
 # pks
 p = open('mssql_pk.sql', 'w')
