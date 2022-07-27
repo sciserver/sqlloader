@@ -1,8 +1,8 @@
 
 # right now this parses the mssql_*.sql files and generates lists of the info needed to generate the IndexMap.sql file
-# TODO: actually generate the IndexMap.sql for these tables, etc
+# TODO: actually generate the IndexMap.sql for these tables, etc (actually done but not tested)
+# TODO: splitting on 2 newlines seems janky, fix that for the pk one
 
-from asyncore import write
 
 
 pks = []
@@ -83,8 +83,6 @@ def write_indexes(_indexes):
 def write_fks(_fks):
     for _fk in _fks:
         print(f'INSERT IndexMap Values(\'{_fk[0]}\',\'foreign key\', \'{_fk[1]}\', 	\'{_fk[2]}\'	,\'{_fk[3]}\',	\'SCHEMA\',\'PAGE\',\'SCHEMA\', 1);')
-
-
 
 
 
