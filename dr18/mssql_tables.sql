@@ -1,5 +1,6 @@
 
 
+DROP TABLE IF EXISTS dbo.dr18_allwise
 CREATE TABLE dbo.dr18_allwise (
     designation varchar(20),
     ra numeric(10,7),
@@ -302,6 +303,7 @@ CREATE TABLE dbo.dr18_allwise (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_best_brightest
 CREATE TABLE dbo.dr18_best_brightest (
     designation varchar(19),
     ra_1 double precision,
@@ -342,18 +344,19 @@ CREATE TABLE dbo.dr18_best_brightest (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_bhm_csc_v2
 CREATE TABLE dbo.dr18_bhm_csc_v2 (
-    cxoid text,
+    cxoid varchar(1000),
     xra double precision,
     xdec double precision,
     pri smallint,
-    ocat text,
+    ocat varchar(1000),
     oid bigint,
     ora double precision,
     odec double precision,
     omag real,
     omatchtype smallint,
-    irid text,
+    irid varchar(1000),
     ra2m double precision,
     dec2m double precision,
     hmag real,
@@ -361,16 +364,17 @@ CREATE TABLE dbo.dr18_bhm_csc_v2 (
     lgal double precision,
     bgal double precision,
     logfx real,
-    xband text,
+    xband varchar(1000),
     xsn double precision,
     xflags integer,
-    designation2m text,
+    designation2m varchar(1000),
     idg2 bigint,
     idps bigint,
     pk bigint NOT NULL
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_bhm_efeds_veto
 CREATE TABLE dbo.dr18_bhm_efeds_veto (
     programname varchar(5),
     chunk varchar(7),
@@ -398,6 +402,7 @@ CREATE TABLE dbo.dr18_bhm_efeds_veto (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_bhm_rm_v0_2
 CREATE TABLE dbo.dr18_bhm_rm_v0_2 (
     field_name varchar(8),
     ra double precision,
@@ -651,19 +656,21 @@ CREATE TABLE dbo.dr18_bhm_rm_v0_2 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_cadence
 CREATE TABLE dbo.dr18_cadence (
-    label text,
+    label varchar(1000),
     nepochs integer,
     pk bigint NOT NULL,
-    label_root text,
-    label_version text,
+    label_root varchar(1000),
+    label_version varchar(1000),
     max_skybrightness real,
     nexp_total integer
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_cadence_epoch
 CREATE TABLE dbo.dr18_cadence_epoch (
-    label text NOT NULL,
+    label varchar(1000) NOT NULL,
     nepochs integer,
     cadence_pk bigint,
     epoch integer NOT NULL,
@@ -673,19 +680,21 @@ CREATE TABLE dbo.dr18_cadence_epoch (
     delta_min real,
     nexp integer,
     max_length real,
-    obsmode_pk text
+    obsmode_pk varchar(1000)
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_carton
 CREATE TABLE dbo.dr18_carton (
-    carton text,
+    carton varchar(1000),
     carton_pk integer NOT NULL,
     mapper_pk smallint,
     category_pk smallint,
-    target_selection_planname text
+    target_selection_planname varchar(1000)
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_carton_to_target
 CREATE TABLE dbo.dr18_carton_to_target (
     carton_to_target_pk integer NOT NULL,
     lambda_eff real,
@@ -701,19 +710,21 @@ CREATE TABLE dbo.dr18_carton_to_target (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_carton_txt
 CREATE TABLE dbo.dr18_carton_txt (
-    carton text,
-    planname text,
-    category text,
-    stage text,
+    carton varchar(1000),
+    planname varchar(1000),
+    category varchar(1000),
+    stage varchar(1000),
     active bit
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_cataclysmic_variables
 CREATE TABLE dbo.dr18_cataclysmic_variables (
     ref_id bigint NOT NULL,
     solution_id bigint,
-    designation text,
+    designation varchar(1000),
     source_id bigint,
     random_index integer,
     ref_epoch real,
@@ -784,7 +795,7 @@ CREATE TABLE dbo.dr18_cataclysmic_variables (
     rv_template_teff real,
     rv_template_logg real,
     rv_template_fe_h real,
-    phot_variable_flag text,
+    phot_variable_flag varchar(1000),
     l double precision,
     b double precision,
     ecl_lon double precision,
@@ -809,19 +820,21 @@ CREATE TABLE dbo.dr18_cataclysmic_variables (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog
 CREATE TABLE dbo.dr18_catalog (
     catalogid bigint NOT NULL,
-    iauname text,
+    iauname varchar(1000),
     ra double precision,
     "dec" double precision,
     pmra real,
     pmdec real,
     parallax real,
-    lead text,
+    lead varchar(1000),
     version_id integer
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_allwise
 CREATE TABLE dbo.dr18_catalog_to_allwise (
     catalogid bigint,
     target_id bigint,
@@ -831,6 +844,7 @@ CREATE TABLE dbo.dr18_catalog_to_allwise (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_bhm_efeds_veto
 CREATE TABLE dbo.dr18_catalog_to_bhm_efeds_veto (
     catalogid bigint,
     target_id bigint,
@@ -840,6 +854,7 @@ CREATE TABLE dbo.dr18_catalog_to_bhm_efeds_veto (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_bhm_rm_v0_2
 CREATE TABLE dbo.dr18_catalog_to_bhm_rm_v0_2 (
     catalogid bigint,
     target_id bigint,
@@ -849,6 +864,7 @@ CREATE TABLE dbo.dr18_catalog_to_bhm_rm_v0_2 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_catwise2020
 CREATE TABLE dbo.dr18_catalog_to_catwise2020 (
     catalogid bigint,
     target_id varchar(25),
@@ -858,6 +874,7 @@ CREATE TABLE dbo.dr18_catalog_to_catwise2020 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_glimpse
 CREATE TABLE dbo.dr18_catalog_to_glimpse (
     catalogid bigint,
     target_id bigint,
@@ -867,6 +884,7 @@ CREATE TABLE dbo.dr18_catalog_to_glimpse (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_guvcat
 CREATE TABLE dbo.dr18_catalog_to_guvcat (
     catalogid bigint,
     target_id bigint,
@@ -876,6 +894,7 @@ CREATE TABLE dbo.dr18_catalog_to_guvcat (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_legacy_survey_dr8
 CREATE TABLE dbo.dr18_catalog_to_legacy_survey_dr8 (
     catalogid bigint,
     target_id bigint,
@@ -885,6 +904,7 @@ CREATE TABLE dbo.dr18_catalog_to_legacy_survey_dr8 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_panstarrs1
 CREATE TABLE dbo.dr18_catalog_to_panstarrs1 (
     catalogid bigint,
     target_id bigint,
@@ -894,6 +914,7 @@ CREATE TABLE dbo.dr18_catalog_to_panstarrs1 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_sdss_dr13_photoobj_primary
 CREATE TABLE dbo.dr18_catalog_to_sdss_dr13_photoobj_primary (
     catalogid bigint,
     target_id bigint,
@@ -903,6 +924,7 @@ CREATE TABLE dbo.dr18_catalog_to_sdss_dr13_photoobj_primary (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_sdss_dr16_specobj
 CREATE TABLE dbo.dr18_catalog_to_sdss_dr16_specobj (
     catalogid bigint,
     target_id numeric(20,0),
@@ -912,6 +934,7 @@ CREATE TABLE dbo.dr18_catalog_to_sdss_dr16_specobj (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_skies_v2
 CREATE TABLE dbo.dr18_catalog_to_skies_v2 (
     catalogid bigint,
     target_id bigint,
@@ -921,6 +944,7 @@ CREATE TABLE dbo.dr18_catalog_to_skies_v2 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_skymapper_dr2
 CREATE TABLE dbo.dr18_catalog_to_skymapper_dr2 (
     catalogid bigint,
     target_id bigint,
@@ -930,6 +954,7 @@ CREATE TABLE dbo.dr18_catalog_to_skymapper_dr2 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_supercosmos
 CREATE TABLE dbo.dr18_catalog_to_supercosmos (
     catalogid bigint,
     target_id bigint,
@@ -939,6 +964,7 @@ CREATE TABLE dbo.dr18_catalog_to_supercosmos (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_tic_v8
 CREATE TABLE dbo.dr18_catalog_to_tic_v8 (
     catalogid bigint,
     target_id bigint,
@@ -948,15 +974,17 @@ CREATE TABLE dbo.dr18_catalog_to_tic_v8 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_tycho2
 CREATE TABLE dbo.dr18_catalog_to_tycho2 (
     catalogid bigint,
-    target_id text,
+    target_id varchar(1000),
     version_id smallint,
     distance double precision,
     best bit
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_uvotssc1
 CREATE TABLE dbo.dr18_catalog_to_uvotssc1 (
     catalogid bigint,
     target_id bigint,
@@ -966,6 +994,7 @@ CREATE TABLE dbo.dr18_catalog_to_uvotssc1 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catalog_to_xmm_om_suss_4_1
 CREATE TABLE dbo.dr18_catalog_to_xmm_om_suss_4_1 (
     catalogid bigint,
     target_id bigint,
@@ -975,12 +1004,14 @@ CREATE TABLE dbo.dr18_catalog_to_xmm_om_suss_4_1 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_category
 CREATE TABLE dbo.dr18_category (
     pk integer NOT NULL,
-    label text
+    label varchar(1000)
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_catwise2020
 CREATE TABLE dbo.dr18_catwise2020 (
     source_name varchar(21),
     source_id varchar(25) NOT NULL,
@@ -1172,12 +1203,13 @@ CREATE TABLE dbo.dr18_catwise2020 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_ebosstarget_v5
 CREATE TABLE dbo.dr18_ebosstarget_v5 (
     run integer,
     camcol integer,
     field integer,
     id integer,
-    rerun text,
+    rerun varchar(1000),
     fibermag_u real,
     fibermag_g real,
     fibermag_r real,
@@ -1275,15 +1307,17 @@ CREATE TABLE dbo.dr18_ebosstarget_v5 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_gaia_dr2_ruwe
 CREATE TABLE dbo.dr18_gaia_dr2_ruwe (
     source_id bigint NOT NULL,
     ruwe real
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_gaia_dr2_source
 CREATE TABLE dbo.dr18_gaia_dr2_source (
     solution_id bigint,
-    designation text,
+    designation varchar(1000),
     source_id bigint NOT NULL,
     random_index bigint,
     ref_epoch double precision,
@@ -1354,7 +1388,7 @@ CREATE TABLE dbo.dr18_gaia_dr2_source (
     rv_template_teff real,
     rv_template_logg real,
     rv_template_fe_h real,
-    phot_variable_flag text,
+    phot_variable_flag varchar(1000),
     l double precision,
     b double precision,
     ecl_lon double precision,
@@ -1379,9 +1413,10 @@ CREATE TABLE dbo.dr18_gaia_dr2_source (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_gaia_dr2_wd
 CREATE TABLE dbo.dr18_gaia_dr2_wd (
-    wd text,
-    dr2name text,
+    wd varchar(1000),
+    dr2name varchar(1000),
     source_id bigint NOT NULL,
     source integer,
     ra double precision,
@@ -1410,7 +1445,7 @@ CREATE TABLE dbo.dr18_gaia_dr2_wd (
     glat double precision,
     density real,
     ag real,
-    sdss text,
+    sdss varchar(1000),
     umag real,
     e_umag real,
     gmag real,
@@ -1440,11 +1475,12 @@ CREATE TABLE dbo.dr18_gaia_dr2_wd (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_gaia_unwise_agn
 CREATE TABLE dbo.dr18_gaia_unwise_agn (
     ra double precision,
     "dec" double precision,
     gaia_sourceid bigint NOT NULL,
-    unwise_objid text,
+    unwise_objid varchar(1000),
     plx double precision,
     plx_err double precision,
     pmra double precision,
@@ -1481,6 +1517,7 @@ CREATE TABLE dbo.dr18_gaia_unwise_agn (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_gaiadr2_tmass_best_neighbour
 CREATE TABLE dbo.dr18_gaiadr2_tmass_best_neighbour (
     tmass_oid bigint,
     number_of_neighbours integer,
@@ -1494,6 +1531,7 @@ CREATE TABLE dbo.dr18_gaiadr2_tmass_best_neighbour (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_geometric_distances_gaia_dr2
 CREATE TABLE dbo.dr18_geometric_distances_gaia_dr2 (
     source_id bigint NOT NULL,
     r_est real,
@@ -1505,8 +1543,9 @@ CREATE TABLE dbo.dr18_geometric_distances_gaia_dr2 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_glimpse
 CREATE TABLE dbo.dr18_glimpse (
-    designation text,
+    designation varchar(1000),
     tmass_designation varchar(18),
     tmass_cntr integer,
     l double precision,
@@ -1588,10 +1627,11 @@ CREATE TABLE dbo.dr18_glimpse (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_guvcat
 CREATE TABLE dbo.dr18_guvcat (
     objid bigint NOT NULL,
     photoextractid bigint,
-    mpstype text,
+    mpstype varchar(1000),
     avaspra double precision,
     avaspdec double precision,
     fexptime real,
@@ -1666,40 +1706,42 @@ CREATE TABLE dbo.dr18_guvcat (
     ib_poserr real,
     nuv_pperr real,
     fuv_pperr real,
-    corv text,
+    corv varchar(1000),
     grank smallint,
     ngrank smallint,
     primgid bigint,
-    groupgid text,
+    groupgid varchar(1000),
     grankdist smallint,
     ngrankdist bigint,
     primgiddist bigint,
-    groupgiddist text,
-    groupgidtot text,
+    groupgiddist varchar(1000),
+    groupgidtot varchar(1000),
     difffuv real,
     diffnuv real,
     difffuvdist real,
     diffnuvdist real,
     sepas real,
     sepasdist real,
-    inlargeobj text,
+    inlargeobj varchar(1000),
     largeobjsize real
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_instrument
 CREATE TABLE dbo.dr18_instrument (
     pk integer NOT NULL,
-    label text,
+    label varchar(1000),
     default_lambda_eff real
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_legacy_survey_dr8
 CREATE TABLE dbo.dr18_legacy_survey_dr8 (
     release integer,
     brickid bigint,
-    brickname text,
+    brickname varchar(1000),
     objid bigint,
-    type text,
+    type varchar(1000),
     ra double precision,
     "dec" double precision,
     ra_ivar real,
@@ -1777,7 +1819,7 @@ CREATE TABLE dbo.dr18_legacy_survey_dr8 (
     galdepth_z real,
     psfdepth_w1 real,
     psfdepth_w2 real,
-    wise_coadd_id text,
+    wise_coadd_id varchar(1000),
     fracdev real,
     fracdev_ivar real,
     shapedev_r real,
@@ -1798,7 +1840,7 @@ CREATE TABLE dbo.dr18_legacy_survey_dr8 (
     fibertotflux_g real,
     fibertotflux_r real,
     fibertotflux_z real,
-    ref_cat text,
+    ref_cat varchar(1000),
     ref_id bigint,
     ref_epoch real,
     gaia_phot_g_mean_mag real,
@@ -1825,6 +1867,7 @@ CREATE TABLE dbo.dr18_legacy_survey_dr8 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_magnitude
 CREATE TABLE dbo.dr18_magnitude (
     carton_to_target_pk integer,
     magnitude_pk bigint NOT NULL,
@@ -1838,16 +1881,18 @@ CREATE TABLE dbo.dr18_magnitude (
     j real,
     k real,
     gaia_g real,
-    optical_prov text
+    optical_prov varchar(1000)
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_mapper
 CREATE TABLE dbo.dr18_mapper (
     pk integer NOT NULL,
-    label text
+    label varchar(1000)
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_panstarrs1
 CREATE TABLE dbo.dr18_panstarrs1 (
     ra double precision,
     "dec" double precision,
@@ -2044,6 +2089,7 @@ CREATE TABLE dbo.dr18_panstarrs1 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_sagitta
 CREATE TABLE dbo.dr18_sagitta (
     source_id bigint NOT NULL,
     ra double precision,
@@ -2056,8 +2102,9 @@ CREATE TABLE dbo.dr18_sagitta (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_sdss_apogeeallstarmerge_r13
 CREATE TABLE dbo.dr18_sdss_apogeeallstarmerge_r13 (
-    apogee_id text NOT NULL,
+    apogee_id varchar(1000) NOT NULL,
     nvisits smallint,
     nentries integer,
     ra double precision,
@@ -2066,7 +2113,7 @@ CREATE TABLE dbo.dr18_sdss_apogeeallstarmerge_r13 (
     glat double precision,
     pmra double precision,
     pmdec double precision,
-    pm_src text,
+    pm_src varchar(1000),
     j real,
     j_err real,
     h real,
@@ -2081,35 +2128,36 @@ CREATE TABLE dbo.dr18_sdss_apogeeallstarmerge_r13 (
     baseline real,
     mean_fiber real,
     sig_fiber real,
-    apstar_ids text,
-    visits text,
-    fields text,
-    surveys text,
-    telescopes text,
-    targflags text,
-    starflags text,
-    aspcapflags text,
+    apstar_ids varchar(1000),
+    visits varchar(1000),
+    fields varchar(1000),
+    surveys varchar(1000),
+    telescopes varchar(1000),
+    targflags varchar(1000),
+    starflags varchar(1000),
+    aspcapflags varchar(1000),
     teff real,
     teff_err real,
     logg real,
     logg_err real,
     feh real,
     feh_err real,
-    startype text,
+    startype varchar(1000),
     vjitter real,
     dist real,
     dist_err real,
-    dist_src text,
-    dist_srclist text,
+    dist_src varchar(1000),
+    dist_srclist varchar(1000),
     mstar real,
     mstar_err real,
     rstar real,
     rstar_err real,
-    mstar_src text,
-    designation text
+    mstar_src varchar(1000),
+    designation varchar(1000)
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_sdss_dr13_photoobj_primary
 CREATE TABLE dbo.dr18_sdss_dr13_photoobj_primary (
     objid bigint NOT NULL,
     ra double precision,
@@ -2117,15 +2165,16 @@ CREATE TABLE dbo.dr18_sdss_dr13_photoobj_primary (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_sdss_dr16_qso
 CREATE TABLE dbo.dr18_sdss_dr16_qso (
-    sdss_name text,
+    sdss_name varchar(1000),
     ra double precision,
     "dec" double precision,
     plate integer,
     mjd integer,
     fiberid integer,
-    autoclass_pqn text,
-    autoclass_dr14q text,
+    autoclass_pqn varchar(1000),
+    autoclass_dr14q varchar(1000),
     is_qso_qn integer,
     z_qn double precision,
     random_select integer,
@@ -2145,10 +2194,10 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso (
     z_dr7q_hw double precision,
     is_qso_final integer,
     z double precision,
-    source_z text,
+    source_z varchar(1000),
     z_pipe double precision,
     zwarning integer,
-    objid text,
+    objid varchar(1000),
     z_pca double precision,
     zwarn_pca bigint,
     deltachi2_pca double precision,
@@ -2171,9 +2220,9 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso (
     zwarn_lya bigint,
     deltachi2_lya double precision,
     z_lyawg real,
-    z_dla text,
-    nhi_dla text,
-    conf_dla text,
+    z_dla varchar(1000),
+    nhi_dla varchar(1000),
+    conf_dla varchar(1000),
     bal_prob real,
     bi_civ double precision,
     err_bi_civ double precision,
@@ -2192,13 +2241,13 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso (
     nspec_sdss integer,
     nspec_boss integer,
     nspec integer,
-    plate_duplicate text,
-    mjd_duplicate text,
-    fiberid_duplicate text,
-    spectro_duplicate text,
+    plate_duplicate varchar(1000),
+    mjd_duplicate varchar(1000),
+    fiberid_duplicate varchar(1000),
+    spectro_duplicate varchar(1000),
     skyversion integer,
     run_number integer,
-    rerun_number text,
+    rerun_number varchar(1000),
     camcol_number integer,
     field_number integer,
     id_number integer,
@@ -2206,7 +2255,7 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso (
     zoffset double precision,
     xfocal double precision,
     yfocal double precision,
-    chunk text,
+    chunk varchar(1000),
     tile integer,
     platesn2 double precision,
     psfflux_u real,
@@ -2287,7 +2336,7 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso (
     ksnr double precision,
     krdflag integer,
     sdss2mass_sep double precision,
-    rass2rxs_id text,
+    rass2rxs_id varchar(1000),
     rass2rxs_ra double precision,
     rass2rxs_dec double precision,
     rass2rxs_src_flux real,
@@ -2305,7 +2354,7 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso (
     xmm_total_lum real,
     sdss2xmm_sep double precision,
     gaia_matched integer,
-    gaia_designation text,
+    gaia_designation varchar(1000),
     gaia_ra double precision,
     gaia_dec double precision,
     gaia_parallax double precision,
@@ -2325,15 +2374,16 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_sdss_dr16_qso_original
 CREATE TABLE dbo.dr18_sdss_dr16_qso_original (
-    sdss_name text,
+    sdss_name varchar(1000),
     ra double precision,
     "dec" double precision,
     plate integer,
     mjd integer,
     fiberid integer,
-    autoclass_pqn text,
-    autoclass_dr14q text,
+    autoclass_pqn varchar(1000),
+    autoclass_dr14q varchar(1000),
     is_qso_qn integer,
     z_qn double precision,
     random_select integer,
@@ -2353,10 +2403,10 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso_original (
     z_dr7q_hw double precision,
     is_qso_final integer,
     z double precision,
-    source_z text,
+    source_z varchar(1000),
     z_pipe double precision,
     zwarning integer,
-    objid text,
+    objid varchar(1000),
     z_pca double precision,
     zwarn_pca bigint,
     deltachi2_pca double precision,
@@ -2379,9 +2429,9 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso_original (
     zwarn_lya bigint,
     deltachi2_lya double precision,
     z_lyawg real,
-    z_dla text,
-    nhi_dla text,
-    conf_dla text,
+    z_dla varchar(1000),
+    nhi_dla varchar(1000),
+    conf_dla varchar(1000),
     bal_prob real,
     bi_civ double precision,
     err_bi_civ double precision,
@@ -2400,13 +2450,13 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso_original (
     nspec_sdss integer,
     nspec_boss integer,
     nspec integer,
-    plate_duplicate text,
-    mjd_duplicate text,
-    fiberid_duplicate text,
-    spectro_duplicate text,
+    plate_duplicate varchar(1000),
+    mjd_duplicate varchar(1000),
+    fiberid_duplicate varchar(1000),
+    spectro_duplicate varchar(1000),
     skyversion integer,
     run_number integer,
-    rerun_number text,
+    rerun_number varchar(1000),
     camcol_number integer,
     field_number integer,
     id_number integer,
@@ -2414,7 +2464,7 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso_original (
     zoffset double precision,
     xfocal double precision,
     yfocal double precision,
-    chunk text,
+    chunk varchar(1000),
     tile integer,
     platesn2 double precision,
     psfflux_u real,
@@ -2495,7 +2545,7 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso_original (
     ksnr double precision,
     krdflag integer,
     sdss2mass_sep double precision,
-    rass2rxs_id text,
+    rass2rxs_id varchar(1000),
     rass2rxs_ra double precision,
     rass2rxs_dec double precision,
     rass2rxs_src_flux real,
@@ -2513,7 +2563,7 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso_original (
     xmm_total_lum real,
     sdss2xmm_sep double precision,
     gaia_matched integer,
-    gaia_designation text,
+    gaia_designation varchar(1000),
     gaia_ra double precision,
     gaia_dec double precision,
     gaia_parallax double precision,
@@ -2533,6 +2583,7 @@ CREATE TABLE dbo.dr18_sdss_dr16_qso_original (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_sdss_dr16_specobj
 CREATE TABLE dbo.dr18_sdss_dr16_specobj (
     specobjid numeric(20,0) NOT NULL,
     bestobjid bigint,
@@ -2731,6 +2782,7 @@ CREATE TABLE dbo.dr18_sdss_dr16_specobj (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_skies_v2
 CREATE TABLE dbo.dr18_skies_v2 (
     pix_32768 bigint NOT NULL,
     ra double precision,
@@ -2763,6 +2815,7 @@ CREATE TABLE dbo.dr18_skies_v2 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_skymapper_dr2
 CREATE TABLE dbo.dr18_skymapper_dr2 (
     object_id bigint NOT NULL,
     raj2000 double precision,
@@ -2867,6 +2920,7 @@ CREATE TABLE dbo.dr18_skymapper_dr2 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_supercosmos
 CREATE TABLE dbo.dr18_supercosmos (
     objid bigint NOT NULL,
     objidb bigint,
@@ -2928,6 +2982,7 @@ CREATE TABLE dbo.dr18_supercosmos (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_target
 CREATE TABLE dbo.dr18_target (
     target_pk bigint NOT NULL,
     ra double precision,
@@ -2940,6 +2995,7 @@ CREATE TABLE dbo.dr18_target (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_tic_v8
 CREATE TABLE dbo.dr18_tic_v8 (
     id bigint NOT NULL,
     version varchar(8),
@@ -3067,13 +3123,14 @@ CREATE TABLE dbo.dr18_tic_v8 (
     wdflag integer,
     objid bigint,
     gaia_int bigint,
-    twomass_psc text,
+    twomass_psc varchar(1000),
     twomass_psc_pts_key integer,
     tycho2_tycid integer,
     allwise_cntr bigint
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_twomass_psc
 CREATE TABLE dbo.dr18_twomass_psc (
     ra double precision,
     decl double precision,
@@ -3134,10 +3191,11 @@ CREATE TABLE dbo.dr18_twomass_psc (
     scan_key integer,
     coadd_key integer,
     coadd smallint,
-    designation text
+    designation varchar(1000)
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_tycho2
 CREATE TABLE dbo.dr18_tycho2 (
     tyc1 integer,
     tyc2 integer,
@@ -3176,11 +3234,12 @@ CREATE TABLE dbo.dr18_tycho2 (
     corr real,
     flag varchar(1),
     mflag varchar(1),
-    designation text NOT NULL,
+    designation varchar(1000) NOT NULL,
     tycid integer
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_uvotssc1
 CREATE TABLE dbo.dr18_uvotssc1 (
     name varchar(17),
     oseq bigint,
@@ -3268,6 +3327,7 @@ CREATE TABLE dbo.dr18_uvotssc1 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_xmm_om_suss_4_1
 CREATE TABLE dbo.dr18_xmm_om_suss_4_1 (
     iauname varchar(22),
     n_summary integer,
@@ -3387,9 +3447,10 @@ CREATE TABLE dbo.dr18_xmm_om_suss_4_1 (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_yso_clustering
 CREATE TABLE dbo.dr18_yso_clustering (
     source_id bigint NOT NULL,
-    twomass text,
+    twomass varchar(1000),
     ra double precision,
     "dec" double precision,
     parallax real,
@@ -3409,6 +3470,7 @@ CREATE TABLE dbo.dr18_yso_clustering (
 );
 
 
+DROP TABLE IF EXISTS dbo.dr18_zari18pms
 CREATE TABLE dbo.dr18_zari18pms (
     source bigint NOT NULL,
     glon double precision,
