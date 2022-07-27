@@ -58,9 +58,20 @@ with open('mssql_fk.sql') as file:
             fks.append(fk)
 
 
-
+'''
 print(pks, '\n\n')
 print(indexes, '\n\n')
 print(fks, '\n\n')
+'''
+
+#INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'PhotoObjAll', 'objID', '', 'PHOTO', 'PAGE', 'PHOTO', 1)
+
+def write_pks(_pks):
+    for _pk in _pks:
+         print(f'INSERT  [dbo].[IndexMap]   VALUES  (\'K\', \'primary key\', \'{_pk[1]}\', \'{_pk[2]}\', \'\', \'PHOTO\', \'PAGE\', \'PHOTO\', 1)')
+
+
+write_pks(pks)
+
 
 
