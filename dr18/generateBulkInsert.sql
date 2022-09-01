@@ -35,7 +35,7 @@ WITH ( FORMAT = 'CSV');
 	--BULK INSERT dr18_allwise FROM 'd:\dr18loading\minidb\csv\minidb.dr18_allwise.csv' WITH (DATAFILETYPE='char', FIRSTROW=2, FIELDTERMINATOR=',', rowterminator='0x0a');
 
 	
-	set @sql = concat(@sql, 'BULK INSERT ', @targettable, ' FROM ''', @fname, ''' WITH (DATAFILETYPE=''char'', FIRSTROW=2, FIELDTERMINATOR='','', ROWTERMINATOR=''0x0a'');','
+	set @sql = concat(@sql, 'BULK INSERT ', @targettable, ' FROM ''', @fname, ''' WITH (DATAFILETYPE=''char'', FIRSTROW=2, FIELDTERMINATOR='','', ROWTERMINATOR=''0x0a'', TABLOCK);','
 	')
 	print @sql
 	if (@doExecute = 1)
