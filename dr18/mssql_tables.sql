@@ -2,7 +2,7 @@
 
 DROP TABLE IF EXISTS dbo.dr18_allwise
 CREATE TABLE dbo.dr18_allwise (
-    designation varchar(20),
+    designation varchar(100),
     ra numeric(10,7),
     "dec" numeric(9,7),
     sigra numeric(7,4),
