@@ -1,0 +1,1 @@
+PS D:\dr18loading\minidb\csv> Get-Content .\minidb.dr18_allwise.csv -Head 10 |out-file -Path ./allwise.csv
