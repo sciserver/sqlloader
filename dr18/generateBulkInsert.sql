@@ -1,15 +1,24 @@
 
+USE BESTTEST
+
 -- ###################
 -- 
 -- load dr18 csv files 
---
+-- the quick n dirty way
+-- 
 -- ####################
 
 --select * from filesToLoad2
 
-
+/*
+update filesToLoad2
+set loadStatus = 9 where id = 59
+*/
+----------------------------------------------
+-- set these!!!!
 declare @doExecute bit = 1
 declare @truncate bit = 1
+-----------------------------------------------
 
 declare @sql nvarchar(4000)
 declare @id int
@@ -18,6 +27,7 @@ declare @targettable sysname
 
 declare cur cursor fast_forward for 
 select id, fname, targettable from filestoload2
+where loadStatus = 1
 
 
 open cur
@@ -40,18 +50,16 @@ WITH ( FORMAT = 'CSV');
 	print @sql
 	if (@doExecute = 1)
 	begin
-		
+		begin tran
 			exec sp_executesql @sql
+			set @sql = concat('update filestoload2 set lastLoadDate=''',GETDATE(),''', loadStatus=2 WHERE id=',@id,'
+			')
+			print @sql
+			exec sp_executesql @sql
+		commit tran
 	end
 
-	set @sql = concat('update filestoload2 set lastLoadDate=''',GETDATE(),''', loadStatus=1 WHERE id=',@id,'
-	')
-	print @sql
-	if (@doExecute = 1)
-	begin
-		
-			exec sp_executesql @sql
-	end
+
 	
 	fetch next from cur into @id, @fname, @targettable
 	
