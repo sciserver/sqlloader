@@ -1,11 +1,11 @@
 
 
-ALTER TABLE  dbo.dr18_best_brightest
-    ADD CONSTRAINT dr18_best_brightest_cntr_fkey FOREIGN KEY (cntr) REFERENCES dbo.dr18_allwise(cntr);
+--ALTER TABLE  dbo.dr18_best_brightest
+--    ADD CONSTRAINT dr18_best_brightest_cntr_fkey FOREIGN KEY (cntr) REFERENCES dbo.dr18_allwise(cntr);
 
 
-ALTER TABLE  dbo.dr18_bhm_csc_v2
-    ADD CONSTRAINT dr18_bhm_csc_v2_designation2m_fkey FOREIGN KEY (designation2m) REFERENCES dbo.dr18_twomass_psc(designation);
+--ALTER TABLE  dbo.dr18_bhm_csc_v2
+--    ADD CONSTRAINT dr18_bhm_csc_v2_designation2m_fkey FOREIGN KEY (designation2m) REFERENCES dbo.dr18_twomass_psc(designation);
 
 
 ALTER TABLE  dbo.dr18_bhm_csc_v2
@@ -116,20 +116,20 @@ ALTER TABLE  dbo.dr18_sagitta
     ADD CONSTRAINT dr18_sagitta_source_id_fkey FOREIGN KEY (source_id) REFERENCES dbo.dr18_gaia_dr2_source(source_id);
 
 
-ALTER TABLE  dbo.dr18_sdss_apogeeallstarmerge_r13
-    ADD CONSTRAINT dr18_sdss_apogeeallstarmerge_r13_designation_fkey FOREIGN KEY (designation) REFERENCES dbo.dr18_twomass_psc(designation);
+--ALTER TABLE  dbo.dr18_sdss_apogeeallstarmerge_r13
+--    ADD CONSTRAINT dr18_sdss_apogeeallstarmerge_r13_designation_fkey FOREIGN KEY (designation) REFERENCES dbo.dr18_twomass_psc(designation);
 
 
-ALTER TABLE  dbo.dr18_sdss_dr16_qso
-    ADD CONSTRAINT dr18_sdss_dr16_qso_plate_fiberid_mjd_fkey FOREIGN KEY (plate, fiberid, mjd) REFERENCES dbo.dr18_sdss_dr16_specobj(plate, fiberid, mjd);
+--ALTER TABLE  dbo.dr18_sdss_dr16_qso
+--    ADD CONSTRAINT dr18_sdss_dr16_qso_plate_fiberid_mjd_fkey FOREIGN KEY (plate, fiberid, mjd) REFERENCES dbo.dr18_sdss_dr16_specobj(plate, fiberid, mjd);
 
 
 ALTER TABLE  dbo.dr18_tic_v8
     ADD CONSTRAINT dr18_tic_v8_gaia_int_fkey FOREIGN KEY (gaia_int) REFERENCES dbo.dr18_gaia_dr2_source(source_id);
 
 
-ALTER TABLE  dbo.dr18_tic_v8
-    ADD CONSTRAINT dr18_tic_v8_twomass_psc_fkey FOREIGN KEY (twomass_psc) REFERENCES dbo.dr18_twomass_psc(designation);
+--ALTER TABLE  dbo.dr18_tic_v8
+--    ADD CONSTRAINT dr18_tic_v8_twomass_psc_fkey FOREIGN KEY (twomass_psc) REFERENCES dbo.dr18_twomass_psc(designation);
 
 
 ALTER TABLE  dbo.dr18_yso_clustering
