@@ -11,7 +11,7 @@ The issues I did find in the remaining 14 files mostly fell into 2 categories --
 
 - boolean / bit columns with t/f values -- I realize that the initial schema supplied was from postgresql but Sql Server doesn't have a "boolean" datatype.  Rather, it has "bit" which uses values 1/0/NULL instead of TRUE/FALSE/NULL.  I converted all the boolean columns to "bit" when creating the Sql Server schema but the t/f values in the csv's caused errors.
 
-One more thing to keep in mind -- at this point I did not do any "sanity checking" of any individual values beyond "did they load correctly into the specified column type?" so we may need to do some range checking, etc in a subsequent pass.  Also I did not perform any checks for duplicates, etc at this time.
+One more thing to keep in mind -- at this point I did not do any "sanity checking" of any individual values beyond "did they load correctly into the specified column type?" so we may need to do some range checking, etc in a subsequent pass.  In previous data releases, stuff like range and duplicate checking happen further downstream once the data has been loaded into a temporary (or "task") db in the spValidate step. 
 
 ## Specific things from the csv files
 
