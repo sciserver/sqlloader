@@ -1,3 +1,20 @@
+
+# First Pass of DR18 loading - Sept 2022
+
+## General Notes:
+
+Out of 60 csv files, I was able to load 46 of them with either no problems, or with small issues that I was able to fix by altering the table schema.  I did not alter the data in the csv files in any way.
+
+The issues I did find in the remaining 14 files mostly fell into 2 categories -- Nan / Inf values, and boolean / bit columns with t/f as the values.  
+
+- Nan / Inf -- When possible, I tried to identify specific rows/columns with NaN's but since the bulk load process I was using gives up on loading a row on the first invalid column value, it's possible that more NaN's exist in that row.  (I did notice that in a couple cases.)  Also, since the bulk load process aborts after a certain number of total errors, there could be more errors further down the file. So this should not be considered an exhaustive list of every invalid value in each file, but just a note to have a look at the file.  I also noticed in some of the files that some of the columns that had NaN's in some of the rows also had -9 in some of the rows (usually a small percentage.) I'm not sure if this is meant to be -9999 ?
+
+- boolean / bit columns with t/f values -- I realize that the initial schema supplied was from postgresql but Sql Server doesn't have a "boolean" datatype.  Rather, it has "bit" which uses values 1/0/NULL instead of TRUE/FALSE/NULL.  I converted all the boolean columns to "bit" when creating the Sql Server schema but the t/f values in the csv's caused errors.
+
+One more thing to keep in mind -- at this point I did not do any "sanity checking" of any individual values beyond "did they load correctly into the specified column type?" so we may need to do some range checking, etc in a subsequent pass.  Also I did not perform any checks for duplicates, etc at this time.
+
+## Specific things from the csv files
+
 - minidb.dr18_bhm_csc_v2.csv 
   - ora has NaN's (see row 6, row 14, row 17)
 
