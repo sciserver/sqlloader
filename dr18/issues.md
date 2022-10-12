@@ -119,6 +119,49 @@ Bulk load data conversion error (type mismatch or invalid character for the spec
   - Nan's in j, h, k columns (possibly more) look at rows 19, 70, 85...
 
 
+-------------------------------------------------------------------------------------------------------------
+
+new issues loading 10/2022
+
+commas may cause issues
+
+TRUNCATE TABLE dr18_sdss_apogeeallstarmerge_r13;BULK INSERT dr18_sdss_apogeeallstarmerge_r13 FROM 'd:\dr18loading\minidb\csv\minidb.dr18_sdss_apogeeallstarmerge_r13.csv' WITH (DATAFILETYPE='char', FIRSTROW=2, FIELDTERMINATOR=',', ROWTERMINATOR='0x0a', TABLOCK);
+	
+Msg 4863, Level 16, State 1, Line 1
+Bulk load data conversion error (truncation) for row 2, column 29 (telescopes).
+Msg 4863, Level 16, State 1, Line 1
+Bulk load data conversion error (truncation) for row 3, column 26 (visits).
+Msg 4863, Level 16, State 1, Line 1
+Bulk load data conversion error (truncation) for row 4, column 29 (telescopes).
+Msg 4863, Level 16, State 1, Line 1
+Bulk load data conversion error (truncation) for row 5, column 26 (visits).
+Msg 4863, Level 16, State 1, Line 1
+Bulk load data conversion error (truncation) for row 6, column 27 (fields).
+Msg 4864, Level 16, State 1, Line 1
+Bulk load data conversion error (type mismatch or invalid character for the specified codepage) for row 7, column 33 (teff).
+Msg 4863, Level 16, State 1, Line 1
+Bulk load data conversion error (truncation) for row 8, column 27 (fields).
+Msg 4864, Level 16, State 1, Line 1
+Bulk load data conversion error (type mismatch or invalid character for the specified codepage) for row 9, column 33 (teff).
+Msg 4863, Level 16, State 1, Line 1
+Bulk load data conversion error (truncation) for row 10, column 26 (visits).
+Msg 4863, Level 16, State 1, Line 1
+Bulk load data conversion error (truncation) for row 11, column 26 (visits).
+Msg 4863, Level 16, State 1, Line 1
+Bulk load data conversion error (truncation) for row 12, column 31 (starflags).
+Msg 4865, Level 16, State 1, Line 1
+Cannot bulk load because the maximum number of errors (10) was exceeded.
+Msg 7399, Level 16, State 1, Line 1
+The OLE DB provider "BULK" for linked server "(null)" reported an error. The provider did not give any information about the error.
+Msg 7330, Level 16, State 2, Line 1
+Cannot fetch a row from OLE DB provider "BULK" for linked server "(null)".
+
+
+
+
+
+
+
 
   
 
