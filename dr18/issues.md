@@ -125,6 +125,8 @@ new issues loading 10/2022
 
 commas may cause issues
 
+minidb.dr18_sdss_apogeeallstarmerge_r13.csv  -- lots of spaces at the end of the quoted lines?
+
 TRUNCATE TABLE dr18_sdss_apogeeallstarmerge_r13;BULK INSERT dr18_sdss_apogeeallstarmerge_r13 FROM 'd:\dr18loading\minidb\csv\minidb.dr18_sdss_apogeeallstarmerge_r13.csv' WITH (DATAFILETYPE='char', FIRSTROW=2, FIELDTERMINATOR=',', ROWTERMINATOR='0x0a', TABLOCK);
 	
 Msg 4863, Level 16, State 1, Line 1
