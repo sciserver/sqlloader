@@ -31,14 +31,13 @@ declare @sql nvarchar(4000)
 declare @id int
 declare @fname nvarchar(2000)
 declare @targettable sysname
-declare @sourcetable sysname
 
 declare cur cursor fast_forward for 
-select id,	targettable from filestoload2
+select id, fname, targettable from filestoload2
 where loadStatus = 0
 
 open cur
-fetch next from cur into @id, @targettable
+fetch next from cur into @id, @fname, @targettable
 while @@FETCH_STATUS = 0
 begin
 /*
@@ -52,9 +51,8 @@ WITH ( FORMAT = 'CSV');
 	--BULK INSERT dr18_allwise FROM 'd:\dr18loading\minidb\csv\minidb.dr18_allwise.csv' WITH (DATAFILETYPE='char', FIRSTROW=2, FIELDTERMINATOR=',', rowterminator='0x0a');
 
 	
-	--set @sql = concat(@sql, 'BULK INSERT ', @targettable, ' FROM ''', @fname, ''' WITH (DATAFILETYPE=''char'', FIRSTROW=2, FIELDTERMINATOR='','', ROWTERMINATOR=''0x0a'', TABLOCK);','
-	--')
-	set @sql = concat(@sql, 'INSERT ',@targettable, ' WITH (TABLOCK) SELECT * FROM minidb.dbo.', @targettable)
+	set @sql = concat(@sql, 'BULK INSERT ', @targettable, ' FROM ''', @fname, ''' WITH (DATAFILETYPE=''char'', FIRSTROW=2, FIELDTERMINATOR='','', ROWTERMINATOR=''0x0a'', TABLOCK);','
+	')
 	print @sql
 	if (@doExecute = 1)
 	begin
@@ -69,7 +67,7 @@ WITH ( FORMAT = 'CSV');
 
 
 	
-	fetch next from cur into @id, @targettable
+	fetch next from cur into @id, @fname, @targettable
 	
 end
 

@@ -1,5 +1,5 @@
 
-USE BESTTEST
+USE minidb2
 
 -- ###################
 -- 
@@ -13,6 +13,13 @@ USE BESTTEST
 /*
 update filesToLoad2
 set loadStatus = 9 where id = 59
+
+select count(*) from filestoload2
+where loadStatus = 9
+
+update filestoload2
+set loadSTatus = 0
+
 */
 ----------------------------------------------
 -- set these!!!!
@@ -27,8 +34,7 @@ declare @targettable sysname
 
 declare cur cursor fast_forward for 
 select id, fname, targettable from filestoload2
-where loadStatus = 1
-
+where loadStatus = 0
 
 open cur
 fetch next from cur into @id, @fname, @targettable
