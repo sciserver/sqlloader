@@ -1,6 +1,200 @@
-USE [minidb]
+
+/****** Object:  Table [dbo].[dr18_zari18pms]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_zari18pms]
 GO
-/****** Object:  Table [dbo].[dr18_allwise]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_yso_clustering]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_yso_clustering]
+GO
+/****** Object:  Table [dbo].[dr18_xmm_om_suss_4_1]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_xmm_om_suss_4_1]
+GO
+/****** Object:  Table [dbo].[dr18_uvotssc1]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_uvotssc1]
+GO
+/****** Object:  Table [dbo].[dr18_tycho2]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_tycho2]
+GO
+/****** Object:  Table [dbo].[dr18_twomass_psc]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_twomass_psc]
+GO
+/****** Object:  Table [dbo].[dr18_tic_v8]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_tic_v8]
+GO
+/****** Object:  Table [dbo].[dr18_targeting_generation]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_targeting_generation]
+GO
+/****** Object:  Table [dbo].[dr18_targetdb_version]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_targetdb_version]
+GO
+/****** Object:  Table [dbo].[dr18_target]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_target]
+GO
+/****** Object:  Table [dbo].[dr18_supercosmos]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_supercosmos]
+GO
+/****** Object:  Table [dbo].[dr18_skymapper_dr2]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_skymapper_dr2]
+GO
+/****** Object:  Table [dbo].[dr18_skies_v2]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_skies_v2]
+GO
+/****** Object:  Table [dbo].[dr18_sdss_dr16_specobj]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_sdss_dr16_specobj]
+GO
+/****** Object:  Table [dbo].[dr18_sdss_dr16_qso_original]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_sdss_dr16_qso_original]
+GO
+/****** Object:  Table [dbo].[dr18_sdss_dr16_qso]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_sdss_dr16_qso]
+GO
+/****** Object:  Table [dbo].[dr18_sdss_dr13_photoobj_primary]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_sdss_dr13_photoobj_primary]
+GO
+/****** Object:  Table [dbo].[dr18_sdss_apogeeallstarmerge_r13]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_sdss_apogeeallstarmerge_r13]
+GO
+/****** Object:  Table [dbo].[dr18_sagitta]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_sagitta]
+GO
+/****** Object:  Table [dbo].[dr18_panstarrs1]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_panstarrs1]
+GO
+/****** Object:  Table [dbo].[dr18_mapper]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_mapper]
+GO
+/****** Object:  Table [dbo].[dr18_magnitude]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_magnitude]
+GO
+/****** Object:  Table [dbo].[dr18_legacy_survey_dr8]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_legacy_survey_dr8]
+GO
+/****** Object:  Table [dbo].[dr18_instrument]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_instrument]
+GO
+/****** Object:  Table [dbo].[dr18_guvcat]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_guvcat]
+GO
+/****** Object:  Table [dbo].[dr18_glimpse]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_glimpse]
+GO
+/****** Object:  Table [dbo].[dr18_geometric_distances_gaia_dr2]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_geometric_distances_gaia_dr2]
+GO
+/****** Object:  Table [dbo].[dr18_gaiadr2_tmass_best_neighbour]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_gaiadr2_tmass_best_neighbour]
+GO
+/****** Object:  Table [dbo].[dr18_gaia_unwise_agn]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_gaia_unwise_agn]
+GO
+/****** Object:  Table [dbo].[dr18_gaia_dr2_wd]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_gaia_dr2_wd]
+GO
+/****** Object:  Table [dbo].[dr18_gaia_dr2_source]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_gaia_dr2_source]
+GO
+/****** Object:  Table [dbo].[dr18_gaia_dr2_ruwe]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_gaia_dr2_ruwe]
+GO
+/****** Object:  Table [dbo].[dr18_ebosstarget_v5]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_ebosstarget_v5]
+GO
+/****** Object:  Table [dbo].[dr18_catwise2020]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catwise2020]
+GO
+/****** Object:  Table [dbo].[dr18_category]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_category]
+GO
+/****** Object:  Table [dbo].[dr18_catalogdb_version]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalogdb_version]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_xmm_om_suss_4_1]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_xmm_om_suss_4_1]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_uvotssc1]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_uvotssc1]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_tycho2]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_tycho2]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_tic_v8]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_tic_v8]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_supercosmos]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_supercosmos]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_skymapper_dr2]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_skymapper_dr2]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_skies_v2]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_skies_v2]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_sdss_dr16_specobj]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_sdss_dr16_specobj]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_sdss_dr13_photoobj_primary]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_sdss_dr13_photoobj_primary]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_panstarrs1]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_panstarrs1]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_legacy_survey_dr8]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_legacy_survey_dr8]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_guvcat]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_guvcat]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_glimpse]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_glimpse]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_catwise2020]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_catwise2020]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_bhm_rm_v0_2]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_bhm_rm_v0_2]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_bhm_efeds_veto]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_bhm_efeds_veto]
+GO
+/****** Object:  Table [dbo].[dr18_catalog_to_allwise]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog_to_allwise]
+GO
+/****** Object:  Table [dbo].[dr18_catalog]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_catalog]
+GO
+/****** Object:  Table [dbo].[dr18_cataclysmic_variables]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_cataclysmic_variables]
+GO
+/****** Object:  Table [dbo].[dr18_carton_txt]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_carton_txt]
+GO
+/****** Object:  Table [dbo].[dr18_carton_to_target]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_carton_to_target]
+GO
+/****** Object:  Table [dbo].[dr18_carton]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_carton]
+GO
+/****** Object:  Table [dbo].[dr18_cadence_epoch]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_cadence_epoch]
+GO
+/****** Object:  Table [dbo].[dr18_cadence]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_cadence]
+GO
+/****** Object:  Table [dbo].[dr18_bhm_rm_v0_2]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_bhm_rm_v0_2]
+GO
+/****** Object:  Table [dbo].[dr18_bhm_efeds_veto]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_bhm_efeds_veto]
+GO
+/****** Object:  Table [dbo].[dr18_bhm_csc_v2]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_bhm_csc_v2]
+GO
+/****** Object:  Table [dbo].[dr18_best_brightest]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_best_brightest]
+GO
+/****** Object:  Table [dbo].[dr18_allwise]    Script Date: 10/26/2022 3:39:21 PM ******/
+DROP TABLE IF EXISTS [dbo].[dr18_allwise]
+GO
+/****** Object:  Table [dbo].[dr18_allwise]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -306,7 +500,7 @@ CREATE TABLE [dbo].[dr18_allwise](
 	[htm20] [bigint] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_best_brightest]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_best_brightest]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -350,7 +544,7 @@ CREATE TABLE [dbo].[dr18_best_brightest](
 	[cntr] [bigint] NOT NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_bhm_csc_v2]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_bhm_csc_v2]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -383,7 +577,7 @@ CREATE TABLE [dbo].[dr18_bhm_csc_v2](
 	[pk] [bigint] NOT NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_bhm_efeds_veto]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_bhm_efeds_veto]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -414,7 +608,7 @@ CREATE TABLE [dbo].[dr18_bhm_efeds_veto](
 	[pk] [bigint] NOT NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_bhm_rm_v0_2]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_bhm_rm_v0_2]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -671,7 +865,7 @@ CREATE TABLE [dbo].[dr18_bhm_rm_v0_2](
 	[ps1_var_sn_y] [float] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_cadence]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_cadence]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -686,7 +880,7 @@ CREATE TABLE [dbo].[dr18_cadence](
 	[nexp_total] [int] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_cadence_epoch]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_cadence_epoch]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -705,7 +899,7 @@ CREATE TABLE [dbo].[dr18_cadence_epoch](
 	[obsmode_pk] [varchar](500) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_carton]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_carton]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -718,7 +912,7 @@ CREATE TABLE [dbo].[dr18_carton](
 	[target_selection_planname] [varchar](500) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_carton_to_target]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_carton_to_target]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -737,7 +931,7 @@ CREATE TABLE [dbo].[dr18_carton_to_target](
 	[inertial] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_carton_txt]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_carton_txt]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -750,7 +944,7 @@ CREATE TABLE [dbo].[dr18_carton_txt](
 	[active] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_cataclysmic_variables]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_cataclysmic_variables]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -853,7 +1047,7 @@ CREATE TABLE [dbo].[dr18_cataclysmic_variables](
 	[lum_percentile_upper] [float] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -870,7 +1064,7 @@ CREATE TABLE [dbo].[dr18_catalog](
 	[version_id] [int] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_allwise]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_allwise]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -883,7 +1077,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_allwise](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_bhm_efeds_veto]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_bhm_efeds_veto]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -896,7 +1090,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_bhm_efeds_veto](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_bhm_rm_v0_2]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_bhm_rm_v0_2]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -909,7 +1103,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_bhm_rm_v0_2](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_catwise2020]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_catwise2020]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -922,7 +1116,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_catwise2020](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_glimpse]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_glimpse]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -935,7 +1129,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_glimpse](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_guvcat]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_guvcat]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -948,7 +1142,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_guvcat](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_legacy_survey_dr8]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_legacy_survey_dr8]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -961,7 +1155,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_legacy_survey_dr8](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_panstarrs1]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_panstarrs1]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -974,7 +1168,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_panstarrs1](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_sdss_dr13_photoobj_primary]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_sdss_dr13_photoobj_primary]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -987,7 +1181,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_sdss_dr13_photoobj_primary](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_sdss_dr16_specobj]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_sdss_dr16_specobj]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1000,7 +1194,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_sdss_dr16_specobj](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_skies_v2]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_skies_v2]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1013,7 +1207,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_skies_v2](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_skymapper_dr2]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_skymapper_dr2]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1026,7 +1220,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_skymapper_dr2](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_supercosmos]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_supercosmos]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1039,7 +1233,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_supercosmos](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_tic_v8]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_tic_v8]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1052,7 +1246,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_tic_v8](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_tycho2]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_tycho2]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1065,7 +1259,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_tycho2](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_uvotssc1]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_uvotssc1]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1078,7 +1272,7 @@ CREATE TABLE [dbo].[dr18_catalog_to_uvotssc1](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catalog_to_xmm_om_suss_4_1]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalog_to_xmm_om_suss_4_1]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1091,7 +1285,18 @@ CREATE TABLE [dbo].[dr18_catalog_to_xmm_om_suss_4_1](
 	[best] [bit] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_category]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catalogdb_version]    Script Date: 10/26/2022 3:39:21 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[dr18_catalogdb_version](
+	[id] [int] NOT NULL,
+	[planname] [varchar](500) NULL,
+	[tag] [varchar](500) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[dr18_category]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1101,7 +1306,7 @@ CREATE TABLE [dbo].[dr18_category](
 	[label] [varchar](500) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_catwise2020]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_catwise2020]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1296,7 +1501,7 @@ CREATE TABLE [dbo].[dr18_catwise2020](
 	[unwise_objid] [varchar](20) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_ebosstarget_v5]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_ebosstarget_v5]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1403,7 +1608,7 @@ CREATE TABLE [dbo].[dr18_ebosstarget_v5](
 	[pk] [bigint] NOT NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_gaia_dr2_ruwe]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_gaia_dr2_ruwe]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1413,7 +1618,7 @@ CREATE TABLE [dbo].[dr18_gaia_dr2_ruwe](
 	[ruwe] [real] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_gaia_dr2_source]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_gaia_dr2_source]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1515,7 +1720,7 @@ CREATE TABLE [dbo].[dr18_gaia_dr2_source](
 	[lum_percentile_upper] [real] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_gaia_dr2_wd]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_gaia_dr2_wd]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1580,7 +1785,7 @@ CREATE TABLE [dbo].[dr18_gaia_dr2_wd](
 	[chisqhe] [real] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_gaia_unwise_agn]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_gaia_unwise_agn]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1625,7 +1830,7 @@ CREATE TABLE [dbo].[dr18_gaia_unwise_agn](
 	[prob_rf] [float] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_gaiadr2_tmass_best_neighbour]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_gaiadr2_tmass_best_neighbour]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1642,7 +1847,7 @@ CREATE TABLE [dbo].[dr18_gaiadr2_tmass_best_neighbour](
 	[tmass_pts_key] [int] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_geometric_distances_gaia_dr2]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_geometric_distances_gaia_dr2]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1657,7 +1862,7 @@ CREATE TABLE [dbo].[dr18_geometric_distances_gaia_dr2](
 	[modality_flag] [smallint] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_glimpse]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_glimpse]    Script Date: 10/26/2022 3:39:21 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1744,7 +1949,7 @@ CREATE TABLE [dbo].[dr18_glimpse](
 	[pk] [bigint] NOT NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_guvcat]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_guvcat]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1847,7 +2052,7 @@ CREATE TABLE [dbo].[dr18_guvcat](
 	[largeobjsize] [real] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_instrument]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_instrument]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1858,7 +2063,7 @@ CREATE TABLE [dbo].[dr18_instrument](
 	[default_lambda_eff] [real] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_legacy_survey_dr8]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_legacy_survey_dr8]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1993,7 +2198,7 @@ CREATE TABLE [dbo].[dr18_legacy_survey_dr8](
 	[gaia_sourceid] [bigint] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_magnitude]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_magnitude]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2014,7 +2219,7 @@ CREATE TABLE [dbo].[dr18_magnitude](
 	[optical_prov] [varchar](500) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_mapper]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_mapper]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2024,7 +2229,7 @@ CREATE TABLE [dbo].[dr18_mapper](
 	[label] [varchar](500) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_panstarrs1]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_panstarrs1]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2224,7 +2429,7 @@ CREATE TABLE [dbo].[dr18_panstarrs1](
 	[extid_hi_lo] [bigint] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_sagitta]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_sagitta]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2240,7 +2445,7 @@ CREATE TABLE [dbo].[dr18_sagitta](
 	[age_std] [real] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_sdss_apogeeallstarmerge_r13]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_sdss_apogeeallstarmerge_r13]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2271,7 +2476,7 @@ CREATE TABLE [dbo].[dr18_sdss_apogeeallstarmerge_r13](
 	[mean_fiber] [real] NULL,
 	[sig_fiber] [real] NULL,
 	[apstar_ids] [varchar](1400) NULL,
-	[visits] [varchar](500) NULL,
+	[visits] [varchar](2000) NULL,
 	[fields] [varchar](500) NULL,
 	[surveys] [varchar](500) NULL,
 	[telescopes] [varchar](500) NULL,
@@ -2289,7 +2494,6 @@ CREATE TABLE [dbo].[dr18_sdss_apogeeallstarmerge_r13](
 	[dist] [real] NULL,
 	[dist_err] [real] NULL,
 	[dist_src] [varchar](500) NULL,
-	[dist_srclist] [varchar](500) NULL,
 	[mstar] [real] NULL,
 	[mstar_err] [real] NULL,
 	[rstar] [real] NULL,
@@ -2298,7 +2502,7 @@ CREATE TABLE [dbo].[dr18_sdss_apogeeallstarmerge_r13](
 	[designation] [varchar](500) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_sdss_dr13_photoobj_primary]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_sdss_dr13_photoobj_primary]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2309,7 +2513,7 @@ CREATE TABLE [dbo].[dr18_sdss_dr13_photoobj_primary](
 	[dec] [float] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_sdss_dr16_qso]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_sdss_dr16_qso]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2521,7 +2725,7 @@ CREATE TABLE [dbo].[dr18_sdss_dr16_qso](
 	[pk] [bigint] NOT NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_sdss_dr16_qso_original]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_sdss_dr16_qso_original]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2733,7 +2937,7 @@ CREATE TABLE [dbo].[dr18_sdss_dr16_qso_original](
 	[pk] [bigint] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_sdss_dr16_specobj]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_sdss_dr16_specobj]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2935,7 +3139,7 @@ CREATE TABLE [dbo].[dr18_sdss_dr16_specobj](
 	[loadversion] [int] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_skies_v2]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_skies_v2]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2971,7 +3175,7 @@ CREATE TABLE [dbo].[dr18_skies_v2](
 	[sep_neighbour_tmass_xsc] [real] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_skymapper_dr2]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_skymapper_dr2]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3079,7 +3283,7 @@ CREATE TABLE [dbo].[dr18_skymapper_dr2](
 	[gaia_dr2_dist2] [real] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_supercosmos]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_supercosmos]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3144,7 +3348,7 @@ CREATE TABLE [dbo].[dr18_supercosmos](
 	[ebmv] [real] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_target]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_target]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3160,7 +3364,30 @@ CREATE TABLE [dbo].[dr18_target](
 	[catalogid] [bigint] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_tic_v8]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_targetdb_version]    Script Date: 10/26/2022 3:39:22 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[dr18_targetdb_version](
+	[pk] [int] NOT NULL,
+	[planname] [varchar](500) NULL,
+	[tag] [varchar](500) NULL,
+	[target_selection] [bit] NULL,
+	[robostrategy] [bit] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[dr18_targeting_generation]    Script Date: 10/26/2022 3:39:22 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[dr18_targeting_generation](
+	[pk] [int] NOT NULL,
+	[label] [varchar](500) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[dr18_tic_v8]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3298,7 +3525,7 @@ CREATE TABLE [dbo].[dr18_tic_v8](
 	[allwise_cntr] [bigint] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_twomass_psc]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_twomass_psc]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3366,7 +3593,7 @@ CREATE TABLE [dbo].[dr18_twomass_psc](
 	[designation] [varchar](500) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_tycho2]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_tycho2]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3413,7 +3640,7 @@ CREATE TABLE [dbo].[dr18_tycho2](
 	[tycid] [int] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_uvotssc1]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_uvotssc1]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3504,7 +3731,7 @@ CREATE TABLE [dbo].[dr18_uvotssc1](
 	[id] [bigint] NOT NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_xmm_om_suss_4_1]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_xmm_om_suss_4_1]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3627,7 +3854,7 @@ CREATE TABLE [dbo].[dr18_xmm_om_suss_4_1](
 	[pk] [bigint] NOT NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_yso_clustering]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_yso_clustering]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3653,7 +3880,7 @@ CREATE TABLE [dbo].[dr18_yso_clustering](
 	[edist] [float] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[dr18_zari18pms]    Script Date: 9/7/2022 2:12:54 PM ******/
+/****** Object:  Table [dbo].[dr18_zari18pms]    Script Date: 10/26/2022 3:39:22 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
