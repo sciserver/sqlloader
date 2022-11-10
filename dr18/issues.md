@@ -177,6 +177,19 @@ q3c_ang2ipix is a postgres function, no obvious SQL Server equivalent unless we 
 
 - CREATE NONCLUSTERED INDEX dr18_target_q3c_ang2ipix_idx ON dbo.dr18_target  (public.q3c_ang2ipix(ra, "dec")) ON [MINIDB];
 
+ra/dec
+
+- dr18_bhm_rm_v0_2 
+- dr18_cataclysmic_variables
+- dr18_catalog
+- dr18_catwise2020
+- dr18_ebosstarget_v5
+- dr18_gaia_dr2_source
+- dr18_gaia_dr2_wd
+- dr18_gaia_unwise_agn 
+- ...etc there are 26 total didn't have time to paste them here
+
+
 
 
 
