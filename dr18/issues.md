@@ -160,6 +160,29 @@ Cannot fetch a row from OLE DB provider "BULK" for linked server "(null)".
 
 
 
+--
+
+## index issues
+
+
+
+- CREATE NONCLUSTERED INDEX dr18_allwise_expr_idx ON dbo.dr18_allwise  (((w1mpro - w2mpro))) ON [MINIDB];
+- CREATE NONCLUSTERED INDEX dr18_gaia_dr2_source_expr_idx ON dbo.dr18_gaia_dr2_source  (((parallax - parallax_error))) ON [MINIDB];
+- CREATE NONCLUSTERED INDEX dr18_guvcat_expr_idx ON dbo.dr18_guvcat  (((fuv_mag - nuv_mag))) ON [MINIDB];
+
+Can't have a calculation in an index statement.  I can make a persisted computed column for these values.  Need to know what to name them.
+
+--
+q3c_ang2ipix is a postgres function, no obvious SQL Server equivalent unless we add a spatial index.  replace with htmid?   should i add htmid to all tables that have ra/dec columns?
+
+- CREATE NONCLUSTERED INDEX dr18_target_q3c_ang2ipix_idx ON dbo.dr18_target  (public.q3c_ang2ipix(ra, "dec")) ON [MINIDB];
+
+
+
+
+
+
+
 
 
 
