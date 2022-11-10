@@ -190,6 +190,9 @@ ra/dec
 - ...etc there are 26 total didn't have time to paste them here
 
 
+actually this isn't going to work
+
+
 
 
 
