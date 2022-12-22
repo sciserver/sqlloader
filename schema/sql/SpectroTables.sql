@@ -146,6 +146,9 @@
 --* 2017-12-12  Ani: Added new VAC table sdssEbossFirefly (from J Comparat).
 --* 2019-09-27  Ani: Updated table sdssEbossFirefly (for DR16).
 --* 2021-07-19  Ani: Swapped in updated SpecObjAll (for DR17).
+--* 2022-12-22  Ani: spAll table added for DR18. Still needs schema info.
+--* 2022-12-22  Ani: Removed duplicate spectroflux_[ugriz] columns. (DR18)
+--* 2022-12-22  Ani: Bumped up size of PlateX.tile to int from smallint (DR18).
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -188,7 +191,7 @@ CREATE TABLE PlateX (
 	run2d		varchar(32) NOT NULL,	--/D 2D reduction rerun of plate
 	run1d		varchar(32) NOT NULL,	--/D 1D reduction rerun of plate  
 	runsspp		varchar(32) NOT NULL,	--/D SSPP reduction rerun of plate  ("none" if not run)  
-	tile            smallint NOT NULL,      --/D Tile number for SDSS-I, -II plates (-1 for SDSS-III) [from platelist product]
+	tile            int NOT NULL,      --/D Tile number for SDSS-I, -II plates (-1 for SDSS-III) [from platelist product]
 	designID        int NOT NULL,           --/D Design number number for SDSS-III plates (-1 for SDSS-I, -II) [from platelist product]
 	locationID        int NOT NULL,         --/D Location number number for SDSS-III plates (-1 for SDSS-I, -II) [from platelist product]
 	iopVersion      varchar(64) NOT NULL,   --/D IOP Version [from spPlate header]
@@ -1083,6 +1086,235 @@ Chabrier_ELODIE_spm_EBV                                               real     N
 Chabrier_ELODIE_nComponentsSSP                                        real     NOT NULL, --/U 
 )
 
+GO
+--
+
+
+
+
+--===============================================================
+-- spAll table added for DR18
+--===============================================================
+if exists (select * from dbo.sysobjects 
+	where id = object_id(N'spAll')) 
+	drop table [spAll]
+GO
+--
+CREATE TABLE spAll (
+-------------------------------------------------------------------------------
+--/H Contains the summary results for a boss spectrum.
+--
+--/T This is a base table containing the summary spectroscopic
+--/T information fot the BOSS spectrograph data.
+-------------------------------------------------------------------------------
+    programname     varchar(32) NOT NULL,	--/D Program name
+    chunk           varchar(32) NOT NULL,	--/D Chunk name
+    survey          varchar(32) NOT NULL,	--/D Survey name
+    platequality varchar(4) NOT NULL,
+    platesn2 real NOT NULL,
+    deredsn2 real NOT NULL,
+    primtarget bigint NOT NULL,
+    sectarget bigint NOT NULL,
+    lambda_eff real NOT NULL,
+    bluefiber bigint NOT NULL,
+    zoffset real NOT NULL,
+    xfocal real NOT NULL,
+    yfocal real NOT NULL,
+    specprimary smallint NOT NULL,			--/D Best version of spectrum at this location --/F specprimary
+    specboss smallint NOT NULL,				--/D Best version of spectrum at this location --/F specboss
+    boss_specobj_id bigint NOT NULL,
+    nspecobs smallint NOT NULL,
+    calibflux_u real NOT NULL,
+    calibflux_g real NOT NULL,
+    calibflux_r real NOT NULL,
+    calibflux_i real NOT NULL,
+    calibflux_z real NOT NULL,
+    calibflux_ivar_u real NOT NULL,
+    calibflux_ivar_g real NOT NULL,
+    calibflux_ivar_r real NOT NULL,
+    calibflux_ivar_i real NOT NULL,
+    calibflux_ivar_z real NOT NULL,
+    gaia_bp real NOT NULL,
+    gaia_rp real NOT NULL,
+    gaia_g real NOT NULL,
+    firstcarton varchar(48) NOT NULL,
+    mag_u real NOT NULL,
+    mag_g real NOT NULL,
+    mag_r real NOT NULL,
+    mag_i real NOT NULL,
+    mag_z real NOT NULL,
+    plate numeric(20) NOT NULL, --/D Plate
+    designid smallint NOT NULL,
+    nexp smallint NOT NULL,
+    exptime smallint NOT NULL,
+    airmass real NOT NULL,
+    healpix bigint NOT NULL,
+    healpixgrp smallint NOT NULL,
+    healpix_dir varchar(68) NOT NULL,
+    mjd_final real NOT NULL,
+    mjd_list varchar(11) NOT NULL,
+    tai_list varchar(143) NOT NULL,
+    platesnr2g_list varchar(95) NOT NULL,
+    platesnr2r_list varchar(95) NOT NULL,
+    platesnr2i_list varchar(95) NOT NULL,
+    moon_dist varchar(119) NOT NULL,
+    moon_phase varchar(142) NOT NULL,
+    sfd_ebv real NOT NULL,
+    wise_mag_1 real NOT NULL,
+    wise_mag_2 real NOT NULL,
+    wise_mag_3 real NOT NULL,
+    wise_mag_4 real NOT NULL,
+    twomass_mag_1 real NOT NULL,
+    twomass_mag_2 real NOT NULL,
+    twomass_mag_3 real NOT NULL,
+    guvcat_mag_1 real NOT NULL,
+    guvcat_mag_2 real NOT NULL,
+    gaia_parallax real NOT NULL,
+    gaia_pmra real NOT NULL,
+    gaia_pmdec real NOT NULL,
+    xcsao_rv real NOT NULL,
+    xcsao_erv real NOT NULL,
+    xcsao_rxc real NOT NULL,
+    xcsao_teff real NOT NULL,
+    xcsao_eteff real NOT NULL,
+    xcsao_logg real NOT NULL,
+    xcsao_elogg real NOT NULL,
+    xcsao_feh real NOT NULL,
+    xcsao_efeh real NOT NULL,
+    catalogid bigint NOT NULL,
+    sdssv_boss_target0 bigint NOT NULL,
+    field bigint NOT NULL,
+    tile bigint NOT NULL,
+    mjd bigint NOT NULL,
+    fiberid bigint NOT NULL,
+    run2d varchar(6) NOT NULL,
+    run1d varchar(6) NOT NULL,
+    objtype varchar(16) NOT NULL,
+    plug_ra float NOT NULL,
+    plug_dec float NOT NULL,
+    class varchar(6) NOT NULL,
+    subclass varchar(21) NOT NULL,
+    z real NOT NULL,
+    z_err real NOT NULL,
+    rchi2 real NOT NULL,
+    dof bigint NOT NULL,
+    rchi2diff real NOT NULL,
+    tfile varchar(24) NOT NULL,
+    tcolumn_1 bigint NOT NULL,
+    tcolumn_2 bigint NOT NULL,
+    tcolumn_3 bigint NOT NULL,
+    tcolumn_4 bigint NOT NULL,
+    tcolumn_5 bigint NOT NULL,
+    tcolumn_6 bigint NOT NULL,
+    tcolumn_7 bigint NOT NULL,
+    tcolumn_8 bigint NOT NULL,
+    tcolumn_9 bigint NOT NULL,
+    tcolumn_10 bigint NOT NULL,
+    npoly bigint NOT NULL,
+    theta_1 bigint NOT NULL,
+    theta_2 bigint NOT NULL,
+    theta_3 bigint NOT NULL,
+    theta_4 bigint NOT NULL,
+    theta_5 bigint NOT NULL,
+    theta_6 bigint NOT NULL,
+    theta_7 bigint NOT NULL,
+    theta_8 bigint NOT NULL,
+    theta_9 bigint NOT NULL,
+    theta_10 bigint NOT NULL,
+    vdisp real NOT NULL,
+    vdisp_err real NOT NULL,
+    vdispz real NOT NULL,
+    vdispz_err real NOT NULL,
+    vdispchi2 real NOT NULL,
+    vdispnpix real NOT NULL,
+    vdispdof bigint NOT NULL,
+    wavemin real NOT NULL,
+    wavemax real NOT NULL,
+    wcoverage real NOT NULL,
+    zwarning bigint NOT NULL,
+    sn_median_u real NOT NULL,
+    sn_median_g real NOT NULL,
+    sn_median_r real NOT NULL,
+    sn_median_i real NOT NULL,
+    sn_median_z real NOT NULL,
+    sn_median_all real NOT NULL,
+    chi68p real NOT NULL,
+    fracnsigma_1 bigint NOT NULL,
+    fracnsigma_2 bigint NOT NULL,
+    fracnsigma_3 bigint NOT NULL,
+    fracnsigma_4 bigint NOT NULL,
+    fracnsigma_5 bigint NOT NULL,
+    fracnsigma_6 bigint NOT NULL,
+    fracnsigma_7 bigint NOT NULL,
+    fracnsigma_8 bigint NOT NULL,
+    fracnsigma_9 bigint NOT NULL,
+    fracnsigma_10 bigint NOT NULL,
+    fracnsighi_1 bigint NOT NULL,
+    fracnsighi_2 bigint NOT NULL,
+    fracnsighi_3 bigint NOT NULL,
+    fracnsighi_4 bigint NOT NULL,
+    fracnsighi_5 bigint NOT NULL,
+    fracnsighi_6 bigint NOT NULL,
+    fracnsighi_7 bigint NOT NULL,
+    fracnsighi_8 bigint NOT NULL,
+    fracnsighi_9 bigint NOT NULL,
+    fracnsighi_10 bigint NOT NULL,
+    fracnsiglo_1 bigint NOT NULL,
+    fracnsiglo_2 bigint NOT NULL,
+    fracnsiglo_3 bigint NOT NULL,
+    fracnsiglo_4 bigint NOT NULL,
+    fracnsiglo_5 bigint NOT NULL,
+    fracnsiglo_6 bigint NOT NULL,
+    fracnsiglo_7 bigint NOT NULL,
+    fracnsiglo_8 bigint NOT NULL,
+    fracnsiglo_9 bigint NOT NULL,
+    fracnsiglo_10 bigint NOT NULL,
+    spectroflux_u real NOT NULL,
+    spectroflux_g real NOT NULL,
+    spectroflux_r real NOT NULL,
+    spectroflux_i real NOT NULL,
+    spectroflux_z real NOT NULL,
+    spectrosynflux_u real NOT NULL,
+    spectrosynflux_g real NOT NULL,
+    spectrosynflux_r real NOT NULL,
+    spectrosynflux_i real NOT NULL,
+    spectrosynflux_z real NOT NULL,
+    spectrosynflux_ivar_u real NOT NULL,
+    spectrosynflux_ivar_g real NOT NULL,
+    spectrosynflux_ivar_r real NOT NULL,
+    spectrosynflux_ivar_i real NOT NULL,
+    spectrosynflux_ivar_z real NOT NULL,
+    spectroskyflux_u real NOT NULL,
+    spectroskyflux_g real NOT NULL,
+    spectroskyflux_r real NOT NULL,
+    spectroskyflux_i real NOT NULL,
+    spectroskyflux_z real NOT NULL,
+    anyandmask bigint NOT NULL,
+    anyormask bigint NOT NULL,
+    spec1_g real NOT NULL,
+    spec1_r real NOT NULL,
+    spec1_i real NOT NULL,
+    elodie_filename varchar(16) NOT NULL,
+    elodie_object varchar(9) NOT NULL,
+    elodie_sptype varchar(12) NOT NULL,
+    elodie_bv real NOT NULL,
+    elodie_teff real NOT NULL,
+    elodie_logg real NOT NULL,
+    elodie_feh real NOT NULL,
+    elodie_z real NOT NULL,
+    elodie_z_err real NOT NULL,
+    elodie_z_modelerr real NOT NULL,
+    elodie_rchi2 real NOT NULL,
+    elodie_dof bigint NOT NULL,
+    z_noqso real NOT NULL,
+    z_err_noqso real NOT NULL,
+    znum_noqso bigint NOT NULL,
+    zwarning_noqso bigint NOT NULL,
+    class_noqso varchar(6) NOT NULL,
+    subclass_noqso varchar(21) NOT NULL,
+    rchi2diff_noqso real NOT NULL,
+    specobjid bigint NOT NULL
+)
 GO
 --
 
