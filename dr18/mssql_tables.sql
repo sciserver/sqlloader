@@ -2,7 +2,7 @@
 
 DROP TABLE IF EXISTS dbo.dr18_allwise
 CREATE TABLE dbo.dr18_allwise (
-    designation varchar(20),
+    designation varchar(100),
     ra numeric(10,7),
     "dec" numeric(9,7),
     sigra numeric(7,4),
@@ -2128,7 +2128,7 @@ CREATE TABLE dbo.dr18_sdss_apogeeallstarmerge_r13 (
     baseline real,
     mean_fiber real,
     sig_fiber real,
-    apstar_ids varchar(500),
+    apstar_ids varchar(1400),  --changed from 500
     visits varchar(500),
     fields varchar(500),
     surveys varchar(500),
