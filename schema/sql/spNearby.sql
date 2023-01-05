@@ -109,7 +109,7 @@
 --* 2018-03-29 Sue: Fixed spec functions to return numeric(20) instead of bigint
 --* 2019-01016 Sue: fGetObjectsEq now returns numeric(20) instead of bigint
 --* 2020-02-11 Sue: changed apstar_id from varchar(50) to (64) in  fGetNearbyApogeeStarEq
-
+--* 2023-01-05 Ani: Added fGetNearbyMosTargetEq for DR18.
 --=====================================================================
 SET NOCOUNT ON;
 GO
@@ -1649,6 +1649,75 @@ BEGIN
   END
 GO
 
+
+
+--=======================================================
+IF EXISTS (SELECT name FROM   sysobjects 
+	   WHERE  name = N'fGetNearbyMosTargetEq' )
+	DROP FUNCTION fGetNearbyMosTargetEq
+GO
+--
+CREATE FUNCTION [dbo].[fGetNearbyMosTargetEq] (@ra float, @dec float, @r float)
+-------------------------------------------------------------
+--/H Returns table of spectrum objects within @r arcmins of an equatorial point (@ra, @dec).
+-------------------------------------------------------------
+--/T There is no limit on the number of objects returned.
+--/T <p>returned table:  
+--/T <li> target_pk biginit NOT NULL, -- primary object identifier
+--/T <li> catalogid bigint NULL,      -- id in mos_catalog   
+--/T <li> ra NULL,                    -- position RA
+--/T <li> dec NULL,                   -- position declination
+--/T <li> epoch real NULL,            -- 
+--/T <li> parallax NULL,              -- 
+--/T <li> htmID bigint,               -- Hierarchical Trangular Mesh id of this object
+--/T <li> distance float              -- distance in arc minutes to this object from the ra,dec.
+--/T <br> Sample call to find SpecObj within 0.5 arcminutes of ra,dec 180.0, -0.5
+--/T <br><samp>
+--/T <br>select *
+--/T <br> from  dbo.fGetNearbySpecObjXYZ(180.0, -0.5, 0,5)  
+--/T </samp>  
+--/T <br>see also fGetNearbySpecObjEq, fGetNearestSpecObjXYZ, fGetNearestSpecObjXYZ
+-------------------------------------------------------------
+  RETURNS @proxtab TABLE (
+    target_pk bigint NOT NULL,
+	catalogid bigint NULL,
+    ra float NULL,
+	[dec] float NULL,
+    epoch real NULL,
+    parallax real NULL,
+    htmID bigint,
+    distance float		-- distance in arc minutes
+  ) AS BEGIN
+	DECLARE @d2r float, @nx float,@ny float,@nz float 
+	set @d2r = PI()/180.0
+	if (@r<0) RETURN
+	set @nx  = COS(@dec*@d2r)*COS(@ra*@d2r)
+	set @ny  = COS(@dec*@d2r)*SIN(@ra*@d2r)
+	set @nz  = SIN(@dec*@d2r)
+	DECLARE @htmTemp TABLE (
+		HtmIdStart bigint,
+		HtmIdEnd bigint
+	);
+	INSERT @htmTemp SELECT * FROM dbo.fHtmCoverCircleXyz(@nx,@ny,@nz,@r)
+	DECLARE @lim float;
+	SET @lim = POWER(2*SIN(RADIANS(@r/120)),2);
+	INSERT @proxtab	SELECT 
+	    target_pk, 
+	    catalogid,
+	    ra,
+	    [dec],
+	    epoch,
+		parallax,
+	    htmID,
+		dbo.fDistanceArcMinEq(@ra,@dec,A.ra,A.[dec])
+	    FROM @htmTemp H join mos_target A
+	             ON  (A.htmID BETWEEN H.HtmIDstart AND H.HtmIDend )
+	    AND dbo.fDistanceArcMinEq(@ra,@dec,A.ra,A.[dec]) < @r
+-- 	SELECT * FROM dbo.fGetNearbyMosTargetXYZ(@nx,@ny,@nz,@r) 
+  RETURN
+  END
+  GO
+  --
 
 
 
