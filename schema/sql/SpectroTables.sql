@@ -149,6 +149,12 @@
 --* 2022-12-22  Ani: spAll table added for DR18. Still needs schema info.
 --* 2022-12-22  Ani: Removed duplicate spectroflux_[ugriz] columns. (DR18)
 --* 2022-12-22  Ani: Bumped up size of PlateX.tile to int from smallint (DR18).
+--* 2023-01-03  Ani: Added spAll_eFEDS table, bumped up string lengths for 
+--*                  mjd_list through moon_phase.(DR18).
+--* 2023-01-04  Ani: Added remaining column descriptions for spAll tables from
+--*                  S Morrison. (DR18).
+--* 2023-01-05  Ani: Swapped in full column descriptions for spAll tables from
+--*                  S Morrison. (DR18).
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -1107,213 +1113,438 @@ CREATE TABLE spAll (
 --/T This is a base table containing the summary spectroscopic
 --/T information fot the BOSS spectrograph data.
 -------------------------------------------------------------------------------
-    programname     varchar(32) NOT NULL,	--/D Program name
-    chunk           varchar(32) NOT NULL,	--/D Chunk name
-    survey          varchar(32) NOT NULL,	--/D Survey name
-    platequality varchar(4) NOT NULL,
-    platesn2 real NOT NULL,
-    deredsn2 real NOT NULL,
-    primtarget bigint NOT NULL,
-    sectarget bigint NOT NULL,
-    lambda_eff real NOT NULL,
-    bluefiber bigint NOT NULL,
-    zoffset real NOT NULL,
-    xfocal real NOT NULL,
-    yfocal real NOT NULL,
-    specprimary smallint NOT NULL,			--/D Best version of spectrum at this location --/F specprimary
-    specboss smallint NOT NULL,				--/D Best version of spectrum at this location --/F specboss
-    boss_specobj_id bigint NOT NULL,
-    nspecobs smallint NOT NULL,
-    calibflux_u real NOT NULL,
-    calibflux_g real NOT NULL,
-    calibflux_r real NOT NULL,
-    calibflux_i real NOT NULL,
-    calibflux_z real NOT NULL,
-    calibflux_ivar_u real NOT NULL,
-    calibflux_ivar_g real NOT NULL,
-    calibflux_ivar_r real NOT NULL,
-    calibflux_ivar_i real NOT NULL,
-    calibflux_ivar_z real NOT NULL,
-    gaia_bp real NOT NULL,
-    gaia_rp real NOT NULL,
-    gaia_g real NOT NULL,
-    firstcarton varchar(48) NOT NULL,
-    mag_u real NOT NULL,
-    mag_g real NOT NULL,
-    mag_r real NOT NULL,
-    mag_i real NOT NULL,
-    mag_z real NOT NULL,
-    plate numeric(20) NOT NULL, --/D Plate
-    designid smallint NOT NULL,
-    nexp smallint NOT NULL,
-    exptime smallint NOT NULL,
-    airmass real NOT NULL,
-    healpix bigint NOT NULL,
-    healpixgrp smallint NOT NULL,
-    healpix_dir varchar(68) NOT NULL,
-    mjd_final real NOT NULL,
-    mjd_list varchar(11) NOT NULL,
-    tai_list varchar(143) NOT NULL,
-    platesnr2g_list varchar(95) NOT NULL,
-    platesnr2r_list varchar(95) NOT NULL,
-    platesnr2i_list varchar(95) NOT NULL,
-    moon_dist varchar(119) NOT NULL,
-    moon_phase varchar(142) NOT NULL,
-    sfd_ebv real NOT NULL,
-    wise_mag_1 real NOT NULL,
-    wise_mag_2 real NOT NULL,
-    wise_mag_3 real NOT NULL,
-    wise_mag_4 real NOT NULL,
-    twomass_mag_1 real NOT NULL,
-    twomass_mag_2 real NOT NULL,
-    twomass_mag_3 real NOT NULL,
-    guvcat_mag_1 real NOT NULL,
-    guvcat_mag_2 real NOT NULL,
-    gaia_parallax real NOT NULL,
-    gaia_pmra real NOT NULL,
-    gaia_pmdec real NOT NULL,
-    xcsao_rv real NOT NULL,
-    xcsao_erv real NOT NULL,
-    xcsao_rxc real NOT NULL,
-    xcsao_teff real NOT NULL,
-    xcsao_eteff real NOT NULL,
-    xcsao_logg real NOT NULL,
-    xcsao_elogg real NOT NULL,
-    xcsao_feh real NOT NULL,
-    xcsao_efeh real NOT NULL,
-    catalogid bigint NOT NULL,
-    sdssv_boss_target0 bigint NOT NULL,
-    field bigint NOT NULL,
-    tile bigint NOT NULL,
-    mjd bigint NOT NULL,
-    fiberid bigint NOT NULL,
-    run2d varchar(6) NOT NULL,
-    run1d varchar(6) NOT NULL,
-    objtype varchar(16) NOT NULL,
-    plug_ra float NOT NULL,
-    plug_dec float NOT NULL,
-    class varchar(6) NOT NULL,
-    subclass varchar(21) NOT NULL,
-    z real NOT NULL,
-    z_err real NOT NULL,
-    rchi2 real NOT NULL,
-    dof bigint NOT NULL,
-    rchi2diff real NOT NULL,
-    tfile varchar(24) NOT NULL,
-    tcolumn_1 bigint NOT NULL,
-    tcolumn_2 bigint NOT NULL,
-    tcolumn_3 bigint NOT NULL,
-    tcolumn_4 bigint NOT NULL,
-    tcolumn_5 bigint NOT NULL,
-    tcolumn_6 bigint NOT NULL,
-    tcolumn_7 bigint NOT NULL,
-    tcolumn_8 bigint NOT NULL,
-    tcolumn_9 bigint NOT NULL,
-    tcolumn_10 bigint NOT NULL,
-    npoly bigint NOT NULL,
-    theta_1 bigint NOT NULL,
-    theta_2 bigint NOT NULL,
-    theta_3 bigint NOT NULL,
-    theta_4 bigint NOT NULL,
-    theta_5 bigint NOT NULL,
-    theta_6 bigint NOT NULL,
-    theta_7 bigint NOT NULL,
-    theta_8 bigint NOT NULL,
-    theta_9 bigint NOT NULL,
-    theta_10 bigint NOT NULL,
-    vdisp real NOT NULL,
-    vdisp_err real NOT NULL,
-    vdispz real NOT NULL,
-    vdispz_err real NOT NULL,
-    vdispchi2 real NOT NULL,
-    vdispnpix real NOT NULL,
-    vdispdof bigint NOT NULL,
-    wavemin real NOT NULL,
-    wavemax real NOT NULL,
-    wcoverage real NOT NULL,
-    zwarning bigint NOT NULL,
-    sn_median_u real NOT NULL,
-    sn_median_g real NOT NULL,
-    sn_median_r real NOT NULL,
-    sn_median_i real NOT NULL,
-    sn_median_z real NOT NULL,
-    sn_median_all real NOT NULL,
-    chi68p real NOT NULL,
-    fracnsigma_1 bigint NOT NULL,
-    fracnsigma_2 bigint NOT NULL,
-    fracnsigma_3 bigint NOT NULL,
-    fracnsigma_4 bigint NOT NULL,
-    fracnsigma_5 bigint NOT NULL,
-    fracnsigma_6 bigint NOT NULL,
-    fracnsigma_7 bigint NOT NULL,
-    fracnsigma_8 bigint NOT NULL,
-    fracnsigma_9 bigint NOT NULL,
-    fracnsigma_10 bigint NOT NULL,
-    fracnsighi_1 bigint NOT NULL,
-    fracnsighi_2 bigint NOT NULL,
-    fracnsighi_3 bigint NOT NULL,
-    fracnsighi_4 bigint NOT NULL,
-    fracnsighi_5 bigint NOT NULL,
-    fracnsighi_6 bigint NOT NULL,
-    fracnsighi_7 bigint NOT NULL,
-    fracnsighi_8 bigint NOT NULL,
-    fracnsighi_9 bigint NOT NULL,
-    fracnsighi_10 bigint NOT NULL,
-    fracnsiglo_1 bigint NOT NULL,
-    fracnsiglo_2 bigint NOT NULL,
-    fracnsiglo_3 bigint NOT NULL,
-    fracnsiglo_4 bigint NOT NULL,
-    fracnsiglo_5 bigint NOT NULL,
-    fracnsiglo_6 bigint NOT NULL,
-    fracnsiglo_7 bigint NOT NULL,
-    fracnsiglo_8 bigint NOT NULL,
-    fracnsiglo_9 bigint NOT NULL,
-    fracnsiglo_10 bigint NOT NULL,
-    spectroflux_u real NOT NULL,
-    spectroflux_g real NOT NULL,
-    spectroflux_r real NOT NULL,
-    spectroflux_i real NOT NULL,
-    spectroflux_z real NOT NULL,
-    spectrosynflux_u real NOT NULL,
-    spectrosynflux_g real NOT NULL,
-    spectrosynflux_r real NOT NULL,
-    spectrosynflux_i real NOT NULL,
-    spectrosynflux_z real NOT NULL,
-    spectrosynflux_ivar_u real NOT NULL,
-    spectrosynflux_ivar_g real NOT NULL,
-    spectrosynflux_ivar_r real NOT NULL,
-    spectrosynflux_ivar_i real NOT NULL,
-    spectrosynflux_ivar_z real NOT NULL,
-    spectroskyflux_u real NOT NULL,
-    spectroskyflux_g real NOT NULL,
-    spectroskyflux_r real NOT NULL,
-    spectroskyflux_i real NOT NULL,
-    spectroskyflux_z real NOT NULL,
-    anyandmask bigint NOT NULL,
-    anyormask bigint NOT NULL,
-    spec1_g real NOT NULL,
-    spec1_r real NOT NULL,
-    spec1_i real NOT NULL,
-    elodie_filename varchar(16) NOT NULL,
-    elodie_object varchar(9) NOT NULL,
-    elodie_sptype varchar(12) NOT NULL,
-    elodie_bv real NOT NULL,
-    elodie_teff real NOT NULL,
-    elodie_logg real NOT NULL,
-    elodie_feh real NOT NULL,
-    elodie_z real NOT NULL,
-    elodie_z_err real NOT NULL,
-    elodie_z_modelerr real NOT NULL,
-    elodie_rchi2 real NOT NULL,
-    elodie_dof bigint NOT NULL,
-    z_noqso real NOT NULL,
-    z_err_noqso real NOT NULL,
-    znum_noqso bigint NOT NULL,
-    zwarning_noqso bigint NOT NULL,
-    class_noqso varchar(6) NOT NULL,
-    subclass_noqso varchar(21) NOT NULL,
-    rchi2diff_noqso real NOT NULL,
-    specobjid bigint NOT NULL
+    programname     varchar(32) NOT NULL, --/D Program name within a given survey
+    chunk           varchar(32) NOT NULL, --/D Name of tiling chunk
+    survey          varchar(32) NOT NULL, --/D Survey that plate is part of
+    platequality varchar(4) NOT NULL, --/D Characterization of plate quality
+    platesn2 real NOT NULL,   --/D Overall (S/N)^2 measure for plate; minimum of all 2 cameras
+    deredsn2 real NOT NULL,   --/D Dereddened (extinction corrected) (S/N)^2 measure for plate; minimum of 2 cameras
+    primtarget bigint NOT NULL,   --/D Primary target flags
+    sectarget bigint NOT NULL,   --/D Secondary target flags
+    lambda_eff real NOT NULL,   --/D Wavelength to optimize hole location for, in Angstroms.
+    bluefiber bigint NOT NULL,   --/D 1 if the BOSS instrument is meant to assign this target a "blue" fiber; 0 otherwise
+    zoffset real NOT NULL,   --/D Backstopping offset distance, in microns.
+    xfocal real NOT NULL,   --/D Hole x-axis position in focal plane (mm)
+    yfocal real NOT NULL,   --/D Hole y-axis position in focal plane (mm)
+    specprimary smallint NOT NULL, --/D  Objects observed multiple times will have this set to 1 for one observation only. This is usually the 'best' observation, as defined by critera listed in platemerge.pro. --/F specprimary
+    specboss smallint NOT NULL, --/D Best version of spectrum at this location --/F specboss
+    boss_specobj_id bigint NOT NULL,   --/D Same as SPECPRIMARY
+    nspecobs smallint NOT NULL,   --/D Number of spectral observations
+    calibflux_u real NOT NULL,   --/D Broad-band flux in SDSS-u computed from the input PSF photometric magnitudes
+    calibflux_g real NOT NULL,   --/D Broad-band flux in SDSS-g computed from the input PSF photometric magnitudes 
+    calibflux_r real NOT NULL,   --/D Broad-band flux in SDSS-r computed from the input PSF photometric magnitudes 
+    calibflux_i real NOT NULL,   --/D Broad-band flux in SDSS-i computed from the input PSF photometric magnitudes 
+    calibflux_z real NOT NULL,   --/D Broad-band flux in SDSS-z computed from the input PSF photometric magnitudes 
+    calibflux_ivar_u real NOT NULL,   --/D Inverse variance in broad-band flux in SDSS-u computed from the input PSF photometric magnitudes
+    calibflux_ivar_g real NOT NULL,   --/D Inverse variance in broad-band flux in SDSS-g computed from the input PSF photometric magnitudes
+    calibflux_ivar_r real NOT NULL,   --/D Inverse variance in broad-band flux in SDSS-r computed from the input PSF photometric magnitudes
+    calibflux_ivar_i real NOT NULL,   --/D Inverse variance in broad-band flux in SDSS-i computed from the input PSF photometric magnitudes
+    calibflux_ivar_z real NOT NULL,   --/D Inverse variance in broad-band flux in SDSS-z computed from the input PSF photometric magnitudes
+    gaia_bp real NOT NULL,   --/D Gaia DR2 G_BP magnitude
+    gaia_rp real NOT NULL,   --/D Gaia DR2 G_RP magnitude 
+    gaia_g real NOT NULL,   --/D  Gaia DR2 G magnitude
+    firstcarton varchar(48) NOT NULL,   --/D Primary SDSS-V Carton for target
+    mag_u real NOT NULL,   --/D SDSS-u Fiber2mag magnitude 
+    mag_g real NOT NULL,   --/D SDSS-g Fiber2mag magnitude 
+    mag_r real NOT NULL,   --/D SDSS-r Fiber2mag magnitude 
+    mag_i real NOT NULL,   --/D SDSS-i Fiber2mag magnitude 
+    mag_z real NOT NULL,   --/D SDSS-z Fiber2mag magnitude 
+    plate numeric(20) NOT NULL,  --/D The number of the currently loaded plate
+    designid smallint NOT NULL,   --/D SDSS-V DesignID
+    nexp smallint NOT NULL,   --/D Number of exposures in Coadded Spectra
+    exptime smallint NOT NULL,   --/D Length of Coadded Spectra [s]
+    airmass real NOT NULL,   --/D Airmass at time of observation
+    healpix bigint NOT NULL,   --/D The healpix pixel number of the plug_ra, plug_dec coords, computed with healpix nside=2^7=128
+    healpixgrp smallint NOT NULL,   --/D The rounded-down integer value of healpix / 1000
+    healpix_dir varchar(68) NOT NULL,   --/D Path to spec fits file in the SAS healpix structure
+    mjd_final real NOT NULL,   --/D Mean MJD of the Coadded Spectra
+    mjd_list varchar(11) NOT NULL,   --/D List MJDs for each exposure
+    tai_list varchar(143) NOT NULL,   --/D List MJD(Tai) for each exposure (at midpoint)
+    platesnr2g_list varchar(95) NOT NULL,   --/D Overall (S/N)^2 in g measured for plate per exposure
+    platesnr2r_list varchar(95) NOT NULL,   --/D Overall (S/N)^2 in r measured for plate per exposure 
+    platesnr2i_list varchar(95) NOT NULL,   --/D Overall (S/N)^2 in i measured for plate per exposure 
+    moon_dist varchar(119) NOT NULL,   --/D Mean Moon-target speparation of the Coadded Spectra
+    moon_phase varchar(142) NOT NULL,   --/D Mean Moon phase of the Coadded Spectra
+    sfd_ebv real NOT NULL,   --/D SFD dust extinction
+    wise_mag_1 real NOT NULL,   --/D WISE W1 band magnitude
+    wise_mag_2 real NOT NULL,   --/D WISE W2 band magnitude 
+    wise_mag_3 real NOT NULL,   --/D WISE W3 band magnitude 
+    wise_mag_4 real NOT NULL,   --/D WISE W4 band magnitude 
+    twomass_mag_1 real NOT NULL,   --/D 2MASS J band magnitude
+    twomass_mag_2 real NOT NULL,   --/D 2MASS H band magnitude
+    twomass_mag_3 real NOT NULL,   --/D 2MASS Ks band magnitude
+    guvcat_mag_1 real NOT NULL,   --/D GALEX FUV Magnitude
+    guvcat_mag_2 real NOT NULL,   --/D GALEX NUV Magnitude
+    gaia_parallax real NOT NULL,   --/D Gaia DR2 parallax [mas]
+    gaia_pmra real NOT NULL,   --/D Gaia DR2 RA proper motion [mas/yr]
+    gaia_pmdec real NOT NULL,   --/D Gaia DR2 DEC proper motion [mas/yr]
+    xcsao_rv real NOT NULL,   --/D Radial velocity measured with pyXCSAO [km/s]
+    xcsao_erv real NOT NULL,   --/D Uncertainty in Radial velocity measured with pyXCSAO [km/s]
+    xcsao_rxc real NOT NULL,   --/D Cross correlation strength, as defined in Tonry+79 from pyXCSAO 
+    xcsao_teff real NOT NULL,   --/D Interpolated temperature of the best matched cross-correlation template from pyXCSAO [K]
+    xcsao_eteff real NOT NULL,   --/D Uncertainty in Interpolated temperature of the best matched cross-correlation template from pyXCSAO [K]
+    xcsao_logg real NOT NULL,   --/D Interpolated surface gravity of the best matched cross-correlation template from pyXCSAO [cm/s^2]
+    xcsao_elogg real NOT NULL,   --/D Uncertainty in Interpolated surface gravity of the best matched cross-correlation template from pyXCSAO [cm/s^2]
+    xcsao_feh real NOT NULL,   --/D Interpolated metallicity of the best matched cross-correlation template from pyXCSAO [Solar]
+    xcsao_efeh real NOT NULL,   --/D Uncertainty in interpolated metallicity of the best matched cross-correlation template from pyXCSAO [Solar]
+    catalogid bigint NOT NULL,   --/D SDSS-V CatalogID
+    sdssv_boss_target0 bigint NOT NULL,   --/D SDSS-V BOSS targeting bitmask
+    field bigint NOT NULL,   --/D Field number
+    tile bigint NOT NULL,   --/D  Tile number
+    mjd bigint NOT NULL,   --/D Modified Julian date of observation
+    fiberid bigint NOT NULL,   --/D Fiber ID
+    run2d varchar(6) NOT NULL,   --/D  Spectro-2D reduction name
+    run1d varchar(6) NOT NULL,   --/D  Spectro-1D reduction name
+    objtype varchar(16) NOT NULL,   --/D  Why this object was targetted.  Note that if this field says QSO, it could be the case that this object would have been targetted as a GALAXY or any number of other categories as well. The PRIMTARGET and SECTARGET flags in the plug-map structure (in the spPlate file) gives this full information.
+    plug_ra float NOT NULL,   --/D  Object RA (drilled fiber position) [J2000 degrees].
+    plug_dec float NOT NULL,   --/D  Object DEC (drilled fiber position) [J2000 degrees].
+    class varchar(6) NOT NULL,   --/D  Spectro classification: GALAXY, QSO, STAR; reductions prior to version v4_7 will also use SKY and UNKNOWN; later versions set the ZWARNING flags
+    subclass varchar(21) NOT NULL,   --/D Spectro sub-classification
+    z real NOT NULL,   --/D  Redshift; if the ZWARNING flag is nonzero, then assume that this redshift is incorrect
+    z_err real NOT NULL,   --/D  Redshift error based upon fit to chi^2 minimum; negative for invalid fit.
+    rchi2 real NOT NULL,   --/D  Reduced chi^2 for best fit
+    dof bigint NOT NULL,   --/D  Degrees of freedom for best fit
+    rchi2diff real NOT NULL,   --/D  Difference in reduced chi^2 of best solution to 2nd best solution
+    tfile varchar(24) NOT NULL,   --/D  Template file in $IDLSPEC2D_DIR/templates
+    tcolumn_1 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_2 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_3 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_4 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_5 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_6 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_7 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_8 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_9 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_10 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    npoly bigint NOT NULL,   --/D  Number of polynomial terms used in conjunction with TFILE
+    theta_1 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_2 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_3 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_4 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_5 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_6 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_7 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_8 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_9 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_10 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    vdisp real NOT NULL,   --/D  Velocity dispersion, only computed for galaxies (km/sec)
+    vdisp_err real NOT NULL,   --/D  Error in VDISP (km/sec); negative for invalid fit
+    vdispz real NOT NULL,   --/D  Redshift for best-fit velocity dispersion
+    vdispz_err real NOT NULL,   --/D  Error in VDISPZ
+    vdispchi2 real NOT NULL,   --/D  Chi^2 for best-fit velocity dispersion
+    vdispnpix real NOT NULL,   --/D  Number of pixels overlapping the templates used in the velocity dispersion fit
+    vdispdof bigint NOT NULL,   --/D  Degrees of freedom for best-fit velocity dispersion, equal to VDISPNPIX minus the number of templates minus the number of polynomial terms minus 1 (the last 1 is for the velocity dispersion)
+    wavemin real NOT NULL,   --/D  Minimum observed (vacuum) wavelength for this object (Angstroms)
+    wavemax real NOT NULL,   --/D  Maximum observed (vacuum) wavelength for this object (Angstroms)
+    wcoverage real NOT NULL,   --/D  Amount of wavelength coverage in log-10(Angstroms)
+    zwarning bigint NOT NULL,   --/D  A flag set for bad redshift fits in place of calling CLASS=UNKNOWN
+    sn_median_u real NOT NULL,   --/D  Median S/N for all good pixels in the u filter
+    sn_median_g real NOT NULL,   --/D  Median S/N for all good pixels in the g filter
+    sn_median_r real NOT NULL,   --/D  Median S/N for all good pixels in the r filter
+    sn_median_i real NOT NULL,   --/D  Median S/N for all good pixels in the i filter
+    sn_median_z real NOT NULL,   --/D  Median S/N for all good pixels in the z filter
+    sn_median_all real NOT NULL,   --/D   Median S/N for all good pixels in all filters
+    chi68p real NOT NULL,   --/D  68-th percentile value of abs(chi) of the best-fit synthetic spectrum to the actual spectrum, which would be 1.0 for a good fit if the errors are properly normalized.
+    fracnsigma_1 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 1 sigma (igorning all points blueward of rest-frame 1216 Ang)
+    fracnsigma_2 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 2 sigma (igorning all points blueward of rest-frame 1216 Ang)
+    fracnsigma_3 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 3 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_4 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 4 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_5 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 5 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_6 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 6 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_7 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 7 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_8 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 8 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_9 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 9 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_10 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 10 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_1 bigint NOT NULL,   --/D  Fraction of pixels high by more than 1 sigma (igorning all points blueward of rest-frame 1216 Ang)
+    fracnsighi_2 bigint NOT NULL,   --/D  Fraction of pixels high by more than 2 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_3 bigint NOT NULL,   --/D  Fraction of pixels high by more than 3 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_4 bigint NOT NULL,   --/D  Fraction of pixels high by more than 4 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_5 bigint NOT NULL,   --/D  Fraction of pixels high by more than 5 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_6 bigint NOT NULL,   --/D  Fraction of pixels high by more than 6 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_7 bigint NOT NULL,   --/D  Fraction of pixels high by more than 7 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_8 bigint NOT NULL,   --/D  Fraction of pixels high by more than 8 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_9 bigint NOT NULL,   --/D  Fraction of pixels high by more than 9 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_10 bigint NOT NULL,   --/D  Fraction of pixels high by more than 10 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsiglo_1 bigint NOT NULL,   --/D  Fraction of pixels low by more than 1 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsiglo_2 bigint NOT NULL,   --/D  Fraction of pixels low by more than 2 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_3 bigint NOT NULL,   --/D  Fraction of pixels low by more than 3 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_4 bigint NOT NULL,   --/D  Fraction of pixels low by more than 4 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_5 bigint NOT NULL,   --/D  Fraction of pixels low by more than 5 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_6 bigint NOT NULL,   --/D  Fraction of pixels low by more than 6 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_7 bigint NOT NULL,   --/D  Fraction of pixels low by more than 7 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_8 bigint NOT NULL,   --/D  Fraction of pixels low by more than 8 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_9 bigint NOT NULL,   --/D  Fraction of pixels low by more than 9 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_10 bigint NOT NULL,   --/D  Fraction of pixels low by more than 10 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    spectroflux_u real NOT NULL,   --/D  Spectrum projected onto u filter
+    spectroflux_g real NOT NULL,   --/D  Spectrum projected onto g filter
+    spectroflux_r real NOT NULL,   --/D  Spectrum projected onto r filter
+    spectroflux_i real NOT NULL,   --/D  Spectrum projected onto i filter
+    spectroflux_z real NOT NULL,   --/D  Spectrum projected onto z filter
+    spectrosynflux_u real NOT NULL,   --/D  Best-fit template spectrum projected onto u filter 
+    spectrosynflux_g real NOT NULL,   --/D  Best-fit template spectrum projected onto g filter  
+    spectrosynflux_r real NOT NULL,   --/D  Best-fit template spectrum projected onto r filter  
+    spectrosynflux_i real NOT NULL,   --/D  Best-fit template spectrum projected onto i filter  
+    spectrosynflux_z real NOT NULL,   --/D  Best-fit template spectrum projected onto z filter  
+    spectrosynflux_ivar_u real NOT NULL,   --/D  Inverse variance of best-fit template spectrum projected onto u filter
+    spectrosynflux_ivar_g real NOT NULL,   --/D  Inverse variance of best-fit template spectrum projected onto g filter 
+    spectrosynflux_ivar_r real NOT NULL,   --/D  Inverse variance of best-fit template spectrum projected onto r filter 
+    spectrosynflux_ivar_i real NOT NULL,   --/D  Inverse variance of best-fit template spectrum projected onto i filter 
+    spectrosynflux_ivar_z real NOT NULL,   --/D  Inverse variance of best-fit template spectrum projected onto z filter 
+    spectroskyflux_u real NOT NULL,   --/D  Sky spectrum projected onto u filter
+    spectroskyflux_g real NOT NULL,   --/D  Sky spectrum projected onto g filter 
+    spectroskyflux_r real NOT NULL,   --/D  Sky spectrum projected onto r filter 
+    spectroskyflux_i real NOT NULL,   --/D  Sky spectrum projected onto i filter 
+    spectroskyflux_z real NOT NULL,   --/D  Sky spectrum projected onto z filter 
+    anyandmask bigint NOT NULL,   --/D  For each bit, records whether any pixel in the spectrum has that bit set in its ANDMASK
+    anyormask bigint NOT NULL,   --/D  For each bit, records whether any pixel in the spectrum has that bit set in its ORMASK
+    spec1_g real NOT NULL,   --/D  (S/N)^2 at g=20.20 for spectrograph #1 (same value for 500 fibers)
+    spec1_r real NOT NULL,   --/D  (S/N)^2 at r=20.25 for spectrograph #1 (same value for 500 fibers) 
+    spec1_i real NOT NULL,   --/D  (S/N)^2 at i=19.90 for spectrograph #1 (same value for 500 fibers)
+    elodie_filename varchar(16) NOT NULL,   --/D  File name for best-fit Elodie star
+    elodie_object varchar(9) NOT NULL,   --/D  Star name (mostly Henry Draper names)  from Elodie
+    elodie_sptype varchar(12) NOT NULL,   --/D  Spectral type  from Elodie
+    elodie_bv real NOT NULL,   --/D  (B-V) color  from Elodie
+    elodie_teff real NOT NULL,   --/D  Effective temperature from Elodie
+    elodie_logg real NOT NULL,   --/D  Log10(gravity) from Elodie
+    elodie_feh real NOT NULL,   --/D  [Fe/H] from Elodie
+    elodie_z real NOT NULL,   --/D  Redshift from Elodie
+    elodie_z_err real NOT NULL,   --/D  Redshift error from Elodie; negative for invalid fit
+    elodie_z_modelerr real NOT NULL,   --/D  The standard deviation in redshift amongst the 12 best-fit Elodie stars
+    elodie_rchi2 real NOT NULL,   --/D  Reduced chi^2 from Elodie
+    elodie_dof bigint NOT NULL,   --/D  Degrees of freedom for fit from Elodie
+    z_noqso real NOT NULL,   --/D  Redshift of the best-fit non-QSO model (recommended for CMASS and LOZ).
+    z_err_noqso real NOT NULL,   --/D  Formal one-sigma error on Z_NOQSO (recommended for CMASS and LOZ).
+    znum_noqso bigint NOT NULL,   --/D  Best fit redshift/classification index while excluding QSO fits; 1-indexed.
+    zwarning_noqso bigint NOT NULL,   --/D  Redshift warning flag for Z_NOQSO (recommended for CMASS and LOZ).
+    class_noqso varchar(6) NOT NULL,   --/D  Spectro classification of best-fit non-QSO model (recommended for CMASS and LOZ).
+    subclass_noqso varchar(21) NOT NULL,   --/D  Spectro sub-classification of best-fit non-QSO model (recommended for CMASS and LOZ).
+    rchi2diff_noqso real NOT NULL,   --/D  Reduced chi-squared difference to next-best non-QSO model (recommended for CMASS and LOZ).
+    specobjid bigint NOT NULL --/D  Unique database ID based on PLATE, MJD, FIBERID, RUN2D
+)
+GO
+--
+
+
+if exists (select * from dbo.sysobjects 
+	where id = object_id(N'spAll_eFEDS')) 
+	drop table [spAll_eFEDS]
+GO
+--
+CREATE TABLE spAll_eFEDS (
+-------------------------------------------------------------------------------
+--/H Contains the summary results for combined boss spectra for the eFEDS program.
+--
+--/T This is a nonbase table (related to spAll) containing the summary spectroscopic
+--/T information for combined (eFEDS) visits for BOSS spectrograph data.
+--/T The catalogid is a unique column in this table, and can be joined to spAll for all visits.
+-------------------------------------------------------------------------------
+    programname     varchar(32) NOT NULL, --/D Program name within a given survey
+    chunk           varchar(32) NOT NULL, --/D Name of tiling chunk
+    survey          varchar(32) NOT NULL, --/D Survey that plate is part of
+    platequality varchar(4) NOT NULL, --/D Characterization of plate quality
+    platesn2 real NOT NULL,   --/D Overall (S/N)^2 measure for plate; minimum of all 2 cameras
+    deredsn2 real NOT NULL,   --/D Dereddened (extinction corrected) (S/N)^2 measure for plate; minimum of 2 cameras
+    primtarget bigint NOT NULL,   --/D Primary target flags
+    sectarget bigint NOT NULL,   --/D Secondary target flags
+    lambda_eff real NOT NULL,   --/D Wavelength to optimize hole location for, in Angstroms.
+    bluefiber bigint NOT NULL,   --/D 1 if the BOSS instrument is meant to assign this target a "blue" fiber; 0 otherwise
+    zoffset real NOT NULL,   --/D Backstopping offset distance, in microns.
+    xfocal real NOT NULL,   --/D Hole x-axis position in focal plane (mm)
+    yfocal real NOT NULL,   --/D Hole y-axis position in focal plane (mm)
+    specprimary smallint NOT NULL, --/D  Objects observed multiple times will have this set to 1 for one observation only. This is usually the 'best' observation, as defined by critera listed in platemerge.pro. --/F specprimary
+    specboss smallint NOT NULL, --/D Best version of spectrum at this location --/F specboss
+    boss_specobj_id bigint NOT NULL,   --/D Same as SPECPRIMARY
+    nspecobs smallint NOT NULL,   --/D Number of spectral observations
+    calibflux_u real NOT NULL,   --/D Broad-band flux in SDSS-u computed from the input PSF photometric magnitudes
+    calibflux_g real NOT NULL,   --/D Broad-band flux in SDSS-g computed from the input PSF photometric magnitudes 
+    calibflux_r real NOT NULL,   --/D Broad-band flux in SDSS-r computed from the input PSF photometric magnitudes 
+    calibflux_i real NOT NULL,   --/D Broad-band flux in SDSS-i computed from the input PSF photometric magnitudes 
+    calibflux_z real NOT NULL,   --/D Broad-band flux in SDSS-z computed from the input PSF photometric magnitudes 
+    calibflux_ivar_u real NOT NULL,   --/D Inverse variance in broad-band flux in SDSS-u computed from the input PSF photometric magnitudes
+    calibflux_ivar_g real NOT NULL,   --/D Inverse variance in broad-band flux in SDSS-g computed from the input PSF photometric magnitudes
+    calibflux_ivar_r real NOT NULL,   --/D Inverse variance in broad-band flux in SDSS-r computed from the input PSF photometric magnitudes
+    calibflux_ivar_i real NOT NULL,   --/D Inverse variance in broad-band flux in SDSS-i computed from the input PSF photometric magnitudes
+    calibflux_ivar_z real NOT NULL,   --/D Inverse variance in broad-band flux in SDSS-z computed from the input PSF photometric magnitudes
+    gaia_bp real NOT NULL,   --/D Gaia DR2 G_BP magnitude
+    gaia_rp real NOT NULL,   --/D Gaia DR2 G_RP magnitude 
+    gaia_g real NOT NULL,   --/D  Gaia DR2 G magnitude
+    firstcarton varchar(48) NOT NULL,   --/D Primary SDSS-V Carton for target
+    mag_u real NOT NULL,   --/D SDSS-u Fiber2mag magnitude 
+    mag_g real NOT NULL,   --/D SDSS-g Fiber2mag magnitude 
+    mag_r real NOT NULL,   --/D SDSS-r Fiber2mag magnitude 
+    mag_i real NOT NULL,   --/D SDSS-i Fiber2mag magnitude 
+    mag_z real NOT NULL,   --/D SDSS-z Fiber2mag magnitude 
+    plate numeric(20) NOT NULL,  --/D The number of the currently loaded plate
+    designid smallint NOT NULL,   --/D SDSS-V DesignID
+    nexp smallint NOT NULL,   --/D Number of exposures in Coadded Spectra
+    exptime smallint NOT NULL,   --/D Length of Coadded Spectra [s]
+    airmass real NOT NULL,   --/D Airmass at time of observation
+    healpix bigint NOT NULL,   --/D The healpix pixel number of the plug_ra, plug_dec coords, computed with healpix nside=2^7=128
+    healpixgrp smallint NOT NULL,   --/D The rounded-down integer value of healpix / 1000
+    healpix_dir varchar(68) NOT NULL,   --/D Path to spec fits file in the SAS healpix structure
+    mjd_final real NOT NULL,   --/D Mean MJD of the Coadded Spectra
+    mjd_list varchar(128) NOT NULL,   --/D List MJDs for each exposure
+    tai_list varchar(512) NOT NULL,   --/D List MJD(Tai) for each exposure (at midpoint)
+    platesnr2g_list varchar(512) NOT NULL,   --/D Overall (S/N)^2 in g measured for plate per exposure
+    platesnr2r_list varchar(512) NOT NULL,   --/D Overall (S/N)^2 in r measured for plate per exposure 
+    platesnr2i_list varchar(512) NOT NULL,   --/D Overall (S/N)^2 in i measured for plate per exposure 
+    moon_dist varchar(512) NOT NULL,   --/D Mean Moon-target speparation of the Coadded Spectra
+    moon_phase varchar(512) NOT NULL,   --/D Mean Moon phase of the Coadded Spectra
+    sfd_ebv real NOT NULL,   --/D SFD dust extinction
+    wise_mag_1 real NOT NULL,   --/D WISE W1 band magnitude
+    wise_mag_2 real NOT NULL,   --/D WISE W2 band magnitude 
+    wise_mag_3 real NOT NULL,   --/D WISE W3 band magnitude 
+    wise_mag_4 real NOT NULL,   --/D WISE W4 band magnitude 
+    twomass_mag_1 real NOT NULL,   --/D 2MASS J band magnitude
+    twomass_mag_2 real NOT NULL,   --/D 2MASS H band magnitude
+    twomass_mag_3 real NOT NULL,   --/D 2MASS Ks band magnitude
+    guvcat_mag_1 real NOT NULL,   --/D GALEX FUV Magnitude
+    guvcat_mag_2 real NOT NULL,   --/D GALEX NUV Magnitude
+    gaia_parallax real NOT NULL,   --/D Gaia DR2 parallax [mas]
+    gaia_pmra real NOT NULL,   --/D Gaia DR2 RA proper motion [mas/yr]
+    gaia_pmdec real NOT NULL,   --/D Gaia DR2 DEC proper motion [mas/yr]
+    xcsao_rv real NOT NULL,   --/D Radial velocity measured with pyXCSAO [km/s]
+    xcsao_erv real NOT NULL,   --/D Uncertainty in Radial velocity measured with pyXCSAO [km/s]
+    xcsao_rxc real NOT NULL,   --/D Cross correlation strength, as defined in Tonry+79 from pyXCSAO 
+    xcsao_teff real NOT NULL,   --/D Interpolated temperature of the best matched cross-correlation template from pyXCSAO [K]
+    xcsao_eteff real NOT NULL,   --/D Uncertainty in Interpolated temperature of the best matched cross-correlation template from pyXCSAO [K]
+    xcsao_logg real NOT NULL,   --/D Interpolated surface gravity of the best matched cross-correlation template from pyXCSAO [cm/s^2]
+    xcsao_elogg real NOT NULL,   --/D Uncertainty in Interpolated surface gravity of the best matched cross-correlation template from pyXCSAO [cm/s^2]
+    xcsao_feh real NOT NULL,   --/D Interpolated metallicity of the best matched cross-correlation template from pyXCSAO [Solar]
+    xcsao_efeh real NOT NULL,   --/D Uncertainty in interpolated metallicity of the best matched cross-correlation template from pyXCSAO [Solar]
+    catalogid bigint NOT NULL,   --/D SDSS-V CatalogID
+    sdssv_boss_target0 bigint NOT NULL,   --/D SDSS-V BOSS targeting bitmask
+    field bigint NOT NULL,   --/D Field number
+    tile bigint NOT NULL,   --/D  Tile number
+    mjd bigint NOT NULL,   --/D Modified Julian date of observation
+    fiberid bigint NOT NULL,   --/D Fiber ID
+    run2d varchar(6) NOT NULL,   --/D  Spectro-2D reduction name
+    run1d varchar(6) NOT NULL,   --/D  Spectro-1D reduction name
+    objtype varchar(16) NOT NULL,   --/D  Why this object was targetted.  Note that if this field says QSO, it could be the case that this object would have been targetted as a GALAXY or any number of other categories as well. The PRIMTARGET and SECTARGET flags in the plug-map structure (in the spPlate file) gives this full information.
+    plug_ra float NOT NULL,   --/D  Object RA (drilled fiber position) [J2000 degrees].
+    plug_dec float NOT NULL,   --/D  Object DEC (drilled fiber position) [J2000 degrees].
+    class varchar(6) NOT NULL,   --/D  Spectro classification: GALAXY, QSO, STAR; reductions prior to version v4_7 will also use SKY and UNKNOWN; later versions set the ZWARNING flags
+    subclass varchar(21) NOT NULL,   --/D Spectro sub-classification
+    z real NOT NULL,   --/D  Redshift; if the ZWARNING flag is nonzero, then assume that this redshift is incorrect
+    z_err real NOT NULL,   --/D  Redshift error based upon fit to chi^2 minimum; negative for invalid fit.
+    rchi2 real NOT NULL,   --/D  Reduced chi^2 for best fit
+    dof bigint NOT NULL,   --/D  Degrees of freedom for best fit
+    rchi2diff real NOT NULL,   --/D  Difference in reduced chi^2 of best solution to 2nd best solution
+    tfile varchar(24) NOT NULL,   --/D  Template file in $IDLSPEC2D_DIR/templates
+    tcolumn_1 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_2 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_3 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_4 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_5 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_6 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_7 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_8 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_9 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    tcolumn_10 bigint NOT NULL,   --/D Column to use in template file (0-indexed); unused value set to -1
+    npoly bigint NOT NULL,   --/D  Number of polynomial terms used in conjunction with TFILE
+    theta_1 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_2 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_3 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_4 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_5 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_6 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_7 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_8 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_9 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    theta_10 bigint NOT NULL,   --/D  Eigenvalue coefficient for each column in template file + each polynomial term
+    vdisp real NOT NULL,   --/D  Velocity dispersion, only computed for galaxies (km/sec)
+    vdisp_err real NOT NULL,   --/D  Error in VDISP (km/sec); negative for invalid fit
+    vdispz real NOT NULL,   --/D  Redshift for best-fit velocity dispersion
+    vdispz_err real NOT NULL,   --/D  Error in VDISPZ
+    vdispchi2 real NOT NULL,   --/D  Chi^2 for best-fit velocity dispersion
+    vdispnpix real NOT NULL,   --/D  Number of pixels overlapping the templates used in the velocity dispersion fit
+    vdispdof bigint NOT NULL,   --/D  Degrees of freedom for best-fit velocity dispersion, equal to VDISPNPIX minus the number of templates minus the number of polynomial terms minus 1 (the last 1 is for the velocity dispersion)
+    wavemin real NOT NULL,   --/D  Minimum observed (vacuum) wavelength for this object (Angstroms)
+    wavemax real NOT NULL,   --/D  Maximum observed (vacuum) wavelength for this object (Angstroms)
+    wcoverage real NOT NULL,   --/D  Amount of wavelength coverage in log-10(Angstroms)
+    zwarning bigint NOT NULL,   --/D  A flag set for bad redshift fits in place of calling CLASS=UNKNOWN
+    sn_median_u real NOT NULL,   --/D  Median S/N for all good pixels in the u filter
+    sn_median_g real NOT NULL,   --/D  Median S/N for all good pixels in the g filter
+    sn_median_r real NOT NULL,   --/D  Median S/N for all good pixels in the r filter
+    sn_median_i real NOT NULL,   --/D  Median S/N for all good pixels in the i filter
+    sn_median_z real NOT NULL,   --/D  Median S/N for all good pixels in the z filter
+    sn_median_all real NOT NULL,   --/D   Median S/N for all good pixels in all filters
+    chi68p real NOT NULL,   --/D  68-th percentile value of abs(chi) of the best-fit synthetic spectrum to the actual spectrum, which would be 1.0 for a good fit if the errors are properly normalized.
+    fracnsigma_1 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 1 sigma (igorning all points blueward of rest-frame 1216 Ang)
+    fracnsigma_2 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 2 sigma (igorning all points blueward of rest-frame 1216 Ang)
+    fracnsigma_3 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 3 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_4 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 4 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_5 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 5 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_6 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 6 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_7 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 7 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_8 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 8 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_9 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 9 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsigma_10 bigint NOT NULL,   --/D  Fraction of pixels deviant by more than 10 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_1 bigint NOT NULL,   --/D  Fraction of pixels high by more than 1 sigma (igorning all points blueward of rest-frame 1216 Ang)
+    fracnsighi_2 bigint NOT NULL,   --/D  Fraction of pixels high by more than 2 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_3 bigint NOT NULL,   --/D  Fraction of pixels high by more than 3 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_4 bigint NOT NULL,   --/D  Fraction of pixels high by more than 4 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_5 bigint NOT NULL,   --/D  Fraction of pixels high by more than 5 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_6 bigint NOT NULL,   --/D  Fraction of pixels high by more than 6 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_7 bigint NOT NULL,   --/D  Fraction of pixels high by more than 7 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_8 bigint NOT NULL,   --/D  Fraction of pixels high by more than 8 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_9 bigint NOT NULL,   --/D  Fraction of pixels high by more than 9 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsighi_10 bigint NOT NULL,   --/D  Fraction of pixels high by more than 10 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsiglo_1 bigint NOT NULL,   --/D  Fraction of pixels low by more than 1 sigma (igorning all points blueward of rest-frame 1216 Ang) 
+    fracnsiglo_2 bigint NOT NULL,   --/D  Fraction of pixels low by more than 2 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_3 bigint NOT NULL,   --/D  Fraction of pixels low by more than 3 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_4 bigint NOT NULL,   --/D  Fraction of pixels low by more than 4 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_5 bigint NOT NULL,   --/D  Fraction of pixels low by more than 5 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_6 bigint NOT NULL,   --/D  Fraction of pixels low by more than 6 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_7 bigint NOT NULL,   --/D  Fraction of pixels low by more than 7 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_8 bigint NOT NULL,   --/D  Fraction of pixels low by more than 8 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_9 bigint NOT NULL,   --/D  Fraction of pixels low by more than 9 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    fracnsiglo_10 bigint NOT NULL,   --/D  Fraction of pixels low by more than 10 sigma (igorning all points blueward of rest-frame 1216 Ang)  
+    spectroflux_u real NOT NULL,   --/D  Spectrum projected onto u filter
+    spectroflux_g real NOT NULL,   --/D  Spectrum projected onto g filter
+    spectroflux_r real NOT NULL,   --/D  Spectrum projected onto r filter
+    spectroflux_i real NOT NULL,   --/D  Spectrum projected onto i filter
+    spectroflux_z real NOT NULL,   --/D  Spectrum projected onto z filter
+    spectrosynflux_u real NOT NULL,   --/D  Best-fit template spectrum projected onto u filter 
+    spectrosynflux_g real NOT NULL,   --/D  Best-fit template spectrum projected onto g filter  
+    spectrosynflux_r real NOT NULL,   --/D  Best-fit template spectrum projected onto r filter  
+    spectrosynflux_i real NOT NULL,   --/D  Best-fit template spectrum projected onto i filter  
+    spectrosynflux_z real NOT NULL,   --/D  Best-fit template spectrum projected onto z filter  
+    spectrosynflux_ivar_u real NOT NULL,   --/D  Inverse variance of best-fit template spectrum projected onto u filter
+    spectrosynflux_ivar_g real NOT NULL,   --/D  Inverse variance of best-fit template spectrum projected onto g filter 
+    spectrosynflux_ivar_r real NOT NULL,   --/D  Inverse variance of best-fit template spectrum projected onto r filter 
+    spectrosynflux_ivar_i real NOT NULL,   --/D  Inverse variance of best-fit template spectrum projected onto i filter 
+    spectrosynflux_ivar_z real NOT NULL,   --/D  Inverse variance of best-fit template spectrum projected onto z filter 
+    spectroskyflux_u real NOT NULL,   --/D  Sky spectrum projected onto u filter
+    spectroskyflux_g real NOT NULL,   --/D  Sky spectrum projected onto g filter 
+    spectroskyflux_r real NOT NULL,   --/D  Sky spectrum projected onto r filter 
+    spectroskyflux_i real NOT NULL,   --/D  Sky spectrum projected onto i filter 
+    spectroskyflux_z real NOT NULL,   --/D  Sky spectrum projected onto z filter 
+    anyandmask bigint NOT NULL,   --/D  For each bit, records whether any pixel in the spectrum has that bit set in its ANDMASK
+    anyormask bigint NOT NULL,   --/D  For each bit, records whether any pixel in the spectrum has that bit set in its ORMASK
+    spec1_g real NOT NULL,   --/D  (S/N)^2 at g=20.20 for spectrograph #1 (same value for 500 fibers)
+    spec1_r real NOT NULL,   --/D  (S/N)^2 at r=20.25 for spectrograph #1 (same value for 500 fibers) 
+    spec1_i real NOT NULL,   --/D  (S/N)^2 at i=19.90 for spectrograph #1 (same value for 500 fibers)
+    elodie_filename varchar(16) NOT NULL,   --/D  File name for best-fit Elodie star
+    elodie_object varchar(9) NOT NULL,   --/D  Star name (mostly Henry Draper names)  from Elodie
+    elodie_sptype varchar(12) NOT NULL,   --/D  Spectral type  from Elodie
+    elodie_bv real NOT NULL,   --/D  (B-V) color  from Elodie
+    elodie_teff real NOT NULL,   --/D  Effective temperature from Elodie
+    elodie_logg real NOT NULL,   --/D  Log10(gravity) from Elodie
+    elodie_feh real NOT NULL,   --/D  [Fe/H] from Elodie
+    elodie_z real NOT NULL,   --/D  Redshift from Elodie
+    elodie_z_err real NOT NULL,   --/D  Redshift error from Elodie; negative for invalid fit
+    elodie_z_modelerr real NOT NULL,   --/D  The standard deviation in redshift amongst the 12 best-fit Elodie stars
+    elodie_rchi2 real NOT NULL,   --/D  Reduced chi^2 from Elodie
+    elodie_dof bigint NOT NULL,   --/D  Degrees of freedom for fit from Elodie
+    z_noqso real NOT NULL,   --/D  Redshift of the best-fit non-QSO model (recommended for CMASS and LOZ).
+    z_err_noqso real NOT NULL,   --/D  Formal one-sigma error on Z_NOQSO (recommended for CMASS and LOZ).
+    znum_noqso bigint NOT NULL,   --/D  Best fit redshift/classification index while excluding QSO fits; 1-indexed.
+    zwarning_noqso bigint NOT NULL,   --/D  Redshift warning flag for Z_NOQSO (recommended for CMASS and LOZ).
+    class_noqso varchar(6) NOT NULL,   --/D  Spectro classification of best-fit non-QSO model (recommended for CMASS and LOZ).
+    subclass_noqso varchar(21) NOT NULL,   --/D  Spectro sub-classification of best-fit non-QSO model (recommended for CMASS and LOZ).
+    rchi2diff_noqso real NOT NULL,   --/D  Reduced chi-squared difference to next-best non-QSO model (recommended for CMASS and LOZ).
+    specobjid bigint NOT NULL --/D  Unique database ID based on PLATE, MJD, FIBERID, RUN2D
 )
 GO
 --
