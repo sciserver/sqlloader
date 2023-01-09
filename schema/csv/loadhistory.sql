@@ -510,6 +510,11 @@ INSERT History VALUES('SpectroTables','2017-07-11','Ani','Changed SpecPhotoAll.p
 INSERT History VALUES('SpectroTables','2017-12-12','Ani','Added new VAC table sdssEbossFirefly (from J Comparat). ');
 INSERT History VALUES('SpectroTables','2019-09-27','Ani','Updated table sdssEbossFirefly (for DR16). ');
 INSERT History VALUES('SpectroTables','2021-07-19','Ani','Swapped in updated SpecObjAll (for DR17). ');
+INSERT History VALUES('SpectroTables','2022-12-22','Ani','spAll table added for DR18. Still needs schema info. ');
+INSERT History VALUES('SpectroTables','2022-12-22','Ani','Removed duplicate spectroflux_[ugriz] columns. (DR18) ');
+INSERT History VALUES('SpectroTables','2022-12-22','Ani','Bumped up size of PlateX.tile to int from smallint (DR18). ');
+INSERT History VALUES('SpectroTables','2023-01-03','Ani','Added spAll_eFEDS table, bumped up string lengths for  mjd_list through moon_phase.(DR18). ');
+INSERT History VALUES('SpectroTables','2023-01-04','Ani','Added remaining column descriptions for spAll tables from S Morrison. (DR18). ');
 INSERT History VALUES('GalaxyProductTables','2013-05-01','Ani','Moved galprod tables here from SpectroTables.sql and updated with new schema for DR10. ');
 INSERT History VALUES('GalaxyProductTables','2013-05-06','Ani','Made specobjid (PK) NOT NULL for galprod FSPSGran tables. ');
 INSERT History VALUES('GalaxyProductTables','2014-02-11','Ani','Swapped in updated definition of emissionLinesPort table that includes fixes for PR #1962 made by Ben Weaver. ');
@@ -612,7 +617,7 @@ INSERT History VALUES('ApogeeTables','2014-09-05','Ani','Fixed typo in ApogeePla
 INSERT History VALUES('ApogeeTables','2014-11-06','Ani','Applied DR12 updates - removed apogeeObject.observed and updated descriptions for a few other columns. ');
 INSERT History VALUES('ApogeeTables','2014-11-06','Ani','Increased length of id strings in apogeeObject to 64. ');
 INSERT History VALUES('ApogeeTables','2014-11-13','Ani','Increased length of target_id everywhere to 64. ');
-INSERT History VALUES('ApogeeTables','2014-11-25','Ani','Incorporated schema changes for DR12 (new columns param_m_h_err and param_alpha_m_err in aspcapStar) and changed http bitmask help links to internal info links. 2016-03-16 DR13 updates. 2016-03-30 More DR13 updates - ce_* and felem_ce* columns removed.. 2016-05-13 Updated felem* column descriptions in aspcapStar as per Jen Sobeck. 2017-04-11 Added the DR14 schema updates, including new table cannonStar. 2017-04-19 Updated cannonStar schema from SVN, added default values for cannonStar.filename and field columns because the CSVs have NULL values. 2017-05-06 Added columns to apogeeVisit and apogeeStar for DR14. 2018-07-18 Removed conditional DROP TABLE from tables that do not get recreated with each release (apogeeDesign/Field/Object). 2019-11-14 DR16 schema changes. 2021-06-23 DR17 schema changes. 2021-06-23 Fixed bug in ApogeeStar, put "file" column name in []. Also commented out cannonStar which is not reloaded in DR17. 2021-07-28 Updated ApogeeVisit - added new "field" column (DR17). 2021-12-01 Added ApogeeStar "commiss" column with default value 0 (DR17). ');
+INSERT History VALUES('ApogeeTables','2014-11-25','Ani','Incorporated schema changes for DR12 (new columns param_m_h_err and param_alpha_m_err in aspcapStar) and changed http bitmask help links to internal info links. 2016-03-16 DR13 updates. 2016-03-30 More DR13 updates - ce_* and felem_ce* columns removed.. 2016-05-13 Updated felem* column descriptions in aspcapStar as per Jen Sobeck. 2017-04-11 Added the DR14 schema updates, including new table cannonStar. 2017-04-19 Updated cannonStar schema from SVN, added default values for cannonStar.filename and field columns because the CSVs have NULL values. 2017-05-06 Added columns to apogeeVisit and apogeeStar for DR14. 2018-07-18 Removed conditional DROP TABLE from tables that do not get recreated with each release (apogeeDesign/Field/Object). 2019-11-14 DR16 schema changes. 2021-06-23 DR17 schema changes. 2021-06-23 Fixed bug in ApogeeStar, put "file" column name in []. Also commented out cannonStar which is not reloaded in DR17. 2021-07-28 Updated ApogeeVisit - added new "field" column (DR17). ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Adapted from sas-sql/mangadrp.sql. ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Increased length of mangaTarget.nsa_subdir to 128. ');
 INSERT History VALUES('MangaTables','2016-04-22','Ani','Added htmID to mangaDRPall. ');
@@ -718,6 +723,8 @@ INSERT History VALUES('VacTables','2021-08-05','Ani','Added apogee_starhorse VAC
 INSERT History VALUES('VacTables','2021-08-06','Ani','Added apogeeDistMass, ebossMCPM VAC tables. (DR17). ');
 INSERT History VALUES('VacTables','2021-08-11','Ani','Added mangaFirefly_mastar,_miles VAC tables. (DR17). ');
 INSERT History VALUES('VacTables','2021-09-29','Ani','Moved SDSS17Pipe3D_v3_1_1 to MangaTables (as mangaPipe3D) (DR17). ');
+INSERT History VALUES('VacTables','2022-12-27','Ani','Added eFEDs VACs (DR18). ');
+INSERT History VALUES('VacTables','2022-12-28','Ani','Replaced "--\" with "--/" and removed indents for table description rows in eFEDs VACs (DR18). ');
 INSERT History VALUES('spHtmCSharp','2005-05-01','Jim','started ');
 INSERT History VALUES('spHtmCSharp','2005-05-02','Jim','removed fHtmLookup and fHtmLookupError added fHtmToString ');
 INSERT History VALUES('spHtmCSharp','2005-05-05','GYF','added .pdb to assembly for symbolic debugging added fHtmToName (faster than fHtmToString and reports error) ');
@@ -1321,6 +1328,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1311 lines inserted into History'
+PRINT '1318 lines inserted into History'
 ------------------------------------
 GO

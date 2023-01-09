@@ -30,6 +30,7 @@
 --*             number with leading zeros, but this convention is broken
 --*             for bigger plate numbers (starting with DR14).
 --* 2018-08-01	Sue: updated functions to use numeric(20) SpecObjID instead of bigint
+--* 2023-01-09  Ani: Updated function fSDSSfromSpecID to return run2d also (DR18).
 ------------------------------------------------------------------------
 
 -----------------------------------------------------
@@ -129,16 +130,17 @@ GO
 --
 CREATE FUNCTION fSDSSfromSpecID(@specID numeric(20,0))
 -------------------------------------------------------------------------------
---/H Returns a table pf the 3-part SDSS numbers from the long specObjID.
+--/H Returns a table pf the 4-part SDSS numbers from the long specObjID.
 --
 --/T The returned columns in the output table are: 
---/T	plate, mjd, fiber<br>
+--/T	plate, mjd, fiber, run2d<br>
 --/T <samp> select * from dbo.fSDSSfromSpecID(865922932356966400)</samp>
 -------------------------------------------------------------------------------
 RETURNS @sdssSpecID TABLE (
 	plate INT,
 	mjd INT,
-	fiber INT
+	fiber INT,
+	run2d VARCHAR(16)
 )
 AS BEGIN
 
@@ -146,6 +148,8 @@ AS BEGIN
 	declare @mjd int;
 	declare @fiber int;
 	declare @s bigint;
+	declare @run2dnum int;
+	declare @run2d VARCHAR(16) = '';
 
 
 	DECLARE @sum bigint = 0
@@ -172,12 +176,21 @@ AS BEGIN
 	set @s = @specID - @sum
 	set @fiber = cast( (((cast(@s as bigint) & 0x0003FFFFFFFFFFFF)/ power(cast(2 as bigint),38))) AS INT)
 
-	
+	-- bits 10-23 are for run2d
+	set @run2dnum = cast( (((cast(@s as bigint) & 0x0000000000FFFC00)/ power(cast(2 as bigint),10))) AS INT)
+	IF @run2dnum > 104 
+	    BEGIN
+			SET @run2d = CONCAT( 'v', cast((@run2dnum/10000)+5 AS VARCHAR),'_', cast(((@run2dnum%10000)/100) as VARCHAR), '_', cast(@run2dnum % 100 AS VARCHAR) );
+		END
+	ELSE
+		SET @run2d = CAST( @run2dnum AS VARCHAR);
+
     INSERT @sdssSpecID 
 	SELECT
 	    cast( (@specID / power(cast(2 as bigint),50)) AS INT ) AS plate,
 	    @mjd AS mjd,
-	    @fiber AS fiber
+	    @fiber AS fiber,
+		@run2d as run2d
     RETURN
 END
 GO
