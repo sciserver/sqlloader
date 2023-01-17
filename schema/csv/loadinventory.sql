@@ -43,6 +43,7 @@ INSERT Inventory VALUES('ConstantSupport','eBossTarget0','V');
 INSERT Inventory VALUES('ConstantSupport','SpecZWarning','V');
 INSERT Inventory VALUES('ConstantSupport','SpecPixMask','V');
 INSERT Inventory VALUES('ConstantSupport','TiMask','V');
+INSERT Inventory VALUES('ConstantSupport','sdssvBossTarget0','V');
 INSERT Inventory VALUES('ConstantSupport','PhotoMode','V');
 INSERT Inventory VALUES('ConstantSupport','PhotoType','V');
 INSERT Inventory VALUES('ConstantSupport','MaskType','V');
@@ -129,6 +130,8 @@ INSERT Inventory VALUES('ConstantSupport','fSpecPixMask','F');
 INSERT Inventory VALUES('ConstantSupport','fSpecPixMaskN','F');
 INSERT Inventory VALUES('ConstantSupport','fTiMask','F');
 INSERT Inventory VALUES('ConstantSupport','fTiMaskN','F');
+INSERT Inventory VALUES('ConstantSupport','fSdssVBossTarget0','F');
+INSERT Inventory VALUES('ConstantSupport','fSdssVBossTarget0N','F');
 INSERT Inventory VALUES('ConstantSupport','fPhotoDescription','F');
 INSERT Inventory VALUES('ConstantSupport','fSpecDescription','F');
 INSERT Inventory VALUES('MetadataTables','SiteDBs','U');
@@ -219,6 +222,7 @@ INSERT Inventory VALUES('SpectroTables','SpecPhotoAll','U');
 INSERT Inventory VALUES('SpectroTables','SpecDR7','U');
 INSERT Inventory VALUES('SpectroTables','sdssEbossFirefly','U');
 INSERT Inventory VALUES('SpectroTables','spAll','U');
+INSERT Inventory VALUES('SpectroTables','spAll_eFEDS','U');
 INSERT Inventory VALUES('GalaxyProductTables','stellarMassPCAWiscBC03','U');
 INSERT Inventory VALUES('GalaxyProductTables','stellarMassPCAWiscM11','U');
 INSERT Inventory VALUES('GalaxyProductTables','stellarMassPassivePort','U');
@@ -482,6 +486,7 @@ INSERT Inventory VALUES('spNearby','fGetNearbyApogeeStarEq','F');
 INSERT Inventory VALUES('spNearby','fGetNearestApogeeStarEq','F');
 INSERT Inventory VALUES('spNearby','fGetNearbyMangaObjEq','F');
 INSERT Inventory VALUES('spNearby','fGetNearestMangaObjEq','F');
+INSERT Inventory VALUES('spNearby','dbo.[fGetNearbyMosTargetEq]','F');
 INSERT Inventory VALUES('spNearby','fGetNearbyFrameEq','F');
 INSERT Inventory VALUES('spNearby','fGetNearestFrameEq','F');
 INSERT Inventory VALUES('spNearby','fGetNearestFrameidEq','F');
@@ -494,12 +499,10 @@ INSERT Inventory VALUES('spNearby','spGetSpecNeighborsPrim','P');
 INSERT Inventory VALUES('spNearby','spGetSpecNeighborsAll','P');
 INSERT Inventory VALUES('spNearby','fGetObjFromRect','F');
 INSERT Inventory VALUES('spNearby','fGetObjFromRectEq','F');
-INSERT Inventory VALUES('spNearby','fGetObjectsEq','F');
+INSERT Inventory VALUES('spNearby','dbo.[fGetObjectsEq]','F');
 INSERT Inventory VALUES('spNearby','fGetObjectsMaskEq','F');
 INSERT Inventory VALUES('spNearby','fGetJpegObjects','F');
 INSERT Inventory VALUES('spNearby','spGetMatch','P');
-INSERT Inventory VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','F');
-INSERT Inventory VALUES('spNearby','dbo.[fGetNearestMastarObjEq]','F');
 INSERT Inventory VALUES('spApogee','fAspcapParamsAll','F');
 INSERT Inventory VALUES('spApogee','fAspcapParams','F');
 INSERT Inventory VALUES('spApogee','fAspcapParamErrs','F');
@@ -699,6 +702,6 @@ INSERT Inventory VALUES('spCosmology','fMathGetBin','F');
 GO
 
 ------------------------------------
-PRINT '689 lines inserted into Inventory'
+PRINT '692 lines inserted into Inventory'
 ------------------------------------
 GO

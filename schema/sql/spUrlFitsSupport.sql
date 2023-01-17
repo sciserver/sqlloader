@@ -81,6 +81,8 @@
 --*            in path, since this works for all DRs). RTicket#84834
 --* 2021-08-18 Ani: Fixed another bug in fGetUrlFitsSpectrum to allow 
 --*            5-digit plate numbers in the path.
+--* 2023-01-17 Ani: Updated fGetUrlFitsSpectrum for DR18 paths, adding a
+--*            special case for spAll paths (plate# >= 15000). 
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 
@@ -527,35 +529,52 @@ CREATE FUNCTION fGetUrlFitsSpectrum(@specObjID numeric(20,0))
 --/T Combines the value of the DataServer URL from the
 --/T SiteConstants table and builds up the whole URL
 --/T from the specObjId.
---/T <br><samp> select dbo.fGetUrlFitsSpectrum(75094092974915584)</samp>
+--/T <br><samp> select TOP 10 dbo.fGetUrlFitsSpectrum(specObjID)
+--/T <br>FROM SpecObj</samp>
 -------------------------------------------------
-RETURNS varchar(128)
+RETURNS varchar(256)
 BEGIN
-	DECLARE @link varchar(128), @plate varchar(8), @mjd varchar(8), 
-	    @fiber varchar(8), @rerun varchar(16), @release varchar(8), 
-	    @survey varchar(16), @oplate varchar(8), @ofiber varchar(8);
+	DECLARE @link varchar(256), @plate varchar(8), @mjd varchar(8), 
+	    @fiber varchar(8), @run2d varchar(16), @release varchar(8), 
+	    @survey varchar(16), @oplate varchar(8), @ofiber varchar(8),
+		@catid varchar(12), @ocatid varchar(12);
+	DECLARE @iplate int, @imjd int, @ifiber int;
 	SET @link = (SELECT value FROM SiteConstants WHERE name='DataServerURL');
 	SET @release = (select value from SiteConstants where name='Release');
-	SELECT @rerun = isnull(p.run2d, p.run1d), @survey = p.survey,
-	    @mjd = cast(p.mjd as varchar(8)), @plate=cast(p.plate as varchar(8)), 
-	    @fiber=cast(s.fiberID as varchar(8)) 
-	    FROM PlateX p JOIN specObjAll s ON p.plateId=s.plateId 
-	    WHERE s.specObjID=@specObjId;
-	IF @survey != 'boss'
-            SET @survey = 'sdss'
-	ELSE
-	    SET @survey = 'eboss'
-	IF len(@plate) > 4
-		SET @oplate = @plate
-	ELSE
-		SET @oplate = substring('0000',1,4-len(@plate)) + @plate;
-	SET @ofiber = substring( '0000',1,4-len(@fiber)) + @fiber;
-	SET @link = @link + 'sas/dr' + @release + '/' + @survey + '/spectro/redux/' +
-		@rerun + '/spectra/lite/' + @oplate + '/spec-' + @oplate + '-' + 
-		@mjd + '-' + @ofiber + '.fits';
+	SET @survey = 'sdss';	-- survey is always "sdss" as of DR18
+	SELECT @iplate=plate, @imjd=mjd, @ifiber=fiber, @run2d=run2d FROM dbo.fSDSSfromSpecID(@specObjID)
+	SET @link = @link + 'sas/dr' + @release + '/spectro/' + @survey + '/redux/' + @run2d + '/spectra/lite/';
+	IF @iplate < 15000		-- pre-DR18 paths are derived from PlateX
+		BEGIN
+			SELECT @run2d = isnull(p.run2d, p.run1d), @survey = p.survey,
+				@mjd = cast(p.mjd as varchar(8)), @plate=cast(p.plate as varchar(8)), 
+				@fiber=cast(s.fiberID as varchar(8)) 
+				FROM PlateX p JOIN specObjAll s ON p.plateId=s.plateId 
+				WHERE s.specObjID=@specObjId
+			IF len(@plate) > 4
+				SET @oplate = @plate
+			ELSE
+				SET @oplate = substring('0000',1,4-len(@plate)) + @plate;
+			SET @ofiber = substring( '0000',1,4-len(@fiber)) + @fiber;
+			SET @link = @link + @oplate + '/spec-' + @oplate + '-' + @mjd + '-' + @ofiber + '.fits';
+		END
+	ELSE					-- post-DR18 paths are derived from spAll
+		BEGIN		
+			SELECT @catid = CAST(catalogid AS varchar(12)) FROM spAll WHERE specobjid = @specObjID;
+			SET @ocatid = substring('00000000000',1,11-len(@catid)) + @catid;
+			SET @plate = CAST( @iplate AS varchar(8) )
+			SET @oplate = CONCAT( @plate, 'p')
+			SET @mjd = CAST( @imjd AS varchar(8) )
+			SET @fiber = CAST( @ifiber AS varchar(8) )
+			SET @ofiber = substring( '0000',1,4-len(@fiber)) + @fiber;
+			SET @link = @link + @oplate + '/' + @mjd + '/spec-' + @plate + '-' + @mjd + 
+				'-' + @ocatid + '.fits';
+		END
+
 	RETURN @link;
 END
 GO
+--
 
 
 --===================================================================
