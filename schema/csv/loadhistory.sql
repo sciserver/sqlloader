@@ -991,6 +991,7 @@ INSERT History VALUES('spUrlFitsSupport','2020-05-20','Ani','Updated fGetUrlFits
 INSERT History VALUES('spUrlFitsSupport','2021-08-17','Ani','Updated fGetUrlFitsSpectrum: changed "full/" to "lite/" in path, since this works for all DRs). RTicket#84834 ');
 INSERT History VALUES('spUrlFitsSupport','2021-08-18','Ani','Fixed another bug in fGetUrlFitsSpectrum to allow  5-digit plate numbers in the path. ');
 INSERT History VALUES('spUrlFitsSupport','2023-01-17','Ani','Updated fGetUrlFitsSpectrum for DR18 paths, adding a special case for spAll paths (plate# >= 15000).  ');
+INSERT History VALUES('spUrlFitsSupport','2023-01-18','Ani','Updated all the imaging FITS paths for DR18, and also plate and manga URL functions. ');
 INSERT History VALUES('spNeighbor','2004-08-30','Alex','Moved here spNeighbors and spBuildMatchTables ');
 INSERT History VALUES('spNeighbor','2004-10-10','Jim+Alex','updated spBuildMatchTables ');
 INSERT History VALUES('spNeighbor','2004-10-10','Alex+Jim','Tied into load framework to record messages.  Added code to drop/build indices and foreign keys.  Optimized triple computation.  ');
@@ -1334,6 +1335,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1324 lines inserted into History'
+PRINT '1325 lines inserted into History'
 ------------------------------------
 GO
