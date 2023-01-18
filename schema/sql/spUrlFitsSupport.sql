@@ -83,6 +83,8 @@
 --*            5-digit plate numbers in the path.
 --* 2023-01-17 Ani: Updated fGetUrlFitsSpectrum for DR18 paths, adding a
 --*            special case for spAll paths (plate# >= 15000). 
+--* 2023-01-18 Ani: Updated all the imaging FITS paths for DR18, and also
+--*            plate and manga URL functions.
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 
@@ -223,8 +225,8 @@ BEGIN
 	SET @link = (select value from SiteConstants where name='DataServerURL');
 	SET @release = (select value from SiteConstants where name='Release');
 	SET @dbType = (select value from SiteConstants where name='DB Type');
-	--SET @link = @link + 'imaging/';
-	SET @link = @link + 'sas/dr' + @release + '/eboss/photoObj/';
+	-- Updated path for DR18: 
+	SET @link = @link + 'sas/dr' + @release + '/prior-surveys/sdss4-dr17-eboss/photoObj/';
 	SELECT @skyVersion=cast(dbo.fSkyVersion(@fieldid) as varchar(8));
 	SELECT  @run = cast(f.run as varchar(8)), 
 		@rerun=cast(f.rerun as varchar(8)), 
@@ -281,8 +283,8 @@ BEGIN
 	SET @link = (select value from SiteConstants where name='DataServerURL');
 	SET @release = (select value from SiteConstants where name='Release');
 	SET @dbType = (select value from SiteConstants where name='DB Type');
-	--SET @link = @link + 'imaging/';
-	SET @link = @link + 'sas/dr' + @release + '/eboss/photoObj/frames/';
+	-- Updated path for DR18:
+	SET @link = @link + 'sas/dr' + @release + '/prior-surveys/sdss4-dr17-eboss/photoObj/frames/';
 	SELECT  @run = cast(run as varchar(8)), @rerun=cast(rerun as varchar(8)), 
 		@camcol=cast(camcol as varchar(8)), @field=cast(field as varchar(8))
 	    FROM Field
@@ -297,7 +299,6 @@ BEGIN
 	ELSE
 	    SET @run6   = substring('000000',1,6-len(@run)) + @run;
 	SET @field = substring('0000',1,4-len(@field)) + @field;
-	--RETURN 	 @link + @run + '/' + @rerun + '/corr/'+@camcol+'/fpC-'+@run6+'-'+@filter+@camcol+'-'+@field+'.fit.gz';
 	RETURN 	 @link + @rerun + '/' + @run + '/' +@camcol+'/frame-'+@filter+'-'+@run6+'-'+@camcol+'-'+@field+'.fits.bz2';
 END
 GO
@@ -329,7 +330,7 @@ BEGIN
 	SET @release = (select value from SiteConstants where name='Release');
 	SET @dbType = (select value from SiteConstants where name='DB Type');
 	--SET @link = @link + 'imaging/';
-	SET @link = @link + 'sas/dr' + @release + '/eboss/photo/redux/';
+	SET @link = @link + 'sas/dr' + @release + '/prior-surveys/sdss4-dr17-eboss/photo/redux/';
 	SELECT  @run = cast(run as varchar(8)), @rerun=cast(rerun as varchar(8)), 
 		@camcol=cast(camcol as varchar(8)), @field=cast(field as varchar(8))
 	    FROM Field
@@ -344,7 +345,6 @@ BEGIN
 	ELSE
 	    SET @run6   = substring('000000',1,6-len(@run)) + @run;
 	SET @field = substring('0000',1,4-len(@field)) + @field;
-	--RETURN 	 @link + @run + '/' + @rerun + '/objcs/'+@camcol+'/fpM-'+@run6+'-'+@filter+@camcol+'-'+@field+'.fit';
 	RETURN 	 @link + @rerun + '/' + @run + '/objcs/'+@camcol+'/fpM-'+@run6+'-'+@filter+@camcol+'-'+@field+'.fit.gz';
 END
 GO
@@ -375,8 +375,8 @@ BEGIN
 	SET @link = (select value from SiteConstants where name='DataServerURL');
 	SET @release = (select value from SiteConstants where name='Release');
 	SET @dbType = (select value from SiteConstants where name='DB Type');
-	--SET @link = @link + 'imaging/';
-	SET @link = @link + 'sas/dr' + @release + '/eboss/photo/redux/';
+	-- Updated path for DR18:
+	SET @link = @link + 'sas/dr' + @release + '/prior-surveys/sdss4-dr17-eboss/photo/redux/';
 	SELECT  @run = cast(run as varchar(8)), @rerun=cast(rerun as varchar(8)), 
 		@camcol=cast(camcol as varchar(8)), @field=cast(field as varchar(8))
 	    FROM Field
@@ -391,7 +391,6 @@ BEGIN
 	ELSE
 	    SET @run6   = substring('000000',1,6-len(@run)) + @run;
 	SET @field = substring('0000',1,4-len(@field)) + @field;
-	--RETURN 	 @link + @run + '/' + @rerun + '/objcs/'+@camcol+'/fpBIN-'+@run6+'-'+@filter+@camcol+'-'+@field+'.fit';
 	RETURN 	 @link + @rerun + '/' + @run + '/objcs/'+@camcol+'/fpBIN-'+@run6+'-'+@filter+@camcol+'-'+@field+'.fit.gz';
 END
 GO
@@ -421,8 +420,8 @@ BEGIN
 	SET @link = (select value from SiteConstants where name='DataServerURL');
 	SET @release = (select value from SiteConstants where name='Release');
 	SET @dbType = (select value from SiteConstants where name='DB Type');
-	--SET @link = @link + 'imaging/';
-	SET @link = @link + 'sas/dr' + @release + '/eboss/photo/redux/';
+	-- Updated path for DR18:
+	SET @link = @link + 'sas/dr' + @release + '/prior-surveys/sdss4-dr17-eboss/photo/redux/';
 	SELECT  @run = cast(run as varchar(8)), @rerun=cast(rerun as varchar(8)), 
 		@camcol=cast(camcol as varchar(8)), @field=cast(field as varchar(8))
 	    FROM Field
@@ -437,7 +436,6 @@ BEGIN
 	ELSE
 	    SET @run6   = substring('000000',1,6-len(@run)) + @run;
 	SET @field = substring('0000',1,4-len(@field)) + @field;
-	--RETURN 	 @link + @run + '/' + @rerun + '/objcs/'+@camcol+'/fpAtlas-'+@run6+'-'+@camcol+'-'+@field+'.fit';
 	RETURN 	 @link + @rerun + '/' + @run + '/objcs/'+@camcol+'/fpAtlas-'+@run6+'-'+@camcol+'-'+@field+'.fit';
 END
 GO
@@ -494,18 +492,14 @@ CREATE FUNCTION fGetUrlFitsPlate(@specObjID numeric(20,0))
 RETURNS varchar(128)
 BEGIN
 	DECLARE @link varchar(128), @plate varchar(4), @oplate varchar(4), 
-	    @mjd varchar(5), @rerun varchar(16), @release varchar(8), @survey varchar(16);
+	    @mjd varchar(5), @rerun varchar(16), @release varchar(8);
 	SET @link = (SELECT value FROM SiteConstants WHERE name='DataServerURL');
 	SET @release = (select value from SiteConstants where name='Release');
-	SELECT @rerun = isnull(p.run2d, p.run1d), @survey = p.survey,
+	SELECT @rerun = isnull(p.run2d, p.run1d),
 	    @mjd = cast(p.mjd as varchar(5)), @plate=cast(p.plate as varchar(4)) 
 	    FROM PlateX p JOIN specObjAll s ON p.plateId=s.plateId 
 	    WHERE s.specObjID=@specObjId;
-    IF @survey != 'boss'
-        SET @survey = 'sdss'
-    ELSE 
-        SET @survey = 'eboss'
-    SET @link = @link + 'sas/dr' + @release + '/' + @survey + '/spectro/redux/' +
+    SET @link = @link + 'sas/dr' + @release + '/spectro/sdss/redux/' +
 		@rerun + '/';
     SET @oplate = substring('0000',1,4-len(@plate)) + @plate;
     SET @link = @link + @oplate + '/';
@@ -604,7 +598,7 @@ BEGIN
 	SELECT @plate=plate, @vers = versdrp3
 	    FROM mangaDrpAll
 	    WHERE plateIFU=@plateIFU;
-	SET @link = @link + 'sas/dr' + @release + '/manga/spectro/redux/' +
+	SET @link = @link + 'sas/dr' + @release + '/prior-surveys/sdss4-dr17-manga/spectro/redux/' +
 		@vers + '/' + CAST(@plate as VARCHAR) + '/stack/manga-' + 
 		@plateIFU + '-' + UPPER(@type) + 'CUBE.fits.gz';
 	RETURN @link;
