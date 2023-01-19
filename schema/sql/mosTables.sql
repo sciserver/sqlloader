@@ -395,7 +395,10 @@ CREATE TABLE mos_allwise (
     y numeric(17,16), --/D Unit sphere position y value
     z numeric(17,16), --/D Unit sphere position z value
     spt_ind integer, --/D Level 7 HTM spatial index key
-    htm20 bigint --/D Level 20 HTM spatial index key
+    htm20 bigint, --/D Level 20 HTM spatial index key
+    [w1mpro_w2mpro] AS ([w1mpro]-[w2mpro]) PERSISTED, --/D difference of w1mpro and w2mpro
+	htmid bigint --/D 20-level deep Hierarchical Triangular Mesh ID
+
 )
 GO
 --
@@ -1002,7 +1005,7 @@ CREATE TABLE mos_carton (
     carton_pk integer NOT NULL, --/D The primary key. A sequential identifier.
     mapper_pk smallint, --/D The primary key of the mapper leading this carton. See mos_mapper.
     category_pk smallint, --/D The primary key of the category in the mos_category table.
-    target_selection_plan text --/D The target selection plan version for which this carton was run.
+    target_selection_planname text --/D The target selection plan version for which this carton was run.
 )
 GO
 --
@@ -2268,7 +2271,8 @@ CREATE TABLE mos_gaia_dr2_source (
     radius_percentile_upper real, --/U Solar Radius --/D Radius_val upper uncertainty
     lum_val real, --/U Solar Luminosity --/D stellar luminosity
     lum_percentile_lower real, --/U Solar Luminosity --/D lum_val lower uncertainty
-    lum_percentile_upper real --/U Solar Luminosity --/D lum_val upper uncertainty
+    lum_percentile_upper real, --/U Solar Luminosity --/D lum_val upper uncertainty
+    parallax_parallax_error  AS ([parallax]-[parallax_error]) PERSISTED --/D difference between parallax and parallax error
 )
 GO
 --
@@ -2732,7 +2736,8 @@ CREATE TABLE mos_guvcat (
     sepasdist real, --/U arcsec --/D Separation between primary and secondary, but based on distance 0
 	--/D criterion
     inlargeobj text, --/D Is source in the footprint of an extended object?
-    largeobjsize real --/D Size of the extended object
+    largeobjsize real, --/D Size of the extended object
+    fuv_mag_nuv_mag  AS ([fuv_mag]-[nuv_mag]) PERSISTED --/D difference between fuv_mag and nuv_mag
 )
 GO
 --

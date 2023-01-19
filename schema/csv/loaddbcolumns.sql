@@ -11320,6 +11320,8 @@ INSERT DBColumns VALUES('mos_allwise','y','','','','Unit sphere position y value
 INSERT DBColumns VALUES('mos_allwise','z','','','','Unit sphere position z value','0');
 INSERT DBColumns VALUES('mos_allwise','spt_ind','','','','Level 7 HTM spatial index key','0');
 INSERT DBColumns VALUES('mos_allwise','htm20','','','','Level 20 HTM spatial index key','0');
+INSERT DBColumns VALUES('mos_allwise','w1mpro_w2mpro','','','','difference of w1mpro and w2mpro','0');
+INSERT DBColumns VALUES('mos_allwise','htmid','','','','20-level deep Hierarchical Triangular Mesh ID','0');
 INSERT DBColumns VALUES('mos_best_brightest','designation','','','','2MASS Designation','0');
 INSERT DBColumns VALUES('mos_best_brightest','ra_1','degrees','','','right ascension from the AllWISE catalog','0');
 INSERT DBColumns VALUES('mos_best_brightest','dec_1','degrees','','','declination from the AllWISE catalog','0');
@@ -11675,7 +11677,7 @@ INSERT DBColumns VALUES('mos_carton','carton','','','','The name of the carton.'
 INSERT DBColumns VALUES('mos_carton','carton_pk','','','','The primary key. A sequential identifier.','0');
 INSERT DBColumns VALUES('mos_carton','mapper_pk','','','','The primary key of the mapper leading this carton. See mos_mapper.','0');
 INSERT DBColumns VALUES('mos_carton','category_pk','','','','The primary key of the category in the mos_category table.','0');
-INSERT DBColumns VALUES('mos_carton','target_selection_plan','','','','The target selection plan version for which this carton was run.','0');
+INSERT DBColumns VALUES('mos_carton','target_selection_planname','','','','The target selection plan version for which this carton was run.','0');
 INSERT DBColumns VALUES('mos_carton_to_target','carton_to_target_pk','','','','The primary key. A sequential identifier.','0');
 INSERT DBColumns VALUES('mos_carton_to_target','lambda_eff','angstrom','','','The effective wavelength at which the object will be observed','0');
 INSERT DBColumns VALUES('mos_carton_to_target','carton_pk','','','','The primary key of the carton in the mos_carton table.','0');
@@ -12263,6 +12265,7 @@ INSERT DBColumns VALUES('mos_gaia_dr2_source','radius_percentile_upper','Solar R
 INSERT DBColumns VALUES('mos_gaia_dr2_source','lum_val','Solar Luminosity','','','stellar luminosity','0');
 INSERT DBColumns VALUES('mos_gaia_dr2_source','lum_percentile_lower','Solar Luminosity','','','lum_val lower uncertainty','0');
 INSERT DBColumns VALUES('mos_gaia_dr2_source','lum_percentile_upper','Solar Luminosity','','','lum_val upper uncertainty','0');
+INSERT DBColumns VALUES('mos_gaia_dr2_source','parallax_parallax_error','','','','difference between parallax and parallax error','0');
 INSERT DBColumns VALUES('mos_gaia_dr2_wd','wd','','','','WD names from this catalog -- WD J + J2000 ra (hh mm ss.ss) + dec (dd','0');
 INSERT DBColumns VALUES('mos_gaia_dr2_wd','dr2name','','','','Unique Gaia source designation','0');
 INSERT DBColumns VALUES('mos_gaia_dr2_wd','source_id','','','','Unique Gaia DR2 source identifier','0');
@@ -12547,6 +12550,7 @@ INSERT DBColumns VALUES('mos_guvcat','sepas','arcsec','','','Separation between 
 INSERT DBColumns VALUES('mos_guvcat','sepasdist','arcsec','','','Separation between primary and secondary, but based on distance 0','0');
 INSERT DBColumns VALUES('mos_guvcat','inlargeobj','','','','Is source in the footprint of an extended object?','0');
 INSERT DBColumns VALUES('mos_guvcat','largeobjsize','','','','Size of the extended object','0');
+INSERT DBColumns VALUES('mos_guvcat','fuv_mag_nuv_mag','','','','difference between fuv_mag and nuv_mag','0');
 INSERT DBColumns VALUES('mos_instrument','pk','','','','The primary key. A sequential identifier.','0');
 INSERT DBColumns VALUES('mos_instrument','label','','','','The name of the instrument.','0');
 INSERT DBColumns VALUES('mos_instrument','default_lambda_eff','angstrom','','','The default wavelength for which fibre positioning will be optimised','0');
@@ -14011,6 +14015,6 @@ INSERT DBColumns VALUES('mos_zari18pms','uwe','','','','Unit Weight Error, as de
 
 GO
 ----------------------------- 
-PRINT '14001 lines inserted into DBColumns '
+PRINT '14005 lines inserted into DBColumns '
 ----------------------------- 
 
