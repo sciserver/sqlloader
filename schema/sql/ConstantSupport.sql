@@ -34,6 +34,7 @@
 --	ImageMask		bits	binary(4)
 --	SpecPixMask		bits	binary(4)
 --	TiMask			bits	binary(4)
+--	sdssvBossTarget0	bits	binary(8)
 --	PhotoType		enum	int
 --	MaskType		enum	int
 --	FieldQuality		enum	int
@@ -108,6 +109,7 @@
 --* 2015-03-16 Ani: Fixed column names for AncillaryTarget? examples.
 --* 2015-03-25 Ani: Fixed AncillaryTarget2 view (needs to be 64-bit).
 --* 2016-07-30 Ani: Fixed APOGEE flag function descriptions.
+--* 2023-01-12 Ani: Added sdssvBossTarget0 view and functions.
 --=================================================================================
 SET NOCOUNT ON
 GO
@@ -699,6 +701,31 @@ SELECT name,
     FROM DataConstants
     WHERE field='TiMask' AND name != ''
 GO
+
+
+--===========================================
+IF EXISTS (SELECT name FROM   sysobjects 
+	   WHERE  name = N'sdssvBossTarget0' )
+DROP VIEW sdssvBossTarget0
+GO
+--
+CREATE VIEW sdssvBossTarget0
+------------------------------------------
+--/H Contains the sdssvBossTarget0 flag values from DataConstants as binary(8).
+------------------------------------------
+--/T Please see the FLAGS1 and FLAGS2 entries in Algorithms under Bitmasks
+--/T for further information.
+------------------------------------------
+AS
+SELECT 
+	name, 
+	value, 
+	description
+    FROM DataConstants
+    WHERE field='sdssvBossTarget0' AND name != ''
+GO
+
+
 
 
 --%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3480,6 +3507,82 @@ BEGIN
 END
 GO
 --
+
+
+
+--===========================================
+IF EXISTS (SELECT name FROM   sysobjects 
+	   WHERE  name = N'fSdssVBossTarget0' )
+	DROP FUNCTION fSdssVBossTarget0
+GO
+--
+CREATE FUNCTION fSdssVBossTarget0(@name varchar(40))
+-------------------------------------------------------------
+--/H Returns the sdssvBossTarget0 value corresponding to a name
+-------------------------------------------------------------
+--/T the sdssvBossTarget0 values can be shown with Select * from sdssvBossTarget0
+--/T <br>
+--/T Sample call to find photo objects with saturated pixels is
+--/T <samp> 
+--/T <br> select top 10 * 
+--/T <br> from spAll 
+--/T <br> where sdssv_boss_target0 & dbo.fSdssVBossTarget0('OPS_STD_BOSS') > 0 
+--/T </samp> 
+--/T <br> see also fSdssVBossTarget0N
+-------------------------------------------------------------
+RETURNS bigint
+AS BEGIN
+RETURN ( SELECT cast(value as bigint)
+	FROM sdssvBossTarget0
+	WHERE name = UPPER(@name)
+	)
+END
+GO
+
+
+
+
+--===========================================
+IF EXISTS (SELECT name FROM   sysobjects 
+	   WHERE  name = N'fSdssVBossTarget0N' )
+	DROP FUNCTION fSdssVBossTarget0N
+GO
+--
+CREATE FUNCTION fSdssVBossTarget0N(@value bigint)
+---------------------------------------------------
+--/H Returns the expanded sdssvBossTarget0 corresponding to the status value as a string
+---------------------------------------------------
+--/T the photoFlags can be shown with Select * from sdssvBossTarget0 
+--/T <br>
+--/T Sample call to display the flags of some photoObjs
+--/T <samp> 
+--/T <br> select top 10 objID, dbo.fSdssVBossTarget0N(sdssv_boss_target0) as targetflags
+--/T <br> from spAll 
+--/T </samp> 
+--/T <br> see also fSdssVBossTarget0
+-------------------------------------------------------------
+RETURNS varchar(1000)
+BEGIN
+    DECLARE @bit int, @mask bigint, @out varchar(2000);
+    SET @bit=63;
+    SET @out ='';
+    WHILE (@bit>0)
+	BEGIN
+	    SET @bit = @bit-1;
+	    SET @mask = power(cast(2 as bigint),@bit);
+	    SET @out = @out + (CASE 
+		WHEN (@mask & @value)=0 THEN '' 
+		ELSE coalesce((select name from PhotoFlags where value=@mask),'')+' '
+	    	END);
+	END
+    RETURN @out;
+END
+GO
+
+
+
+
+
 
 
 IF EXISTS (SELECT name FROM   sysobjects 

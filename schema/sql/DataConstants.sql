@@ -41,6 +41,7 @@
 --	ProgramType		enum
 --	CoordType		enum
 --	TiMask			bits
+--  sdssvBossTarget0	bits
 --  SDSSConstants
 --  StripeDefs
 --  RunShift
@@ -150,6 +151,7 @@
 --*  2015-02-13  Ani: Fixed typos in EBOSS_TARGET0 flag values.
 --*  2015-02-15  Ani: Fixed one more typo in EBOSS_TARGET0 flag values.
 --*  2015-03-04  Ani: Added additional AncillaryTarget2 flag values for DR12.
+--*  2023-01-12  Ani: Added sdssvBossTarget0 flag values for DR18.
 --=================================================================================
 SET NOCOUNT ON
 GO
@@ -1017,6 +1019,75 @@ Insert DataConstants values  ('SpecPixMask',	'BADFLUXFACTOR',	0x0000000004000000
 Insert DataConstants values  ('SpecPixMask',	'BADSKYCHI',		0x0000000008000000,	'Relative ?2 > 3 in sky residuals at this wavelength')
 Insert DataConstants values  ('SpecPixMask',	'REDMONSTER',		0x0000000010000000,	'Contiguous region of bad ?2 in sky residuals (with threshhold of relative ?2 > 3).')
 GO
+
+
+
+-- sdssvBossTarget0 (63 values)
+Insert DataConstants values  ('sdssvBossTarget0',	'SKY',						0x0000000000000001,	'empty sky fiber for calibrating night sky emission')
+Insert DataConstants values  ('sdssvBossTarget0',	'OPS_STD_EBOSS',				0x0000000000000002,	'spectrophotometric flux standard from eBOSS survey. Includes BOSS F dwarf flux standard selected at narrower magnitude range and wider color range,  QSOs, and White Dwarfs')
+Insert DataConstants values  ('sdssvBossTarget0',	'OPS_STD_BOSS',					0x0000000000000004,	'spectrophotometric flux standard selected via Gaia color-mag cuts designed to emulate prior SDSS-photometry based selection of F dwarf flux standards')
+Insert DataConstants values  ('sdssvBossTarget0',	'OPS_STD_BOSS-RED',				0x0000000000000008,	'spectrophotometric flux standard selected via de-reddened Gaia-2MASS color/mag/reduced proper motion cuts (designed to provide F star flux standards even in highly reddened regions)')
+Insert DataConstants values  ('sdssvBossTarget0',	'OPS_STD_BOSS_TIC',				0x0000000000000010,	'spectrophotometric flux standard F-dwarf targets selected from the TIC catalogue, based on Teff and logg, plus GAIA magnitudes')
+Insert DataConstants values  ('sdssvBossTarget0',	'OPS_SKY_BOSS-NOTDB',				0x0000000000000020,	'empty sky fiber chosen by platedesign pipeline')
+Insert DataConstants values  ('sdssvBossTarget0',	'OPS_SKY_2MASS',				0x0000000000000040,	'empty sky fiber obtained with SDSS-IV Apogee method')
+Insert DataConstants values  ('sdssvBossTarget0',	'SPARE1',					0x0000000000000080,	'')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_RM_CORE',					0x0000000000000100,	'Selected as a target of Black Hole Mappers (BHM) Reverberation Mapping (RM) sample  targets selected by  a QSO classification and photoz regression algorithm based on multi-dimensional Skew-t functions.')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_RM_KNOWN-SPEC',				0x0000000000000200,	'Selected as a target of Black Hole Mappers (BHM) Reverberation Mapping (RM) sample  targets selected because they have existing spectroscopic confirmations')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_RM_VAR',					0x0000000000000400,	'Selected as a target of Black Hole Mappers (BHM) Reverberation Mapping (RM) sample  targets selected by optical variability (DES, PS1) properties')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_RM_ANCILLARY',				0x0000000000000800,	'Selected as a target of Black Hole Mappers (BHM) Reverberation Mapping (RM) sample  targets selected by WISE colours or by the XDQSO algorithm')
+Insert DataConstants values  ('sdssvBossTarget0',	'SPARE2',					0x0000000000001000,	'')
+Insert DataConstants values  ('sdssvBossTarget0',	'SPARE3',					0x0000000000002000,	'')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_AQMES_MED',				0x0000000000004000,	'Selected as a target of BHMs Apache Point Observatory Quasar Multi-Epoch Survey (AQMES) Medium cadence sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_AQMES_MED-FAINT',				0x0000000000008000,	'Selected as a target of BHMs AQMES Medium cadence faint object sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_AQMES_WIDE3',				0x0000000000010000,	'Selected as a target of BHMs AQMES wide 3-epoch cadence sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_AQMES_WIDE3-FAINT',			0x0000000000020000,	'Selected as a target of BHMs AQMES wide 3-epoch cadence faint object sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_AQMES_WIDE2',				0x0000000000040000,	'Selected as a target of BHMs AQMES wide 2-epoch cadence sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_AQMES_WIDE2-FAINT',			0x0000000000080000,	'Selected as a target of BHMs AQMES wide 2-epoch cadence faint object sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_AQMES_BONUS-DARK',				0x0000000000100000,	'Selected as a target of BHMs AQMES bonus dark-time sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_AQMES_BONUS-BRIGHT',			0x0000000000200000,	'Selected as a target of BHMs AQMES bonus bright-time sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'SPARE4',					0x0000000000400000,	'')
+Insert DataConstants values  ('sdssvBossTarget0',	'SPARE5',					0x0000000000800000,	'')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_SPIDERS_CLUSTERS-EFEDS-SDSS-REDMAPPER',	0x0000000001000000,	'Selected as a target of BHMs SPIDERS clusters eFEDS RedMapper sample using SDSS photometry')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_SPIDERS_CLUSTERS-EFEDS-HSC-REDMAPPER',	0x0000000002000000,	'Selected as a target of BHMs SPIDERS clusters eFEDS RedMapper sample using HyperSuprimeCam photometry')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_SPIDERS_CLUSTERS-EFEDS-LS-REDMAPPER',	0x0000000004000000,	'Selected as a target of BHMs SPIDERS clusters eFEDS RedMapper sample using LegacySurvey photometry')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_SPIDERS_CLUSTERS-EFEDS-EROSITA',		0x0000000008000000,	'Selected as a target of BHMs SPIDERS clusters eFEDS eROSITA sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_SPIDERS_AGN-EFEDS',			0x0000000010000000,	'Selected as a target of BHMs SPIDERS AGN eFEDS sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'SPARE6',					0x0000000020000000,	'')
+Insert DataConstants values  ('sdssvBossTarget0',	'SPARE7',					0x0000000040000000,	'')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_CSC_BOSS-DARK',				0x0000000080000000,	'Selected as a target of BHMs Chandra Source Catalog (CSC) dark-time sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_CSC_BOSS-BRIGHT',				0x0000000100000000,	'Selected as a target of BHMs Chandra Source Catalog (CSC) bright-time sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_GUA_DARK',					0x0000000200000000,	'Selected as a target of BHMs Gaia/UnWISE AGN dark-time sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'BHM_GUA_BRIGHT',				0x0000000400000000,	'Selected as a target of BHMs Gaia/UnWISE AGN brght-time sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'SPARE8',					0x0000000800000000,	'')
+Insert DataConstants values  ('sdssvBossTarget0',	'SPARE9',					0x0000001000000000,	'')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_SNC_100PC',				0x0000002000000000,	'Selected as a target of the MWMs Solar Neighborhood Census (SNC) 100pc sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_CB_300PC',					0x0000004000000000,	'Selected as a target of the MWMs Compact Binary (CB) 300pc sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_CB_CVCANDIDATES',				0x0000008000000000,	'Selected as a target of the MWMs CB Cataclysmic Variable candidate sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_CB_GAIAGALEX',				0x0000010000000000,	'Selected as a target of the MWMs CB Gaia-Galex sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_CB_UVEX1',					0x0000020000000000,	'Selected as a target of the MWMs CB UV-selected sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_WD',					0x0000040000000000,	'Selected as a target of the MWMs White Dwarf sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_SNC_250PC',				0x0000080000000000,	'Selected as a target of the MWMs SNC 250pc sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_CV_FAINT',					0x0000100000000000,	'Selected as a target of the MWMs faint Cataclysmic variable (CV) sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_CV_GREY',					0x0000200000000000,	'Selected as a target of the MWMs grey-time Cataclysmic variable (CV) sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_CV_BRIGHT',				0x0000400000000000,	'Selected as a target of the MWMs bright CV sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_HALO_BB',					0x0000800000000000,	'Selected as a target of the MWMs Halo Star Best & Brightest sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_HALO_SM',					0x0001000000000000,	'Selected as a target of the MWMs Halo Star SM sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_YSO_S1',					0x0002000000000000,	'Selected as a target of the MWMs YSO Optically visible Class I/II sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_YSO_S3',					0x0004000000000000,	'Selected as a target of the MWMs YSO Optically variable Class III sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_YSO_CLUSTER',				0x0008000000000000,	'Selected as a target of the MWMs YSO Clustering selected sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_OB',					0x0010000000000000,	'Selected as a target of the MWMs OB star sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_OB_CEPHEIDS',				0x0020000000000000,	'Selected as a target of the MWMs OB Cepheid star sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_LEGACY_IR2OPT',				0x0040000000000000,	'Selected as a target of the MWMs APOGEE legacy observations')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_CB_UVEX2',					0x0080000000000000,	'Selected as a target of the MWMs CB UV-selected sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_CB_UVEX3',					0x0100000000000000,	'Selected as a target of the MWMs CB UV-selected sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_CB_UVEX4',					0x0200000000000000,	'Selected as a target of the MWMs CB UV-selected sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'MWM_CB_UVEX5',					0x0400000000000000,	'Selected as a target of the MWMs CB UV-selected sample')
+Insert DataConstants values  ('sdssvBossTarget0',	'SPARE10',					0x0800000000000000,	'')
+Insert DataConstants values  ('sdssvBossTarget0',	'SPARE11',					0x1000000000000000,	'')
+Insert DataConstants values  ('sdssvBossTarget0',	'SPARE12',					0x2000000000000000,	'')
+Insert DataConstants values  ('sdssvBossTarget0',	'SPARE13',					0x4000000000000000,	'')
+
+
 
 --plPlugMap HoleType
 INSERT DataConstants VALUES('HoleType',	'',			0,	'plPlugMap hole type (SDSS-II).')

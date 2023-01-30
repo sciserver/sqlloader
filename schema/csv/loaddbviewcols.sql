@@ -88,6 +88,9 @@ INSERT DBViewCols VALUES('description','SpecPixMask','DataConstants ');
 INSERT DBViewCols VALUES('name','TiMask','DataConstants ');
 INSERT DBViewCols VALUES('value','TiMask','DataConstants ');
 INSERT DBViewCols VALUES('description','TiMask','DataConstants ');
+INSERT DBViewCols VALUES('name','sdssvBossTarget0','DataConstants ');
+INSERT DBViewCols VALUES('value','sdssvBossTarget0','DataConstants ');
+INSERT DBViewCols VALUES('description','sdssvBossTarget0','DataConstants ');
 INSERT DBViewCols VALUES('name','PhotoMode','DataConstants ');
 INSERT DBViewCols VALUES('value','PhotoMode','DataConstants ');
 INSERT DBViewCols VALUES('description','PhotoMode','DataConstants ');
@@ -241,6 +244,6 @@ INSERT DBViewCols VALUES('text','TableDesc','DBObjects o LEFT OUTER JOIN IndexMa
 
 GO
 ----------------------------- 
-PRINT '231 lines inserted into DBViewcols'
+PRINT '234 lines inserted into DBViewcols'
 ----------------------------- 
 

@@ -15,6 +15,9 @@
 --* 2021-08-06  Ani: Added apogeeDistMass, ebossMCPM VAC tables. (DR17).
 --* 2021-08-11  Ani: Added mangaFirefly_mastar,_miles VAC tables. (DR17).
 --* 2021-09-29  Ani: Moved SDSS17Pipe3D_v3_1_1 to MangaTables (as mangaPipe3D) (DR17).
+--* 2022-12-27  Ani: Added eFEDs VACs (DR18).
+--* 2022-12-28  Ani: Replaced "--\" with "--/" and removed indents for table
+--*             description rows in eFEDs VACs (DR18).
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -584,6 +587,211 @@ CREATE TABLE mangaFirefly_mastar (
 GO
 --
 
+
+--=============================================================
+IF EXISTS (SELECT name FROM sysobjects
+         WHERE xtype='U' AND name = 'eFEDS_Main_speccomp')
+	DROP TABLE eFEDS_Main_speccomp
+GO
+--
+EXEC spSetDefaultFileGroup 'eFEDS_Main_speccomp'
+GO
+
+CREATE TABLE eFEDS_Main_speccomp (
+-------------------------------------------------------------------------------
+--/H eROSITA/eFEDS Main source catalogue counterparts with redshifts/classifications updated with SDSS-V information.
+-------------------------------------------------------------------------------
+--/T A catalogue of soft X-ray (0.2-2.3 keV) selected sources detected in the eROSITA/eFEDS performance verification field (Brunner et al., 2022), 
+--/T and classificaions (w.r.t. Salvato et al. 2022), using a spectroscopic compilation, derived from several facilities, 
+--/T but dominated by SDSS/BOSS spectroscopy. We include new information derived from 37 dedicated SDSS-V plates, observed between Dec 2020-May 2021. 
+--/T We combine automated redshift and classifications, provided by the standard SDSS idlspec1d pipeline, with an extensive and targeted set of 
+--/T visual inspections, which increases the reliability and completeness of the spectroscopic coverage.
+-------------------------------------------------------------------------------
+
+	ero_name varchar(30) NOT NULL, --/U  --/D    From Brunner+22, eROSITA official source Name
+	ero_id_src int NOT NULL, --/U  --/D    From Brunner+22, ID of eROSITA source in the Main Sample
+	ero_ra_corr float NOT NULL, --/U deg --/D    From Brunner+22, J2000 Right Ascension of eROSITA source (corrected)
+	ero_dec_corr float NOT NULL, --/U deg --/D    From Brunner+22, J2000 Declination of eROSITA source (corrected)
+	ero_radec_err_corr real, --/U arcsec --/D    From Brunner+22, eROSITA positional uncertainty (corrected)
+	ero_ml_flux real, --/U erg/cm^2/s --/D    From Brunner+22, 0.2-2.3 keV source flux
+	ero_ml_flux_err real, --/U erg/cm^2/s --/D    From Brunner+22, 0.2-2.3 keV source flux error (1 sigma)
+	ero_det_like real, --/U  --/D    From Brunner+22, 0.2-2.3 keV detection likelihood via PSF-fitting
+	ctp_ls8_unique_objid varchar(20), --/U  --/D    From Salvato+22, LS8 unique id for ctp to the eROSITA source
+	ctp_ls8_ra float, --/U deg --/D    From Salvato+22, Right Ascension of the LS8 counterpart
+	ctp_ls8_dec float, --/U deg --/D    From Salvato+22, Declination of the best LS8 counterpart
+	dist_ctp_ls8_ero real, --/U arcsec --/D    From Salvato+22, Separation between ctp and eROSITA position
+	ctp_quality smallint, --/U  --/D    From Salvato+22, ctp qual: 4=best,3=good,2=secondary,1/0=unreliable
+	ls_id bigint, --/U  --/D    Unique ID of lsdr9 photometric object labelled with spec-z
+	ls_ra float, --/U deg --/D    Coordinate from lsdr9 at epoch LS9_EPOCH
+	ls_dec float, --/U deg --/D    Coordinate from lsdr9 at epoch LS9_EPOCH
+	ls_pmra real, --/U mas/yr --/D    Proper motion from lsdr9
+	ls_pmdec real, --/U mas/yr --/D    Proper motion from lsdr9
+	ls_epoch real, --/U year --/D    Coordinate epoch from lsdr9
+	ls_mag_g real, --/U mag --/D    DECam g-band model magnitude from lsdr9, AB
+	ls_mag_r real, --/U mag --/D    DECam r-band model magnitude from lsdr9, AB
+	ls_mag_z real, --/U mag --/D    DECam z-band model magnitude from lsdr9, AB
+	specz_n int, --/U  --/D    Total number of spec-z associated with this lsdr9 object
+	specz_raj2000 float, --/U deg --/D    Coordinate of spec-z, propagated if necessary to epoch J2000
+	specz_dej2000 float, --/U deg --/D    Coordinate of spec-z, propagated if necessary to epoch J2000
+	specz_nsel int, --/U  --/D    Number of spec-z selected to inform result for this object
+	specz_redshift real, --/U  --/D    Final redshift determined for this object
+	specz_normq int, --/U  --/D    Final normalised redshift quality associated with this object
+	specz_normc varchar(10), --/U  --/D    Final normlised classfication determined for this object
+	specz_hasvi bit, --/U  --/D    True if best spec-z for this object has a visual inspection
+	specz_catcode varchar(20), --/U  --/D    Catalogue code of best spec-z for this object
+	specz_bitmask bigint, --/U  --/D    Bitmask encoding catalogues containing spec-z for this object
+	specz_sel_bitmask bigint, --/U  --/D    Bitmask encoding catalogues containing informative spec-z for object
+	specz_flags int, --/U  --/D    Bitmask encoding quality flags for this object
+	specz_sel_normq_max int, --/U  --/D    Highest NORMQ of informative spec-z for this object
+	specz_sel_normq_mean real, --/U  --/D    Mean NORMQ of informative spec-z for this object
+	specz_sel_z_mean real, --/U  --/D    Mean REDSHIFT of informative spec-z for this object
+	specz_sel_z_median real, --/U  --/D    Median REDSHIFT of informative spec-z for this object
+	specz_sel_z_stddev real, --/U  --/D    Standard deviation of REDSHIFTs for informative spec-z for object
+	specz_orig_ra float, --/U deg --/D    Coordinate associated with individual spec-z measurement
+	specz_orig_dec float, --/U deg --/D    Coordinate associated with individual spec-z measurement
+	specz_orig_pos_epoch real, --/U  --/D    Coordinate epoch associated with individual spec-z measurement
+	specz_orig_ls_sep real, --/U arcsec --/D    Distance from spec-z to lsdr9 photometric ctp (corrected for pm)
+	specz_orig_ls_gt1ctp bit, --/U  --/D    Can spec-z be associated with >1 possible lsdr9 counterpart?
+	specz_orig_ls_ctp_rank int, --/U  --/D    Rank of ctp out of all possibilities for this spec-z (1=closest)
+	specz_orig_id varchar(40), --/U  --/D    Orig. value of ID of individual spec-z measurement (as a string)
+	specz_orig_redshift real, --/U  --/D    Orig. redshift value of individual spec-z measurement
+	specz_orig_qual varchar(10), --/U  --/D    Orig. redshift quality value of individual spec-z measurement
+	specz_orig_normq int, --/U  --/D    Orig. redshift quality of individual spec-z measurement - normalised
+	specz_orig_class varchar(20), --/U  --/D    Orig. classification label of individual spec-z measurement
+	specz_orig_hasvi bit, --/U  --/D    True if individual spec-z has a visual inspection from our team
+	specz_orig_normc varchar(10), --/U  --/D    Normalised classification code of individual spec-z measurement
+	specz_ra_used float, --/U deg --/D    Adopted coordinate of specz when matching to Salvato+22 counterpart
+	specz_dec_used float, --/U deg --/D    Adopted coordinate of specz when matching to Salvato+22 counterpart
+	separation_specz_ctp float, --/U arcsec --/D    Distance from LS_RA,LS_DEC to SPECZ_RA_USED,SPECZ_DEC_USED
+	has_specz bit, --/U  --/D    Does this Salvato+22 counterpart have a spec-z?
+	has_informative_specz bit --/U  --/D    Does this Salvato+22 counterpart have an informative spec-z?
+)
+GO
+--
+
+
+--=============================================================
+IF EXISTS (SELECT name FROM sysobjects
+         WHERE xtype='U' AND name = 'eFEDS_Hard_speccomp')
+	DROP TABLE eFEDS_Hard_speccomp
+GO
+--
+EXEC spSetDefaultFileGroup 'eFEDS_Hard_speccomp'
+GO
+
+CREATE TABLE eFEDS_Hard_speccomp (
+-------------------------------------------------------------------------------
+--/H eROSITA/eFEDS Hard source catalogue counterparts with redshifts/classifications updated with SDSS-V information.
+-------------------------------------------------------------------------------
+--/T A catalogue of hard X-ray (2.3-5 keV) selected sources detected in the eROSITA/eFEDS performance verification field (Brunner et al., 2022), 
+--/T with optical/IR counterpart associations (Salvato et al., 2022). This catalogue (Merloni et al., in prep) updates the spectroscopic redshift 
+--/T and classificaions (w.r.t. Salvato et al. 2022), using a spectroscopic compilation, derived from several facilities, but dominated by 
+--/T SDSS/BOSS spectroscopy. We include new information derived from 37 dedicated SDSS-V plates, observed between Dec 2020-May 2021. 
+--/T We combine automated redshift and classifications, provided by the standard SDSS idlspec1d pipeline, with an extensive and targeted set of visual inspections, 
+--/T which increase the reliability and completeness of the spectroscopic coverage.
+-------------------------------------------------------------------------------
+
+	ero_name varchar(30) NOT NULL, --/U  --/D    From Brunner+22, eROSITA official source Name
+	ero_id_src int NOT NULL, --/U  --/D    From Brunner+22, ID of eROSITA source in the Main Sample
+	ero_ra_corr real NOT NULL, --/U deg --/D    From Brunner+22, J2000 Right Ascension of eROSITA source (corrected)
+	ero_dec_corr real NOT NULL, --/U deg --/D    From Brunner+22, J2000 Declination of eROSITA source (corrected)
+	ero_radec_err_corr real NOT NULL, --/U arcsec --/D    From Brunner+22, eROSITA positional uncertainty (corrected)
+	ero_ml_flux_3 real, --/U erg/cm^2/s --/D    From Brunner+22, 2.3-5.0 keV source flux
+	ero_ml_flux_err_3 real , --/U erg/cm^2/s --/D    From Brunner+22, 2.3-5.0 keV source flux error (1 sigma)
+	ero_det_like_3 real , --/U  --/D    From Brunner+22, 2.3-5.0 keV detection likelihood via PSF-fitting
+	ctp_ls8_unique_objid varchar(20) , --/U  --/D    From Salvato+22, LS8 unique id for ctp to the eROSITA source
+	ctp_ls8_ra real , --/U deg --/D    From Salvato+22, Right Ascension of the LS8 counterpart
+	ctp_ls8_dec real , --/U deg --/D    From Salvato+22, Declination of the best LS8 counterpart
+	dist_ctp_ls8_ero real , --/U arcsec --/D    From Salvato+22, Separation between ctp and eROSITA position
+	ctp_quality smallint , --/U  --/D    From Salvato+22, ctp qual: 4=best,3=good,2=secondary,1/0=unreliable
+	ls_id bigint , --/U  --/D    Unique ID of lsdr9 photometric object labelled with spec-z
+	ls_ra float , --/U deg --/D    Coordinate from lsdr9 at epoch LS9_EPOCH
+	ls_dec float , --/U deg --/D    Coordinate from lsdr9 at epoch LS9_EPOCH
+	ls_pmra real , --/U mas/yr --/D    Proper motion from lsdr9
+	ls_pmdec real , --/U mas/yr --/D    Proper motion from lsdr9
+	ls_epoch real , --/U year --/D    Coordinate epoch from lsdr9
+	ls_mag_g real , --/U mag --/D    DECam g-band model magnitude from lsdr9, AB
+	ls_mag_r real , --/U mag --/D    DECam r-band model magnitude from lsdr9, AB
+	ls_mag_z real , --/U mag --/D    DECam z-band model magnitude from lsdr9, AB
+	specz_n int , --/U  --/D    Total number of spec-z associated with this lsdr9 object
+	specz_raj2000 float , --/U deg --/D    Coordinate of spec-z, propagated if necessary to epoch J2000
+	specz_dej2000 float , --/U deg --/D    Coordinate of spec-z, propagated if necessary to epoch J2000
+	specz_nsel int , --/U  --/D    Number of spec-z selected to inform result for this object
+	specz_redshift real , --/U  --/D    Final redshift determined for this object
+	specz_normq int , --/U  --/D    Final normalised redshift quality associated with this object
+	specz_normc varchar(10) , --/U  --/D    Final normlised classfication determined for this object
+	specz_hasvi bit , --/U  --/D    True if best spec-z for this object has a visual inspection
+	specz_catcode varchar(20) , --/U  --/D    Catalogue code of best spec-z for this object
+	specz_bitmask bigint , --/U  --/D    Bitmask encoding catalogues containing spec-z for this object
+	specz_sel_bitmask bigint , --/U  --/D    Bitmask encoding catalogues containing informative spec-z for object
+	specz_flags int , --/U  --/D    Bitmask encoding quality flags for this object
+	specz_sel_normq_max int , --/U  --/D    Highest NORMQ of informative spec-z for this object
+	specz_sel_normq_mean real , --/U  --/D    Mean NORMQ of informative spec-z for this object
+	specz_sel_z_mean real , --/U  --/D    Mean REDSHIFT of informative spec-z for this object
+	specz_sel_z_median real , --/U  --/D    Median REDSHIFT of informative spec-z for this object
+	specz_sel_z_stddev real , --/U  --/D    Standard deviation of REDSHIFTs for informative spec-z for object
+	specz_orig_ra float , --/U deg --/D    Coordinate associated with individual spec-z measurement
+	specz_orig_dec float , --/U deg --/D    Coordinate associated with individual spec-z measurement
+	specz_orig_pos_epoch real , --/U  --/D    Coordinate epoch associated with individual spec-z measurement
+	specz_orig_ls_sep real , --/U arcsec --/D    Distance from spec-z to lsdr9 photometric ctp (corrected for pm)
+	specz_orig_ls_gt1ctp bit , --/U  --/D    Can spec-z be associated with >1 possible lsdr9 counterpart?
+	specz_orig_ls_ctp_rank int , --/U  --/D    Rank of ctp out of all possibilities for this spec-z (1=closest)
+	specz_orig_id varchar(40) , --/U  --/D    Orig. value of ID of individual spec-z measurement (as a string)
+	specz_orig_redshift real , --/U  --/D    Orig. redshift value of individual spec-z measurement
+	specz_orig_qual varchar(10) , --/U  --/D    Orig. redshift quality value of individual spec-z measurement
+	specz_orig_normq int , --/U  --/D    Orig. redshift quality of individual spec-z measurement - normalised
+	specz_orig_class varchar(20) , --/U  --/D    Orig. classification label of individual spec-z measurement
+	specz_orig_hasvi bit , --/U  --/D    True if individual spec-z has a visual inspection from our team
+	specz_orig_normc varchar(10) , --/U  --/D    Normalised classification code of individual spec-z measurement
+	specz_ra_used float , --/U deg --/D    Adopted coordinate of specz when matching to Salvato+22 counterpart
+	specz_dec_used float , --/U deg --/D    Adopted coordinate of specz when matching to Salvato+22 counterpart
+	separation_specz_ctp float , --/U arcsec --/D    Distance from LS_RA,LS_DEC to SPECZ_RA_USED,SPECZ_DEC_USED
+	has_specz bit , --/U  --/D    Does this Salvato+22 counterpart have a spec-z?
+	has_informative_specz bit  --/U  --/D    Does this Salvato+22 counterpart have an informative spec-z?
+)
+GO
+--
+
+
+
+--=============================================================
+IF EXISTS (SELECT name FROM sysobjects
+         WHERE xtype='U' AND name = 'eFEDS_SDSSV_spec_results')
+	DROP TABLE eFEDS_SDSSV_spec_results
+GO
+--
+EXEC spSetDefaultFileGroup 'eFEDS_SDSSV_spec_results'
+GO
+
+CREATE TABLE eFEDS_SDSSV_spec_results (
+-------------------------------------------------------------------------------
+--/H SDSS-V/eFEDS catalogue of spectroscopic redshift and visual inspection information.
+-------------------------------------------------------------------------------
+--/T A catalogue of spectroscopic redshifts and classifications derived solely from the SDSS-V/eFEDS plate data set. 
+--/T The pipeline redshift/classification information for many spectra is supplemented by the results of 
+--/T an extensive visual inspection process. We include an entry for all spectra of science targets in the SDSS-V/eFEDS plates, 
+--/T regardless of whether they are deemed to be counterparts to eROSITA X-ray sources.
+-------------------------------------------------------------------------------
+
+	field smallint NOT NULL, --/U  --/D    SDSS field code identifier
+	mjd int NOT NULL, --/U  --/D    SDSS MJD associated with this spectrum
+	catalogid bigint NOT NULL, --/U  --/D    SDSS-V CATALOGID (v0) associated with this target
+	plug_ra float NOT NULL, --/U deg --/D    Sky coordinate of spectroscopic fiber
+	plug_dec float NOT NULL, --/U deg --/D    Sky coordinate of spectroscopic fiber
+	nvi smallint, --/U  --/D    Number of visual inspections collected for this spectrum
+	sn_median_all float, --/U  --/D    Median SNR/pix in spectrum (idlspec2d eFEDS v6_0_2 reductions)
+	z_pipe float, --/U  --/D    Pipeline redshift in idlspec1d eFEDS v6_0_2 reductions
+	z_err_pipe float, --/U  --/D    Pipeline redshift uncertainty in idlspec1d eFEDS v6_0_2 reductions
+	zwarning_pipe smallint, --/U  --/D    Pipeline redshift warning flags in idlspec1d eFEDS v6_0_2 reductions
+	class_pipe varchar(10), --/U  --/D    Pipeline classification in idlspec1d eFEDS v6_0_2 reductions
+	subclass_pipe varchar(30), --/U  --/D    Pipeline sub-classification in idlspec1d eFEDS v6_0_2 reductions
+	z_final float, --/U  --/D    Final redshift derived from pipeline and visual inspections
+	z_conf_final smallint, --/U  --/D    Final redshift confidence from pipeline and visual inspections
+	class_final varchar(20), --/U  --/D    Final classfication derived from pipeline and visual inspections
+	blazar_candidate bit --/U  --/D    Was object flagged as a blazar candidate in visual inspections?
+)
+GO
+--
 
 
 -- revert to primary file group

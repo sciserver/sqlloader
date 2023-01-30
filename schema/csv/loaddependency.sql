@@ -143,11 +143,9 @@ INSERT Dependency VALUES('spHtmCSharp','fHtmGetString','SphericalHTM.[Spherical.
 INSERT Dependency VALUES('spHtmCSharp','fHtmVersion','SphericalHTM.[Spherical.Htm.Sql.fHtmVersion');
 INSERT Dependency VALUES('spHtmCSharp','fHtmXyz','SphericalHTM.[Spherical.Htm.Sql.fHtmXyz');
 INSERT Dependency VALUES('spHtmCSharp','fHtmXyzToEq','SphericalHTM.[Spherical.Htm.Sql.fHtmXyzToEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fDistanceArcMinEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fHtmCoverCircleEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fHtmEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMastarObjEq]','fDistanceArcMinEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMastarObjEq]','fGetNearbyMaStarObjEq');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMosTargetEq]','fDistanceArcMinEq');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMosTargetEq]','fHtmCoverCircleXyz');
+INSERT Dependency VALUES('spNearby','dbo.[fGetObjectsEq]','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','fGetJpegObjects','fGetObjectsEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyApogeeStarEq','fDistanceArcMinEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyApogeeStarEq','fHtmCoverCircleEq');
@@ -180,7 +178,6 @@ INSERT Dependency VALUES('spNearby','fGetNearestSpecObjEq','fGetNearbySpecObjXYZ
 INSERT Dependency VALUES('spNearby','fGetNearestSpecObjIdAllEq','fGetNearestSpecObjAllEq');
 INSERT Dependency VALUES('spNearby','fGetNearestSpecObjIdEq','fGetNearestSpecObjEq');
 INSERT Dependency VALUES('spNearby','fGetNearestSpecObjXYZ','fGetNearbySpecObjXYZ');
-INSERT Dependency VALUES('spNearby','fGetObjectsEq','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','fGetObjectsMaskEq','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','fGetObjFromRect','fGetNearbyObjEq');
 INSERT Dependency VALUES('spNearby','fGetObjFromRectEq','fGetObjFromRect');
@@ -348,6 +345,8 @@ INSERT Dependency VALUES('spTestQueries','spTestQueries','fPhotoType');
 INSERT Dependency VALUES('spTestQueries','spTestQueries','spTestTimeEnd');
 INSERT Dependency VALUES('spTestQueries','spTestQueries','spTestTimeStart');
 INSERT Dependency VALUES('spUrlFitsSupport','fGetUrlFitsField','fSkyVersion');
+INSERT Dependency VALUES('spUrlFitsSupport','fGetUrlFitsSpectrum','fSDSSfromSpecID');
+INSERT Dependency VALUES('spUrlFitsSupport','fGetUrlFitsSpectrum','spAll');
 INSERT Dependency VALUES('spValidate','spComputePhotoParentID','spNewPhase');
 INSERT Dependency VALUES('spValidate','spGenericTest','spNewPhase');
 INSERT Dependency VALUES('spValidate','spTestForeignKey','spNewPhase');
@@ -428,6 +427,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '418 lines inserted into Dependency'
+PRINT '417 lines inserted into Dependency'
 ------------------------------------
 GO
