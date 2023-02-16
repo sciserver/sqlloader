@@ -4264,7 +4264,12 @@ CREATE TABLE mos_target (
     pmdec real, --/U mas/yr --/D The proper motion in declination of the target. From mos_catalog.
     epoch real, --/U years --/D The epoch of the coordinates, as a Julian epoch.
     parallax real, --/U arcsec --/D The parallax of the target. From mos_catalog.
-    catalogid bigint --/D The catalogid of the entry in mos_catalog associated with this target.
+    catalogid bigint, --/D The catalogid of the entry in mos_catalog associated with this target.
+	htmid bigint, --/D 20-level deep Hierarchical Triangular Mesh ID
+	cx float,
+	cy float,
+	cz float
+
 )
 GO
 --

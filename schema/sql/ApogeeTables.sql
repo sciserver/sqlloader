@@ -57,6 +57,7 @@
 --* 2021-06-23 Fixed bug in ApogeeStar, put "file" column name in []. Also
 --*            commented out cannonStar which is not reloaded in DR17.
 --* 2021-07-28 Updated ApogeeVisit - added new "field" column (DR17).
+--* 2023-02-16 Added cx, cy, cz to ApogeeStar
 -------------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -202,7 +203,10 @@ CREATE TABLE apogeeStar (
     gaiaedr3_r_med_photogeo real NOT NULL, --/U pc --/D GAIA EDR3 Bailer Jones r_med_photogeo
     gaiaedr3_r_lo_photogeo real NOT NULL, --/U pc --/D GAIA EDR3 Bailer Jones r_lo_photogeo
     gaiaedr3_r_hi_photogeo real NOT NULL, --/U pc --/D GAIA EDR3 Bailer Jones r_hi_photogeo
-    htmID bigint NOT NULL --/F NOFITS --/D HTM ID 
+    htmID bigint NOT NULL, --/F NOFITS --/D HTM ID 
+	cx float, 
+	cy float, 
+	cz float
 )
 GO
 
