@@ -1861,17 +1861,14 @@ CREATE OR ALTER FUNCTION [dbo].[fGetNearestMosTargetEq] (@ra float, @dec float, 
     htmID bigint,
     distance float		-- distance in arc minutes
   ) AS BEGIN
-	DECLARE @d2r float, @nx float,@ny float,@nz float 
-	set @d2r = PI()/180.0
-	if (@r<0) RETURN
-	set @nx  = COS(@dec*@d2r)*COS(@ra*@d2r)
-	set @ny  = COS(@dec*@d2r)*SIN(@ra*@d2r)
-	set @nz  = SIN(@dec*@d2r)
 	INSERT @proxtab	
-	SELECT top 1 * FROM dbo.fGetNearbyMosTargetXYZ(@nx,@ny,@nz,@r) 
+	    SELECT TOP 1 *
+	    FROM dbo.fGetNearbyMosTargetEq(@ra, @dec, @r)
+	    ORDER BY dbo.fDistanceEq(@ra,@dec,ra,dec) ASC
   RETURN
   END
 GO
+
 -------------------------------------------------
 -- some new UDFs for image navigation
 -------------------------------------------------
