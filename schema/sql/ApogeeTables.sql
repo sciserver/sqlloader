@@ -204,9 +204,9 @@ CREATE TABLE apogeeStar (
     gaiaedr3_r_lo_photogeo real NOT NULL, --/U pc --/D GAIA EDR3 Bailer Jones r_lo_photogeo
     gaiaedr3_r_hi_photogeo real NOT NULL, --/U pc --/D GAIA EDR3 Bailer Jones r_hi_photogeo
     htmID bigint NOT NULL, --/F NOFITS --/D HTM ID 
-	cx float, 
-	cy float, 
-	cz float
+	cx float, --/D unit vector for ra+dec 
+	cy float, --/D unit vector for ra+dec 
+	cz float  --/D unit vector for ra+dec 
 )
 GO
 

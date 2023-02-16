@@ -4266,9 +4266,9 @@ CREATE TABLE mos_target (
     parallax real, --/U arcsec --/D The parallax of the target. From mos_catalog.
     catalogid bigint, --/D The catalogid of the entry in mos_catalog associated with this target.
 	htmid bigint, --/D 20-level deep Hierarchical Triangular Mesh ID
-	cx float,
-	cy float,
-	cz float
+	cx float,  --/D unit vector for ra+dec 
+	cy float,  --/D unit vector for ra+dec 
+	cz float   --/D unit vector for ra+dec 
 
 )
 GO
