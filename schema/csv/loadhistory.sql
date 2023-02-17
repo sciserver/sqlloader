@@ -621,7 +621,7 @@ INSERT History VALUES('ApogeeTables','2014-09-05','Ani','Fixed typo in ApogeePla
 INSERT History VALUES('ApogeeTables','2014-11-06','Ani','Applied DR12 updates - removed apogeeObject.observed and updated descriptions for a few other columns. ');
 INSERT History VALUES('ApogeeTables','2014-11-06','Ani','Increased length of id strings in apogeeObject to 64. ');
 INSERT History VALUES('ApogeeTables','2014-11-13','Ani','Increased length of target_id everywhere to 64. ');
-INSERT History VALUES('ApogeeTables','2014-11-25','Ani','Incorporated schema changes for DR12 (new columns param_m_h_err and param_alpha_m_err in aspcapStar) and changed http bitmask help links to internal info links. 2016-03-16 DR13 updates. 2016-03-30 More DR13 updates - ce_* and felem_ce* columns removed.. 2016-05-13 Updated felem* column descriptions in aspcapStar as per Jen Sobeck. 2017-04-11 Added the DR14 schema updates, including new table cannonStar. 2017-04-19 Updated cannonStar schema from SVN, added default values for cannonStar.filename and field columns because the CSVs have NULL values. 2017-05-06 Added columns to apogeeVisit and apogeeStar for DR14. 2018-07-18 Removed conditional DROP TABLE from tables that do not get recreated with each release (apogeeDesign/Field/Object). 2019-11-14 DR16 schema changes. 2021-06-23 DR17 schema changes. 2021-06-23 Fixed bug in ApogeeStar, put "file" column name in []. Also commented out cannonStar which is not reloaded in DR17. 2021-07-28 Updated ApogeeVisit - added new "field" column (DR17). ');
+INSERT History VALUES('ApogeeTables','2014-11-25','Ani','Incorporated schema changes for DR12 (new columns param_m_h_err and param_alpha_m_err in aspcapStar) and changed http bitmask help links to internal info links. 2016-03-16 DR13 updates. 2016-03-30 More DR13 updates - ce_* and felem_ce* columns removed.. 2016-05-13 Updated felem* column descriptions in aspcapStar as per Jen Sobeck. 2017-04-11 Added the DR14 schema updates, including new table cannonStar. 2017-04-19 Updated cannonStar schema from SVN, added default values for cannonStar.filename and field columns because the CSVs have NULL values. 2017-05-06 Added columns to apogeeVisit and apogeeStar for DR14. 2018-07-18 Removed conditional DROP TABLE from tables that do not get recreated with each release (apogeeDesign/Field/Object). 2019-11-14 DR16 schema changes. 2021-06-23 DR17 schema changes. 2021-06-23 Fixed bug in ApogeeStar, put "file" column name in []. Also commented out cannonStar which is not reloaded in DR17. 2021-07-28 Updated ApogeeVisit - added new "field" column (DR17). 2023-02-16 Added cx, cy, cz to ApogeeStar ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Adapted from sas-sql/mangadrp.sql. ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Increased length of mangaTarget.nsa_subdir to 128. ');
 INSERT History VALUES('MangaTables','2016-04-22','Ani','Added htmID to mangaDRPall. ');
@@ -806,6 +806,8 @@ INSERT History VALUES('spNearby','2017-04-19','Sue','Added inner loop join to fG
 INSERT History VALUES('spNearby','2018-03-29','Sue','Fixed spec functions to return numeric(20) instead of bigint 2019-01016 Sue: fGetObjectsEq now returns numeric(20) instead of bigint ');
 INSERT History VALUES('spNearby','2020-02-11','Sue','changed apstar_id from varchar(50) to (64) in  fGetNearbyApogeeStarEq ');
 INSERT History VALUES('spNearby','2023-01-05','Ani','Added fGetNearbyMosTargetEq for DR18. ');
+INSERT History VALUES('spNearby','2023-02-16','Sue','updated fGetNearbyApogeeStarEq and fGetNearbyMosTargetEq for performance  added fGetNearbyApogeeStarXYZ and fGetNearbyMosTargetXYZ added fGetNearestMosTargetEq ');
+INSERT History VALUES('spNearby','2023-02-17','Ani','Added fGetNearestMosTargetXYZ, fGetNearestApogeeStar[Eq|XYZ], updated documentation text for new functions added for DR18. ');
 INSERT History VALUES('spApogee','2016-04-27','Ani','Created inital version as per JOn Holtzman request. ');
 INSERT History VALUES('spApogee','2016-05-13','Ani','Updated description of fAspcapFelem* functions. ');
 INSERT History VALUES('spApogee','2016-05-18','Ani','Removed dbo. prefix from function definitions and also. trailing spaces from some functions. ');
@@ -1335,6 +1337,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1325 lines inserted into History'
+PRINT '1327 lines inserted into History'
 ------------------------------------
 GO

@@ -5526,6 +5526,9 @@ INSERT DBColumns VALUES('apogeeStar','gaiaedr3_r_med_photogeo','pc','','','GAIA 
 INSERT DBColumns VALUES('apogeeStar','gaiaedr3_r_lo_photogeo','pc','','','GAIA EDR3 Bailer Jones r_lo_photogeo','0');
 INSERT DBColumns VALUES('apogeeStar','gaiaedr3_r_hi_photogeo','pc','','','GAIA EDR3 Bailer Jones r_hi_photogeo','0');
 INSERT DBColumns VALUES('apogeeStar','htmID','','','','HTM ID','0');
+INSERT DBColumns VALUES('apogeeStar','cx','','','','unit vector for ra+dec','0');
+INSERT DBColumns VALUES('apogeeStar','cy','','','','unit vector for ra+dec','0');
+INSERT DBColumns VALUES('apogeeStar','cz','','','','unit vector for ra+dec','0');
 INSERT DBColumns VALUES('apogeeStarVisit','visit_id','','','','Unique ID for visit spectrum, of form apogee.[telescope].[cs].[apred_version].plate.mjd.fiberid','0');
 INSERT DBColumns VALUES('apogeeStarVisit','apstar_id','','','','Unique ID for combined star spectrum of form apogee.[telescope].[cs].apstar_version.location_id.apogee_id','0');
 INSERT DBColumns VALUES('apogeeStarAllVisit','visit_id','','','','Unique ID for visit spectrum, of form apogee.[telescope].[cs].[apred_version].plate.mjd.fiberid','0');
@@ -13539,6 +13542,10 @@ INSERT DBColumns VALUES('mos_target','pmdec','mas/yr','','','The proper motion i
 INSERT DBColumns VALUES('mos_target','epoch','years','','','The epoch of the coordinates, as a Julian epoch.','0');
 INSERT DBColumns VALUES('mos_target','parallax','arcsec','','','The parallax of the target. From mos_catalog.','0');
 INSERT DBColumns VALUES('mos_target','catalogid','','','','The catalogid of the entry in mos_catalog associated with this target.','0');
+INSERT DBColumns VALUES('mos_target','htmid','','','','20-level deep Hierarchical Triangular Mesh ID','0');
+INSERT DBColumns VALUES('mos_target','cx','','','','unit vector for ra+dec','0');
+INSERT DBColumns VALUES('mos_target','cy','','','','unit vector for ra+dec','0');
+INSERT DBColumns VALUES('mos_target','cz','','','','unit vector for ra+dec','0');
 INSERT DBColumns VALUES('mos_targetdb_version','pk','','','','','0');
 INSERT DBColumns VALUES('mos_targetdb_version','planname','','','','','0');
 INSERT DBColumns VALUES('mos_targetdb_version','tag','','','','','0');
@@ -14015,6 +14022,6 @@ INSERT DBColumns VALUES('mos_zari18pms','uwe','','','','Unit Weight Error, as de
 
 GO
 ----------------------------- 
-PRINT '14005 lines inserted into DBColumns '
+PRINT '14012 lines inserted into DBColumns '
 ----------------------------- 
 

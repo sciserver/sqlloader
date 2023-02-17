@@ -143,12 +143,8 @@ INSERT Dependency VALUES('spHtmCSharp','fHtmGetString','SphericalHTM.[Spherical.
 INSERT Dependency VALUES('spHtmCSharp','fHtmVersion','SphericalHTM.[Spherical.Htm.Sql.fHtmVersion');
 INSERT Dependency VALUES('spHtmCSharp','fHtmXyz','SphericalHTM.[Spherical.Htm.Sql.fHtmXyz');
 INSERT Dependency VALUES('spHtmCSharp','fHtmXyzToEq','SphericalHTM.[Spherical.Htm.Sql.fHtmXyzToEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMosTargetEq]','fDistanceArcMinEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMosTargetEq]','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','dbo.[fGetObjectsEq]','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','fGetJpegObjects','fGetObjectsEq');
-INSERT Dependency VALUES('spNearby','fGetNearbyApogeeStarEq','fDistanceArcMinEq');
-INSERT Dependency VALUES('spNearby','fGetNearbyApogeeStarEq','fHtmCoverCircleEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyFrameEq','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','fGetNearbyMangaObjEq','fDistanceArcMinEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyMangaObjEq','fHtmCoverCircleEq');
@@ -160,8 +156,8 @@ INSERT Dependency VALUES('spNearby','fGetNearbySpecObjAllEq','fGetNearbySpecObjA
 INSERT Dependency VALUES('spNearby','fGetNearbySpecObjAllXYZ','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','fGetNearbySpecObjEq','fGetNearbySpecObjXYZ');
 INSERT Dependency VALUES('spNearby','fGetNearbySpecObjXYZ','fHtmCoverCircleXyz');
-INSERT Dependency VALUES('spNearby','fGetNearestApogeeStarEq','fDistanceArcMinEq');
 INSERT Dependency VALUES('spNearby','fGetNearestApogeeStarEq','fGetNearbyApogeeStarEq');
+INSERT Dependency VALUES('spNearby','fGetNearestApogeeStarXYZ','fGetNearbyApogeeStarXYZ');
 INSERT Dependency VALUES('spNearby','fGetNearestFrameidEq','fGetNearestFrameEq');
 INSERT Dependency VALUES('spNearby','fGetNearestMangaObjEq','fDistanceArcMinEq');
 INSERT Dependency VALUES('spNearby','fGetNearestMangaObjEq','fGetNearbyMangaObjEq');
@@ -427,6 +423,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '417 lines inserted into Dependency'
+PRINT '413 lines inserted into Dependency'
 ------------------------------------
 GO

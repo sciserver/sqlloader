@@ -113,6 +113,8 @@
 --* 2023-02-16 Sue: updated fGetNearbyApogeeStarEq and fGetNearbyMosTargetEq for performance 
 --*					added fGetNearbyApogeeStarXYZ and fGetNearbyMosTargetXYZ
 --*					added fGetNearestMosTargetEq
+--* 2023-02-17 Ani: Added fGetNearestMosTargetXYZ, fGetNearestApogeeStar[Eq|XYZ],
+--*                 updated documentation text for new functions added for DR18.
 --=====================================================================
 SET NOCOUNT ON;
 GO
@@ -1396,60 +1398,6 @@ GO
 
 
 
---======================================================================
-IF EXISTS (SELECT name FROM sysobjects 
-           WHERE  name = N'fGetNearbyApogeeStarEq' ) 
-	DROP FUNCTION fGetNearbyApogeeStarEq
-GO
---
-
--------------------------------------------------------------
-CREATE OR ALTER FUNCTION [dbo].[fGetNearbyApogeeStarEq] (@ra float, @dec float, @r float)
--------------------------------------------------------------
---/H Returns table of APOGEE spectrum objects within @r arcmins of an equatorial point (@ra,@dec).
--------------------------------------------------------------
---/T There is no limit on the number of objects returned, but there are about 40 per sq arcmin.
---/T <p>returned table:  
---/T <li> apstar_id varchar(50) NOT NULL,      -- Combined star spectrum unique ID
---/T <li> star varchar(32) NOT NULL,           -- 2MASS-style star id
---/T <li> ra float NOT NULL,            -- Right Ascension
---/T <li> dec float NOT NULL,		-- declination
---/T <li> glon float NOT NULL,          -- Galactic longitude 
---/T <li> glat float NOT NULL,		-- Galactic latitude 
---/T <li> vhelio_avg real NOT NULL	-- S/N-weighted average of heliocentric radial velocity
---/T <li> vscatter real NOT NULL	-- stdev of scatter of visit RVs around average
---/T <li> htmID bigint NOT NULL		-- Hierarchical Trangular Mesh id of this star
---/T <br> Sample call to find APOGEE star within 5 arcminutes of xyz -.0996,-.1,0
---/T <br><samp>
---/T <br>select *
---/T <br> from  dbo.fGetNearbyApogeeStarEq(180.0,-0.1,0,5)  
---/T </samp>  
---/T <br>see also fGetNearestApogeeStarEq
--------------------------------------------------------------
-  RETURNS @proxtab TABLE (
-    apstar_id varchar(64) NOT NULL,
-    apogee_id varchar(32) NOT NULL,
-    ra float NOT NULL,
-    dec float NOT NULL,
-    glon float NOT NULL,
-    glat float NOT NULL,
-    vhelio_avg real NOT NULL,
-    vscatter real NOT NULL,
-    htmID bigint NOT NULL
-  ) AS 
-BEGIN
-	DECLARE @d2r float, @nx float,@ny float,@nz float 
-	set @d2r = PI()/180.0
-	if (@r<0) RETURN
-	set @nx  = COS(@dec*@d2r)*COS(@ra*@d2r)
-	set @ny  = COS(@dec*@d2r)*SIN(@ra*@d2r)
-	set @nz  = SIN(@dec*@d2r)
-	INSERT @proxtab	
-	SELECT * FROM dbo.fGetNearbyApogeeStarXYZ(@nx,@ny,@nz,@r) 
-  RETURN
-  END
-GO
-
 IF EXISTS (SELECT name FROM sysobjects 
            WHERE  name = N'fGetNearbyApogeeStarXYZ' ) 
 	DROP FUNCTION fGetNearbyApogeeStarXYZ
@@ -1458,7 +1406,7 @@ GO
 --
 CREATE OR ALTER FUNCTION [dbo].[fGetNearbyApogeeStarXYZ](@nx float, @ny float, @nz float, @r float)
 -------------------------------------------------------------
---/H Returns table of APOGEE spectrum objects within @r arcmins of an equatorial point (@ra,@dec).
+--/H Returns table of APOGEE spectrum objects within @r arcmins of an xyz point (@nx,@ny,@nz).
 -------------------------------------------------------------
 --/T There is no limit on the number of objects returned, but there are about 40 per sq arcmin.
 --/T <p>returned table:  
@@ -1470,13 +1418,14 @@ CREATE OR ALTER FUNCTION [dbo].[fGetNearbyApogeeStarXYZ](@nx float, @ny float, @
 --/T <li> glat float NOT NULL,		-- Galactic latitude 
 --/T <li> vhelio_avg real NOT NULL	-- S/N-weighted average of heliocentric radial velocity
 --/T <li> vscatter real NOT NULL	-- stdev of scatter of visit RVs around average
+--/T <li> distance float NOT NULL    -- distance in arcmin from specified equatorial point
 --/T <li> htmID bigint NOT NULL		-- Hierarchical Trangular Mesh id of this star
---/T <br> Sample call to find APOGEE star within 5 arcminutes of xyz -.0996,-.1,0
+--/T <br> Sample call to find APOGEE star within 5 arcminutes of xyz -0.904,-0.287,0.316
 --/T <br><samp>
 --/T <br>select *
---/T <br> from  dbo.fGetNearbyApogeeStarEq(180.0,-0.1,0,5)  
+--/T <br> from  dbo.fGetNearbyApogeeStarXYZ(-0.904,-0.287,0.316, 5)  
 --/T </samp>  
---/T <br>see also fGetNearestApogeeStarEq
+--/T <br>see also fGetNearbyApogeeStarEq, fGetNearestApogeeStarEq, fGetNearestApogeeStarXYZ
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
     apstar_id varchar(64) NOT NULL,
@@ -1487,6 +1436,7 @@ CREATE OR ALTER FUNCTION [dbo].[fGetNearbyApogeeStarXYZ](@nx float, @ny float, @
     glat float NOT NULL,
     vhelio_avg real NOT NULL,
     vscatter real NOT NULL,
+	distance float NOT NULL,
 	htmID bigint NOT NULL
 
   ) AS 
@@ -1507,7 +1457,8 @@ BEGIN
 	    glon,
 	    glat,
 	    vhelio_avg,
-	    vscatter, 
+	    vscatter,
+ 	    2*DEGREES(ASIN(sqrt(power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2))/2))*60 as distance,
 		htmID
 	    FROM @htmTemp H  inner loop join apogeeStar P
 	             ON  (P.HtmID BETWEEN H.HtmIDstart AND H.HtmIDend )
@@ -1516,19 +1467,24 @@ BEGIN
   RETURN
   END
 GO
+
+
+
 --======================================================================
 IF EXISTS (SELECT name FROM sysobjects 
-           WHERE  name = N'fGetNearestApogeeStarEq' ) 
-	DROP FUNCTION fGetNearestApogeeStarEq
+           WHERE  name = N'fGetNearbyApogeeStarEq' ) 
+	DROP FUNCTION fGetNearbyApogeeStarEq
 GO
 --
-CREATE FUNCTION fGetNearestApogeeStarEq (@ra float, @dec float, @r float)
+
 -------------------------------------------------------------
---/H Returns nearest APOGEE star spectrum within @r arcmins of an equatorial point (@ra,@dec).
+CREATE OR ALTER FUNCTION [dbo].[fGetNearbyApogeeStarEq] (@ra float, @dec float, @r float)
 -------------------------------------------------------------
---/T There is no limit on the number of objects returned, but there are about 40 per sq arcmin.
+--/H Returns table of APOGEE spectrum objects within @r arcmins of an equatorial point (@ra,@dec).
+-------------------------------------------------------------
+--/T There is no limit on the number of objects returned.
 --/T <p>returned table:  
---/T <li> apstar_id varchar(64) NOT NULL,      -- Combined star spectrum unique ID
+--/T <li> apstar_id varchar(50) NOT NULL,      -- Combined star spectrum unique ID
 --/T <li> star varchar(32) NOT NULL,           -- 2MASS-style star id
 --/T <li> ra float NOT NULL,            -- Right Ascension
 --/T <li> dec float NOT NULL,		-- declination
@@ -1536,13 +1492,14 @@ CREATE FUNCTION fGetNearestApogeeStarEq (@ra float, @dec float, @r float)
 --/T <li> glat float NOT NULL,		-- Galactic latitude 
 --/T <li> vhelio_avg real NOT NULL	-- S/N-weighted average of heliocentric radial velocity
 --/T <li> vscatter real NOT NULL	-- stdev of scatter of visit RVs around average
+--/T <li> distance float NOT NULL    -- distance in arcmin from specified equatorial point
 --/T <li> htmID bigint NOT NULL		-- Hierarchical Trangular Mesh id of this star
 --/T <br> Sample call to find APOGEE star within 5 arcminutes of xyz -.0996,-.1,0
 --/T <br><samp>
 --/T <br>select *
---/T <br> from  dbo.fGetNearestApogeeStarEq(180.0,-0.1,0,5)  
+--/T <br> from  dbo.fGetNearbyApogeeStarEq(180.0,-0.1,0,5)  
 --/T </samp>  
---/T <br>see also fGetNearbyApogeeStarEq
+--/T <br>see also fGetNearbyApogeeStarXYZ, fGetNearestApogeeStarEq, fGetNearestApogeeStarXYZ
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
     apstar_id varchar(64) NOT NULL,
@@ -1553,13 +1510,121 @@ CREATE FUNCTION fGetNearestApogeeStarEq (@ra float, @dec float, @r float)
     glat float NOT NULL,
     vhelio_avg real NOT NULL,
     vscatter real NOT NULL,
+	distance float NOT NULL,
+    htmID bigint NOT NULL
+  ) AS 
+BEGIN
+	DECLARE @d2r float, @nx float,@ny float,@nz float 
+	set @d2r = PI()/180.0
+	if (@r<0) RETURN
+	set @nx  = COS(@dec*@d2r)*COS(@ra*@d2r)
+	set @ny  = COS(@dec*@d2r)*SIN(@ra*@d2r)
+	set @nz  = SIN(@dec*@d2r)
+	INSERT @proxtab	
+	SELECT * FROM dbo.fGetNearbyApogeeStarXYZ(@nx,@ny,@nz,@r) 
+  RETURN
+  END
+GO
+
+
+--======================================================================
+IF EXISTS (SELECT name FROM sysobjects 
+           WHERE  name = N'fGetNearestApogeeStarXYZ' ) 
+	DROP FUNCTION fGetNearestApogeeStarXYZ
+GO
+--
+CREATE FUNCTION fGetNearestApogeeStarXYZ (@nx float, @ny float, @nz float, @r float)
+-------------------------------------------------------------
+--/H Returns nearest APOGEE star spectrum within @r arcmins of an xyz point (@nx,@ny,@nz).
+-------------------------------------------------------------
+--/T There is no limit on the number of objects returned.
+--/T <p>returned table:  
+--/T <li> apstar_id varchar(64) NOT NULL,      -- Combined star spectrum unique ID
+--/T <li> star varchar(32) NOT NULL,           -- 2MASS-style star id
+--/T <li> ra float NOT NULL,            -- Right Ascension
+--/T <li> dec float NOT NULL,		-- declination
+--/T <li> glon float NOT NULL,          -- Galactic longitude 
+--/T <li> glat float NOT NULL,		-- Galactic latitude 
+--/T <li> vhelio_avg real NOT NULL	-- S/N-weighted average of heliocentric radial velocity
+--/T <li> vscatter real NOT NULL	-- stdev of scatter of visit RVs around average
+--/T <li> distance float NOT NULL    -- distance in arcmin from specified equatorial point
+--/T <li> htmID bigint NOT NULL		-- Hierarchical Trangular Mesh id of this star
+--/T <br> Sample call to find APOGEE star within 5 arcminutes of xyz -0.904,-0.287,0.316
+--/T <br><samp>
+--/T <br>select *
+--/T <br> from  dbo.fGetNearestApogeeStarXYZ(-0.904,-0.287,0.316, 5)  
+--/T </samp>  
+--/T <br>see also fGetNearbyApogeeStarEq, fGetNearbyApogeeStarXYZ, fGetNearestApogeeStarEq
+-------------------------------------------------------------
+  RETURNS @proxtab TABLE (
+    apstar_id varchar(64) NOT NULL,
+    apogee_id varchar(32) NOT NULL,
+    ra float NOT NULL,
+    dec float NOT NULL,
+    glon float NOT NULL,
+    glat float NOT NULL,
+    vhelio_avg real NOT NULL,
+    vscatter real NOT NULL,
+	distance float NOT NULL,
+    htmID bigint NOT NULL
+  ) AS 
+BEGIN
+	INSERT @proxtab	
+	    SELECT TOP 1 *
+	    FROM dbo.fGetNearbyApogeeStarXYZ(@nx, @ny, @nz, @r)
+	    ORDER BY distance ASC
+  RETURN
+  END
+GO
+
+
+
+--======================================================================
+IF EXISTS (SELECT name FROM sysobjects 
+           WHERE  name = N'fGetNearestApogeeStarEq' ) 
+	DROP FUNCTION fGetNearestApogeeStarEq
+GO
+--
+CREATE FUNCTION fGetNearestApogeeStarEq (@ra float, @dec float, @r float)
+-------------------------------------------------------------
+--/H Returns nearest APOGEE star spectrum within @r arcmins of an equatorial point (@ra,@dec).
+-------------------------------------------------------------
+--/T There is no limit on the number of objects returned.
+--/T <p>returned table:  
+--/T <li> apstar_id varchar(64) NOT NULL,      -- Combined star spectrum unique ID
+--/T <li> star varchar(32) NOT NULL,           -- 2MASS-style star id
+--/T <li> ra float NOT NULL,            -- Right Ascension
+--/T <li> dec float NOT NULL,		-- declination
+--/T <li> glon float NOT NULL,          -- Galactic longitude 
+--/T <li> glat float NOT NULL,		-- Galactic latitude 
+--/T <li> vhelio_avg real NOT NULL	-- S/N-weighted average of heliocentric radial velocity
+--/T <li> vscatter real NOT NULL	-- stdev of scatter of visit RVs around average
+--/T <li> distance float NOT NULL    -- distance in arcmin from specified equatorial point
+--/T <li> htmID bigint NOT NULL		-- Hierarchical Trangular Mesh id of this star
+--/T <br> Sample call to find APOGEE star within 5 arcminutes of equatorial point 180.0, -0.1
+--/T <br><samp>
+--/T <br>select *
+--/T <br> from  dbo.fGetNearestApogeeStarEq(180.0,-0.1,0,5)  
+--/T </samp>  
+--/T <br>see also fGetNearbyApogeeStarEq, fGetNearbyApogeeStarXYZ, fGetNearestApogeeStarXYZ
+-------------------------------------------------------------
+  RETURNS @proxtab TABLE (
+    apstar_id varchar(64) NOT NULL,
+    apogee_id varchar(32) NOT NULL,
+    ra float NOT NULL,
+    dec float NOT NULL,
+    glon float NOT NULL,
+    glat float NOT NULL,
+    vhelio_avg real NOT NULL,
+    vscatter real NOT NULL,
+	distance float NOT NULL,
     htmID bigint NOT NULL
   ) AS 
 BEGIN
 	INSERT @proxtab	
 	    SELECT TOP 1 *
 	    FROM dbo.fGetNearbyApogeeStarEq(@ra, @dec, @r)
-	    ORDER BY dbo.fDistanceArcMinEq(@ra,@dec,ra,dec) ASC
+	    ORDER BY distance ASC
   RETURN
   END
 GO
@@ -1710,13 +1775,14 @@ GO
 
 --=======================================================
 IF EXISTS (SELECT name FROM   sysobjects 
-	   WHERE  name = N'fGetNearbyMosTargetEq' )
-	DROP FUNCTION fGetNearbyMosTargetEq
+	   WHERE  name = N'fGetNearbyMosTargetXYZ' )
+	DROP FUNCTION fGetNearbyMosTargetXYZ
 GO
---
-CREATE OR ALTER FUNCTION [dbo].[fGetNearbyMosTargetEq] (@ra float, @dec float, @r float)
+
+
+ CREATE OR ALTER FUNCTION [dbo].[fGetNearbyMosTargetXYZ] (@nx float, @ny float, @nz float, @r float)
 -------------------------------------------------------------
---/H Returns table of spectrum objects within @r arcmins of an equatorial point (@ra, @dec).
+--/H Returns table of mos_target objects within @r arcmins of an xyz point (@nx,@ny, @nz).
 -------------------------------------------------------------
 --/T There is no limit on the number of objects returned.
 --/T <p>returned table:  
@@ -1728,61 +1794,12 @@ CREATE OR ALTER FUNCTION [dbo].[fGetNearbyMosTargetEq] (@ra float, @dec float, @
 --/T <li> parallax NULL,              -- 
 --/T <li> htmID bigint,               -- Hierarchical Trangular Mesh id of this object
 --/T <li> distance float              -- distance in arc minutes to this object from the ra,dec.
---/T <br> Sample call to find SpecObj within 0.5 arcminutes of ra,dec 180.0, -0.5
+--/T <br> Sample call to find mos_target objects within 5 arcminutes of xyz -0.904,-0.287,0.316
 --/T <br><samp>
 --/T <br>select *
---/T <br> from  dbo.fGetNearbySpecObjXYZ(180.0, -0.5, 0,5)  
+--/T <br> from  dbo.fGetNearbyMosTargetXYZ(-0.904,-0.287,0.316,5)  
 --/T </samp>  
---/T <br>see also fGetNearbySpecObjEq, fGetNearestSpecObjXYZ, fGetNearestSpecObjXYZ
--------------------------------------------------------------
-  RETURNS @proxtab TABLE (
-    target_pk bigint NOT NULL,
-	catalogid bigint NULL,
-    ra float NULL,
-	[dec] float NULL,
-    epoch real NULL,
-    parallax real NULL,
-    htmID bigint,
-    distance float		-- distance in arc minutes
-  ) AS BEGIN
-	DECLARE @d2r float, @nx float,@ny float,@nz float 
-	set @d2r = PI()/180.0
-	if (@r<0) RETURN
-	set @nx  = COS(@dec*@d2r)*COS(@ra*@d2r)
-	set @ny  = COS(@dec*@d2r)*SIN(@ra*@d2r)
-	set @nz  = SIN(@dec*@d2r)
-	INSERT @proxtab	
-	SELECT * FROM dbo.fGetNearbyMosTargetXYZ(@nx,@ny,@nz,@r) 
-  RETURN
-  END
-GO
---=======================================================
-IF EXISTS (SELECT name FROM   sysobjects 
-	   WHERE  name = N'fGetNearbyMosTargetXYZ' )
-	DROP FUNCTION fGetNearbyMosTargetXYZ
-GO
-
-
- CREATE OR ALTER FUNCTION [dbo].[fGetNearbyMosTargetXYZ] (@nx float, @ny float, @nz float, @r float)
--------------------------------------------------------------
---/H Returns table of scienceprimary spectrum objects within @r arcmins of an xyz point (@nx,@ny, @nz).
--------------------------------------------------------------
---/T There is no limit on the number of objects returned, but there are about 40 per sq arcmin.
---/T <p>returned table:  
---/T <li> target_pk biginit NOT NULL, -- primary object identifier
---/T <li> catalogid bigint NULL,      -- id in mos_catalog   
---/T <li> ra NULL,                    -- position RA
---/T <li> dec NULL,                   -- position declination
---/T <li> epoch real NULL,            -- 
---/T <li> parallax NULL,              -- 
---/T <li> htmID bigint,               -- Hierarchical Trangular Mesh id of this object
---/T <li> distance float              -- distance in arc minutes to this object from the ra,dec.
---/T <br> Sample call to find mos_target within 5 arcminutes of xyz -.0996,-.1,0
---/T <br><samp>
---/T <br>select *
---/T <br> from  dbo.fGetNearbyMosTargetXYZ(-.996,-.1,0,5)  
---/T </samp>  
---/T <br>see also fGetNearbyMosTargetEq
+--/T <br>see also fGetNearbyMosTargetEq, fGetNearestMosTargetEq, fGetNearestMosTargetXyz
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
     target_pk bigint NOT NULL,
@@ -1810,12 +1827,7 @@ BEGIN
 	    epoch,
 		parallax,
 	    htmID,
-		-- @cx = ( (COS([dec]) * COS(ra)) / parallax )
-		-- @cy = ( (COS([dec]) * SIN(ra)) / parallax )
-		-- @cz = ( SIN([dec]) / parallax )
- --	    2*DEGREES(ASIN(sqrt(power(@nx-((COS([dec]) * COS(ra) * 3.26) / parallax),2)+power(@ny-((COS([dec]) * SIN(ra) * 3.26) / parallax),2)+power(@nz-((SIN([dec]) * 5.26) / parallax),2))/2))*60 
 	    2*DEGREES(ASIN(sqrt(power(@nx-( COS([dec]) * COS(ra) ),2)+power(@ny-( COS([dec]) * SIN(ra) ),2)+power(@nz-( SIN([dec]) ),2))/2))*60 
-	    --sqrt(power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2))/@d2r*60 
 	    FROM @htmTemp H  inner loop join mos_target P
 	             ON  (P.HtmID BETWEEN H.HtmIDstart AND H.HtmIDend )
 	   AND power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2) < @lim
@@ -1824,15 +1836,17 @@ BEGIN
   END
 GO
 
+
+
 --=======================================================
 IF EXISTS (SELECT name FROM   sysobjects 
-	   WHERE  name = N'fGetNearestMosTargetEq' )
-	DROP FUNCTION fGetNearestMosTargetEq
+	   WHERE  name = N'fGetNearbyMosTargetEq' )
+	DROP FUNCTION fGetNearbyMosTargetEq
 GO
 --
-CREATE OR ALTER FUNCTION [dbo].[fGetNearestMosTargetEq] (@ra float, @dec float, @r float)
+CREATE OR ALTER FUNCTION [dbo].[fGetNearbyMosTargetEq] (@ra float, @dec float, @r float)
 -------------------------------------------------------------
---/H Returns table of spectrum objects within @r arcmins of an equatorial point (@ra, @dec).
+--/H Returns table of mos_target objects within @r arcmins of an equatorial point (@ra, @dec).
 -------------------------------------------------------------
 --/T There is no limit on the number of objects returned.
 --/T <p>returned table:  
@@ -1844,12 +1858,112 @@ CREATE OR ALTER FUNCTION [dbo].[fGetNearestMosTargetEq] (@ra float, @dec float, 
 --/T <li> parallax NULL,              -- 
 --/T <li> htmID bigint,               -- Hierarchical Trangular Mesh id of this object
 --/T <li> distance float              -- distance in arc minutes to this object from the ra,dec.
---/T <br> Sample call to find SpecObj within 0.5 arcminutes of ra,dec 180.0, -0.5
+--/T <br> Sample call to find mos_target objects within 0.5 arcminutes of ra,dec 180.0, -0.5
 --/T <br><samp>
 --/T <br>select *
---/T <br> from  dbo.fGetNearbySpecObjXYZ(180.0, -0.5, 0,5)  
+--/T <br> from  dbo.fGetNearbyMosTargetEq(180.0, -0.5, 0,5)  
 --/T </samp>  
---/T <br>see also fGetNearbySpecObjEq, fGetNearestSpecObjXYZ, fGetNearestSpecObjXYZ
+--/T <br>see also fGetNearbyMosTargetXyz, fGetNearestMosTargetEq, fGetNearestMosTargetXYZ
+-------------------------------------------------------------
+  RETURNS @proxtab TABLE (
+    target_pk bigint NOT NULL,
+	catalogid bigint NULL,
+    ra float NULL,
+	[dec] float NULL,
+    epoch real NULL,
+    parallax real NULL,
+    htmID bigint,
+    distance float		-- distance in arc minutes
+  ) AS BEGIN
+	DECLARE @d2r float, @nx float,@ny float,@nz float 
+	set @d2r = PI()/180.0
+	if (@r<0) RETURN
+	set @nx  = COS(@dec*@d2r)*COS(@ra*@d2r)
+	set @ny  = COS(@dec*@d2r)*SIN(@ra*@d2r)
+	set @nz  = SIN(@dec*@d2r)
+	INSERT @proxtab	
+	SELECT * FROM dbo.fGetNearbyMosTargetXYZ(@nx,@ny,@nz,@r) 
+  RETURN
+  END
+GO
+
+
+
+--=======================================================
+IF EXISTS (SELECT name FROM   sysobjects 
+	   WHERE  name = N'fGetNearestMosTargetXyz' )
+	DROP FUNCTION fGetNearestMosTargetXyz
+GO
+--
+CREATE OR ALTER FUNCTION [dbo].[fGetNearestMosTargetXYZ] (@nx float, @ny float, @nz float, @r float)
+-------------------------------------------------------------
+--/H Returns inormation for  the nearest mos_target object
+--H/ within @r arcmins of an xyz point (@nx,@ny,@nz).
+-------------------------------------------------------------
+--/T There is no limit on the number of objects returned.
+--/T <p>returned table:  
+--/T <li> target_pk biginit NOT NULL, -- primary object identifier
+--/T <li> catalogid bigint NULL,      -- id in mos_catalog   
+--/T <li> ra NULL,                    -- position RA
+--/T <li> dec NULL,                   -- position declination
+--/T <li> epoch real NULL,            -- 
+--/T <li> parallax NULL,              -- 
+--/T <li> htmID bigint,               -- Hierarchical Trangular Mesh id of this object
+--/T <li> distance float              -- distance in arc minutes to this object from the ra,dec.
+--/T <br> Sample call to find the nearest mos_target object within 5 arcminutes of xyz -0.904,-0.287,0.316
+--/T <br><samp>
+--/T <br>select *
+--/T <br> from  dbo.fGetNearestMosTargetXYZ(-0.904,-0.287,0.316, 5)  
+--/T </samp>  
+--/T <br>see also fGetNearbyMosTargetEq, fGetNearbyMosTargetXYZ, fGetNearestMosTargetEq
+-------------------------------------------------------------
+  RETURNS @proxtab TABLE (
+    target_pk bigint NOT NULL,
+	catalogid bigint NULL,
+    ra float NULL,
+	[dec] float NULL,
+    epoch real NULL,
+    parallax real NULL,
+    htmID bigint,
+    distance float		-- distance in arc minutes
+  ) AS BEGIN
+	INSERT @proxtab	
+	    SELECT TOP 1 *
+	    FROM dbo.fGetNearbyMosTargetXyz(@nx, @ny, @nz, @r)
+	    ORDER BY distance ASC
+  RETURN
+  END
+GO
+
+
+
+--=======================================================
+IF EXISTS (SELECT name FROM   sysobjects 
+	   WHERE  name = N'fGetNearestMosTargetEq' )
+	DROP FUNCTION fGetNearestMosTargetEq
+GO
+--
+CREATE OR ALTER FUNCTION [dbo].[fGetNearestMosTargetEq] (@ra float, @dec float, @r float)
+-------------------------------------------------------------
+--/H Returns inormation for  the nearest mos_target object
+--H/ within @r arcmins of an equatorial point (@ra, @dec).
+-------------------------------------------------------------
+--/T There is no limit on the number of objects returned.
+--/T <p>returned table:  
+--/T <li> target_pk biginit NOT NULL, -- primary object identifier
+--/T <li> catalogid bigint NULL,      -- id in mos_catalog   
+--/T <li> ra NULL,                    -- position RA
+--/T <li> dec NULL,                   -- position declination
+--/T <li> epoch real NULL,            -- 
+--/T <li> parallax NULL,              -- 
+--/T <li> htmID bigint,               -- Hierarchical Trangular Mesh id of this object
+--/T <li> distance float              -- distance in arc minutes to this object from the ra,dec.
+--/T <br> Sample call to find the nearest mos_target object within 0.5 arcminutes of ra,dec 180.0, -0.5
+--/T <br><samp>
+--/T <br>select *
+--/T <br> from  dbo.fGetNearestMosTargetEq(180.0, -0.5, 0,5)  
+--/T </samp>  
+--/T <br>see also fGetNearbyMosTargetEq, fGetNearbyMosTargetXYZ, fGetNearestMosTargetXYZ
 -------------------------------------------------------------
   RETURNS @proxtab TABLE (
     target_pk bigint NOT NULL,
@@ -1864,12 +1978,14 @@ CREATE OR ALTER FUNCTION [dbo].[fGetNearestMosTargetEq] (@ra float, @dec float, 
 	INSERT @proxtab	
 	    SELECT TOP 1 *
 	    FROM dbo.fGetNearbyMosTargetEq(@ra, @dec, @r)
-	    ORDER BY dbo.fDistanceEq(@ra,@dec,ra,dec) ASC
+	    ORDER BY distance ASC
   RETURN
   END
 GO
 
--------------------------------------------------
+
+
+------------------------------------------------
 -- some new UDFs for image navigation
 -------------------------------------------------
 
