@@ -1404,7 +1404,7 @@ IF EXISTS (SELECT name FROM sysobjects
 GO
 --======================================================================
 --
-CREATE OR ALTER FUNCTION [dbo].[fGetNearbyApogeeStarXYZ](@nx float, @ny float, @nz float, @r float)
+CREATE FUNCTION [dbo].[fGetNearbyApogeeStarXYZ](@nx float, @ny float, @nz float, @r float)
 -------------------------------------------------------------
 --/H Returns table of APOGEE spectrum objects within @r arcmins of an xyz point (@nx,@ny,@nz).
 -------------------------------------------------------------
@@ -1478,7 +1478,7 @@ GO
 --
 
 -------------------------------------------------------------
-CREATE OR ALTER FUNCTION [dbo].[fGetNearbyApogeeStarEq] (@ra float, @dec float, @r float)
+CREATE FUNCTION [dbo].[fGetNearbyApogeeStarEq] (@ra float, @dec float, @r float)
 -------------------------------------------------------------
 --/H Returns table of APOGEE spectrum objects within @r arcmins of an equatorial point (@ra,@dec).
 -------------------------------------------------------------

@@ -143,6 +143,12 @@ INSERT Dependency VALUES('spHtmCSharp','fHtmGetString','SphericalHTM.[Spherical.
 INSERT Dependency VALUES('spHtmCSharp','fHtmVersion','SphericalHTM.[Spherical.Htm.Sql.fHtmVersion');
 INSERT Dependency VALUES('spHtmCSharp','fHtmXyz','SphericalHTM.[Spherical.Htm.Sql.fHtmXyz');
 INSERT Dependency VALUES('spHtmCSharp','fHtmXyzToEq','SphericalHTM.[Spherical.Htm.Sql.fHtmXyzToEq');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyApogeeStarEq]','fGetNearbyApogeeStarXYZ');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyApogeeStarXYZ]','fHtmCoverCircleXyz');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMosTargetEq]','fGetNearbyMosTargetXYZ');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMosTargetXYZ]','fHtmCoverCircleXyz');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMosTargetEq]','fGetNearbyMosTargetEq');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMosTargetXYZ]','fGetNearbyMosTargetXyz');
 INSERT Dependency VALUES('spNearby','dbo.[fGetObjectsEq]','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','fGetJpegObjects','fGetObjectsEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyFrameEq','fHtmCoverCircleXyz');
@@ -423,6 +429,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '413 lines inserted into Dependency'
+PRINT '419 lines inserted into Dependency'
 ------------------------------------
 GO
