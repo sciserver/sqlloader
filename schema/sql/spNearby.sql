@@ -1780,7 +1780,7 @@ IF EXISTS (SELECT name FROM   sysobjects
 GO
 
 
- CREATE OR ALTER FUNCTION [dbo].[fGetNearbyMosTargetXYZ] (@nx float, @ny float, @nz float, @r float)
+ CREATE FUNCTION [dbo].[fGetNearbyMosTargetXYZ] (@nx float, @ny float, @nz float, @r float)
 -------------------------------------------------------------
 --/H Returns table of mos_target objects within @r arcmins of an xyz point (@nx,@ny, @nz).
 -------------------------------------------------------------
@@ -1844,7 +1844,7 @@ IF EXISTS (SELECT name FROM   sysobjects
 	DROP FUNCTION fGetNearbyMosTargetEq
 GO
 --
-CREATE OR ALTER FUNCTION [dbo].[fGetNearbyMosTargetEq] (@ra float, @dec float, @r float)
+CREATE FUNCTION [dbo].[fGetNearbyMosTargetEq] (@ra float, @dec float, @r float)
 -------------------------------------------------------------
 --/H Returns table of mos_target objects within @r arcmins of an equatorial point (@ra, @dec).
 -------------------------------------------------------------
@@ -1895,7 +1895,7 @@ IF EXISTS (SELECT name FROM   sysobjects
 	DROP FUNCTION fGetNearestMosTargetXyz
 GO
 --
-CREATE OR ALTER FUNCTION [dbo].[fGetNearestMosTargetXYZ] (@nx float, @ny float, @nz float, @r float)
+CREATE FUNCTION [dbo].[fGetNearestMosTargetXYZ] (@nx float, @ny float, @nz float, @r float)
 -------------------------------------------------------------
 --/H Returns inormation for  the nearest mos_target object
 --H/ within @r arcmins of an xyz point (@nx,@ny,@nz).
@@ -1943,7 +1943,7 @@ IF EXISTS (SELECT name FROM   sysobjects
 	DROP FUNCTION fGetNearestMosTargetEq
 GO
 --
-CREATE OR ALTER FUNCTION [dbo].[fGetNearestMosTargetEq] (@ra float, @dec float, @r float)
+CREATE FUNCTION [dbo].[fGetNearestMosTargetEq] (@ra float, @dec float, @r float)
 -------------------------------------------------------------
 --/H Returns inormation for  the nearest mos_target object
 --H/ within @r arcmins of an equatorial point (@ra, @dec).
