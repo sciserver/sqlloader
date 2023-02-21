@@ -270,6 +270,7 @@
 --* 2021-08-06 Ani: Added PKs for mangaFirefly_mastar, mangaFirefly_miles VACs (DR17).
 --* 2021-09-23 Ani: Removed QueryResults PK.
 --* 2021-09-29 Ani: Replaced SDSS17Pipe3D_v3_1_1 with managaPipe3D (table renamed) (DR17).
+--* 2023-02-20 Ani: Added eFEDS PKs (DR18).
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -527,6 +528,12 @@ INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'apogeeDistMass', 'apstar
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaFirefly_mastar', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaFirefly_miles', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'ebossMCPM', 'CATALOGID,MCPM_RUN', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'eFEDS_Hard_speccomp', 'ero_name', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'eFEDS_Main_speccomp', 'ero_name', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'eFEDS_SDSSV_spec_results', 'catalogid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'spAll_eFEDS', 'catalogid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'spAll', 'specObjID', '', 'SPECTRO', 'page', 'SPEC', 0)
+
 -----------------------------------------------------
 -- Primary Keys for the TILES tables
 -----------------------------------------------------

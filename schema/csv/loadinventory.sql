@@ -488,6 +488,8 @@ INSERT Inventory VALUES('spNearby','fGetNearestApogeeStarXYZ','F');
 INSERT Inventory VALUES('spNearby','fGetNearestApogeeStarEq','F');
 INSERT Inventory VALUES('spNearby','fGetNearbyMangaObjEq','F');
 INSERT Inventory VALUES('spNearby','fGetNearestMangaObjEq','F');
+INSERT Inventory VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','F');
+INSERT Inventory VALUES('spNearby','dbo.[fGetNearestMastarObjEq]','F');
 INSERT Inventory VALUES('spNearby','dbo.[fGetNearbyMosTargetXYZ]','F');
 INSERT Inventory VALUES('spNearby','dbo.[fGetNearbyMosTargetEq]','F');
 INSERT Inventory VALUES('spNearby','dbo.[fGetNearestMosTargetXYZ]','F');
@@ -707,6 +709,6 @@ INSERT Inventory VALUES('spCosmology','fMathGetBin','F');
 GO
 
 ------------------------------------
-PRINT '697 lines inserted into Inventory'
+PRINT '699 lines inserted into Inventory'
 ------------------------------------
 GO
