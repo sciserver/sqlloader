@@ -1340,10 +1340,7 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-<<<<<<< HEAD
 PRINT '1330 lines inserted into History'
-=======
-PRINT '1329 lines inserted into History'
->>>>>>> 5fb1efb5e8815c5768f20f5dcad1616a5efe0d50
-------------------------------------
+
+
 GO
