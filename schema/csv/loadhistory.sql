@@ -347,6 +347,7 @@ INSERT History VALUES('IndexMap','2021-08-06','Ani','Added PKs for apogeeDistMas
 INSERT History VALUES('IndexMap','2021-08-06','Ani','Added PKs for mangaFirefly_mastar, mangaFirefly_miles VACs (DR17). ');
 INSERT History VALUES('IndexMap','2021-09-23','Ani','Removed QueryResults PK. ');
 INSERT History VALUES('IndexMap','2021-09-29','Ani','Replaced SDSS17Pipe3D_v3_1_1 with managaPipe3D (table renamed) (DR17). ');
+INSERT History VALUES('IndexMap','2023-02-20','Ani','Added eFEDS PKs (DR18). ');
 INSERT History VALUES('PhotoTables','2009-04-27','Ani','Swapped in updated schema for photo tables for SDSS-III. Added new table Run. ');
 INSERT History VALUES('PhotoTables','2009-05-05','Ani','Added loadVersion to Field table. ');
 INSERT History VALUES('PhotoTables','2009-06-11','Ani','Added nProf_[ugriz] to Field table. ');
@@ -808,11 +809,13 @@ INSERT History VALUES('spNearby','2020-02-11','Sue','changed apstar_id from varc
 INSERT History VALUES('spNearby','2023-01-05','Ani','Added fGetNearbyMosTargetEq for DR18. ');
 INSERT History VALUES('spNearby','2023-02-16','Sue','updated fGetNearbyApogeeStarEq and fGetNearbyMosTargetEq for performance  added fGetNearbyApogeeStarXYZ and fGetNearbyMosTargetXYZ added fGetNearestMosTargetEq ');
 INSERT History VALUES('spNearby','2023-02-17','Ani','Added fGetNearestMosTargetXYZ, fGetNearestApogeeStar[Eq|XYZ], updated documentation text for new functions added for DR18. ');
+INSERT History VALUES('spNearby','2023-02-20','Ani','Added back fGetNear[by|est]MastarEq functions (DR18) with change to ');
 INSERT History VALUES('spApogee','2016-04-27','Ani','Created inital version as per JOn Holtzman request. ');
 INSERT History VALUES('spApogee','2016-05-13','Ani','Updated description of fAspcapFelem* functions. ');
 INSERT History VALUES('spApogee','2016-05-18','Ani','Removed dbo. prefix from function definitions and also. trailing spaces from some functions. ');
 INSERT History VALUES('spApogee','2016-05-19','Ani','Removed multiple instances of links to flag docs. ');
 INSERT History VALUES('spApogee','2019-12-05','Ani','Replaced Y with Yb everywhere. (DR16) ');
+INSERT History VALUES('spApogee','2023-03-08','Ani','Fixed the fAspcapElem* functions by removing  discontinued columns (DR18).  ');
 INSERT History VALUES('spCoordinate','2004-02-13','Ani','Fixed bugs in fCoordsFromEq, fLambdaFromEq and fEtaFromEq (PR #5865). ');
 INSERT History VALUES('spCoordinate','2004-03-18','Alex','extracted coordinate related stuff from spBoundary.sql ');
 INSERT History VALUES('spCoordinate','2004-06-10','Alex','added support for Galactic coordinates ');
@@ -1337,6 +1340,10 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1327 lines inserted into History'
+<<<<<<< HEAD
+PRINT '1330 lines inserted into History'
+=======
+PRINT '1329 lines inserted into History'
+>>>>>>> 5fb1efb5e8815c5768f20f5dcad1616a5efe0d50
 ------------------------------------
 GO

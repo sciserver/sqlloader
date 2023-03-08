@@ -10,6 +10,8 @@
 --*                 trailing spaces from some functions.
 --* 2016-05-19 Ani: Removed multiple instances of links to flag docs.
 --* 2019-12-05 Ani: Replaced Y with Yb everywhere. (DR16)
+--* 2023-03-08 Ani: Fixed the fAspcapElem* functions by removing 
+--*                 discontinued columns (DR18). 
 --======================================================================
 IF EXISTS (SELECT name FROM sysobjects 
            WHERE  name = N'fAspcapParamsAll' ) 
@@ -293,18 +295,6 @@ CREATE FUNCTION fAspcapElemsAll (@aspcap_id VARCHAR(64))
 --/T <li> cu_fe real NOT NULL,        -- empirically calibrated [Cu/Fe] from ASPCAP
 --/T <li> cu_fe_err real NOT NULL,    -- external uncertainty for empirically calibrated [Cu/Fe] from ASPCAP
 --/T <li> cu_fe_flag int NOT NULL,    -- ELEMFLAG for Cu
---/T <li> ge_fe real NOT NULL,        -- empirically calibrated [Ge/Fe] from ASPCAP
---/T <li> ge_fe_err real NOT NULL,    -- external uncertainty for empirically calibrated [Ge/Fe] from ASPCAP
---/T <li> ge_fe_flag int NOT NULL,    -- ELEMFLAG for Ge
---/T <li> rb_fe real NOT NULL,        -- empirically calibrated [Rb/Fe] from ASPCAP
---/T <li> rb_fe_err real NOT NULL,    -- external uncertainty for empirically calibrated [Rb/Fe] from ASPCAP
---/T <li> rb_fe_flag int NOT NULL,    -- ELEMFLAG for Rb
---/T <li> yb_fe real NOT NULL,         -- empirically calibrated [Yb/Fe] from ASPCAP
---/T <li> yb_fe_err real NOT NULL,     -- external uncertainty for empirically calibrated [Yb/Fe] from ASPCAP
---/T <li> yb_fe_flag int NOT NULL,     -- ELEMFLAG for Yb
---/T <li> nd_fe real NOT NULL,        -- empirically calibrated [Nd/Fe] from ASPCAP
---/T <li> nd_fe_err real NOT NULL,    -- external uncertainty for empirically calibrated [Nd/Fe] from ASPCAP
---/T <li> nd_fe_flag int NOT NULL,    -- ELEMFLAG for Nd                  --/T <br> Sample call to return aspcap params
 --/T <br> Sample call to get aspcap element abundances with errors and flags:
 --/T <br><samp>
 --/T <br>select TOP 10 a.apstar_id, b.*
@@ -375,19 +365,7 @@ CREATE FUNCTION fAspcapElemsAll (@aspcap_id VARCHAR(64))
     ni_fe_flag int NOT NULL,
     cu_fe real NOT NULL,
     cu_fe_err real NOT NULL,
-    cu_fe_flag int NOT NULL,
-    ge_fe real NOT NULL,
-    ge_fe_err real NOT NULL,
-    ge_fe_flag int NOT NULL,
-    rb_fe real NOT NULL,
-    rb_fe_err real NOT NULL,
-    rb_fe_flag int NOT NULL,
-    yb_fe real NOT NULL,
-    yb_fe_err real NOT NULL,
-    yb_fe_flag int NOT NULL,
-    nd_fe real NOT NULL,
-    nd_fe_err real NOT NULL,
-    nd_fe_flag int NOT NULL
+    cu_fe_flag int NOT NULL
   ) AS 
 BEGIN
 	INSERT @etab
@@ -454,23 +432,12 @@ BEGIN
             ni_fe_flag,
             cu_fe,
             cu_fe_err,
-            cu_fe_flag,
-            ge_fe,
-            ge_fe_err,
-            ge_fe_flag,
-            rb_fe,
-            rb_fe_err,
-            rb_fe_flag,
-            yb_fe,
-            yb_fe_err,
-            yb_fe_flag,
-            nd_fe,
-            nd_fe_err,
-            nd_fe_flag
+            cu_fe_flag
 		FROM aspcapStar WHERE aspcap_id = @aspcap_id
   RETURN
   END
 GO
+--
 
 
 
@@ -507,10 +474,6 @@ CREATE FUNCTION fAspcapElems (@aspcap_id VARCHAR(64))
 --/T <li> co_fe real NOT NULL,          -- empirically calibrated [Co/Fe] from ASPCAP
 --/T <li> ni_fe real NOT NULL,          -- empirically calibrated [Ni/Fe] from ASPCAP
 --/T <li> cu_fe real NOT NULL,          -- empirically calibrated [Cu/Fe] from ASPCAP
---/T <li> ge_fe real NOT NULL,          -- empirically calibrated [Ge/Fe] from ASPCAP
---/T <li> rb_fe real NOT NULL,          -- empirically calibrated [Rb/Fe] from ASPCAP
---/T <li> yb_fe real NOT NULL,          -- empirically calibrated [Y/Fe] from ASPCAP
---/T <li> nd_fe real NOT NULL,          -- empirically calibrated [Nd/Fe] from ASPCAP
 --/T <br> Sample call to get aspcap element abundances:
 --/T <br><samp>
 --/T <br>select TOP 10 a.apstar_id, b.*
@@ -539,11 +502,7 @@ CREATE FUNCTION fAspcapElems (@aspcap_id VARCHAR(64))
     fe_h real NOT NULL,
     co_fe real NOT NULL,
     ni_fe real NOT NULL,
-    cu_fe real NOT NULL,
-    ge_fe real NOT NULL,
-    rb_fe real NOT NULL,
-    yb_fe real NOT NULL,
-    nd_fe real NOT NULL
+    cu_fe real NOT NULL
   ) AS 
 BEGIN
 	INSERT @etab
@@ -568,15 +527,13 @@ BEGIN
             fe_h,
             co_fe,
             ni_fe,
-            cu_fe,
-            ge_fe,
-            rb_fe,
-            yb_fe,
-            nd_fe
+            cu_fe
 		FROM aspcapStar WHERE aspcap_id = @aspcap_id
   RETURN
   END
 GO
+--
+
 
 
 --======================================================================
@@ -612,10 +569,7 @@ CREATE FUNCTION fAspcapElemErrs (@aspcap_id VARCHAR(64))
 --/T <li> co_fe_err real NOT NULL,      -- external uncertainty for empirically calibrated [Co/Fe] from ASPCAP
 --/T <li> ni_fe_err real NOT NULL,      -- external uncertainty for empirically calibrated [Ni/Fe] from ASPCAP
 --/T <li> cu_fe_err real NOT NULL,      -- external uncertainty for empirically calibrated [Cu/Fe] from ASPCAP
---/T <li> ge_fe_err real NOT NULL,      -- external uncertainty for empirically calibrated [Ge/Fe] from ASPCAP
---/T <li> rb_fe_err real NOT NULL,      -- external uncertainty for empirically calibrated [Rb/Fe] from ASPCAP
---/T <li> yb_fe_err real NOT NULL,      -- external uncertainty for empirically calibrated [Yb/Fe] from ASPCAP
---/T <li> nd_fe_err real NOT NULL,      -- external uncertainty for empirically calibrated [Nd/Fe] from ASPCAP
+--/T <li> ce_fe_err real NOT NULL,      -- external uncertainty for empirically calibrated [Ce/Fe] from ASPCAP
 --/T <br> Sample call to get aspcap element abundance errors:
 --/T <br><samp>
 --/T <br>select TOP 10 a.apstar_id, b.*
@@ -645,43 +599,39 @@ CREATE FUNCTION fAspcapElemErrs (@aspcap_id VARCHAR(64))
     co_fe_err real NOT NULL,
     ni_fe_err real NOT NULL,
     cu_fe_err real NOT NULL,
-    ge_fe_err real NOT NULL,
-    rb_fe_err real NOT NULL,
-    yb_fe_err real NOT NULL,
-    nd_fe_err real NOT NULL
+    ce_fe_err real NOT NULL
   ) AS 
 BEGIN
 	INSERT @etab
-		SELECT 
-            c_fe_err,
-            ci_fe_err,
-            n_fe_err,
-            o_fe_err,
-            na_fe_err,
-            mg_fe_err,
-            al_fe_err,
-            si_fe_err,
-            p_fe_err,
-            s_fe_err,
-            k_fe_err,
-            ca_fe_err,
-            ti_fe_err,
-            tiii_fe_err,
-            v_fe_err,
-            cr_fe_err,
-            mn_fe_err,
-            fe_h_err,
-            co_fe_err,
-            ni_fe_err,
-            cu_fe_err,
-            ge_fe_err,
-            rb_fe_err,
-            yb_fe_err,
-            nd_fe_err
-		FROM aspcapStar WHERE aspcap_id = @aspcap_id
+	SELECT
+      c_fe_err
+      ,ci_fe_err
+      ,n_fe_err
+      ,o_fe_err
+      ,na_fe_err
+      ,mg_fe_err
+      ,al_fe_err
+      ,si_fe_err
+      ,p_fe_err
+      ,s_fe_err
+      ,k_fe_err
+      ,ca_fe_err
+      ,ti_fe_err
+      ,tiii_fe_err
+      ,v_fe_err
+      ,cr_fe_err
+      ,mn_fe_err
+      ,fe_h_err
+      ,co_fe_err
+      ,ni_fe_err
+      ,cu_fe_err
+      ,ce_fe_err
+	FROM aspcapStar WHERE aspcap_id = @aspcap_id
   RETURN
   END
-GO
+  GO
+  --
+
 
 
 --======================================================================
@@ -717,10 +667,6 @@ CREATE FUNCTION fAspcapElemFlags (@aspcap_id VARCHAR(64))
 --/T <li> co_fe_flag int NOT NULL,      -- ELEMFLAG for Co
 --/T <li> ni_fe_flag int NOT NULL,      -- ELEMFLAG for Ni
 --/T <li> cu_fe_flag int NOT NULL,      -- ELEMFLAG for Cu
---/T <li> ge_fe_flag int NOT NULL,      -- ELEMFLAG for Ge
---/T <li> rb_fe_flag int NOT NULL,      -- ELEMFLAG for Rb
---/T <li> yb_fe_flag int NOT NULL,      -- ELEMFLAG for Yb
---/T <li> nd_fe_flag int NOT NULL,      -- ELEMFLAG for Nd
 --/T <br> Sample call to get aspcap element abundance flags:
 --/T <br><samp>
 --/T <br>select TOP 10 a.apstar_id, b.*
@@ -749,11 +695,7 @@ CREATE FUNCTION fAspcapElemFlags (@aspcap_id VARCHAR(64))
     fe_h_flag int NOT NULL,
     co_fe_flag int NOT NULL,
     ni_fe_flag int NOT NULL,
-    cu_fe_flag int NOT NULL,
-    ge_fe_flag int NOT NULL,
-    rb_fe_flag int NOT NULL,
-    yb_fe_flag int NOT NULL,
-    nd_fe_flag int NOT NULL
+    cu_fe_flag int NOT NULL
   ) AS 
 BEGIN
 	INSERT @etab
@@ -778,15 +720,12 @@ BEGIN
             fe_h_flag,
             co_fe_flag,
             ni_fe_flag,
-            cu_fe_flag,
-            ge_fe_flag,
-            rb_fe_flag,
-            yb_fe_flag,
-            nd_fe_flag
+            cu_fe_flag
 		FROM aspcapStar WHERE aspcap_id = @aspcap_id
   RETURN
   END
 GO
+--
 
 
 
