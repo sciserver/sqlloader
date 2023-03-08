@@ -19,50 +19,6 @@ USE xmatchdb
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- create radius table
-
-IF  EXISTS (SELECT * FROM sys.objects 
-WHERE object_id = OBJECT_ID(N'Def') AND type in (N'U'))
-	DROP TABLE Def
-GO
-IF EXISTS (SELECT * FROM sys.objects
-WHERE object_id = OBJECT_ID(N'pmts') AND type in (N'U'))
-	DROP TABLE pmts
-GO
-
-IF  EXISTS (SELECT * FROM sys.objects
-WHERE object_id = OBJECT_ID(N'radius') AND type in (N'U'))
-	DROP TABLE radius
-CREATE TABLE radius(
---/H Radii values for xmatch procedures.
-	id int identity primary key not null, --/D index for each radius, which is referencesd in other xmtach tables
-	radius FLOAT  not null --/D seach radius in arcsec --/U arcsec
-)
-INSERT INTO [radius](radius)
-VALUES 
-   (3)    
-   ,(7)    
-   ,(15)
-   ,(30)
-   ,(45)
-   ,(60)
-   ,(3*60)
-   ,(7*60)
-   ,(15*60)
-   ,(30*60)
-   ,(45*60)
-   ,(60*60)
-   ,(3*60*60)
-   ,(7*60*60)
-   ,(15*60*60)
-   ,(30*60*60)
-   ,(60*60*60)
-
-GO
-
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- create PMTS table
 
 IF EXISTS (SELECT * FROM sys.objects
@@ -73,21 +29,17 @@ GO
 
 CREATE TABLE pmts(
 --/H XMatch parameters
---/T These parameters defines a Zone schema for several search radii.
-	radius_id int primary key not null, --/D ID of radius defined in radius table
-	radius float not null, --/D Search radius in arcsec
+--/T These parameters defines a Zone schema defined by a particular zone height.
 	theta float not null, --/D Value of theta
 	zone_height float not null, --/D zone height
-	ra_lo float not null, --/D minimum value of Right Ascension to be considred in the search
-	ra_hi float not null, --/D maximum value of Right Ascension in the search
-	CONSTRAINT pmts_radius_id_FK FOREIGN KEY (radius_id) REFERENCES [radius](id)
+	ra_lo float not null, --/D minimum value of Right Ascension to be considered in the search
+	ra_hi float not null, --/D maximum value of Right Ascension to be considered in the search
 )
 GO
 INSERT Pmts 
-SELECT r.id, r.radius, (r.radius + 0.1)/3600.0, r.radius/3600.0, 0, 360
-FROM radius r
-ORDER BY r.id ASC
-GO
+--VALUES (7.0 / 3600.0, 7.1 / 3600.0, 0, 360)
+VALUES (7.0 / 3600.0, 7.0 / 3600.0, 0, 360)
+GO	
 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -112,7 +64,7 @@ CREATE FUNCTION fAlpha(@theta float, @dec float)
 --/T <br> returns 0.130540775596751
 RETURNS float
 AS BEGIN 
-	IF abs(@dec)+@theta > 89.9 return 180 
+	IF abs(@dec)+@theta > 89.9 return 180
 	RETURN(degrees(abs(atan(
 	sin(radians(@theta)) 
 	/ sqrt(abs(
@@ -135,49 +87,39 @@ GO
 
 CREATE TABLE Def (
 --/H ZOnes defininitions
---/T Contains the definitions for all zones at a particular search radius.
-	radius_id int not null,
+--/T Contains the definitions of all zones.
 	ZoneID int NOT NULL,
 	DecMin float NOT NULL,
 	DecMax float NOT NULL,
-	Alpha float NOT NULL,
-	CONSTRAINT def_radius_id_FK FOREIGN KEY (radius_id) REFERENCES [radius](id)
+	Alpha float NOT NULL
 ) 
 GO
-ALTER TABLE Def ADD CONSTRAINT PK_zone_Def PRIMARY KEY (radius_id, ZoneID)
+ALTER TABLE Def ADD CONSTRAINT PK_zone_Def PRIMARY KEY (ZoneID)
 GO
 
 DECLARE @zoneHeight float, @theta float;
-DECLARE @min_rad_id int, @max_rad_id int;
-SELECT @min_rad_id=min(id), @max_rad_id=max(id) FROM [radius]
+SELECT @zoneHeight=zone_height FROM Pmts
+SELECT @theta=theta FROM Pmts
 
-DECLARE @maxZone bigint, @minZone bigint, @zoneDec float;	
+DECLARE @maxZone bigint, @minZone bigint, @zoneDec float;
 SET NOCOUNT ON
-WHILE @min_rad_id <= @max_rad_id
-BEGIN
-	print @min_rad_id
-	SELECT @zoneHeight=zone_height FROM Pmts WHERE radius_id = @min_rad_id
-	SELECT @theta=theta FROM Pmts WHERE radius_id = @min_rad_id
 
-	SET @minZone = 0;
-	SET @maxZone =  floor(180.0/@zoneHeight);
+SET @minZone = 0;
+SET @maxZone =  floor(180.0/@zoneHeight);
 
-	WHILE @minZone <= @maxZone
-	BEGIN   
-		SET @zoneDec = @minZone * @zoneHeight - 90;
-		INSERT Def VALUES (@min_rad_id, @minZone, @zoneDec, @zoneDec+@zoneHeight, -1)
-		SET @minZone = @minZone + 1
-	END
-	
-	UPDATE Def
-	SET alpha = CASE WHEN ABS(decMax) < ABS(decMin)
-	THEN dbo.fAlpha(@theta, decMin - @zoneHeight / 100)  
-	ELSE dbo.fAlpha(@theta, decMax + @zoneHeight / 100)
-	END
-	WHERE radius_id = @min_rad_id
-
-	SET @min_rad_id = @min_rad_id + 1
+WHILE @minZone <= @maxZone
+BEGIN   
+	SET @zoneDec = @minZone * @zoneHeight - 90;
+	INSERT Def VALUES (@minZone, @zoneDec, @zoneDec+@zoneHeight, -1)
+	SET @minZone = @minZone + 1
 END
+	
+UPDATE Def
+SET alpha = CASE WHEN ABS(decMax) < ABS(decMin)
+THEN dbo.fAlpha(@theta, decMin - @zoneHeight / 100)
+ELSE dbo.fAlpha(@theta, decMax + @zoneHeight / 100)
+END
+
 SET NOCOUNT OFF
 
 GO	
@@ -660,14 +602,8 @@ AS BEGIN
 
 	SET NOCOUNT ON 
 
-	DECLARE @radius_id int, @zoneHeight float, @ra_lo float, @ra_hi float;
-
-	SELECT @radius_id=r.id, @zoneHeight=p.zone_height, @ra_lo=p.ra_lo, @ra_hi=p.ra_hi
-	FROM pmts as p
-	JOIN (
-		SELECT TOP 1 * FROM [radius] WHERE radius >= @radius
-		ORDER BY radius ASC
-	) as r ON p.radius_id=r.id
+	DECLARE @zoneHeight float, @ra_lo float, @ra_hi float;
+	SELECT @zoneHeight=zone_height, @ra_lo=ra_lo, @ra_hi=ra_hi FROM pmts as p
 
 
 
@@ -716,7 +652,6 @@ AS BEGIN
 	FROM #Table1 t 
 	JOIN Def d on d.ZoneID = t.ZoneID
 	WHERE RA + d.Alpha > 360
-	AND d.radius_id = @radius_id
 	--PRINT 'Added ' + cast(@@rowcount as varchar(15)) + ' wraparound to Table1 in '+db_name()+' at ' + cast(getdate() as varchar(22))
   
 	INSERT INTO #Table2
@@ -727,8 +662,27 @@ AS BEGIN
 	FROM #Table2 t 
 	JOIN Def d on d.ZoneID = t.ZoneID
 	WHERE RA + d.Alpha > 360
-	AND d.radius_id = @radius_id
 	--PRINT 'Added ' + cast(@@rowcount as varchar(15)) + ' wraparound to Table2 in '+db_name()+' at ' + cast(getdate() as varchar(22))
+
+
+	DECLARE @theta float = @radius/3600
+
+	CREATE TABLE #def(  
+	ZoneID int primary key NOT NULL,
+	DecMin float NOT NULL,
+	DecMax float NOT NULL,
+	Alpha float NOT NULL
+	)
+
+	INSERT #def
+	select zoneid, decmin, decmax, 
+		CASE WHEN ABS(decMax) < ABS(decMin)
+		THEN dbo.fAlpha(@theta, decMin - @zoneHeight / 100)  -- overshoot a bit
+		ELSE dbo.fAlpha(@theta, decMax + @zoneHeight / 100) 
+		END
+	from def
+	order by zoneid
+
 
 
 	--IF OBJECT_ID('tempdb..#Link') IS NOT NULL DROP TABLE #Link
@@ -741,13 +695,15 @@ AS BEGIN
 	--ALTER TABLE #Link ADD CONSTRAINT PK_zone_Link PRIMARY KEY ( ZoneID1, ZoneID2 )
 	
 
+	DECLARE @num_zones int = ceiling(@theta/@zoneheight)
+
 	INSERT #Link WITH (TABLOCK)
 	SELECT Z1.zoneid, Z2.zoneid, d2.alpha
 	FROM (SELECT DISTINCT ZoneID FROM #Table1) z1 		
 	JOIN (SELECT DISTINCT ZoneID FROM #Table2) z2 
-	ON Z2.zoneid between Z1.zoneid - 1 and Z1.zoneid + 1
-	JOIN Def d2 ON d2.ZoneID = Z2.ZoneID
-	WHERE d2.radius_id = @radius_id
+	ON Z2.zoneid between Z1.zoneid - @num_zones and Z1.zoneid + @num_zones
+	JOIN #Def d2 ON d2.ZoneID = Z2.ZoneID
+	--WHERE d2.radius_id = @radius_id
 	ORDER BY 1, 2
 	
 
@@ -764,16 +720,7 @@ AS BEGIN
 
   
   
-	DECLARE @theta float, @min_rad float;
-	SELECT @theta=theta FROM Pmts WHERE radius_id=@radius_id
-	--DECLARE @dist2 float = 4 * power(sin(radians(@theta/2)), 2);
-	SELECT @min_rad = CASE WHEN @radius/3600.0 < @theta THEN @radius/3600.0 ELSE @theta END
-	DECLARE @dist2 float = 4 * power(sin(radians(@min_rad/2)), 2);
-	print @theta
-	print @min_rad
-	print @radius/3600.0
-	print @radius
-
+	DECLARE @dist2 float = 4 * power(sin(radians(@theta/2)), 2);
 	
 	SELECT t1.objid as id1, t2.objid as id2, 
 	--SELECT t1.objid as id1, t1.ra as ra1, t1.dec as dec1, t2.objid as id2, t2.ra as ra2, t2.dec as dec2,
@@ -802,3 +749,5 @@ AS BEGIN
 
 END
 GO
+
+
