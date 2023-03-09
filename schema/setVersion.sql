@@ -31,6 +31,9 @@ EXEC spCheckDBObjects
 EXEC spCheckDBColumns
 EXEC spCheckDBIndexes
 
+-- check functions, sp's, and views against schema
+EXEC spCheckObjects with recompile
+
 
 -- now set the new version; this gets tweaked for each version
 EXECUTE spSetVersion
