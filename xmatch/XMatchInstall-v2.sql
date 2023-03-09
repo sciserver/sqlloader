@@ -576,7 +576,8 @@ CREATE PROCEDURE sp_xmatch
 	@id_col1 sysname = 'objid', @id_col2 sysname = 'objid', 
 	@ra_col1 sysname = 'ra', @ra_col2 sysname = 'ra', 
 	@dec_col1 sysname = 'dec', @dec_col2 sysname = 'dec',
-	@max_catalog_rows1 bigint = null, @max_catalog_rows2 bigint = null
+	@max_catalog_rows1 bigint = null, @max_catalog_rows2 bigint = null,
+	@output_table sysname = null
 ----------------------------------------------------------------
 --/H Runs a 2-dimensional spatial crossmatch between 2 catalogs of objects, using the Zones algorithm. Returns a table with the object IDs and angular separation between matching objects. 
 --/U ------------------------------------------------------------
@@ -595,6 +596,7 @@ CREATE PROCEDURE sp_xmatch
 --/T <li> @dec_col2 sysname: name of the column containing the Declination (Dec) of objects in catalog @table2. Takes a default value of 'dec'.
 --/T <li> @max_catalog_rows1 bigint: default value of null. If set, the procedure will consider the TOP @max_catalog_rows1 rows in catalog @table1, with no special ordering.
 --/T <li> @max_catalog_rows2 bigint: default value of null. If set, the procedure will consider the TOP @max_catalog_rows2 rows in catalog @table2, with no special ordering.
+--/T <li> @output_table sysname: If not null, this procedure will insert the output results into the table @output_table (of format 'server.database.schema.table', 'database.schema.table', or 'database.table'), which must already exist and be visbile within the scope of the procedure. If set to null, the output results will be simply returned as a table resultset. Takes a default value of null.
 --/T <li> RETURNS TABLE (id1, id2, sep) where
 --/T <li> id1 and id2 are the unique object iudentifier columns in @table1 and @table2, respectively, and sep is the angular separation between objetcs in arseconds.
 
@@ -625,9 +627,9 @@ AS BEGIN
 	  Cy float not null,
 	  Cz float not null,
 	)
-	CREATE UNIQUE CLUSTERED INDEX PK_zone_Table1 ON #Table1(ZoneID, RA, ObjID);
 	--ALTER TABLE #Table1 ADD CONSTRAINT PK_zone_Table1 PRIMARY KEY ( ZoneID, RA, ObjID )
 	EXECUTE sp_SetCatalogIdColumn @target_table='#Table1', @reference_table=@table1, @reference_id_col=@id_col1
+	CREATE UNIQUE CLUSTERED INDEX PK_zone_Table1 ON #Table1(ZoneID, RA, ObjID);
 
 	--IF OBJECT_ID('tempdb..#Table2') IS NOT NULL DROP TABLE #Table2
 	CREATE TABLE #Table2 (
@@ -639,10 +641,9 @@ AS BEGIN
 	  Cy float not null,
 	  Cz float not null,
 	)
-	CREATE UNIQUE CLUSTERED INDEX PK_zone_Table2 ON #Table2(ZoneID, RA, ObjID);
 	--ALTER TABLE #Table2 ADD CONSTRAINT PK_zone_Table2 PRIMARY KEY ( ZoneID, RA, ObjID )
 	EXECUTE sp_SetCatalogIdColumn @target_table='#Table2', @reference_table=@table2, @reference_id_col=@id_col2
-
+	CREATE UNIQUE CLUSTERED INDEX PK_zone_Table2 ON #Table2(ZoneID, RA, ObjID);
 	
 	INSERT INTO #Table1
 	EXECUTE sp_buildcatalog @table=@table1, @zoneHeight=@zoneHeight, @id_col=@id_col1, @ra_col=@ra_col1, @dec_col=@dec_col1, @max_catalog_rows=@max_catalog_rows1
@@ -717,12 +718,38 @@ AS BEGIN
 	--go
 
 	--PRINT 'Updated stats in '+db_name()+' at ' + cast(getdate() as varchar(22))
-
-  
-  
 	DECLARE @dist2 float = 4 * power(sin(radians(@theta/2)), 2);
-	
-	SELECT t1.objid as id1, t2.objid as id2, 
+
+
+
+	SET @sql = N''
+	IF @output_table IS NOT NULL
+	BEGIN
+		declare @server_name sysname,
+				@db_name sysname,
+				@schema_name sysname,
+				@table_name sysname,
+				@data_source sysname
+
+		EXECUTE sp_getDataParts @table=@output_table, @do_include_server=0, @server_name=@server_name OUTPUT, @db_name=@db_name OUTPUT, @schema_name=@schema_name OUTPUT, @table_name=@table_name OUTPUT
+
+		SET @table_name = QUOTENAME(@table_name)
+		if @db_name != N''
+			SET @db_name = QUOTENAME(@db_name)
+		if @server_name != N''
+			SET @server_name = QUOTENAME(@server_name)
+		if @schema_name != N'dbo'
+			SET @schema_name = QUOTENAME(@schema_name)
+
+		SET @table_name = @server_name + N'.' +   @db_name + N'.' + @schema_name + N'.' + @table_name
+
+		SET @sql = N'INSERT INTO ' + @table_name
+	END
+
+
+
+	SET @sql = @sql + N' 
+	SELECT t1.objid as id1, t2.objid as id2,
 	--SELECT t1.objid as id1, t1.ra as ra1, t1.dec as dec1, t2.objid as id2, t2.ra as ra2, t2.dec as dec2,
   
 	  60*120*degrees(asin(sqrt(
@@ -743,6 +770,9 @@ AS BEGIN
 	  + (t1.cy-t2.cy) * (t1.cy-t2.cy)
 	  + (t1.cz-t2.cz) * (t1.cz-t2.cz) < @dist2
 	--ORDER BY t1.objid, t2.objid
+	'
+
+	EXECUTE sp_executesql @sql, N'@dist2 float, @theta float', @dist2=@dist2, @theta=@theta
 
 	--PRINT 'Created table zone.Match with '+ cast(@@rowcount as varchar(15))+' rows in '+db_name()+' at ' + cast(getdate() as varchar(22))
 	--select * from #match
