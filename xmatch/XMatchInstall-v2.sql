@@ -1,3 +1,4 @@
+
 /*
 Copyright 2023 Johns Hopkins University
 
@@ -19,31 +20,6 @@ USE xmatchdb
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- create PMTS table
-
-IF EXISTS (SELECT * FROM sys.objects
-WHERE object_id = OBJECT_ID(N'pmts') AND type in (N'U'))
-	DROP TABLE pmts
-GO
-
-
-CREATE TABLE pmts(
---/H XMatch parameters
---/T These parameters defines a Zone schema defined by a particular zone height.
-	theta float not null, --/D Value of theta
-	zone_height float not null, --/D zone height
-	ra_lo float not null, --/D minimum value of Right Ascension to be considered in the search
-	ra_hi float not null, --/D maximum value of Right Ascension to be considered in the search
-)
-GO
-INSERT Pmts 
---VALUES (7.0 / 3600.0, 7.1 / 3600.0, 0, 360)
-VALUES (7.0 / 3600.0, 7.0 / 3600.0, 0, 360)
-GO	
-
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- create fAlpha function
 
 
@@ -54,12 +30,12 @@ WHERE object_id = OBJECT_ID(N'fAlpha')
 GO
 
 CREATE FUNCTION fAlpha(@theta float, @dec float)
---/H Returns the value of alpha at each declination (which links to a zone), and a search radius theta
+--/H Returns the value of alpha, which is a modified search radius along the RA direction.
 --/U ------------------------------------------------------------
 --/T Parameters:<br>
---/T <li> @theta float: value of theta in degrees
+--/T <li> @theta float: value of theta (input search radius) in degrees
 --/T <li> @dec float: value of declination in degrees
---/T <li> returns alpha float: value of alpha (improved search radius)
+--/T <li> returns alpha float: value of alpha.
 --/T <br><samp> select dbo.fAlpha(0.1, 40) as alpha </samp>
 --/T <br> returns 0.130540775596751
 RETURNS float
@@ -77,57 +53,6 @@ GO
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
--- create DEFS table
-
-
-IF  EXISTS (SELECT * FROM sys.objects 
-WHERE object_id = OBJECT_ID(N'Def') AND type in (N'U'))
-	DROP TABLE Def
-GO
-
-CREATE TABLE Def (
---/H ZOnes defininitions
---/T Contains the definitions of all zones.
-	ZoneID int NOT NULL,
-	DecMin float NOT NULL,
-	DecMax float NOT NULL,
-	Alpha float NOT NULL
-) 
-GO
-ALTER TABLE Def ADD CONSTRAINT PK_zone_Def PRIMARY KEY (ZoneID)
-GO
-
-DECLARE @zoneHeight float, @theta float;
-SELECT @zoneHeight=zone_height FROM Pmts
-SELECT @theta=theta FROM Pmts
-
-DECLARE @maxZone bigint, @minZone bigint, @zoneDec float;
-SET NOCOUNT ON
-
-SET @minZone = 0;
-SET @maxZone =  floor(180.0/@zoneHeight);
-
-WHILE @minZone <= @maxZone
-BEGIN   
-	SET @zoneDec = @minZone * @zoneHeight - 90;
-	INSERT Def VALUES (@minZone, @zoneDec, @zoneDec+@zoneHeight, -1)
-	SET @minZone = @minZone + 1
-END
-	
-UPDATE Def
-SET alpha = CASE WHEN ABS(decMax) < ABS(decMin)
-THEN dbo.fAlpha(@theta, decMin - @zoneHeight / 100)
-ELSE dbo.fAlpha(@theta, decMax + @zoneHeight / 100)
-END
-
-SET NOCOUNT OFF
-
-GO	
-
-
-
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- create sp_getDataParts procedure
 
 
@@ -140,7 +65,7 @@ CREATE PROCEDURE sp_getDataParts @table sysname, @do_include_server BIT = 1, @se
 --/H Returns the 4 parts defining a sys object name:  server.database.schema.table
 --/U ------------------------------------------------------------
 --/T Parameters:<br>
---/T <li> @table sysname: can be any of these formats: 'server.database.schema.table', 'database.schema.table', or 'database.table'
+--/T <li> @table sysname: can be any of these formats: 'server.database.schema.table', 'database.schema.table', 'database.table', or simply 'table'
 --/T <li> @do_include_server bit: whether to output the server name or not.
 --/T <li> @server_name sysname OUTPUT: name of database server, or empty string if not defined or @do_include_server=0
 --/T <li> @db_name sysname OUTPUT: name of database, or empty string if not defined.
@@ -211,7 +136,7 @@ CREATE PROCEDURE sp_hascolumn(@table sysname, @column sysname, @has_column bit O
 --/H Returns whether or not a table or view has a particular column.
 --/U ------------------------------------------------------------
 --/T Parameters:<br>
---/T <li> @table sysname: can be any of these formats: 'server.database.schema.table', 'database.schema.table', or 'database.table'
+--/T <li> @table sysname: can be any of these formats: 'server.database.schema.table', 'database.schema.table', 'database.table', or simply 'table'
 --/T <li> @column sysname: name of column
 --/T <li> @has_column bit OUTPUT: has the value of 1 if the column is in @table, and 0 otherwise,
 AS BEGIN
@@ -293,7 +218,7 @@ CREATE PROCEDURE sp_columntype(@table sysname, @column sysname, @col_type sysnam
 --/H Gets the type of a particular column in a table or view.
 --/U ------------------------------------------------------------
 --/T Parameters:<br>
---/T <li> @table sysname: can be any of these formats: 'server.database.schema.table', 'database.schema.table', or 'database.table'
+--/T <li> @table sysname: can be any of these formats: 'server.database.schema.table', 'database.schema.table', or 'database.table', or simply 'table'
 --/T <li> @column sysname: name of column.
 --/T <li> @col_type sysname OUTPUT: type of column
 --/T <li> @col_length BIGINT OUTPUT: column length
@@ -361,6 +286,41 @@ GO
 
 
 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- create sp_buildcatalog procedure
+
+if exists (select * from sys.objects WHERE object_id = OBJECT_ID(N'sp_getQuotedPath'))
+	DROP PROCEDURE sp_getQuotedPath
+go
+CREATE PROCEDURE sp_getQuotedPath(@table sysname, @quoted_path sysname OUTPUT)
+----------------------------------------------------------------
+--/H Gets the full quoted path to a database table
+--/U ------------------------------------------------------------
+--/T Parameters:<br>
+--/T <li> @table sysname: input table. Can be any of these formats: 'server.database.schema.table', 'database.schema.table', 'database.table', or simply 'table'
+--/T <li> @quoted_path float: output path to the input table, with quotes.
+AS BEGIN
+	declare @server_name sysname,
+			@db_name sysname,
+			@schema_name sysname,
+			@table_name sysname
+
+	EXECUTE sp_getDataParts @table=@table, @do_include_server=0, @server_name=@server_name OUTPUT, @db_name=@db_name OUTPUT, @schema_name=@schema_name OUTPUT, @table_name=@table_name OUTPUT
+
+
+	SET @table_name = QUOTENAME(@table_name)
+	if @db_name != N''
+		SET @db_name = QUOTENAME(@db_name)
+	if @server_name != N''
+		SET @server_name = QUOTENAME(@server_name)
+	if @schema_name != N'dbo'
+		SET @schema_name = QUOTENAME(@schema_name)
+
+	SET @quoted_path = @server_name + N'.' +   @db_name + N'.' + @schema_name + N'.' + @table_name
+	RETURN
+END
+GO
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -380,7 +340,7 @@ CREATE PROCEDURE sp_buildcatalog(@table sysname, @zoneHeight float = 7, @id_col 
 --/T If the column defining the zone ID (must be named 'zoneid') is missing, then this procedure will calculate and add it by using the value of @zoneHeight.
 --/U ------------------------------------------------------------
 --/T Parameters:<br>
---/T <li> @table sysname: input table. Can be any of these formats: 'server.database.schema.table', 'database.schema.table', or 'database.table'
+--/T <li> @table sysname: input table. Can be any of these formats: 'server.database.schema.table', 'database.schema.table', 'database.table', or simply 'table'
 --/T <li> @zoneHeight float: If @table does not contain a column named 'zoneid', then it will calculate this column using zones of this height (in units of arcsec). Takes a default value of 7 arsec.
 --/T <li> @id_col sysname: name of column that uniquely identifies an object. Defaults to 'objid'.
 --/T <li> @ra_col sysname: name of column containing the RA (Right Ascension) value of an object. Defaults to 'ra'.
@@ -389,7 +349,8 @@ CREATE PROCEDURE sp_buildcatalog(@table sysname, @zoneHeight float = 7, @id_col 
 AS BEGIN
 
 	SET NOCOUNT ON
-	
+
+/*	
 	declare @server_name sysname,
 			@db_name sysname,
 			@schema_name sysname,
@@ -409,6 +370,11 @@ AS BEGIN
 
 
 	SET @data_source = @server_name + N'.' +   @db_name + N'.' + @schema_name + N'.' + @table_name
+*/
+	DECLARE @quoted_path sysname
+	EXECUTE sp_getQuotedPath @table=@table, @quoted_path=@quoted_path OUTPUT
+
+
 	SET @id_col = QUOTENAME(PARSENAME(@id_col, 1))
 	SET @ra_col = QUOTENAME(PARSENAME(@ra_col, 1))
 	SET @dec_col = QUOTENAME(PARSENAME(@dec_col, 1))
@@ -470,7 +436,7 @@ AS BEGIN
 							 COS(' + @dec_col + N'*@d2r)*SIN(' + @ra_col + N'*@d2r) as cy, 
 							 SIN(' + @dec_col + N'*@d2r) as cz '
 
-	SET @sql = @sql + N'FROM ' + @data_source + N' WHERE ' + @id_col + N' is not null ORDER BY zoneid, ra, objid;'
+	SET @sql = @sql + N'FROM ' + @quoted_path + N' WHERE ' + @id_col + N' is not null ORDER BY zoneid, ra, objid;'
 
 
 	--print @sql
@@ -495,11 +461,12 @@ CREATE PROCEDURE sp_SetCatalogIdColumn(@target_table sysname, @reference_table s
 --/H Changes the type of the unique identifier column (must be named 'objid') in a target table, and set it equal to the type of a column in a refernece table.
 --/U ------------------------------------------------------------
 --/T Parameters:<br>
---/T <li> @target_table sysname: target table. Can be any of these formats: 'server.database.schema.table', 'database.schema.table', or 'database.table'
---/T <li> @reference_table sysname: reference table. Can be any of these formats: 'server.database.schema.table', 'database.schema.table', or 'database.table'
+--/T <li> @target_table sysname: target table. Can be any of these formats: 'server.database.schema.table', 'database.schema.table', or 'database.table', or simply 'table'
+--/T <li> @reference_table sysname: reference table. Can be any of these formats: 'server.database.schema.table', 'database.schema.table', 'database.table', or simply 'table'
 --/T <li> @reference_id_col sysname: name of column in the refernce table. Takes the default value 'objid'.
 AS BEGIN
 	SET NOCOUNT ON
+
 	DECLARE @sql NVARCHAR(max)
 	DECLARE @col_type NVARCHAR(max)
 	DECLARE @col_length BIGINT
@@ -585,8 +552,8 @@ CREATE PROCEDURE sp_xmatch
 --/T For each catalog, if the columns defining the cartesian coordinates an object (must be named 'cx', 'cy', and 'cz') are missing, then the code will calculate them on the fly.
 --/T If the column defining the zone ID (must be named 'zoneid') is missing, then the code will calculate it on the fly, based on the value of the search radius @radius around each object.
 --/T Parameters:<br>
---/T <li> @table1 sysname: name of first input catalog. Can be any of these formats: 'server.database.schema.table', 'database.schema.table', or 'database.table'
---/T <li> @table2 sysname: name of first input catalog. Can be any of these formats: 'server.database.schema.table', 'database.schema.table', or 'database.table'
+--/T <li> @table1 sysname: name of first input catalog. Can be any of these formats: 'server.database.schema.table', 'database.schema.table', 'database.table', or simply 'table'
+--/T <li> @table2 sysname: name of first input catalog. Can be any of these formats: 'server.database.schema.table', 'database.schema.table', 'database.table', or simply 'table'
 --/T <li> @radius float: search radius around each object, in arcseconds. Takes a default value of 10 arcseconds.
 --/T <li> @id_col1 sysname: name of the column defining a unique object identifier in catalog @table1. Takes a default value of 'objid'.
 --/T <li> @id_col2 sysname: name of the column defining a unique object identifier in catalog @table2. Takes a default value of 'objid'.
@@ -596,7 +563,7 @@ CREATE PROCEDURE sp_xmatch
 --/T <li> @dec_col2 sysname: name of the column containing the Declination (Dec) of objects in catalog @table2. Takes a default value of 'dec'.
 --/T <li> @max_catalog_rows1 bigint: default value of null. If set, the procedure will consider the TOP @max_catalog_rows1 rows in catalog @table1, with no special ordering.
 --/T <li> @max_catalog_rows2 bigint: default value of null. If set, the procedure will consider the TOP @max_catalog_rows2 rows in catalog @table2, with no special ordering.
---/T <li> @output_table sysname: If not null, this procedure will insert the output results into the table @output_table (of format 'server.database.schema.table', 'database.schema.table', or 'database.table'), which must already exist and be visbile within the scope of the procedure. If set to null, the output results will be simply returned as a table resultset. Takes a default value of null.
+--/T <li> @output_table sysname: If not null, this procedure will insert the output results into the table @output_table (of format 'server.database.schema.table', 'database.schema.table', 'database.table', or simply 'table'), which must already exist and be visbile within the scope of the procedure. If set to null, the output results will be simply returned as a table resultset. Takes a default value of null.
 --/T <li> RETURNS TABLE (id1, id2, sep) where
 --/T <li> id1 and id2 are the unique object iudentifier columns in @table1 and @table2, respectively, and sep is the angular separation between objetcs in arseconds.
 
@@ -604,10 +571,9 @@ AS BEGIN
 
 	SET NOCOUNT ON 
 
-	DECLARE @zoneHeight float, @ra_lo float, @ra_hi float;
-	SELECT @zoneHeight=zone_height, @ra_lo=ra_lo, @ra_hi=ra_hi FROM pmts as p
-
-
+	DECLARE @theta float = @radius/3600
+	DECLARE @zoneHeight float = @theta * 1.01 --  a little bigger that the input radius. If @zoneHeight << @theta, the code takes longer time to finish.
+	DECLARE @DefaultZoneHeight float = 30.0/3600.0 -- 30'' is chosen as a standard value for the zones defined in the public catalogs we already have stored.
 
 	DECLARE @sql NVARCHAR(MAX);
 
@@ -617,7 +583,6 @@ AS BEGIN
 	DECLARE @col_scale BIGINT
 
 
-	--IF OBJECT_ID('tempdb..#Table1') IS NOT NULL DROP TABLE #Table1
 	CREATE TABLE #Table1 (
 	  ZoneID int not null,
 	  ObjID bigint not null,
@@ -627,11 +592,9 @@ AS BEGIN
 	  Cy float not null,
 	  Cz float not null,
 	)
-	--ALTER TABLE #Table1 ADD CONSTRAINT PK_zone_Table1 PRIMARY KEY ( ZoneID, RA, ObjID )
 	EXECUTE sp_SetCatalogIdColumn @target_table='#Table1', @reference_table=@table1, @reference_id_col=@id_col1
 	CREATE UNIQUE CLUSTERED INDEX PK_zone_Table1 ON #Table1(ZoneID, RA, ObjID);
 
-	--IF OBJECT_ID('tempdb..#Table2') IS NOT NULL DROP TABLE #Table2
 	CREATE TABLE #Table2 (
 	  ZoneID int not null,
 	  ObjID bigint not null,
@@ -641,111 +604,91 @@ AS BEGIN
 	  Cy float not null,
 	  Cz float not null,
 	)
-	--ALTER TABLE #Table2 ADD CONSTRAINT PK_zone_Table2 PRIMARY KEY ( ZoneID, RA, ObjID )
 	EXECUTE sp_SetCatalogIdColumn @target_table='#Table2', @reference_table=@table2, @reference_id_col=@id_col2
 	CREATE UNIQUE CLUSTERED INDEX PK_zone_Table2 ON #Table2(ZoneID, RA, ObjID);
-	
+
+
+	-- Assumes that all precomputed zoneid values provided in the input tables are calculated with a standard value of @DefaultZoneHeight=30''
+	DECLARE @has_column bit
+	EXECUTE sp_hascolumn @table=@table1, @column='zoneid', @has_column=@has_column OUTPUT
+	IF @has_column = 1
+		SET @zoneHeight = @DefaultZoneHeight
+	EXECUTE sp_hascolumn @table=@table2, @column='zoneid', @has_column=@has_column OUTPUT
+	IF @has_column = 1
+		SET @zoneHeight = @DefaultZoneHeight
+
 	INSERT INTO #Table1
 	EXECUTE sp_buildcatalog @table=@table1, @zoneHeight=@zoneHeight, @id_col=@id_col1, @ra_col=@ra_col1, @dec_col=@dec_col1, @max_catalog_rows=@max_catalog_rows1
-	--PRINT 'Table Table1 created with '+cast(@@rowcount as varchar(15))+' rows in '+db_name()+' at ' + cast(getdate() as varchar(22))
 	INSERT #Table1 WITH (TABLOCK)
 	SELECT t.ZoneID, ObjID, RA-360, Dec, Cx,Cy,Cz
 	FROM #Table1 t 
 	JOIN Def d on d.ZoneID = t.ZoneID
 	WHERE RA + d.Alpha > 360
-	--PRINT 'Added ' + cast(@@rowcount as varchar(15)) + ' wraparound to Table1 in '+db_name()+' at ' + cast(getdate() as varchar(22))
   
 	INSERT INTO #Table2
 	EXECUTE sp_buildcatalog @table=@table2, @zoneHeight=@zoneHeight, @id_col=@id_col2, @ra_col=@ra_col2, @dec_col=@dec_col2, @max_catalog_rows=@max_catalog_rows2
-	--PRINT 'Table Table2 created with '+cast(@@rowcount as varchar(15))+' rows in '+db_name()+' at ' + cast(getdate() as varchar(22))
 	INSERT #Table2 WITH (TABLOCK)
 	SELECT t.ZoneID, ObjID, RA-360, Dec, Cx,Cy,Cz
 	FROM #Table2 t 
 	JOIN Def d on d.ZoneID = t.ZoneID
 	WHERE RA + d.Alpha > 360
-	--PRINT 'Added ' + cast(@@rowcount as varchar(15)) + ' wraparound to Table2 in '+db_name()+' at ' + cast(getdate() as varchar(22))
-
-
-	DECLARE @theta float = @radius/3600
-
-	CREATE TABLE #def(  
-	ZoneID int primary key NOT NULL,
-	DecMin float NOT NULL,
-	DecMax float NOT NULL,
-	Alpha float NOT NULL
-	)
-
-	INSERT #def
-	select zoneid, decmin, decmax, 
-		CASE WHEN ABS(decMax) < ABS(decMin)
-		THEN dbo.fAlpha(@theta, decMin - @zoneHeight / 100)  -- overshoot a bit
-		ELSE dbo.fAlpha(@theta, decMax + @zoneHeight / 100) 
-		END
-	from def
-	order by zoneid
 
 
 
-	--IF OBJECT_ID('tempdb..#Link') IS NOT NULL DROP TABLE #Link
+	DECLARE @maxZone BIGINT = CAST(floor(180.0/@zoneHeight) as BIGINT)
+
+	CREATE TABLE #Def (
+		ZoneID int PRIMARY KEY NOT NULL,
+		DecMin float NOT NULL,
+		DecMax float NOT NULL,
+		Alpha float NOT NULL
+	) 
+	INSERT INTO #Def
+	SELECT value as zoneid, value*@zoneheight-90 as decMin, value*@zoneheight-90 + @zoneheight as decMax, 
+		CASE WHEN ABS(value*@zoneheight-90 + @zoneheight) < ABS(value*@zoneheight-90)
+		THEN dbo.falpha(@theta, (value*@zoneheight-90) - @zoneheight/100.0 )
+		ELSE dbo.falpha(@theta, (value*@zoneheight-90+@zoneheight) + @zoneheight/100.0 )
+		END as alpha
+	FROM GENERATE_SERIES(CAST(0 as BIGINT), @maxZone, CAST(1 as BIGINT))
+
+
+
+
 	CREATE TABLE #Link (
 	  ZoneID1	int not null,
 	  ZoneID2	int not null,
 	  Alpha2	float not null
 	)
 	CREATE UNIQUE CLUSTERED INDEX PK_zone_Link ON #Link(ZoneID1, ZoneID2);
-	--ALTER TABLE #Link ADD CONSTRAINT PK_zone_Link PRIMARY KEY ( ZoneID1, ZoneID2 )
 	
 
 	DECLARE @num_zones int = ceiling(@theta/@zoneheight)
-
 	INSERT #Link WITH (TABLOCK)
 	SELECT Z1.zoneid, Z2.zoneid, d2.alpha
 	FROM (SELECT DISTINCT ZoneID FROM #Table1) z1 		
 	JOIN (SELECT DISTINCT ZoneID FROM #Table2) z2 
 	ON Z2.zoneid between Z1.zoneid - @num_zones and Z1.zoneid + @num_zones
 	JOIN #Def d2 ON d2.ZoneID = Z2.ZoneID
-	--WHERE d2.radius_id = @radius_id
 	ORDER BY 1, 2
 	
-
-	--PRINT 'Table zone.Link created with '+cast(@@rowcount as varchar(15)) +' rows in '+db_name()+' at ' + cast(getdate() as varchar(22))
-
 
 
 	update statistics #table1
 	update statistics #table2
 	update statistics #link
-	--go
 
-	--PRINT 'Updated stats in '+db_name()+' at ' + cast(getdate() as varchar(22))
+
+
 	DECLARE @dist2 float = 4 * power(sin(radians(@theta/2)), 2);
 
-
-
 	SET @sql = N''
+
 	IF @output_table IS NOT NULL
 	BEGIN
-		declare @server_name sysname,
-				@db_name sysname,
-				@schema_name sysname,
-				@table_name sysname,
-				@data_source sysname
-
-		EXECUTE sp_getDataParts @table=@output_table, @do_include_server=0, @server_name=@server_name OUTPUT, @db_name=@db_name OUTPUT, @schema_name=@schema_name OUTPUT, @table_name=@table_name OUTPUT
-
-		SET @table_name = QUOTENAME(@table_name)
-		if @db_name != N''
-			SET @db_name = QUOTENAME(@db_name)
-		if @server_name != N''
-			SET @server_name = QUOTENAME(@server_name)
-		if @schema_name != N'dbo'
-			SET @schema_name = QUOTENAME(@schema_name)
-
-		SET @table_name = @server_name + N'.' +   @db_name + N'.' + @schema_name + N'.' + @table_name
-
-		SET @sql = N'INSERT INTO ' + @table_name
+		DECLARE @quoted_path sysname
+		EXECUTE sp_getQuotedPath @table=@output_table, @quoted_path=@quoted_path OUTPUT
+		SET @sql = N'INSERT INTO ' + @quoted_path
 	END
-
 
 
 	SET @sql = @sql + N' 
@@ -757,7 +700,6 @@ AS BEGIN
 		+ (t1.cy-t2.cy) * (t1.cy-t2.cy) 
 		+ (t1.cz-t2.cz) * (t1.cz-t2.cz)
 	  )/2)) sep 
-	--INTO #Match
 	FROM #Table1 t1 
 	INNER LOOP JOIN #Link zz on zz.zoneid1 = t1.zoneid 
 	INNER LOOP JOIN #Table2 t2 on (
@@ -769,13 +711,9 @@ AS BEGIN
 	WHERE (t1.cx-t2.cx) * (t1.cx-t2.cx)
 	  + (t1.cy-t2.cy) * (t1.cy-t2.cy)
 	  + (t1.cz-t2.cz) * (t1.cz-t2.cz) < @dist2
-	--ORDER BY t1.objid, t2.objid
 	'
 
 	EXECUTE sp_executesql @sql, N'@dist2 float, @theta float', @dist2=@dist2, @theta=@theta
-
-	--PRINT 'Created table zone.Match with '+ cast(@@rowcount as varchar(15))+' rows in '+db_name()+' at ' + cast(getdate() as varchar(22))
-	--select * from #match
 
 END
 GO
