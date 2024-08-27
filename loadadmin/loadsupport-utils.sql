@@ -38,6 +38,7 @@
 --*		    declaration and removed 'phase' and 'mode' from Task
 --*		    table insert command.
 --* 2007-12-13 Svetlana: added code to deploy spherical assembly in spCreateSchema 
+--* 2024-08-27 Sue: got rid of sp_dboption stuff
 --========================================================
 SET NOCOUNT ON
 GO
@@ -633,7 +634,7 @@ BEGIN
     --
     IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = @dbname)
     BEGIN
-	exec sp_dboption @dbname, N'trunc. log',          N'true'
+	
 	set @cmd = N'ALTER DATABASE ' + @dbname +' SET '
 	                                 + ' ANSI_NULLS              ON, '
                                          + ' ANSI_PADDING            ON, '
@@ -645,8 +646,8 @@ BEGIN
                                          + ' AUTO_CREATE_STATISTICS  ON, '
                                          + ' AUTO_UPDATE_STATISTICS  ON, '  
                                          + ' RECURSIVE_TRIGGERS      OFF,' 
-                                         + ' TORN_PAGE_DETECTION     ON, '
-                                         + ' RECOVERY BULK_LOGGED,       '    
+                                         + ' PAGE_VERIFY		CHECKSUM,'
+                                         + ' RECOVERY SIMPLE,       '    
                                          + ' CURSOR_DEFAULT GLOBAL       '
 	exec sp_executesql @cmd;
     END

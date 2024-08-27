@@ -4,6 +4,7 @@
 --              from loadsupport-build.sql, so this script can be run
 --              by itself when the loadsupport DB already exists (for
 --              incremental loading).
+-- 2024-08-27	Sue: got rid of sp_dboption stuff
 --=============================================================================
 
 USE master
@@ -142,10 +143,10 @@ ALTER DATABASE loadsupport SET
          AUTO_CREATE_STATISTICS  ON,
          AUTO_UPDATE_STATISTICS  ON,  
          RECURSIVE_TRIGGERS     OFF, 
-         TORN_PAGE_DETECTION     ON,
-         RECOVERY BULK_LOGGED,      
+         PAGE_VERIFY CHECKSUM,
+         RECOVERY SIMPLE,      
          CURSOR_DEFAULT GLOBAL   
-exec sp_dboption loadsupport, N'trunc. log', N'true'
+
 GO
 
 Print CAST(getdate() as varchar(64)) + '  -- Database options set'
