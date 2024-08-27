@@ -74,59 +74,59 @@ CREATE DATABASE [weblog]  ON
   COLLATE SQL_Latin1_General_CP1_CI_AS
 GO
 
-exec sp_dboption N'weblog', N'autoclose', N'false'
+-- Disable AUTO_CLOSE
+ALTER DATABASE weblog SET AUTO_CLOSE OFF;
 GO
-
-exec sp_dboption N'weblog', N'bulkcopy', N'false'
+-- Disable bulk-logged operations (set recovery model to FULL)
+ALTER DATABASE weblog SET RECOVERY FULL;
 GO
-
-exec sp_dboption N'weblog', N'trunc. log', N'true'
+-- Enable truncate log on checkpoint (set recovery model to SIMPLE)
+ALTER DATABASE weblog SET RECOVERY SIMPLE;
 GO
-
-exec sp_dboption N'weblog', N'torn page detection', N'true'
+-- Enable torn page detection
+ALTER DATABASE weblog SET PAGE_VERIFY CHECKSUM;
 GO
-
-exec sp_dboption N'weblog', N'read only', N'false'
+-- Set the database to read/write (not read-only)
+ALTER DATABASE weblog SET READ_WRITE;
 GO
-
-exec sp_dboption N'weblog', N'dbo use', N'false'
+-- Disable dbo use only (allow multi-user access)
+ALTER DATABASE weblog SET MULTI_USER;
 GO
-
-exec sp_dboption N'weblog', N'single', N'false'
+-- Set the database to multi-user mode (not single-user)
+ALTER DATABASE weblog SET MULTI_USER;
 GO
-
-exec sp_dboption N'weblog', N'autoshrink', N'false'
+-- Disable auto-shrink
+ALTER DATABASE weblog SET AUTO_SHRINK OFF;
 GO
-
-exec sp_dboption N'weblog', N'ANSI null default', N'false'
+-- Disable ANSI null default
+ALTER DATABASE weblog SET ANSI_NULL_DEFAULT OFF;
 GO
-
-exec sp_dboption N'weblog', N'recursive triggers', N'false'
+-- Disable recursive triggers
+ALTER DATABASE weblog SET RECURSIVE_TRIGGERS OFF;
 GO
-
-exec sp_dboption N'weblog', N'ANSI nulls', N'false'
+-- Disable ANSI nulls
+ALTER DATABASE weblog SET ANSI_NULLS OFF;
 GO
-
-exec sp_dboption N'weblog', N'concat null yields null', N'false'
+-- Disable CONCAT_NULL_YIELDS_NULL
+ALTER DATABASE weblog SET CONCAT_NULL_YIELDS_NULL OFF;
 GO
-
-exec sp_dboption N'weblog', N'cursor close on commit', N'false'
+-- Disable cursor close on commit
+ALTER DATABASE weblog SET CURSOR_CLOSE_ON_COMMIT OFF;
 GO
-
-exec sp_dboption N'weblog', N'default to local cursor', N'false'
+-- Disable default to local cursor
+ALTER DATABASE weblog SET LOCAL_CURSOR_DEFAULT OFF;
 GO
-
-exec sp_dboption N'weblog', N'quoted identifier', N'false'
+-- Disable quoted identifier
+ALTER DATABASE weblog SET QUOTED_IDENTIFIER OFF;
 GO
-
-exec sp_dboption N'weblog', N'ANSI warnings', N'false'
+-- Disable ANSI warnings
+ALTER DATABASE weblog SET ANSI_WARNINGS OFF;
 GO
-
-exec sp_dboption N'weblog', N'auto create statistics', N'true'
+-- Enable auto-create statistics
+ALTER DATABASE weblog SET AUTO_CREATE_STATISTICS ON;
 GO
-
-exec sp_dboption N'weblog', N'auto update statistics', N'true'
-GO
+-- Enable auto-update statistics
+ALTER DATABASE weblog SET AUTO_UPDATE_STATISTICS ON;
 GO
 
 ------------------------
