@@ -46,7 +46,14 @@ Bulk load data conversion error (type mismatch or invalid character for the spec
    -  changed visits to varchar(1500)
    -  changed apstarid to varchar(1000)
    -  loaded fine w import flat file
--  
+
+
+## TODO:
+- get schema / table / column descriptions
+- load with data compression
+- add htmid, cx, cy, cz to all tables with ra/dec?
+
+  
 
 
   
