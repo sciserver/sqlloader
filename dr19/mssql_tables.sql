@@ -1087,12 +1087,7 @@ CREATE TABLE dbo.dr19_carton (
 );
 
 
-DROP TABLE IF EXISTS dbo.dr19_carton_csv
-CREATE TABLE dbo.dr19_carton_csv (
-    carton_pk integer NOT NULL,
-    version_pk integer NOT NULL,
-    carton varchar(500)
-);
+
 
 
 DROP TABLE IF EXISTS dbo.dr19_carton_to_target
