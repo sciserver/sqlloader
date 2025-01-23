@@ -1,5 +1,9 @@
 
 
+ALTER TABLE  dbo.dr19_allstar_dr17_synspec_rev1
+    ADD CONSTRAINT dr19_allstar_dr17_synspec_rev1_pkey PRIMARY KEY CLUSTERED (apstar_id);
+
+
 ALTER TABLE  dbo.dr19_allwise
     ADD CONSTRAINT dr19_allwise_pkey PRIMARY KEY CLUSTERED (cntr);
 
@@ -72,6 +76,10 @@ ALTER TABLE  dbo.dr19_catalog
     ADD CONSTRAINT dr19_catalog_pkey PRIMARY KEY CLUSTERED (catalogid);
 
 
+ALTER TABLE  dbo.dr19_catalog_to_allstar_dr17_synspec_rev1
+    ADD CONSTRAINT dr19_catalog_to_allstar_dr17_synspec_rev1_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
+
+
 ALTER TABLE  dbo.dr19_catalog_to_allwise
     ADD CONSTRAINT dr19_catalog_to_allwise_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
 
@@ -96,6 +104,10 @@ ALTER TABLE  dbo.dr19_catalog_to_catwise2020
     ADD CONSTRAINT dr19_catalog_to_catwise2020_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
 
 
+ALTER TABLE  dbo.dr19_catalog_to_gaia_dr2_source
+    ADD CONSTRAINT dr19_catalog_to_gaia_dr2_source_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
+
+
 ALTER TABLE  dbo.dr19_catalog_to_glimpse
     ADD CONSTRAINT dr19_catalog_to_glimpse_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
 
@@ -108,6 +120,22 @@ ALTER TABLE  dbo.dr19_catalog_to_legacy_survey_dr8
     ADD CONSTRAINT dr19_catalog_to_legacy_survey_dr8_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
 
 
+ALTER TABLE  dbo.dr19_catalog_to_mangatarget
+    ADD CONSTRAINT dr19_catalog_to_mangatarget_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
+
+
+ALTER TABLE  dbo.dr19_catalog_to_marvels_dr11_star
+    ADD CONSTRAINT dr19_catalog_to_marvels_dr11_star_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
+
+
+ALTER TABLE  dbo.dr19_catalog_to_marvels_dr12_star
+    ADD CONSTRAINT dr19_catalog_to_marvels_dr12_star_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
+
+
+ALTER TABLE  dbo.dr19_catalog_to_mastar_goodstars
+    ADD CONSTRAINT dr19_catalog_to_mastar_goodstars_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
+
+
 ALTER TABLE  dbo.dr19_catalog_to_panstarrs1
     ADD CONSTRAINT dr19_catalog_to_panstarrs1_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
 
@@ -118,6 +146,10 @@ ALTER TABLE  dbo.dr19_catalog_to_sdss_dr13_photoobj_primary
 
 ALTER TABLE  dbo.dr19_catalog_to_sdss_dr16_specobj
     ADD CONSTRAINT dr19_catalog_to_sdss_dr16_specobj_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
+
+
+ALTER TABLE  dbo.dr19_catalog_to_sdss_dr17_specobj
+    ADD CONSTRAINT dr19_catalog_to_sdss_dr17_specobj_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
 
 
 ALTER TABLE  dbo.dr19_catalog_to_skies_v1
@@ -138,6 +170,10 @@ ALTER TABLE  dbo.dr19_catalog_to_supercosmos
 
 ALTER TABLE  dbo.dr19_catalog_to_tic_v8
     ADD CONSTRAINT dr19_catalog_to_tic_v8_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
+
+
+ALTER TABLE  dbo.dr19_catalog_to_twomass_psc
+    ADD CONSTRAINT dr19_catalog_to_twomass_psc_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
 
 
 ALTER TABLE  dbo.dr19_catalog_to_tycho2
@@ -252,6 +288,10 @@ ALTER TABLE  dbo.dr19_instrument
     ADD CONSTRAINT dr19_instrument_pkey PRIMARY KEY CLUSTERED (pk);
 
 
+ALTER TABLE  dbo.dr19_legacy_catalog_catalogid
+    ADD CONSTRAINT dr19_legacy_catalog_catalogid_pkey PRIMARY KEY CLUSTERED (catalogid);
+
+
 ALTER TABLE  dbo.dr19_legacy_survey_dr8
     ADD CONSTRAINT dr19_legacy_survey_dr8_pkey PRIMARY KEY CLUSTERED (ls_id);
 
@@ -260,8 +300,36 @@ ALTER TABLE  dbo.dr19_magnitude
     ADD CONSTRAINT dr19_magnitude_pkey PRIMARY KEY CLUSTERED (magnitude_pk);
 
 
+ALTER TABLE  dbo.dr19_mangadapall
+    ADD CONSTRAINT dr19_mangadapall_pkey PRIMARY KEY CLUSTERED (pk);
+
+
+ALTER TABLE  dbo.dr19_mangadrpall
+    ADD CONSTRAINT dr19_mangadrpall_pkey PRIMARY KEY CLUSTERED (mangaid, plate);
+
+
+ALTER TABLE  dbo.dr19_mangatarget
+    ADD CONSTRAINT dr19_mangatarget_pkey PRIMARY KEY CLUSTERED (mangaid);
+
+
 ALTER TABLE  dbo.dr19_mapper
     ADD CONSTRAINT dr19_mapper_pkey PRIMARY KEY CLUSTERED (pk);
+
+
+ALTER TABLE  dbo.dr19_marvels_dr11_star
+    ADD CONSTRAINT dr19_marvels_dr11_star_pkey PRIMARY KEY CLUSTERED (starname);
+
+
+ALTER TABLE  dbo.dr19_marvels_dr12_star
+    ADD CONSTRAINT dr19_marvels_dr12_star_pkey PRIMARY KEY CLUSTERED (pk);
+
+
+ALTER TABLE  dbo.dr19_mastar_goodstars
+    ADD CONSTRAINT dr19_mastar_goodstars_pkey PRIMARY KEY CLUSTERED (mangaid);
+
+
+ALTER TABLE  dbo.dr19_mastar_goodvisits
+    ADD CONSTRAINT dr19_mastar_goodvisits_pkey PRIMARY KEY CLUSTERED (pk);
 
 
 ALTER TABLE  dbo.dr19_mipsgal
@@ -338,6 +406,18 @@ ALTER TABLE  dbo.dr19_sdss_dr16_qso
 
 ALTER TABLE  dbo.dr19_sdss_dr16_specobj
     ADD CONSTRAINT dr19_sdss_dr16_specobj_pkey PRIMARY KEY CLUSTERED (specobjid);
+
+
+ALTER TABLE  dbo.dr19_sdss_dr17_specobj
+    ADD CONSTRAINT dr19_sdss_dr17_specobj_pkey PRIMARY KEY CLUSTERED (specobjid);
+
+
+ALTER TABLE  dbo.dr19_sdss_id_flat
+    ADD CONSTRAINT dr19_sdss_id_flat_pkey PRIMARY KEY CLUSTERED (pk);
+
+
+ALTER TABLE  dbo.dr19_sdss_id_stacked
+    ADD CONSTRAINT dr19_sdss_id_stacked_pkey PRIMARY KEY CLUSTERED (sdss_id);
 
 
 ALTER TABLE  dbo.dr19_sdssv_boss_conflist
@@ -434,8 +514,3 @@ ALTER TABLE  dbo.dr19_yso_clustering
 
 ALTER TABLE  dbo.dr19_zari18pms
     ADD CONSTRAINT dr19_zari18pms_pkey PRIMARY KEY CLUSTERED (source);
-
-ALTER TABLE dr19_catalog_to_twomass_psc
-    ADD CONSTRAINT dr19_catalog_to_twomass_psc_pkey PRIMARY KEY CLUSTERED(version_id, catalogid, target_id);
-
-

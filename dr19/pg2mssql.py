@@ -2,9 +2,14 @@
 
 import os
 
+
+date ="01222025"
 print(os.getcwd())
 
-filename = 'create_minidb_dr19.sql'
+
+
+date ="01222025"
+filename = f"H:/GitHub/sqlloader/dr19/create_minidb_dr19_rev_{date}.sql"
 
 
 tables = []
@@ -53,19 +58,18 @@ with open(filename) as file:
             indexes.append(index)
             break
    
-'''
 print(tables)
 print(pks)
 print(indexes)
 print(fks)
-'''
+
 
 
 # now write out each file in mssql syntax
 
 # tables
 
-t = open('mssql_tables.sql', 'w')
+t = open(f'mssql_tables_{date}.sql', 'w')
 
 for table in tables:
     t.write('\n\n')
@@ -79,19 +83,19 @@ for table in tables:
         t.write(line.replace('minidb_dr19.', 'dbo.').replace('boolean','bit').replace('character varying', 'varchar').replace('text', 'varchar(500)').replace('character', 'varchar').replace('plan', 'planname'))
 
 # pks
-p = open('mssql_pk.sql', 'w')
+p = open(f'mssql_pk_{date}.sql', 'w')
 for pk in pks:
     p.write('\n\n')
     for line in pk:
         p.write(line.replace('minidb_dr19.', 'dbo.').replace('ONLY', '').replace('PRIMARY KEY', 'PRIMARY KEY CLUSTERED'))
 
-i = open('mssql_indexes.sql', 'w')
+i = open(f'mssql_indexes_{date}.sql', 'w')
 for idx in indexes:
     i.write('\n\n')
     for line in idx:
         i.write(line.replace('minidb_dr19.', 'dbo.').replace('CREATE INDEX', 'CREATE NONCLUSTERED INDEX').replace('USING btree', ''))
 
-ff = open('mssql_fk.sql', 'w')
+ff = open(f'mssql_fk_{date}.sql', 'w')
 for fk in fks:
     ff.write('\n\n')
     for line in fk:

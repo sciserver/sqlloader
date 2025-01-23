@@ -61,7 +61,7 @@ with open(filename) as file:
 # now write out each file in mssql syntax
 
 # tables
-t = open('mssql_tables.sql', 'w')
+t = open('mssql_tables_12112024.sql', 'w')
 
 for table in tables:
     t.write('\n\n')
@@ -75,19 +75,19 @@ for table in tables:
         t.write(line.replace('minidb.', 'dbo.').replace('boolean','bit').replace('character varying', 'varchar').replace('text', 'varchar(500)').replace('character', 'varchar').replace('plan', 'planname'))
 
 # pks
-p = open('mssql_pk.sql', 'w')
+p = open('mssql_pk_12112024.sql', 'w')
 for pk in pks:
     p.write('\n\n')
     for line in pk:
         p.write(line.replace('minidb.', 'dbo.').replace('ONLY', '').replace('PRIMARY KEY', 'PRIMARY KEY CLUSTERED'))
 
-i = open('mssql_indexes.sql', 'w')
+i = open('mssql_indexes_12112024.sql', 'w')
 for idx in indexes:
     i.write('\n\n')
     for line in idx:
         i.write(line.replace('minidb.', 'dbo.').replace('CREATE INDEX', 'CREATE NONCLUSTERED INDEX').replace('USING btree', ''))
 
-ff = open('mssql_fk.sql', 'w')
+ff = open('mssql_fk_12112024.sql', 'w')
 for fk in fks:
     ff.write('\n\n')
     for line in fk:

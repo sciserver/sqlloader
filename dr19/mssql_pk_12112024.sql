@@ -96,6 +96,10 @@ ALTER TABLE  dbo.dr19_catalog_to_catwise2020
     ADD CONSTRAINT dr19_catalog_to_catwise2020_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
 
 
+ALTER TABLE  dbo.dr19_catalog_to_gaia_dr2_source
+    ADD CONSTRAINT dr19_catalog_to_gaia_dr2_source_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
+
+
 ALTER TABLE  dbo.dr19_catalog_to_glimpse
     ADD CONSTRAINT dr19_catalog_to_glimpse_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
 
@@ -138,6 +142,10 @@ ALTER TABLE  dbo.dr19_catalog_to_supercosmos
 
 ALTER TABLE  dbo.dr19_catalog_to_tic_v8
     ADD CONSTRAINT dr19_catalog_to_tic_v8_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
+
+
+ALTER TABLE  dbo.dr19_catalog_to_twomass_psc
+    ADD CONSTRAINT dr19_catalog_to_twomass_psc_pkey PRIMARY KEY CLUSTERED (version_id, catalogid, target_id);
 
 
 ALTER TABLE  dbo.dr19_catalog_to_tycho2
@@ -434,8 +442,3 @@ ALTER TABLE  dbo.dr19_yso_clustering
 
 ALTER TABLE  dbo.dr19_zari18pms
     ADD CONSTRAINT dr19_zari18pms_pkey PRIMARY KEY CLUSTERED (source);
-
-ALTER TABLE dr19_catalog_to_twomass_psc
-    ADD CONSTRAINT dr19_catalog_to_twomass_psc_pkey PRIMARY KEY CLUSTERED(version_id, catalogid, target_id);
-
-

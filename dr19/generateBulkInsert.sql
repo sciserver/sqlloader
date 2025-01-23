@@ -22,7 +22,7 @@ set loadSTatus = 0
 */
 ----------------------------------------------
 -- set these!!!!
-declare @doExecute bit = 1
+declare @doExecute bit = 0
 declare @truncate bit = 1
 -----------------------------------------------
 
@@ -34,7 +34,8 @@ declare @targettable sysname
 
 declare cur cursor fast_forward for 
 select id, path, prefix, targettable from filestoload
-where loadStatus = 0
+where loadStatus = 2
+AND id = 8
 
 open cur
 fetch next from cur into @id, @path, @prefix, @targettable
