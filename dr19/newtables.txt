@@ -1,6 +1,6 @@
 minidb_dr19.dr19_sdss_id_flat
 minidb_dr19.dr19_sdss_id_stacked
-minidb_dr19.dr19_sdss_id_to_catalog
+minidb_dr19.dr19_sdss_id_to_catalog --
 minidb_dr19.dr19_catalog_to_mangatarget
 minidb_dr19.dr19_mangatarget
 minidb_dr19.dr19_catalog_to_mastar_goodstars
@@ -18,3 +18,25 @@ minidb_dr19.dr19_catalog_to_sdss_dr17_specobj
 minidb_dr19.dr19_sdss_dr17_specobj
 minidb_dr19.dr19_mangadapall
 minidb_dr19.dr19_mangadrpall
+
+
+minidb_dr19.dr19_allstar_dr17_synspec_rev1
+minidb_dr19.dr19_catalog_to_allstar_dr17_synspec_rev1
+minidb_dr19.dr19_catalog_to_mangatarget
+minidb_dr19.dr19_catalog_to_marvels_dr11_star
+minidb_dr19.dr19_catalog_to_marvels_dr12_star
+minidb_dr19.dr19_catalog_to_mastar_goodstars
+minidb_dr19.dr19_catalog_to_sdss_dr16_specobj
+minidb_dr19.dr19_catalog_to_sdss_dr17_specobj
+minidb_dr19.dr19_mangadapall
+minidb_dr19.dr19_mangadrpall
+minidb_dr19.dr19_mangatarget
+minidb_dr19.dr19_marvels_dr11_star
+minidb_dr19.dr19_marvels_dr12_star
+minidb_dr19.dr19_mastar_goodstars
+minidb_dr19.dr19_mastar_goodvisits
+minidb_dr19.dr19_sdss_dr16_specobj
+minidb_dr19.dr19_sdss_dr17_specobj
+minidb_dr19.dr19_sdss_id_flat
+minidb_dr19.dr19_sdss_id_stacked
+minidb_dr19.dr19_sdss_id_to_catalog --

@@ -56,8 +56,8 @@ ALTER TABLE  dbo.dr19_cadence
     ADD CONSTRAINT dr19_cadence_pkey PRIMARY KEY CLUSTERED (pk);
 
 
-ALTER TABLE  dbo.dr19_carton_csv
-    ADD CONSTRAINT dr19_carton_csv_pkey PRIMARY KEY CLUSTERED (carton_pk, version_pk);
+--ALTER TABLE  dbo.dr19_carton_csv
+--    ADD CONSTRAINT dr19_carton_csv_pkey PRIMARY KEY CLUSTERED (carton_pk, version_pk);
 
 
 ALTER TABLE  dbo.dr19_carton
@@ -288,8 +288,8 @@ ALTER TABLE  dbo.dr19_instrument
     ADD CONSTRAINT dr19_instrument_pkey PRIMARY KEY CLUSTERED (pk);
 
 
-ALTER TABLE  dbo.dr19_legacy_catalog_catalogid
-    ADD CONSTRAINT dr19_legacy_catalog_catalogid_pkey PRIMARY KEY CLUSTERED (catalogid);
+--ALTER TABLE  dbo.dr19_legacy_catalog_catalogid
+--    ADD CONSTRAINT dr19_legacy_catalog_catalogid_pkey PRIMARY KEY CLUSTERED (catalogid);
 
 
 ALTER TABLE  dbo.dr19_legacy_survey_dr8
@@ -418,6 +418,10 @@ ALTER TABLE  dbo.dr19_sdss_id_flat
 
 ALTER TABLE  dbo.dr19_sdss_id_stacked
     ADD CONSTRAINT dr19_sdss_id_stacked_pkey PRIMARY KEY CLUSTERED (sdss_id);
+
+	
+ALTER TABLE  dbo.dr19_sdss_id_to_catalog
+    ADD CONSTRAINT dr19_sdss_id_to_catalog_pkey PRIMARY KEY CLUSTERED (pk);
 
 
 ALTER TABLE  dbo.dr19_sdssv_boss_conflist

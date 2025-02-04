@@ -9,13 +9,13 @@ CREATE NONCLUSTERED INDEX dr19_allstar_dr17_synspec_rev1_aspcap_id_idx ON dbo.dr
 CREATE NONCLUSTERED INDEX dr19_allwise_designation_idx ON dbo.dr19_allwise  (designation);
 
 
-CREATE NONCLUSTERED INDEX dr19_allwise_expr_idx ON dbo.dr19_allwise  (((w1mpro - w2mpro)));
+--CREATE NONCLUSTERED INDEX dr19_allwise_expr_idx ON dbo.dr19_allwise  (((w1mpro - w2mpro)));
 
 
 CREATE NONCLUSTERED INDEX dr19_allwise_ph_qual_idx ON dbo.dr19_allwise  (ph_qual);
 
 
-CREATE NONCLUSTERED INDEX dr19_allwise_q3c_ang2ipix_idx ON dbo.dr19_allwise  (public.q3c_ang2ipix((ra)::double precision, ("dec")::double precision));
+--CREATE NONCLUSTERED INDEX dr19_allwise_q3c_ang2ipix_idx ON dbo.dr19_allwise  (public.q3c_ang2ipix((ra)::double precision, ("dec")::double precision));
 
 
 CREATE NONCLUSTERED INDEX dr19_allwise_w1mpro_idx ON dbo.dr19_allwise  (w1mpro);
@@ -69,7 +69,7 @@ CREATE NONCLUSTERED INDEX dr19_bhm_csc_mag_r_idx ON dbo.dr19_bhm_csc  (mag_r);
 CREATE NONCLUSTERED INDEX dr19_bhm_csc_mag_z_idx ON dbo.dr19_bhm_csc  (mag_z);
 
 
-CREATE NONCLUSTERED INDEX dr19_bhm_csc_q3c_ang2ipix_idx ON dbo.dr19_bhm_csc  (public.q3c_ang2ipix(oir_ra, oir_dec));
+--CREATE NONCLUSTERED INDEX dr19_bhm_csc_q3c_ang2ipix_idx ON dbo.dr19_bhm_csc  (public.q3c_ang2ipix(oir_ra, oir_dec));
 
 
 CREATE NONCLUSTERED INDEX dr19_bhm_csc_v2_cxoid_idx ON dbo.dr19_bhm_csc_v2  (cxoid);
@@ -96,7 +96,7 @@ CREATE NONCLUSTERED INDEX dr19_bhm_csc_v2_oid_idx ON dbo.dr19_bhm_csc_v2  (oid);
 CREATE NONCLUSTERED INDEX dr19_bhm_csc_v2_omag_idx ON dbo.dr19_bhm_csc_v2  (omag);
 
 
-CREATE NONCLUSTERED INDEX dr19_bhm_csc_v2_q3c_ang2ipix_idx ON dbo.dr19_bhm_csc_v2  (public.q3c_ang2ipix(xra, xdec));
+--CREATE NONCLUSTERED INDEX dr19_bhm_csc_v2_q3c_ang2ipix_idx ON dbo.dr19_bhm_csc_v2  (public.q3c_ang2ipix(xra, xdec));
 
 
 CREATE NONCLUSTERED INDEX dr19_bhm_efeds_veto_fiberid_idx ON dbo.dr19_bhm_efeds_veto  (fiberid);
@@ -108,7 +108,7 @@ CREATE NONCLUSTERED INDEX dr19_bhm_efeds_veto_mjd_idx ON dbo.dr19_bhm_efeds_veto
 CREATE NONCLUSTERED INDEX dr19_bhm_efeds_veto_plate_idx ON dbo.dr19_bhm_efeds_veto  (plate);
 
 
-CREATE NONCLUSTERED INDEX dr19_bhm_efeds_veto_q3c_ang2ipix_idx ON dbo.dr19_bhm_efeds_veto  (public.q3c_ang2ipix(plug_ra, plug_dec));
+--CREATE NONCLUSTERED INDEX dr19_bhm_efeds_veto_q3c_ang2ipix_idx ON dbo.dr19_bhm_efeds_veto  (public.q3c_ang2ipix(plug_ra, plug_dec));
 
 
 CREATE NONCLUSTERED INDEX dr19_bhm_efeds_veto_run2d_idx ON dbo.dr19_bhm_efeds_veto  (run2d);
@@ -141,10 +141,10 @@ CREATE NONCLUSTERED INDEX dr19_bhm_rm_tweaks_mjd_idx ON dbo.dr19_bhm_rm_tweaks  
 CREATE NONCLUSTERED INDEX dr19_bhm_rm_tweaks_plate_idx ON dbo.dr19_bhm_rm_tweaks  (plate);
 
 
-CREATE NONCLUSTERED INDEX dr19_bhm_rm_tweaks_q3c_ang2ipix_idx ON dbo.dr19_bhm_rm_tweaks  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_bhm_rm_tweaks_q3c_ang2ipix_idx ON dbo.dr19_bhm_rm_tweaks  (public.q3c_ang2ipix(ra, "dec"));
 
 
-CREATE NONCLUSTERED INDEX dr19_bhm_rm_tweaks_q3c_ang2ipix_idx1 ON dbo.dr19_bhm_rm_tweaks  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_bhm_rm_tweaks_q3c_ang2ipix_idx1 ON dbo.dr19_bhm_rm_tweaks  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_bhm_rm_tweaks_rm_field_name_idx ON dbo.dr19_bhm_rm_tweaks  (rm_field_name);
@@ -168,7 +168,7 @@ CREATE NONCLUSTERED INDEX dr19_bhm_rm_v0_2_objid_sdss_idx ON dbo.dr19_bhm_rm_v0_
 CREATE NONCLUSTERED INDEX dr19_bhm_rm_v0_2_objid_unwise_idx ON dbo.dr19_bhm_rm_v0_2  (objid_unwise);
 
 
-CREATE NONCLUSTERED INDEX dr19_bhm_rm_v0_2_q3c_ang2ipix_idx ON dbo.dr19_bhm_rm_v0_2  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_bhm_rm_v0_2_q3c_ang2ipix_idx ON dbo.dr19_bhm_rm_v0_2  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_bhm_rm_v0_2_source_id_gaia_idx ON dbo.dr19_bhm_rm_v0_2  (source_id_gaia);
@@ -195,7 +195,7 @@ CREATE NONCLUSTERED INDEX dr19_bhm_rm_v0_plxsig_idx ON dbo.dr19_bhm_rm_v0  (plxs
 CREATE NONCLUSTERED INDEX dr19_bhm_rm_v0_pmsig_idx ON dbo.dr19_bhm_rm_v0  (pmsig);
 
 
-CREATE NONCLUSTERED INDEX dr19_bhm_rm_v0_q3c_ang2ipix_idx ON dbo.dr19_bhm_rm_v0  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_bhm_rm_v0_q3c_ang2ipix_idx ON dbo.dr19_bhm_rm_v0  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_bhm_rm_v0_skewt_qso_idx ON dbo.dr19_bhm_rm_v0  (skewt_qso);
@@ -216,7 +216,7 @@ CREATE NONCLUSTERED INDEX dr19_bhm_spiders_agn_superset_gaia_dr2_source_id_idx O
 CREATE NONCLUSTERED INDEX dr19_bhm_spiders_agn_superset_ls_id_idx ON dbo.dr19_bhm_spiders_agn_superset  (ls_id);
 
 
-CREATE NONCLUSTERED INDEX dr19_bhm_spiders_agn_superset_q3c_ang2ipix_idx ON dbo.dr19_bhm_spiders_agn_superset  (public.q3c_ang2ipix(opt_ra, opt_dec));
+--CREATE NONCLUSTERED INDEX dr19_bhm_spiders_agn_superset_q3c_ang2ipix_idx ON dbo.dr19_bhm_spiders_agn_superset  (public.q3c_ang2ipix(opt_ra, opt_dec));
 
 
 CREATE NONCLUSTERED INDEX dr19_bhm_spiders_clusters_superset_ero_flux_idx ON dbo.dr19_bhm_spiders_clusters_superset  (ero_flux);
@@ -228,7 +228,7 @@ CREATE NONCLUSTERED INDEX dr19_bhm_spiders_clusters_superset_gaia_dr2_source_id_
 CREATE NONCLUSTERED INDEX dr19_bhm_spiders_clusters_superset_ls_id_idx ON dbo.dr19_bhm_spiders_clusters_superset  (ls_id);
 
 
-CREATE NONCLUSTERED INDEX dr19_bhm_spiders_clusters_superset_q3c_ang2ipix_idx ON dbo.dr19_bhm_spiders_clusters_superset  (public.q3c_ang2ipix(opt_ra, opt_dec));
+--CREATE NONCLUSTERED INDEX dr19_bhm_spiders_clusters_superset_q3c_ang2ipix_idx ON dbo.dr19_bhm_spiders_clusters_superset  (public.q3c_ang2ipix(opt_ra, opt_dec));
 
 
 CREATE NONCLUSTERED INDEX dr19_cadence_epoch_cadence_pk_idx ON dbo.dr19_cadence_epoch  (cadence_pk);
@@ -237,13 +237,13 @@ CREATE NONCLUSTERED INDEX dr19_cadence_epoch_cadence_pk_idx ON dbo.dr19_cadence_
 CREATE NONCLUSTERED INDEX dr19_cadence_epoch_label_idx ON dbo.dr19_cadence_epoch  (label);
 
 
-CREATE NONCLUSTERED INDEX dr19_carton_csv_carton_idx ON dbo.dr19_carton_csv  (carton);
+--CREATE NONCLUSTERED INDEX dr19_carton_csv_carton_idx ON dbo.dr19_carton_csv  (carton);
 
 
-CREATE NONCLUSTERED INDEX dr19_carton_csv_carton_pk_idx ON dbo.dr19_carton_csv  (carton_pk);
+--CREATE NONCLUSTERED INDEX dr19_carton_csv_carton_pk_idx ON dbo.dr19_carton_csv  (carton_pk);
 
 
-CREATE NONCLUSTERED INDEX dr19_carton_csv_version_pk_idx ON dbo.dr19_carton_csv  (version_pk);
+--CREATE NONCLUSTERED INDEX dr19_carton_csv_version_pk_idx ON dbo.dr19_carton_csv  (version_pk);
 
 
 CREATE NONCLUSTERED INDEX dr19_carton_to_target_cadence_pk_idx ON dbo.dr19_carton_to_target  (cadence_pk);
@@ -258,13 +258,13 @@ CREATE NONCLUSTERED INDEX dr19_carton_to_target_instrument_pk_idx ON dbo.dr19_ca
 CREATE NONCLUSTERED INDEX dr19_carton_to_target_target_pk_idx ON dbo.dr19_carton_to_target  (target_pk);
 
 
-CREATE NONCLUSTERED INDEX dr19_cataclysmic_variables_q3c_ang2ipix_idx ON dbo.dr19_cataclysmic_variables  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_cataclysmic_variables_q3c_ang2ipix_idx ON dbo.dr19_cataclysmic_variables  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_cataclysmic_variables_source_id_idx ON dbo.dr19_cataclysmic_variables  (source_id);
 
 
-CREATE NONCLUSTERED INDEX dr19_catalog_q3c_ang2ipix_idx ON dbo.dr19_catalog  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_catalog_q3c_ang2ipix_idx ON dbo.dr19_catalog  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_catalog_to_allstar_dr17_synspec_rev1_catalogid_idx ON dbo.dr19_catalog_to_allstar_dr17_synspec_rev1  (catalogid);
@@ -915,10 +915,10 @@ CREATE NONCLUSTERED INDEX dr19_catalog_to_xmm_om_suss_4_1_version_id_target_id_b
 CREATE NONCLUSTERED INDEX dr19_catalog_version_id_idx ON dbo.dr19_catalog  (version_id);
 
 
-CREATE NONCLUSTERED INDEX dr19_catwise2020_q3c_ang2ipix_idx ON dbo.dr19_catwise2020  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_catwise2020_q3c_ang2ipix_idx ON dbo.dr19_catwise2020  (public.q3c_ang2ipix(ra, "dec"));
 
 
-CREATE NONCLUSTERED INDEX dr19_catwise2020_q3c_ang2ipix_idx1 ON dbo.dr19_catwise2020  (public.q3c_ang2ipix(ra_pm, dec_pm));
+--CREATE NONCLUSTERED INDEX dr19_catwise2020_q3c_ang2ipix_idx1 ON dbo.dr19_catwise2020  (public.q3c_ang2ipix(ra_pm, dec_pm));
 
 
 CREATE NONCLUSTERED INDEX dr19_catwise2020_source_name_idx ON dbo.dr19_catwise2020  (source_name);
@@ -954,7 +954,7 @@ CREATE NONCLUSTERED INDEX dr19_ebosstarget_v5_objc_type_idx ON dbo.dr19_ebosstar
 CREATE NONCLUSTERED INDEX dr19_ebosstarget_v5_objid_targeting_idx ON dbo.dr19_ebosstarget_v5  (objid_targeting);
 
 
-CREATE NONCLUSTERED INDEX dr19_ebosstarget_v5_q3c_ang2ipix_idx ON dbo.dr19_ebosstarget_v5  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_ebosstarget_v5_q3c_ang2ipix_idx ON dbo.dr19_ebosstarget_v5  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_ebosstarget_v5_resolve_status_idx ON dbo.dr19_ebosstarget_v5  (resolve_status);
@@ -981,10 +981,10 @@ CREATE NONCLUSTERED INDEX dr19_erosita_superset_agn_gaia_dr2_id_idx ON dbo.dr19_
 CREATE NONCLUSTERED INDEX dr19_erosita_superset_agn_ls_id_idx ON dbo.dr19_erosita_superset_agn  (ls_id);
 
 
-CREATE NONCLUSTERED INDEX dr19_erosita_superset_agn_q3c_ang2ipix_idx ON dbo.dr19_erosita_superset_agn  (public.q3c_ang2ipix(opt_ra, opt_dec));
+--CREATE NONCLUSTERED INDEX dr19_erosita_superset_agn_q3c_ang2ipix_idx ON dbo.dr19_erosita_superset_agn  (public.q3c_ang2ipix(opt_ra, opt_dec));
 
 
-CREATE NONCLUSTERED INDEX dr19_erosita_superset_agn_q3c_ang2ipix_idx1 ON dbo.dr19_erosita_superset_agn  (public.q3c_ang2ipix(ero_ra, ero_dec));
+--CREATE NONCLUSTERED INDEX dr19_erosita_superset_agn_q3c_ang2ipix_idx1 ON dbo.dr19_erosita_superset_agn  (public.q3c_ang2ipix(ero_ra, ero_dec));
 
 
 CREATE NONCLUSTERED INDEX dr19_erosita_superset_clusters_catwise2020_id_idx ON dbo.dr19_erosita_superset_clusters  (catwise2020_id);
@@ -1008,10 +1008,10 @@ CREATE NONCLUSTERED INDEX dr19_erosita_superset_clusters_gaia_dr2_id_idx ON dbo.
 CREATE NONCLUSTERED INDEX dr19_erosita_superset_clusters_ls_id_idx ON dbo.dr19_erosita_superset_clusters  (ls_id);
 
 
-CREATE NONCLUSTERED INDEX dr19_erosita_superset_clusters_q3c_ang2ipix_idx ON dbo.dr19_erosita_superset_clusters  (public.q3c_ang2ipix(opt_ra, opt_dec));
+--CREATE NONCLUSTERED INDEX dr19_erosita_superset_clusters_q3c_ang2ipix_idx ON dbo.dr19_erosita_superset_clusters  (public.q3c_ang2ipix(opt_ra, opt_dec));
 
 
-CREATE NONCLUSTERED INDEX dr19_erosita_superset_clusters_q3c_ang2ipix_idx1 ON dbo.dr19_erosita_superset_clusters  (public.q3c_ang2ipix(ero_ra, ero_dec));
+--CREATE NONCLUSTERED INDEX dr19_erosita_superset_clusters_q3c_ang2ipix_idx1 ON dbo.dr19_erosita_superset_clusters  (public.q3c_ang2ipix(ero_ra, ero_dec));
 
 
 CREATE NONCLUSTERED INDEX dr19_erosita_superset_compactobjects_catwise2020_id_idx ON dbo.dr19_erosita_superset_compactobjects  (catwise2020_id);
@@ -1035,10 +1035,10 @@ CREATE NONCLUSTERED INDEX dr19_erosita_superset_compactobjects_gaia_dr2_id_idx O
 CREATE NONCLUSTERED INDEX dr19_erosita_superset_compactobjects_ls_id_idx ON dbo.dr19_erosita_superset_compactobjects  (ls_id);
 
 
-CREATE NONCLUSTERED INDEX dr19_erosita_superset_compactobjects_q3c_ang2ipix_idx ON dbo.dr19_erosita_superset_compactobjects  (public.q3c_ang2ipix(opt_ra, opt_dec));
+--CREATE NONCLUSTERED INDEX dr19_erosita_superset_compactobjects_q3c_ang2ipix_idx ON dbo.dr19_erosita_superset_compactobjects  (public.q3c_ang2ipix(opt_ra, opt_dec));
 
 
-CREATE NONCLUSTERED INDEX dr19_erosita_superset_compactobjects_q3c_ang2ipix_idx1 ON dbo.dr19_erosita_superset_compactobjects  (public.q3c_ang2ipix(ero_ra, ero_dec));
+--CREATE NONCLUSTERED INDEX dr19_erosita_superset_compactobjects_q3c_ang2ipix_idx1 ON dbo.dr19_erosita_superset_compactobjects  (public.q3c_ang2ipix(ero_ra, ero_dec));
 
 
 CREATE NONCLUSTERED INDEX dr19_erosita_superset_stars_catwise2020_id_idx ON dbo.dr19_erosita_superset_stars  (catwise2020_id);
@@ -1062,10 +1062,10 @@ CREATE NONCLUSTERED INDEX dr19_erosita_superset_stars_gaia_dr2_id_idx ON dbo.dr1
 CREATE NONCLUSTERED INDEX dr19_erosita_superset_stars_ls_id_idx ON dbo.dr19_erosita_superset_stars  (ls_id);
 
 
-CREATE NONCLUSTERED INDEX dr19_erosita_superset_stars_q3c_ang2ipix_idx ON dbo.dr19_erosita_superset_stars  (public.q3c_ang2ipix(opt_ra, opt_dec));
+--CREATE NONCLUSTERED INDEX dr19_erosita_superset_stars_q3c_ang2ipix_idx ON dbo.dr19_erosita_superset_stars  (public.q3c_ang2ipix(opt_ra, opt_dec));
 
 
-CREATE NONCLUSTERED INDEX dr19_erosita_superset_stars_q3c_ang2ipix_idx1 ON dbo.dr19_erosita_superset_stars  (public.q3c_ang2ipix(ero_ra, ero_dec));
+--CREATE NONCLUSTERED INDEX dr19_erosita_superset_stars_q3c_ang2ipix_idx1 ON dbo.dr19_erosita_superset_stars  (public.q3c_ang2ipix(ero_ra, ero_dec));
 
 
 CREATE NONCLUSTERED INDEX dr19_field_cadence_pk_idx ON dbo.dr19_field  (cadence_pk);
@@ -1092,7 +1092,7 @@ CREATE NONCLUSTERED INDEX dr19_gaia_dr2_source_astrometric_excess_noise_idx ON d
 CREATE NONCLUSTERED INDEX dr19_gaia_dr2_source_bp_rp_idx ON dbo.dr19_gaia_dr2_source  (bp_rp);
 
 
-CREATE NONCLUSTERED INDEX dr19_gaia_dr2_source_expr_idx ON dbo.dr19_gaia_dr2_source  (((parallax - parallax_error)));
+--CREATE NONCLUSTERED INDEX dr19_gaia_dr2_source_expr_idx ON dbo.dr19_gaia_dr2_source  (((parallax - parallax_error)));
 
 
 CREATE NONCLUSTERED INDEX dr19_gaia_dr2_source_parallax_idx ON dbo.dr19_gaia_dr2_source  (parallax);
@@ -1107,7 +1107,7 @@ CREATE NONCLUSTERED INDEX dr19_gaia_dr2_source_phot_bp_mean_mag_idx ON dbo.dr19_
 CREATE NONCLUSTERED INDEX dr19_gaia_dr2_source_phot_rp_mean_mag_idx ON dbo.dr19_gaia_dr2_source  (phot_rp_mean_mag);
 
 
-CREATE NONCLUSTERED INDEX dr19_gaia_dr2_source_q3c_ang2ipix_idx ON dbo.dr19_gaia_dr2_source  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_gaia_dr2_source_q3c_ang2ipix_idx ON dbo.dr19_gaia_dr2_source  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_gaia_dr2_wd_gmag_idx ON dbo.dr19_gaia_dr2_wd  (gmag);
@@ -1116,7 +1116,7 @@ CREATE NONCLUSTERED INDEX dr19_gaia_dr2_wd_gmag_idx ON dbo.dr19_gaia_dr2_wd  (gm
 CREATE NONCLUSTERED INDEX dr19_gaia_dr2_wd_pwd_idx ON dbo.dr19_gaia_dr2_wd  (pwd);
 
 
-CREATE NONCLUSTERED INDEX dr19_gaia_dr2_wd_q3c_ang2ipix_idx ON dbo.dr19_gaia_dr2_wd  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_gaia_dr2_wd_q3c_ang2ipix_idx ON dbo.dr19_gaia_dr2_wd  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_gaia_unwise_agn_g_idx ON dbo.dr19_gaia_unwise_agn  (g);
@@ -1125,7 +1125,7 @@ CREATE NONCLUSTERED INDEX dr19_gaia_unwise_agn_g_idx ON dbo.dr19_gaia_unwise_agn
 CREATE NONCLUSTERED INDEX dr19_gaia_unwise_agn_prob_rf_idx ON dbo.dr19_gaia_unwise_agn  (prob_rf);
 
 
-CREATE NONCLUSTERED INDEX dr19_gaia_unwise_agn_q3c_ang2ipix_idx ON dbo.dr19_gaia_unwise_agn  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_gaia_unwise_agn_q3c_ang2ipix_idx ON dbo.dr19_gaia_unwise_agn  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_gaia_unwise_agn_unwise_objid_idx ON dbo.dr19_gaia_unwise_agn  (unwise_objid);
@@ -1155,7 +1155,7 @@ CREATE NONCLUSTERED INDEX dr19_geometric_distances_gaia_dr2_r_lo_idx ON dbo.dr19
 CREATE NONCLUSTERED INDEX dr19_glimpse_designation_idx ON dbo.dr19_glimpse  (designation);
 
 
-CREATE NONCLUSTERED INDEX dr19_glimpse_q3c_ang2ipix_idx ON dbo.dr19_glimpse  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_glimpse_q3c_ang2ipix_idx ON dbo.dr19_glimpse  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_glimpse_tmass_cntr_idx ON dbo.dr19_glimpse  (tmass_cntr);
@@ -1164,7 +1164,7 @@ CREATE NONCLUSTERED INDEX dr19_glimpse_tmass_cntr_idx ON dbo.dr19_glimpse  (tmas
 CREATE NONCLUSTERED INDEX dr19_glimpse_tmass_designation_idx ON dbo.dr19_glimpse  (tmass_designation);
 
 
-CREATE NONCLUSTERED INDEX dr19_guvcat_expr_idx ON dbo.dr19_guvcat  (((fuv_mag - nuv_mag)));
+--mathCREATE NONCLUSTERED INDEX dr19_guvcat_expr_idx ON dbo.dr19_guvcat  (((fuv_mag - nuv_mag)));
 
 
 CREATE NONCLUSTERED INDEX dr19_guvcat_fuv_mag_idx ON dbo.dr19_guvcat  (fuv_mag);
@@ -1173,7 +1173,7 @@ CREATE NONCLUSTERED INDEX dr19_guvcat_fuv_mag_idx ON dbo.dr19_guvcat  (fuv_mag);
 CREATE NONCLUSTERED INDEX dr19_guvcat_nuv_mag_idx ON dbo.dr19_guvcat  (nuv_mag);
 
 
-CREATE NONCLUSTERED INDEX dr19_guvcat_q3c_ang2ipix_idx ON dbo.dr19_guvcat  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_guvcat_q3c_ang2ipix_idx ON dbo.dr19_guvcat  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_hole_holeid_idx ON dbo.dr19_hole  (holeid);
@@ -1230,7 +1230,7 @@ CREATE NONCLUSTERED INDEX dr19_legacy_survey_dr8_nobs_z_idx ON dbo.dr19_legacy_s
 CREATE NONCLUSTERED INDEX dr19_legacy_survey_dr8_parallax_idx ON dbo.dr19_legacy_survey_dr8  (parallax);
 
 
-CREATE NONCLUSTERED INDEX dr19_legacy_survey_dr8_q3c_ang2ipix_idx ON dbo.dr19_legacy_survey_dr8  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_legacy_survey_dr8_q3c_ang2ipix_idx ON dbo.dr19_legacy_survey_dr8  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_legacy_survey_dr8_ref_cat_idx ON dbo.dr19_legacy_survey_dr8  (ref_cat);
@@ -1431,7 +1431,7 @@ CREATE NONCLUSTERED INDEX dr19_mipsgal_glon_idx ON dbo.dr19_mipsgal  (glon);
 CREATE NONCLUSTERED INDEX dr19_mipsgal_hmag_idx ON dbo.dr19_mipsgal  (hmag);
 
 
-CREATE NONCLUSTERED INDEX dr19_mipsgal_q3c_ang2ipix_idx ON dbo.dr19_mipsgal  (public.q3c_ang2ipix(radeg, dedeg));
+--CREATE NONCLUSTERED INDEX dr19_mipsgal_q3c_ang2ipix_idx ON dbo.dr19_mipsgal  (public.q3c_ang2ipix(radeg, dedeg));
 
 
 CREATE NONCLUSTERED INDEX dr19_mipsgal_twomass_name_idx ON dbo.dr19_mipsgal  (twomass_name);
@@ -1440,10 +1440,10 @@ CREATE NONCLUSTERED INDEX dr19_mipsgal_twomass_name_idx ON dbo.dr19_mipsgal  (tw
 CREATE NONCLUSTERED INDEX dr19_mwm_tess_ob_h_mag_idx ON dbo.dr19_mwm_tess_ob  (h_mag);
 
 
-CREATE NONCLUSTERED INDEX dr19_mwm_tess_ob_q3c_ang2ipix_idx ON dbo.dr19_mwm_tess_ob  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_mwm_tess_ob_q3c_ang2ipix_idx ON dbo.dr19_mwm_tess_ob  (public.q3c_ang2ipix(ra, "dec"));
 
 
-CREATE NONCLUSTERED INDEX dr19_mwm_tess_ob_q3c_ang2ipix_idx1 ON dbo.dr19_mwm_tess_ob  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_mwm_tess_ob_q3c_ang2ipix_idx1 ON dbo.dr19_mwm_tess_ob  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_opsdb_apo_camera_frame_exposure_pk_idx ON dbo.dr19_opsdb_apo_camera_frame  (exposure_pk);
@@ -1476,7 +1476,7 @@ CREATE NONCLUSTERED INDEX dr19_panstarrs1_i_flags_idx ON dbo.dr19_panstarrs1  (i
 CREATE NONCLUSTERED INDEX dr19_panstarrs1_i_stk_psf_flux_idx ON dbo.dr19_panstarrs1  (i_stk_psf_flux);
 
 
-CREATE NONCLUSTERED INDEX dr19_panstarrs1_q3c_ang2ipix_idx ON dbo.dr19_panstarrs1  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_panstarrs1_q3c_ang2ipix_idx ON dbo.dr19_panstarrs1  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_panstarrs1_r_flags_idx ON dbo.dr19_panstarrs1  (r_flags);
@@ -1503,7 +1503,7 @@ CREATE NONCLUSTERED INDEX dr19_revised_magnitude_h_idx ON dbo.dr19_revised_magni
 CREATE NONCLUSTERED INDEX dr19_sagitta_av_idx ON dbo.dr19_sagitta  (av);
 
 
-CREATE NONCLUSTERED INDEX dr19_sagitta_q3c_ang2ipix_idx ON dbo.dr19_sagitta  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_sagitta_q3c_ang2ipix_idx ON dbo.dr19_sagitta  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_sagitta_yso_idx ON dbo.dr19_sagitta  (yso);
@@ -1521,16 +1521,16 @@ CREATE NONCLUSTERED INDEX dr19_sdss_apogeeallstarmerge_r13_j_idx ON dbo.dr19_sds
 CREATE NONCLUSTERED INDEX dr19_sdss_apogeeallstarmerge_r13_k_idx ON dbo.dr19_sdss_apogeeallstarmerge_r13  (k);
 
 
-CREATE NONCLUSTERED INDEX dr19_sdss_apogeeallstarmerge_r13_q3c_ang2ipix_idx ON dbo.dr19_sdss_apogeeallstarmerge_r13  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_sdss_apogeeallstarmerge_r13_q3c_ang2ipix_idx ON dbo.dr19_sdss_apogeeallstarmerge_r13  (public.q3c_ang2ipix(ra, "dec"));
 
 
-CREATE NONCLUSTERED INDEX dr19_sdss_apogeeallstarmerge_r13_q3c_ang2ipix_idx1 ON dbo.dr19_sdss_apogeeallstarmerge_r13  (public.q3c_ang2ipix(glon, glat));
+--CREATE NONCLUSTERED INDEX dr19_sdss_apogeeallstarmerge_r13_q3c_ang2ipix_idx1 ON dbo.dr19_sdss_apogeeallstarmerge_r13  (public.q3c_ang2ipix(glon, glat));
 
 
 CREATE NONCLUSTERED INDEX dr19_sdss_dr13_photoobj_primary_objid_idx ON dbo.dr19_sdss_dr13_photoobj_primary  (objid);
 
 
-CREATE NONCLUSTERED INDEX dr19_sdss_dr13_photoobj_primary_q3c_ang2ipix_idx ON dbo.dr19_sdss_dr13_photoobj_primary  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_sdss_dr13_photoobj_primary_q3c_ang2ipix_idx ON dbo.dr19_sdss_dr13_photoobj_primary  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_sdss_dr16_qso_fiberid_idx ON dbo.dr19_sdss_dr16_qso  (fiberid);
@@ -1560,7 +1560,7 @@ CREATE NONCLUSTERED INDEX dr19_sdss_dr16_specobj_mjd_idx ON dbo.dr19_sdss_dr16_s
 CREATE NONCLUSTERED INDEX dr19_sdss_dr16_specobj_plate_idx ON dbo.dr19_sdss_dr16_specobj  (plate);
 
 
-CREATE NONCLUSTERED INDEX dr19_sdss_dr16_specobj_q3c_ang2ipix_idx ON dbo.dr19_sdss_dr16_specobj  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_sdss_dr16_specobj_q3c_ang2ipix_idx ON dbo.dr19_sdss_dr16_specobj  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_sdss_dr16_specobj_run2d_idx ON dbo.dr19_sdss_dr16_specobj  (run2d);
@@ -1608,7 +1608,7 @@ CREATE NONCLUSTERED INDEX dr19_sdss_dr17_specobj_mjd_plate_fiberid_run2d_idx ON 
 CREATE NONCLUSTERED INDEX dr19_sdss_dr17_specobj_plateid_idx ON dbo.dr19_sdss_dr17_specobj  (plateid);
 
 
-CREATE NONCLUSTERED INDEX dr19_sdss_dr17_specobj_q3c_ang2ipix_idx ON dbo.dr19_sdss_dr17_specobj  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_sdss_dr17_specobj_q3c_ang2ipix_idx ON dbo.dr19_sdss_dr17_specobj  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_sdss_dr17_specobj_run2d_idx ON dbo.dr19_sdss_dr17_specobj  (run2d);
@@ -1629,10 +1629,10 @@ CREATE NONCLUSTERED INDEX dr19_sdss_id_flat_dec_sdss_id_idx ON dbo.dr19_sdss_id_
 CREATE NONCLUSTERED INDEX dr19_sdss_id_flat_n_associated_idx ON dbo.dr19_sdss_id_flat  (n_associated);
 
 
-CREATE NONCLUSTERED INDEX dr19_sdss_id_flat_q3c_ang2ipix_idx ON dbo.dr19_sdss_id_flat  (public.q3c_ang2ipix(ra_sdss_id, dec_sdss_id));
+--CREATE NONCLUSTERED INDEX dr19_sdss_id_flat_q3c_ang2ipix_idx ON dbo.dr19_sdss_id_flat  (public.q3c_ang2ipix(ra_sdss_id, dec_sdss_id));
 
 
-CREATE NONCLUSTERED INDEX dr19_sdss_id_flat_q3c_ang2ipix_idx1 ON dbo.dr19_sdss_id_flat  (public.q3c_ang2ipix(ra_catalogid, dec_catalogid));
+--CREATE NONCLUSTERED INDEX dr19_sdss_id_flat_q3c_ang2ipix_idx1 ON dbo.dr19_sdss_id_flat  (public.q3c_ang2ipix(ra_catalogid, dec_catalogid));
 
 
 CREATE NONCLUSTERED INDEX dr19_sdss_id_flat_ra_catalogid_idx ON dbo.dr19_sdss_id_flat  (ra_catalogid);
@@ -1644,7 +1644,7 @@ CREATE NONCLUSTERED INDEX dr19_sdss_id_stacked_catalogid21_idx ON dbo.dr19_sdss_
 CREATE NONCLUSTERED INDEX dr19_sdss_id_stacked_catalogid25_idx ON dbo.dr19_sdss_id_stacked  (catalogid25);
 
 
-CREATE NONCLUSTERED INDEX dr19_sdss_id_stacked_q3c_ang2ipix_idx ON dbo.dr19_sdss_id_stacked  (public.q3c_ang2ipix(ra_sdss_id, dec_sdss_id));
+--CREATE NONCLUSTERED INDEX dr19_sdss_id_stacked_q3c_ang2ipix_idx ON dbo.dr19_sdss_id_stacked  (public.q3c_ang2ipix(ra_sdss_id, dec_sdss_id));
 
 
 CREATE NONCLUSTERED INDEX dr19_sdss_id_to_catalog_allstar_dr17_synspec_rev1__apstar_i_idx ON dbo.dr19_sdss_id_to_catalog  (allstar_dr17_synspec_rev1__apstar_id);
@@ -1668,7 +1668,7 @@ CREATE NONCLUSTERED INDEX dr19_sdss_id_to_catalog_catwise2020__source_id_idx ON 
 CREATE NONCLUSTERED INDEX dr19_sdss_id_to_catalog_catwise__source_id_idx ON dbo.dr19_sdss_id_to_catalog  (catwise__source_id);
 
 
-CREATE NONCLUSTERED INDEX dr19_sdss_id_to_catalog_full_catalogid_idx ON dbo.dr19_sdss_id_to_catalog_full  (catalogid);
+-- missing CREATE NONCLUSTERED INDEX dr19_sdss_id_to_catalog_full_catalogid_idx ON dbo.dr19_sdss_id_to_catalog_full  (catalogid);
 
 
 CREATE NONCLUSTERED INDEX dr19_sdss_id_to_catalog_gaia_dr2_source__source_id_idx ON dbo.dr19_sdss_id_to_catalog  (gaia_dr2_source__source_id);
@@ -1761,7 +1761,7 @@ CREATE NONCLUSTERED INDEX dr19_sdssv_boss_conflist_platesn2_idx ON dbo.dr19_sdss
 CREATE NONCLUSTERED INDEX dr19_sdssv_boss_conflist_programname_idx ON dbo.dr19_sdssv_boss_conflist  (programname);
 
 
-CREATE NONCLUSTERED INDEX dr19_sdssv_boss_conflist_q3c_ang2ipix_idx ON dbo.dr19_sdssv_boss_conflist  (public.q3c_ang2ipix(racen, deccen));
+--CREATE NONCLUSTERED INDEX dr19_sdssv_boss_conflist_q3c_ang2ipix_idx ON dbo.dr19_sdssv_boss_conflist  (public.q3c_ang2ipix(racen, deccen));
 
 
 CREATE NONCLUSTERED INDEX dr19_sdssv_boss_conflist_sn2_g1_idx ON dbo.dr19_sdssv_boss_conflist  (sn2_g1);
@@ -1797,7 +1797,7 @@ CREATE NONCLUSTERED INDEX dr19_sdssv_boss_spall_plate_mjd_idx ON dbo.dr19_sdssv_
 CREATE NONCLUSTERED INDEX dr19_sdssv_boss_spall_programname_idx ON dbo.dr19_sdssv_boss_spall  (programname);
 
 
-CREATE NONCLUSTERED INDEX dr19_sdssv_boss_spall_q3c_ang2ipix_idx ON dbo.dr19_sdssv_boss_spall  (public.q3c_ang2ipix(plug_ra, plug_dec));
+--CREATE NONCLUSTERED INDEX dr19_sdssv_boss_spall_q3c_ang2ipix_idx ON dbo.dr19_sdssv_boss_spall  (public.q3c_ang2ipix(plug_ra, plug_dec));
 
 
 CREATE NONCLUSTERED INDEX dr19_sdssv_boss_spall_sn_median_all_idx ON dbo.dr19_sdssv_boss_spall  (sn_median_all);
@@ -1845,10 +1845,10 @@ CREATE NONCLUSTERED INDEX dr19_sdssv_plateholes_meta_plateid_idx ON dbo.dr19_sds
 CREATE NONCLUSTERED INDEX dr19_sdssv_plateholes_meta_programname_idx ON dbo.dr19_sdssv_plateholes_meta  (programname);
 
 
-CREATE NONCLUSTERED INDEX dr19_sdssv_plateholes_meta_q3c_ang2ipix_idx ON dbo.dr19_sdssv_plateholes_meta  (public.q3c_ang2ipix(racen, deccen));
+--CREATE NONCLUSTERED INDEX dr19_sdssv_plateholes_meta_q3c_ang2ipix_idx ON dbo.dr19_sdssv_plateholes_meta  (public.q3c_ang2ipix(racen, deccen));
 
 
-CREATE NONCLUSTERED INDEX dr19_sdssv_plateholes_q3c_ang2ipix_idx ON dbo.dr19_sdssv_plateholes  (public.q3c_ang2ipix(target_ra, target_dec));
+--CREATE NONCLUSTERED INDEX dr19_sdssv_plateholes_q3c_ang2ipix_idx ON dbo.dr19_sdssv_plateholes  (public.q3c_ang2ipix(target_ra, target_dec));
 
 
 CREATE NONCLUSTERED INDEX dr19_sdssv_plateholes_sdssv_apogee_target0_idx ON dbo.dr19_sdssv_plateholes  (sdssv_apogee_target0);
@@ -1884,7 +1884,7 @@ CREATE NONCLUSTERED INDEX dr19_skies_v1_mag_neighbour_tmass_xsc_idx ON dbo.dr19_
 CREATE NONCLUSTERED INDEX dr19_skies_v1_mag_neighbour_tycho2_idx ON dbo.dr19_skies_v1  (mag_neighbour_tycho2);
 
 
-CREATE NONCLUSTERED INDEX dr19_skies_v1_q3c_ang2ipix_idx ON dbo.dr19_skies_v1  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_skies_v1_q3c_ang2ipix_idx ON dbo.dr19_skies_v1  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_skies_v1_sep_neighbour_gaia_idx ON dbo.dr19_skies_v1  (sep_neighbour_gaia);
@@ -1923,7 +1923,7 @@ CREATE NONCLUSTERED INDEX dr19_skies_v2_mag_neighbour_tmass_idx ON dbo.dr19_skie
 CREATE NONCLUSTERED INDEX dr19_skies_v2_mag_neighbour_tycho2_idx ON dbo.dr19_skies_v2  (mag_neighbour_tycho2);
 
 
-CREATE NONCLUSTERED INDEX dr19_skies_v2_q3c_ang2ipix_idx ON dbo.dr19_skies_v2  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_skies_v2_q3c_ang2ipix_idx ON dbo.dr19_skies_v2  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_skies_v2_sep_neighbour_gaia_idx ON dbo.dr19_skies_v2  (sep_neighbour_gaia);
@@ -1968,7 +1968,7 @@ CREATE NONCLUSTERED INDEX dr19_skymapper_dr2_i_psf_idx ON dbo.dr19_skymapper_dr2
 CREATE NONCLUSTERED INDEX dr19_skymapper_dr2_nimaflags_idx ON dbo.dr19_skymapper_dr2  (nimaflags);
 
 
-CREATE NONCLUSTERED INDEX dr19_skymapper_dr2_q3c_ang2ipix_idx ON dbo.dr19_skymapper_dr2  (public.q3c_ang2ipix(raj2000, dej2000));
+--CREATE NONCLUSTERED INDEX dr19_skymapper_dr2_q3c_ang2ipix_idx ON dbo.dr19_skymapper_dr2  (public.q3c_ang2ipix(raj2000, dej2000));
 
 
 CREATE NONCLUSTERED INDEX dr19_skymapper_dr2_r_psf_idx ON dbo.dr19_skymapper_dr2  (r_psf);
@@ -2013,7 +2013,7 @@ CREATE NONCLUSTERED INDEX dr19_supercosmos_classr1_idx ON dbo.dr19_supercosmos  
 CREATE NONCLUSTERED INDEX dr19_supercosmos_classr2_idx ON dbo.dr19_supercosmos  (classr2);
 
 
-CREATE NONCLUSTERED INDEX dr19_supercosmos_q3c_ang2ipix_idx ON dbo.dr19_supercosmos  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_supercosmos_q3c_ang2ipix_idx ON dbo.dr19_supercosmos  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_target_catalogid_idx ON dbo.dr19_target  (catalogid);
@@ -2085,7 +2085,7 @@ CREATE NONCLUSTERED INDEX dr19_tic_v8_plx_idx ON dbo.dr19_tic_v8  (plx);
 CREATE NONCLUSTERED INDEX dr19_tic_v8_posflag_idx ON dbo.dr19_tic_v8  (posflag);
 
 
-CREATE NONCLUSTERED INDEX dr19_tic_v8_q3c_ang2ipix_idx ON dbo.dr19_tic_v8  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_tic_v8_q3c_ang2ipix_idx ON dbo.dr19_tic_v8  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_tic_v8_sdss_idx ON dbo.dr19_tic_v8  (sdss);
@@ -2121,7 +2121,7 @@ CREATE NONCLUSTERED INDEX dr19_twomass_psc_jdate_idx ON dbo.dr19_twomass_psc  (j
 CREATE NONCLUSTERED INDEX dr19_twomass_psc_ph_qual_idx ON dbo.dr19_twomass_psc  (ph_qual);
 
 
-CREATE NONCLUSTERED INDEX dr19_twomass_psc_q3c_ang2ipix_idx ON dbo.dr19_twomass_psc  (public.q3c_ang2ipix(ra, decl));
+--CREATE NONCLUSTERED INDEX dr19_twomass_psc_q3c_ang2ipix_idx ON dbo.dr19_twomass_psc  (public.q3c_ang2ipix(ra, decl));
 
 
 CREATE NONCLUSTERED INDEX dr19_twomass_psc_rd_flg_idx ON dbo.dr19_twomass_psc  (rd_flg);
@@ -2130,10 +2130,10 @@ CREATE NONCLUSTERED INDEX dr19_twomass_psc_rd_flg_idx ON dbo.dr19_twomass_psc  (
 CREATE NONCLUSTERED INDEX dr19_tycho2_btmag_idx ON dbo.dr19_tycho2  (btmag);
 
 
-CREATE NONCLUSTERED INDEX dr19_tycho2_q3c_ang2ipix_idx ON dbo.dr19_tycho2  (public.q3c_ang2ipix(ramdeg, demdeg));
+--CREATE NONCLUSTERED INDEX dr19_tycho2_q3c_ang2ipix_idx ON dbo.dr19_tycho2  (public.q3c_ang2ipix(ramdeg, demdeg));
 
 
-CREATE NONCLUSTERED INDEX dr19_tycho2_q3c_ang2ipix_idx1 ON dbo.dr19_tycho2  (public.q3c_ang2ipix(radeg, dedeg));
+--CREATE NONCLUSTERED INDEX dr19_tycho2_q3c_ang2ipix_idx1 ON dbo.dr19_tycho2  (public.q3c_ang2ipix(radeg, dedeg));
 
 
 CREATE NONCLUSTERED INDEX dr19_tycho2_tycid_idx ON dbo.dr19_tycho2  (tycid);
@@ -2148,7 +2148,7 @@ CREATE NONCLUSTERED INDEX dr19_unwise_flux_w1_idx ON dbo.dr19_unwise  (flux_w1);
 CREATE NONCLUSTERED INDEX dr19_unwise_flux_w2_idx ON dbo.dr19_unwise  (flux_w2);
 
 
-CREATE NONCLUSTERED INDEX dr19_unwise_q3c_ang2ipix_idx ON dbo.dr19_unwise  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_unwise_q3c_ang2ipix_idx ON dbo.dr19_unwise  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_uvotssc1_name_idx ON dbo.dr19_uvotssc1  (name);
@@ -2157,7 +2157,7 @@ CREATE NONCLUSTERED INDEX dr19_uvotssc1_name_idx ON dbo.dr19_uvotssc1  (name);
 CREATE NONCLUSTERED INDEX dr19_uvotssc1_obsid_idx ON dbo.dr19_uvotssc1  (obsid);
 
 
-CREATE NONCLUSTERED INDEX dr19_uvotssc1_q3c_ang2ipix_idx ON dbo.dr19_uvotssc1  (public.q3c_ang2ipix(radeg, dedeg));
+--CREATE NONCLUSTERED INDEX dr19_uvotssc1_q3c_ang2ipix_idx ON dbo.dr19_uvotssc1  (public.q3c_ang2ipix(radeg, dedeg));
 
 
 CREATE NONCLUSTERED INDEX dr19_uvotssc1_srcid_idx ON dbo.dr19_uvotssc1  (srcid);
@@ -2166,7 +2166,7 @@ CREATE NONCLUSTERED INDEX dr19_uvotssc1_srcid_idx ON dbo.dr19_uvotssc1  (srcid);
 CREATE NONCLUSTERED INDEX dr19_xmm_om_suss_4_1_iauname_idx ON dbo.dr19_xmm_om_suss_4_1  (iauname);
 
 
-CREATE NONCLUSTERED INDEX dr19_xmm_om_suss_4_1_q3c_ang2ipix_idx ON dbo.dr19_xmm_om_suss_4_1  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_xmm_om_suss_4_1_q3c_ang2ipix_idx ON dbo.dr19_xmm_om_suss_4_1  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_yso_clustering_bp_idx ON dbo.dr19_yso_clustering  (bp);
@@ -2184,7 +2184,7 @@ CREATE NONCLUSTERED INDEX dr19_yso_clustering_j_idx ON dbo.dr19_yso_clustering  
 CREATE NONCLUSTERED INDEX dr19_yso_clustering_k_idx ON dbo.dr19_yso_clustering  (k);
 
 
-CREATE NONCLUSTERED INDEX dr19_yso_clustering_q3c_ang2ipix_idx ON dbo.dr19_yso_clustering  (public.q3c_ang2ipix(ra, "dec"));
+--CREATE NONCLUSTERED INDEX dr19_yso_clustering_q3c_ang2ipix_idx ON dbo.dr19_yso_clustering  (public.q3c_ang2ipix(ra, "dec"));
 
 
 CREATE NONCLUSTERED INDEX dr19_yso_clustering_rp_idx ON dbo.dr19_yso_clustering  (rp);

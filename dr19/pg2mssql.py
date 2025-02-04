@@ -3,13 +3,13 @@
 import os
 
 
-date ="01222025"
+date ="01272025"
 print(os.getcwd())
 
 
 
-date ="01222025"
-filename = f"H:/GitHub/sqlloader/dr19/create_minidb_dr19_rev_{date}.sql"
+date ="01272025"
+filename = f"H:/GitHub/sqlloader/dr19/specobj.sql"
 
 
 tables = []
