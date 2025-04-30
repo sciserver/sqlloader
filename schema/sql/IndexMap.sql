@@ -271,6 +271,8 @@
 --* 2021-09-23 Ani: Removed QueryResults PK.
 --* 2021-09-29 Ani: Replaced SDSS17Pipe3D_v3_1_1 with managaPipe3D (table renamed) (DR17).
 --* 2023-02-20 Ani: Added eFEDS PKs (DR18).
+--* 2025-04-18 Ani: Added Astra and APOGEE DRP files (DR19).
+--* 2025-04-23 Ani: Added DR19 VAC PKs (DR19).
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -488,6 +490,8 @@ INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'aspcapStarCovar', 'aspca
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'apogeeObject', 'target_id,alt_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'apogeeStarVisit', 'visit_id,apstar_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'apogeeStarAllVisit', 'visit_id,apstar_id', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'apogee-drp-allstar', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'apogee-drp-allvisit', 'target_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'cannonStar', 'cannon_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaDAPall', 'plateIFU,daptype', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaDRPall', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
@@ -533,6 +537,15 @@ INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'eFEDS_Main_speccomp', 'e
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'eFEDS_SDSSV_spec_results', 'catalogid', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'spAll_eFEDS', 'catalogid', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'spAll', 'specObjID', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'MWM_WD_SDSSV_DA_df', 'fieldid,mjd,catalogid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'MWM_WD_eSDSS_DA_df', 'plate,mjd,fiber', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'allVisit_MADGICS_th', 'plate,mjd,fiberid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'allVisit_MADGICS_dd', 'plate,mjd,fiberid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'mwm_mdwarf_abundances','name', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'minesweeper','source_id', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'DR19Q_prop', 'field,mjd,catalogid','', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'occam_cluster', 'name','', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'occam_member', 'sdss_id','', 'SPECTRO', 'page', 'SPEC', 0)
 
 -----------------------------------------------------
 -- Primary Keys for the TILES tables

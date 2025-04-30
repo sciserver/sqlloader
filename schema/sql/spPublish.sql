@@ -81,6 +81,9 @@
 --* 2019-11-24 Ani: Added mangaGalaxyZoo, mangaAlfalfaDR15 to PublishManga (DR16).
 --* 2021-06-18 Ani: Swapped in MaNGA DR17 (GZ) VACs.
 --* 2021-07-30 Ani: Added Mastar VACs (DR17).
+--^ 2024-09-06 Ani: Re-added eBOSS. (DR19)
+--^ 2025-04-16 Ani: Added Astra. (DR19)
+--* 2025-04-25 Ani: Added DR19 VACs. (DR19)
 ----------------------------------------------------------------------
 -- We are not copying 
 -- DBcolumns, DBObjects, DBViewCols, DataConstants, Globe,Glossary, 
@@ -1416,6 +1419,253 @@ END
 GO
 
 
+
+--=============================================================
+IF EXISTS (SELECT name FROM   sysobjects 
+    WHERE  name = N'spPublishEboss' AND  type = 'P')
+    DROP PROCEDURE spPublishEboss
+GO
+--
+CREATE PROCEDURE [dbo].[spPublishEboss](
+	@taskID int, 
+	@stepID int,
+	@fromDB varchar(100), 
+	@toDB varchar(100), 
+	@firstTime int) 
+---------------------------------------------------------------
+--/H Publishes the eBOSS tables of one DB to another 
+--/A
+--/T <p> parameters:   
+--/T <li> taskid int,   		-- Task identifier
+--/T <li> stepid int,   		-- Step identifier
+--/T <li> fromDB varchar(100),   	-- source DB (e.g. verify.photo)
+--/T <li> toDB varchar(100),   		-- destination DB (e.g. dr1.best)
+--/T <li> firstTime int 		-- if 1, creates target table.
+--/T <li> returns  0 if OK, non zero if something wrong  
+--/T <samp> spPublishEboss 1,1,'SkyServerV4','tempDB', 1 </samp>
+---------------------------------------------------------------
+AS BEGIN
+	set nocount on
+	declare @err int, @summary int 
+	declare @message varchar(1000) 
+	declare @status  varchar(16) 
+	set @summary = 0 
+
+	set @message = 'Starting spPublishEboss';
+	exec spNewPhase @taskID, @stepID, 'spPublishEboss', 'OK', @message;
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'spAll', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'spAll_allepoch', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'spAll_epoch', @firstTime 
+	set @summary = @summary + @err 
+
+	--------------------------------------------------
+	set @message = 'Publish of database ' + @fromDB + ' to database ' + @toDB + ' found ' + str(@summary) + ' errors.' 
+	if  @summary = 0 set @status = 'OK' else set @status = 'ABORTING' 
+	--
+	exec spNewPhase @taskID, @stepID, 'spPublishEboss', @status, 'Published Eboss Tables';
+	--
+	return @summary
+END   -- END spPublishEboss
+GO
+
+
+
+--=============================================================
+IF EXISTS (SELECT name FROM   sysobjects 
+    WHERE  name = N'spPublishAstra' AND  type = 'P')
+    DROP PROCEDURE spPublishAstra
+GO
+--
+CREATE PROCEDURE [dbo].[spPublishAstra](
+	@taskID int, 
+	@stepID int,
+	@fromDB varchar(100), 
+	@toDB varchar(100), 
+	@firstTime int) 
+---------------------------------------------------------------
+--/H Publishes the Astra tables of one DB to another 
+--/A
+--/T <p> parameters:   
+--/T <li> taskid int,   		-- Task identifier
+--/T <li> stepid int,   		-- Step identifier
+--/T <li> fromDB varchar(100),   	-- source DB (e.g. verify.photo)
+--/T <li> toDB varchar(100),   		-- destination DB (e.g. dr1.best)
+--/T <li> firstTime int 		-- if 1, creates target table.
+--/T <li> returns  0 if OK, non zero if something wrong  
+--/T <samp> spPublishAstra 1,1,'SkyServerV4','tempDB', 1 </samp>
+---------------------------------------------------------------
+AS BEGIN
+	set nocount on
+	declare @err int, @summary int 
+	declare @message varchar(1000) 
+	declare @status  varchar(16) 
+	set @summary = 0 
+	set @firsttime = 1
+
+	set @message = 'Starting spPublishAstra ft = ' + convert(varchar(1), @firsttime);
+	exec spNewPhase @taskID, @stepID, 'spPublishAstra', 'OK', @message;
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'apogee_net_apogee_star', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'aspcap_apogee_star', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'astro_nn_apogee_star', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'astro_nn_apogee_visit', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'astro_nn_dist_apogee_star', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'boss_net_boss_star', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'boss_net_boss_visit', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'corv_boss_visit', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'line_forest_boss_star', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'line_forest_boss_visit', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'lite_all_star', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'm_dwarf_type_boss_star', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'm_dwarf_type_boss_visit', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mwm_apogee_allstar', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mwm_apogee_allvisit', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mwm_boss_allstar', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mwm_boss_allvisit', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mwm_targets', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'slam_boss_star', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'snow_white_boss_star', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'snow_white_boss_visit', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'the_cannon_apogee_star', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'the_payne_apogee_star', @firstTime
+    set @summary = @summary + @err
+
+    exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'the_payne_apogee_visit', @firstTime
+    set @summary = @summary + @err
+
+	--------------------------------------------------
+	set @message = 'Publish of database ' + @fromDB + ' to database ' + @toDB + ' found ' + str(@summary) + ' errors.' 
+	if  @summary = 0 set @status = 'OK' else set @status = 'ABORTING' 
+	--
+	exec spNewPhase @taskID, @stepID, 'spPublishAstra', @status, 'Published Astra Tables';
+	--
+	return @summary
+END   -- END spPublishAstra
+GO
+
+
+
+--=============================================================
+IF EXISTS (SELECT name FROM   sysobjects 
+    WHERE  name = N'spPublishDR19VACs' AND  type = 'P')
+    DROP PROCEDURE spPublishDR19VACs
+GO
+--
+CREATE PROCEDURE spPublishDR19VACs(
+	@taskID int, 
+	@stepID int,
+	@fromDB varchar(100), 
+	@toDB varchar(100), 
+	@firstTime int) 
+---------------------------------------------------------------
+--/H Publishes the Mastar tables of one DB to another 
+--/A
+--/T <p> parameters:   
+--/T <li> taskid int,   		-- Task identifier
+--/T <li> stepid int,   		-- Step identifier
+--/T <li> fromDB varchar(100),   	-- source DB (e.g. verify.photo)
+--/T <li> toDB varchar(100),   		-- destination DB (e.g. dr1.best)
+--/T <li> firstTime int 		-- if 1, creates target table.
+--/T <li> returns  0 if OK, non zero if something wrong  
+--/T <samp> spPublishMastar 1,1,'SkyServerV4','tempDB', 1 </samp>
+---------------------------------------------------------------
+AS BEGIN
+	set nocount on
+	declare @err int, @summary int 
+	declare @message varchar(1000) 
+	declare @status  varchar(16) 
+	set @summary = 0 
+
+	set @message = 'Starting spPublishDR19VACs';
+	exec spNewPhase @taskID, @stepID, 'spPublishDR19VACs', 'OK', @message;
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'MWM_WD_SDSSV_DA_df', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'MWM_WD_eSDSS_DA_df', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'allVisit_MADGICS_th', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'allVisit_MADGICS_dd', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'mwm_mdwarf_abundances', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'minesweeper', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'DR19Q_prop', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'occam_cluster', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'occam_member', @firstTime 
+	set @summary = @summary + @err 
+
+	--------------------------------------------------
+	set @message = 'Publish of database ' + @fromDB + ' to database ' + @toDB + ' found ' + str(@summary) + ' errors.' 
+	if  @summary = 0 set @status = 'OK' else set @status = 'ABORTING' 
+	--
+	exec spNewPhase @taskID, @stepID, 'spPublishDR19VACs', @status, 'Published DR19 VAC Tables';
+	--
+	return @summary
+END   -- END spPublishDR19VACs
+GO
+
+
 --=============================================================
 IF EXISTS (SELECT name FROM   sysobjects 
     WHERE  name = N'spPublishWise' AND  type = 'P')
@@ -1850,6 +2100,62 @@ BEGIN
         goto commonExit 
         end 
 
+
+    --------------------------------------------------------------------------------------------- 
+    -- Handle eBOSS databases 
+    IF @type in ('eboss') 
+        begin 
+        exec @err = spPublishEboss @taskID, @stepID, @DBname, @publishDB, @firstTime 
+        if @err = 0 
+                begin 
+                set @stepMsg =  'Published eBOSS ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Published eBOSS ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        else 
+                begin 
+                set @stepMsg =  'Failed to publish eBOSS ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Failed to publish eBOSS ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        goto commonExit 
+        end 
+
+
+    --------------------------------------------------------------------------------------------- 
+    -- Handle astra databases 
+    IF @type in ('astra') 
+        begin 
+        exec @err = spPublishAstra @taskID, @stepID, @DBname, @publishDB, @firstTime 
+        if @err = 0 
+                begin 
+                set @stepMsg =  'Published Astra ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Published Astra ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        else 
+                begin 
+                set @stepMsg =  'Failed to publish Astra ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Failed to publish Astra ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        goto commonExit 
+        end 
+
+
+    --------------------------------------------------------------------------------------------- 
+    -- Handle DR19VACs databases 
+    IF @type in ('dr19Vacs') 
+        begin 
+        exec @err = spPublishDR19VACs @taskID, @stepID, @DBname, @publishDB, @firstTime 
+        if @err = 0 
+                begin 
+                set @stepMsg =  'Published DR19 VACs ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Published DR19 VACs ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        else 
+                begin 
+                set @stepMsg =  'Failed to publish DR19 VACs ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Failed to publish DR19 VACs ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        goto commonExit 
+        end 
 
     --------------------------------------------------------------------------------------------- 
     -- Handle WISE databases 

@@ -61,6 +61,8 @@
 ' 2019-11-19    Added Apogee2Object files.
 ' 2019-11-24    Added MangaGalaxyZoo and MangaAlfalfaDR15.
 ' 2021-06-18    Added updated MaNGA GZ tables for DR17.
+' 2024-09-03    Added eBOSS for DR19.
+' 2025-04-25    Added astra and dr19vacs for DR19.
 '==============================================================
 
 Option Explicit
@@ -183,6 +185,8 @@ Public Sub CheckDir (root,level)
 		s = s & "(^sql(ApogeeVisit|ApogeeStar|aspcapStar|aspcapStarCovar|ApogeePlate|ApogeeDesign|ApogeeField|ApogeeObject|Apogee2Object|ApogeeStarVisit|ApogeeStarAllVisit)" & "_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "wise" ) Then
 		s = s & "(^sqlWise(XMatch|AllSky)" & "_[0-9]*\.csv$)"
+	ElseIf ( theexporttype = "eboss" ) Then
+		s = s & "(^sqlSp(All|All_epoch|All_allepoch)" & "*\.csv$)"
 	ElseIf ( theexporttype = "forced" ) Then
 		s = s & "(^sqlWISE_forced_target-2-" & rootname & "-*[0-9]*_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "manga" ) Then
@@ -194,6 +198,10 @@ Public Sub CheckDir (root,level)
 		s = s & "(^sql(MastarGoodStars|MastarGoodVisits)" & "[\-_a-zA-Z0-9]*\.csv$)"
 	ElseIf ( theexporttype = "nsa" ) Then
 		s = s & "(^sqlNSA" & "-v[0-9]*_[0-9]*_[0-9]*\.csv_[0-9]*\.csv$)"
+	ElseIf ( theexporttype = "astra" ) Then
+		s = s & "(^sql(Astra|Mwm)" & "[\-_a-zA-Z0-9]*\.csv$)"
+	ElseIf ( theexporttype = "dr19vacs" ) Then
+		s = s & "(^sql(A|D|E|M|O|S)" & "[\-_a-zA-Z0-9]*\.csv$)"
 	Else
 			s = s & "(^sql(AtlasOutline|Field|FieldProfile|PhotoObjAll|PhotoProfile|Run|2MASS|2MASSXSC|First|RC3|ROSAT|USNOB)"
 			s = s & "-2-" & rootname & "-[0-9]*_*[0-9]*\.csv$)"

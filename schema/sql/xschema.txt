@@ -21,7 +21,8 @@
 -- 2016-04-05  Ani: Added QsoVarTables.sql.
 -- 2018-07-17  Ani: Added VacTables.sql for VACs.
 -- 2018-07-24  Ani: Added MastarTables.sql.
---------------------------
+-- 2025-04-14  Ani: Added AstraTables.sql.
+---------------------------
 -- metadata
 --------------------------
 FileGroups.sql
@@ -47,6 +48,7 @@ RegionTables.sql
 WindowTables.sql
 ssppTables.sql
 ApogeeTables.sql
+AstraTables.sql
 MangaTables.sql
 MastarTables.sql
 QsoVarTables.sql

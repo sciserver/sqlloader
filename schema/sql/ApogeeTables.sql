@@ -775,6 +775,180 @@ CREATE TABLE apogeeObject (
 )
 GO
 
+
+EXEC spSetDefaultFileGroup 'apogee_drp_allstar'
+GO
+
+CREATE TABLE apogee_drp_allstar (
+-------------------------------------------------------------------------------
+--/H Contains data for an APOGEE star combined spectrum.
+-------------------------------------------------------------------------------
+--/T This table contains the data in the combined spectrum for an APOGEE star.
+-------------------------------------------------------------------------------    
+    PK bigint, --/D Primary Key
+    APOGEE_ID	varchar(28),  --/D 2MASS-style star identification
+    [FILE]	varchar(57),  --/D File base name with combined apStar spectrum and catalog information
+    URI         varchar(106),  --/D Resource identifier for the full path of the combined apStar spectrum file
+    STARVER     varchar(15),  --/D Star combination version, MJD of last visit used
+    MJDBEG      bigint,  --/U days --/D  MJD of first visit 
+    MJDEND	bigint,  --/U days --/D  MJD of last visit
+    TELESCOPE	varchar(16),  --/D Telescope where data was taken
+    APRED_VERS  varchar(13),  --/D APOGEE reduction version
+    V_APRED     varchar(50),  --/D Git hash string of apogee_drp software used
+    HEALPIX	bigint,  --/D HEALPix number for this star, nside=128
+    SNR	real,  --/D Median signal-to-noise ratio per pixel
+    RA	float,  --/U deg --/D Right ascension, J2000
+    DEC	float,  --/U deg --/D Declination, J2000
+    GLON	float,  --/U deg --/D Galactic longitude
+    GLAT	float,  --/U deg --/D Galactic latitude
+    JMAG	real,  --/D 2MASS J magnitude
+    JERR	real,  --/D 2MASS J magnitude uncertainty
+    HMAG	real,  --/D 2MASS H magnitude 
+    HERR	real,  --/D 2MASS H magnitude uncertainty
+    KMAG	real,  --/D 2MASS Ks magnitude 
+    KERR	real,  --/D 2MASS Ks magnitude uncertainty
+    SRC_H	varchar(10),  --/D H magnitude used
+    TARG_PMRA	real,  --/U mas/yr --/D Proper motion in right ascension used in target selection
+    TARG_PMDEC	real,  --/U mas/yr --/D Proper motion in declination used in target selection
+    TARG_PM_SRC	varchar(10),  --/D Source of proper motion used in target selection
+    APOGEE_TARGET1	bigint,  --/D APOGEE-1 target flag (first 64 bits) (see https://www.sdss4.org/dr17/algorithms/bitmasks/#APOGEE_TARGET1)
+    APOGEE_TARGET2	bigint,  --/D APOGEE-1 target flag (second 64 bits) (see https://www.sdss4.org/dr17/algorithms/bitmasks/#APOGEE_TARGET2)
+    APOGEE2_TARGET1	bigint,  --/D APOGEE-2 target flag (first 64 bits) (see https://www.sdss4.org/dr17/algorithms/bitmasks/#APOGEE2_TARGET1)
+    APOGEE2_TARGET2	bigint,  --/D APOGEE-2 target flag (second 64 bits) (see https://www.sdss4.org/dr17/algorithms/bitmasks/#APOGEE2_TARGET2)
+    APOGEE2_TARGET3	bigint,  --/D APOGEE-2 target flag (third 64 bits) (see https://www.sdss4.org/dr17/algorithms/bitmasks/#APOGEE2_TARGET3)
+    APOGEE2_TARGET4	bigint,  --/D APOGEE-2 target flag (fourth 64 bits) (see https://www.sdss4.org/dr17/algorithms/bitmasks/#APOGEE2_TARGET3)
+    CATALOGID		decimal,  --/D SDSS-V catalog identification number
+    SDSS_ID             bigint,  --/D SDSS-V sdss_id identification number
+    GAIA_RELEASE        varchar(14),  --/D GAIA data release used
+    GAIA_SOURCEID	bigint,  --/D GAIA source identification
+    GAIA_PLX		real,  --/U mas --/D GAIA parallax
+    GAIA_PLX_ERROR	real,  --/U mas --/D GAIA parallax uncertainty
+    GAIA_PMRA	real,  --/U mas/yr --/D GAIA proper motion in RA
+    GAIA_PMRA_ERROR	real,  --/U mas/yr --/D GAIA proper motion in RA uncertainty
+    GAIA_PMDEC	real,  --/U mas/yr --/D GAIA proper motion in DEC
+    GAIA_PMDEC_ERROR	real,  --/U mas/yr --/D GAIA proper motion in DEC uncertainty
+    GAIA_GMAG	real,  --/D GAIA g mean magnitude
+    GAIA_GERR	real,  --/D GAIA g mean magnitude uncertainty
+    GAIA_BPMAG	real,  --/D GAIA Bp mean magnitude
+    GAIA_BPERR	real,  --/D GAIA Bp mean magnitude uncertainty
+    GAIA_RPMAG	real,  --/D GAIA Rp mean magnitude
+    GAIA_RPERR	real,  --/D GAIA Rp mean magnitude uncertainty
+    SDSSV_APOGEE_TARGET0	bigint,  --/D SDSS-V early targeting flag
+    FIRSTCARTON		varchar(50),  --/D SDSS-V primary target carton
+    CADENCE		varchar(10),  --/D SDSS-V cadence type
+    PROGRAM		varchar(10),  --/D SDSS-V program name
+    CATEGORY		varchar(10),  --/D SDSS-V category
+    TARGFLAGS		varchar(113),  --/D Targeting flags
+    NVISITS		bigint,  --/D Number of visit spectra for this star
+    NGOODVISITS		bigint,  --/D Number of good visits
+    NGOODRVS		bigint,  --/D Number of visits passing RV quality criteria and used in Doppler RV analysis
+    STARFLAG	bigint,  --/D Star-level quality flags (with OR-combination) as integer
+    STARFLAGS	varchar(91),  --/D Star-level quality flags (with OR-combination) as comma-delimited ASCII text
+    ANDFLAG	bigint,  --/D Star-level quality flags (with AND-combination) as integer
+    ANDFLAGS	varchar(10),  --/D Star-level quality flags (with AND-combination) as comma-delimited ASCII text 
+    VRAD	real,  --/U km/s --/D Signal-to-noise weighted average radial velocity in the Solar System Barycentric frame
+    VSCATTER	real,  --/U km/s --/D Standard deviation of scatter of individual visit RVs around average
+    VERR	real,  --/U km/s --/D Weighted error of barycentric radial velocity
+    VMEDERR	real,  --/U km/s --/D Median uncertainty in the visit radial velocity
+    CHISQ	real,  --/D Reduced chi-squared of the Doppler best-fit model to all the visit spectra
+    RV_TEFF	real,  --/U deg K --/D Effective temperature of Doppler RV template match
+    RV_TEFFERR	real,  --/U deg K --/D Effective temperature of Doppler RV template match uncertainty
+    RV_LOGG	real,  --/U dex --/D log g of Doppler RV template match
+    RV_LOGGERR	real,  --/U dex --/D log g of Doppler RV template match uncertainty
+    RV_FEH	real,  --/U dex --/D [Fe/H] from Doppler RV template match
+    RV_FEHERR	real,  --/U dex --/D [Fe/H] from Doppler RV template match uncertainty
+    RV_CCPFWHM	real,  --/U km/s --/D FWHM of cross-correlation peak from combined vs best-match Doppler template spectrum
+    RV_AUTOFWHM	real,  --/U km/s --/D FWHM of auto-correlation of best-match Doppler template spectrum
+    N_COMPONENTS	bigint,  --/D Number of components from RV cross correlation
+    MEANFIB	real,  --/D Mean FiberID for all the star visits
+    SIGFIB	real  --/D Standard deviation of FiberID for all the star visits
+)
+GO
+
+
+EXEC spSetDefaultFileGroup 'apogee_drp_allvisit'
+GO
+
+CREATE TABLE apogee_drp_allvisit (
+-------------------------------------------------------------------------------
+--/H Contains data for a particular APOGEE spectrum visit.
+-------------------------------------------------------------------------------
+--/T This table corresponds to the data in a single spectrum visit in APOGEE
+-------------------------------------------------------------------------------  
+    APOGEE_ID	varchar(28),  --/D 2MASS-style star identification
+    TARGET_ID	varchar(28),  --/D Unique ID for visit spectrum, of form apogee.[telescope].[cs].[apred_version].plate.mjd.fiberid (Primary key)
+    APRED_VERS  varchar(13),  --/D APOGEE reduction version
+    [FILE]	varchar(49),  --/D File base name with visit spectrum and catalog information
+    URI         varchar(122),  --/D Resource identifier for the full path of the combined apVisit spectrum file
+    FIBERID	bigint,  --/D Fiber ID for this visit
+    PLATE	varchar(15),  --/D Plate (for plate era) or configurationID (for FPS era) of this visit
+    MJD		bigint,  --/D Modified Julian Date of the night
+    TELESCOPE	varchar(16),  --/D Telescope where data was taken
+    SURVEY	varchar(23),  --/D SDSS-V survey
+    FIELD	varchar(32),  --/D SDSS-V field ID
+    PROGRAMNAME	varchar(57),  --/D SDSS-V program name
+    RA	float,  --/U deg --/D Right ascension, J2000
+    DEC	float,  --/U deg --/D Declination, J2000
+    GLON	float,  --/U deg --/D Galactic longitude
+    GLAT	float,  --/U deg --/D Galactic latitude
+    JMAG	float,  --/D 2MASS J magnitude
+    JERR	float,  --/D 2MASS J magnitude uncertainty
+    HMAG	float,  --/D 2MASS H magnitude 
+    HERR	float,  --/D 2MASS H magnitude uncertainty
+    KMAG	float,  --/D 2MASS Ks magnitude 
+    KERR	float,  --/D 2MASS Ks magnitude uncertainty
+    SRC_H	varchar(10),  --/D H magnitude used
+    PMRA	float,  --/U mas/yr --/D Proper motion in right ascension used in target selection
+    PMDEC	float,  --/U mas/yr --/D Proper motion in declination used in target selection
+    PM_SRC	varchar(10),  --/D Source of proper motion used in target selection
+    APOGEE_TARGET1      bigint,  --/D APOGEE-2 target flag (first 64 bits) (see https://www.sdss4.org/dr17/algorithms/bitmasks/#APOGEE2_TARGET1)
+    APOGEE_TARGET2	bigint,  --/D APOGEE-2 target flag (second 64 bits) (see https://www.sdss4.org/dr17/algorithms/bitmasks/#APOGEE2_TARGET2)
+    APOGEE_TARGET3	bigint,  --/D APOGEE-2 target flag (third 64 bits) (see https://www.sdss4.org/dr17/algorithms/bitmasks/#APOGEE2_TARGET3)
+    APOGEE_TARGET4	bigint,  --/D APOGEE-2 target flag (fourth 64 bits) (see https://www.sdss4.org/dr17/algorithms/bitmasks/#APOGEE2_TARGET3)
+    CATALOGID		decimal,  --/D SDSS-V catalog identification number
+    SDSS_ID		bigint,  --/D SDSS-V sdss_id identification number
+    GAIA_RELEASE        varchar(14),  --/D GAIA data release used
+    GAIA_PLX		float,  --/U mas --/D GAIA parallax
+    GAIA_PLX_ERROR	float,  --/U mas --/D GAIA parallax uncertainty
+    GAIA_PMRA	        float,  --/U mas/yr --/D GAIA proper motion in RA
+    GAIA_PMRA_ERROR	float,  --/U mas/yr --/D GAIA proper motion in RA uncertainty
+    GAIA_PMDEC	        float,  --/U mas/yr --/D GAIA proper motion in DEC
+    GAIA_PMDEC_ERROR	float,  --/U mas/yr --/D GAIA proper motion in DEC uncertainty
+    GAIA_GMAG	        float,  --/D GAIA G mean magnitude
+    GAIA_GERR	        float,  --/D GAIA G mean magnitude uncertainty
+    GAIA_BPMAG	        float,  --/D GAIA Bp mean magnitude
+    GAIA_BPERR	        float,  --/D GAIA Bp mean magnitude uncertainty
+    GAIA_RPMAG	        float,  --/D GAIA Rp mean magnitude
+    GAIA_RPERR	        float,  --/D GAIA Rp mean magnitude uncertainty
+    SDSSV_APOGEE_TARGET0	bigint,  --/D SDSS-V early targeting flag
+    FIRSTCARTON			varchar(50),  --/D SDSS-V primary target carton
+    TARGFLAGS	varchar(113),  --/D Targeting flags
+    SNR	float,  --/D Median signal-to-noise ratio per pixel
+    STARFLAG	bigint,  --/D Star-level quality flags as integer
+    STARFLAGS	varchar(84),  --/D Star-level quality flags as comma-delimited ASCII text
+    DATEOBS	varchar(33),  --/D Date of observation (YYYY-MM-DDTHH:MM:SS.SSS)
+    JD	float,  --/D Julian date of observation
+    STARVER     varchar(15),  --/D Star combination version, MJD of last visit used    
+    BC	float, --/U km/s --/D Barycentric correction for the observation date and location
+    VTYPE	bigint,  --/D Type of RV determination used
+    VREL	float,  --/U km/s --/D Derived doppler shift for this visit
+    VRELERR	float,  --/U km/s --/D Derived doppler shift uncertainty for this visit
+    VRAD	float,  --/U km/s --/D Derived Doppler Barycentric radial velocity for this visit
+    CHISQ	float,  --/D Reduced chi-squared of the Doppler best-fit model
+    RV_TEFF	float,  --/U deg K --/D Effective temperature of Doppler RV template match
+    RV_LOGG	float,  --/U dex --/D log g of Doppler RV template match
+    RV_FEH	float,  --/U dex --/D [Fe/H] from Doppler RV template match
+    XCORR_VREL  float,  --/U km/s --/D Doppler shift of individual visit spectrum relative to the best-fit Doppler model using cross-correlation
+    XCORR_VRELERR float,  --/U km/s --/D Error in doppler shift for individual visi
+    XCORR_VRAD  float,  --/U km/s --/D Barycentric radial velocity for individual visit using cross-correlation with best-fit Doppler model
+    N_COMPONENTS  bigint,  --/D Number of components from cross correlation 
+    RV_COMPONENTS_0 float,  --/U km/s --/D RV offset for components 0 --/F RV_COMPONENTS
+    RV_COMPONENTS_1 float,  --/U km/s --/D RV offset for components 1 --/F RV_COMPONENTS
+    RV_COMPONENTS_2 float  --/U km/s --/D RV offset for components 2 --/F RV_COMPONENTS
+)
+GO
+
+
 --
 EXEC spSetDefaultFileGroup 'PrimaryFileGroup'
 GO

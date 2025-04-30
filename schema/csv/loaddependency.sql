@@ -143,19 +143,12 @@ INSERT Dependency VALUES('spHtmCSharp','fHtmGetString','SphericalHTM.[Spherical.
 INSERT Dependency VALUES('spHtmCSharp','fHtmVersion','SphericalHTM.[Spherical.Htm.Sql.fHtmVersion');
 INSERT Dependency VALUES('spHtmCSharp','fHtmXyz','SphericalHTM.[Spherical.Htm.Sql.fHtmXyz');
 INSERT Dependency VALUES('spHtmCSharp','fHtmXyzToEq','SphericalHTM.[Spherical.Htm.Sql.fHtmXyzToEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyApogeeStarEq]','fGetNearbyApogeeStarXYZ');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyApogeeStarXYZ]','fHtmCoverCircleXyz');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fDistanceEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fHtmCoverCircleEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fHtmEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMosTargetEq]','fGetNearbyMosTargetXYZ');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMosTargetXYZ]','fHtmCoverCircleXyz');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMastarObjEq]','fDistanceEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMastarObjEq]','fGetNearbyMaStarObjEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMosTargetEq]','fGetNearbyMosTargetEq');
-INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMosTargetXYZ]','fGetNearbyMosTargetXyz');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMosTargetEq]','fDistanceArcMinEq');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMosTargetEq]','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','dbo.[fGetObjectsEq]','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','fGetJpegObjects','fGetObjectsEq');
+INSERT Dependency VALUES('spNearby','fGetNearbyApogeeStarEq','fDistanceArcMinEq');
+INSERT Dependency VALUES('spNearby','fGetNearbyApogeeStarEq','fHtmCoverCircleEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyFrameEq','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','fGetNearbyMangaObjEq','fDistanceArcMinEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyMangaObjEq','fHtmCoverCircleEq');
@@ -167,8 +160,8 @@ INSERT Dependency VALUES('spNearby','fGetNearbySpecObjAllEq','fGetNearbySpecObjA
 INSERT Dependency VALUES('spNearby','fGetNearbySpecObjAllXYZ','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','fGetNearbySpecObjEq','fGetNearbySpecObjXYZ');
 INSERT Dependency VALUES('spNearby','fGetNearbySpecObjXYZ','fHtmCoverCircleXyz');
+INSERT Dependency VALUES('spNearby','fGetNearestApogeeStarEq','fDistanceArcMinEq');
 INSERT Dependency VALUES('spNearby','fGetNearestApogeeStarEq','fGetNearbyApogeeStarEq');
-INSERT Dependency VALUES('spNearby','fGetNearestApogeeStarXYZ','fGetNearbyApogeeStarXYZ');
 INSERT Dependency VALUES('spNearby','fGetNearestFrameidEq','fGetNearestFrameEq');
 INSERT Dependency VALUES('spNearby','fGetNearestMangaObjEq','fDistanceArcMinEq');
 INSERT Dependency VALUES('spNearby','fGetNearestMangaObjEq','fGetNearbyMangaObjEq');
@@ -220,12 +213,19 @@ INSERT Dependency VALUES('spPhoto','fSDSS','fObj');
 INSERT Dependency VALUES('spPhoto','fSDSS','fRerun');
 INSERT Dependency VALUES('spPhoto','fSDSS','fRun');
 INSERT Dependency VALUES('spPhoto','fSDSS','fSkyVersion');
+INSERT Dependency VALUES('spPublish','dbo.[spPublishAstra]','spCopyATable');
+INSERT Dependency VALUES('spPublish','dbo.[spPublishAstra]','spNewPhase');
+INSERT Dependency VALUES('spPublish','dbo.[spPublishAstra]','spPublishAstra');
+INSERT Dependency VALUES('spPublish','dbo.[spPublishEboss]','spCopyATable');
+INSERT Dependency VALUES('spPublish','dbo.[spPublishEboss]','spNewPhase');
 INSERT Dependency VALUES('spPublish','spBackupStep','spEndStep');
 INSERT Dependency VALUES('spPublish','spBackupStep','spNewPhase');
 INSERT Dependency VALUES('spPublish','spBackupStep','spStartStep');
 INSERT Dependency VALUES('spPublish','spCopyATable','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishApogee','spCopyATable');
 INSERT Dependency VALUES('spPublish','spPublishApogee','spNewPhase');
+INSERT Dependency VALUES('spPublish','spPublishDR19VACs','spCopyATable');
+INSERT Dependency VALUES('spPublish','spPublishDR19VACs','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishGalProd','spCopyATable');
 INSERT Dependency VALUES('spPublish','spPublishGalProd','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishGalSpec','spCopyATable');
@@ -251,6 +251,9 @@ INSERT Dependency VALUES('spPublish','spPublishSspp','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishStep','spEndStep');
 INSERT Dependency VALUES('spPublish','spPublishStep','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishApogee');
+INSERT Dependency VALUES('spPublish','spPublishStep','spPublishAstra');
+INSERT Dependency VALUES('spPublish','spPublishStep','spPublishDR19VACs');
+INSERT Dependency VALUES('spPublish','spPublishStep','spPublishEboss');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishGalProd');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishGalSpec');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishManga');
@@ -364,6 +367,14 @@ INSERT Dependency VALUES('spValidate','spTestUniqueKey','spNewPhase');
 INSERT Dependency VALUES('spValidate','spValidateApogee','fDatediffSec');
 INSERT Dependency VALUES('spValidate','spValidateApogee','spNewPhase');
 INSERT Dependency VALUES('spValidate','spValidateApogee','spTestUniqueKey');
+INSERT Dependency VALUES('spValidate','spValidateAstra','fDatediffSec');
+INSERT Dependency VALUES('spValidate','spValidateAstra','spNewPhase');
+INSERT Dependency VALUES('spValidate','spValidateDR19VACs','fDatediffSec');
+INSERT Dependency VALUES('spValidate','spValidateDR19VACs','spNewPhase');
+INSERT Dependency VALUES('spValidate','spValidateDR19VACs','spTestUniqueKey');
+INSERT Dependency VALUES('spValidate','spValidateEboss','fDatediffSec');
+INSERT Dependency VALUES('spValidate','spValidateEboss','spNewPhase');
+INSERT Dependency VALUES('spValidate','spValidateEboss','spTestUniqueKey');
 INSERT Dependency VALUES('spValidate','spValidateGalProd','fDatediffSec');
 INSERT Dependency VALUES('spValidate','spValidateGalProd','spNewPhase');
 INSERT Dependency VALUES('spValidate','spValidateGalProd','spTestUniqueKey');
@@ -407,6 +418,9 @@ INSERT Dependency VALUES('spValidate','spValidateStep','spEndStep');
 INSERT Dependency VALUES('spValidate','spValidateStep','spNewPhase');
 INSERT Dependency VALUES('spValidate','spValidateStep','spStartStep');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateApogee');
+INSERT Dependency VALUES('spValidate','spValidateStep','spValidateAstra');
+INSERT Dependency VALUES('spValidate','spValidateStep','spValidateDR19VACs');
+INSERT Dependency VALUES('spValidate','spValidateStep','spValidateEboss');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateGalProd');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateGalSpec');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateManga');
@@ -434,6 +448,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '424 lines inserted into Dependency'
+PRINT '438 lines inserted into Dependency'
 ------------------------------------
 GO
