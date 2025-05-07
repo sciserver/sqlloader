@@ -165,8 +165,111 @@ had to change bulk insert statement for dr19_field
 TRUNCATE TABLE dr19_field;BULK INSERT dr19_field FROM 'e:\DR19\mos_target-csv\minidb_dr19.dr19_field.csv' WITH (FORMAT='CSV', FIRSTROW=2, FIELDTERMINATOR=',', ROWTERMINATOR='0x0a', TABLOCK, FIELDQUOTE = '"');
 
 
+null or not null?
+
+CREATE TABLE [dbo].[dr19_catalog_to_sdss_dr17_specobj](
+	[catalogid] [bigint] NOT NULL,
+	[target_id] [numeric](20, 0) NOT NULL,
+	[version_id] [smallint] NOT NULL,
+	[distance] [float] NULL,
+	[best] [bit] NULL,
+	[planname_id] [varchar](500) NULL,
+	[added_by_phase] [smallint] NULL
+) ON [PRIMARY]
 
 
+CREATE TABLE [dbo].[dr19_catalog_to_twomass_psc](
+	[catalogid] [bigint] NOT NULL,
+	[target_id] [int] NOT NULL,
+	[version_id] [smallint] NOT NULL,
+	[distance] [float] NULL,
+	[best] [bit] NULL
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[dr19_marvels_dr11_star](
+
+  CREATE TABLE [dbo].[dr19_mwm_tess_ob](
+
+  why all the varchar(1) columns
+
+
+## foreign keys
+ALTER TABLE  dbo.dr19_catalog_to_bhm_csc
+    ADD CONSTRAINT dr19_catalog_to_bhm_csc_target_id_fkey FOREIGN KEY (target_id) REFERENCES dbo.dr19_bhm_csc(pk);
+
+
+	select target_id from dr19_catalog_to_bhm_csc
+	where target_id not in (select pk from dr19_bhm_csc)
+
+gives:
+
+target_id
+30857
+30857
+
+ALTER TABLE  dbo.dr19_catalog_to_bhm_efeds_veto
+    ADD CONSTRAINT dr19_catalog_to_bhm_efeds_veto_target_id_fkey FOREIGN KEY (target_id) REFERENCES dbo.dr19_bhm_efeds_veto(pk);
+
+	select target_id from dr19_catalog_to_bhm_efeds_veto
+	where target_id not in (select pk from dr19_bhm_efeds_veto)
+
+  1342
+1973
+1973
+2002
+2002
+2842
+2842
+3386
+3386
+3449
+3449
+4210
+4210
+4264
+4264
+5301
+5664
+5664
+
+--ALTER TABLE  dbo.dr19_catalog_to_catwise2020
+--    ADD CONSTRAINT dr19_catalog_to_catwise2020_target_id_fkey FOREIGN KEY (target_id) REFERENCES dbo.dr19_catwise2020(source_id);
+
+
+--	select target_id from dr19_catalog_to_catwise2020
+--	where target_id not in (select source_id from dr19_catwise2020)
+
+gives almost 3m rows
+
+
+ALTER TABLE  dbo.dr19_catalog_to_glimpse
+    ADD CONSTRAINT dr19_catalog_to_glimpse_target_id_fkey FOREIGN KEY (target_id) REFERENCES dbo.dr19_glimpse(pk);
+
+	select target_id from dr19_catalog_to_glimpse
+	where target_id not in (select pk from  dr19_glimpse)
+
+  12krows
+
+
+## after reload
+
+ALTER TABLE  dbo.dr19_carton
+    ADD CONSTRAINT dr19_carton_target_selection_plan_fkey FOREIGN KEY (target_selection_plan) REFERENCES dbo.dr19_targetdb_version(planname);
+
+
+
+
+ALTER TABLE  dbo.dr19_catalog_to_mangatarget
+    ADD CONSTRAINT dr19_catalog_to_mangatarget_target_id_fkey FOREIGN KEY (target_id) REFERENCES dbo.dr19_mangatarget(mangaid);
+
+
+    catalog_to_mastar_goodstars: change target_id from varchar(255) to varchar(25)
+
+    actually maybe i should change mangatarget.mangaid to varchar(255) instead.
+
+
+    
 
   
   
