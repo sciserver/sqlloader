@@ -96,6 +96,7 @@
 --* 2024-08-22 Ani: Added spValidateEboss. (DR19)
 --* 2025-04-16 Ani: Added spValidateAstra. (DR19)
 --* 2025-04-21 Ani: Added spValidateDR19VACs. (DR19)
+--* 2025-05-16 Ani: Added spValidateAllspec. (DR19)
 --====================================================================
 SET NOCOUNT ON;
 GO
@@ -2471,6 +2472,81 @@ go
 
 
 
+IF EXISTS (SELECT [name]FROM sysobjects 
+	WHERE [name]= N'spValidateAllspec' ) 
+	drop procedure spValidateAllspec
+GO
+--
+CREATE PROCEDURE spValidateAllspec (
+	@taskid int, 
+	@stepid int,
+	@destinationDB varchar(16)
+)
+-------------------------------------------------------------
+--/H  Validate allspec tables  
+--/A 
+--/T <p> parameters:   
+--/T <li> taskid int,   		-- Task identifier
+--/T <li> stepid int,   		-- Step identifier
+--/T <li> destinationDB int,   		-- Name of destination DB 
+--/T <li> returns  0 if OK, non zero if something wrong  
+--/T <br>
+--/T Sample call:<br>
+--/T <samp> 
+--/T <br> exec  spValidateAllspec @taskid , @stepid, 'BestDR18'  
+--/T </samp> 
+--/T <br>  
+------------------------------------------------------------- 
+AS BEGIN
+    	--
+    	SET NOCOUNT ON
+
+    	--- Globals
+    	DECLARE	@start datetime,
+		@summary bigint,
+		@error bigint,
+		@errorMsg varchar(1000),
+		@verb varchar(16)
+
+    -- Put out step greeting
+    EXEC spNewPhase @taskid, @stepid, 'spValidateAllspec', 'OK', 'spValidateEboss called'; 
+
+    -------------------------------------
+    SET @start  = current_timestamp
+    SET @summary = 0
+
+	---------------------
+	-- test unique keys
+	---------------------
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'multiplex', 'multiplex_id', @error OUTPUT
+	set @summary = @summary + @error;
+
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'allspec', 'allspec_id', @error OUTPUT
+	set @summary = @summary + @error;
+
+	-- generate completion message.
+	IF @summary = 0 
+	    BEGIN
+		SET @errorMsg =   'Allspec tables validated in '  
+			+ cast(dbo.fDatediffSec(@start, current_timestamp) as varchar(30))+ ' seconds'
+		SET @verb = 'OK'
+	    END
+	ELSE 	
+	    BEGIN
+		SET @errorMsg =   'Allspec tables validation found ' +str(@summary) + ' errors in ' 
+			+ cast(dbo.fDatediffSec(@start, current_timestamp) as varchar(30)) + ' seconds'
+		SET @verb = 'ERROR'
+	    END
+
+	EXEC spNewPhase @taskid, @stepid, 'spValidateAllspec', @verb, @errorMsg ;
+	
+	RETURN @summary
+END		-- End spValidateAllspec()
+--======================================
+GO
+
+
+
 --======================================================
 IF EXISTS (SELECT [name] FROM sysobjects 
 	WHERE  [name] = N'spValidateStep' )
@@ -2831,6 +2907,23 @@ BEGIN
 		    BEGIN
 		   		SET @stepMsg = 'Failed to validate DR19 VACs ' + @id
 				SET @phaseMsg = 'Failed to validate DR19 VACs ' + @id
+			END
+		GOTO commonExit
+	    END
+
+
+	IF @type = 'allspec'
+	    BEGIN
+		EXEC @err = spValidateAllspec @taskID, @stepID, @destinationDBbname 
+	        IF @err = 0
+		    BEGIN 
+	   			set @stepMsg = 'Validated Allspec ' + @id
+				set @phaseMsg = 'Validated Allspec ' + @id
+		    END
+		ELSE
+		    BEGIN
+		   		SET @stepMsg = 'Failed to validate Allspec ' + @id
+				SET @phaseMsg = 'Failed to validate Allspec ' + @id
 			END
 		GOTO commonExit
 	    END

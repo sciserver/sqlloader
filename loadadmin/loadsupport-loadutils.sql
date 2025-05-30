@@ -367,6 +367,7 @@ AS BEGIN
     --
     SET @cmd = N'BULK INSERT '+@dbname+'.dbo.'+@targettable
 	+ ' FROM '''+@fname+''' WITH ('
+    + ' FORMAT = ''CSV'', '	
 	+ ' DATAFILETYPE = ''char'','
 	+ ' FIELDTERMINATOR = '','','
 	+ ' ROWTERMINATOR = ''\n'','

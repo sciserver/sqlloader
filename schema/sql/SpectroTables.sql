@@ -160,6 +160,7 @@
 --*                  varchars. (DR19)
 --* 2024-09-06  Ani: Increased size of carton_to_target_pk in spAll 
 --*                  tables. (DR19)
+--* 2025-05-16  Ani: Added allspec tables. (DR19)
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -2110,6 +2111,100 @@ CREATE TABLE spAll_eFEDS (
 )
 GO
 --
+
+-- Allspec (DR19)
+
+--// Created from HDU 1 in $ALLSPEC/1.0.1/multiplex-dr19-1.0.1.fits
+
+if exists (select * from dbo.sysobjects 
+	where id = object_id(N'multiplex')) 
+	drop table multiplex
+GO
+--
+CREATE TABLE multiplex (
+    ------- 
+    --/H Table of all spectroscopic plates or FPS fields
+    --/T Table of all spectroscopic plates or FPS fields across each SDSS instrument.
+    ------- 
+    multiplex_id varchar(40) NOT NULL, --/U  --/D Unique multiplex ID  
+    design_id int NOT NULL, --/U  --/D design_id  
+    sdss_phase smallint NOT NULL, --/U  --/D SDSS Phase from 1 to 5  
+    observatory varchar(10) NOT NULL, --/U  --/D observatory  
+    instrument varchar(10) NOT NULL, --/U  --/D instrument  
+    plate int NOT NULL, --/U  --/D SDSS/BOSS/eBOSS/BHM plate (before FPS era)  
+    fps_field int NOT NULL, --/U  --/D Plate or FPS Field (merges pre/post Plate era)  
+    plate_or_fps_field int NOT NULL, --/U  --/D Plate or FPS Field (merges pre/post Plate era)  
+    mjd int NOT NULL, --/U  --/D MJD  
+    run2d varchar(10) NOT NULL, --/U  --/D idlspec2d version  
+    apred_vers varchar(10) NOT NULL, --/U  --/D APOGEE DRP Version  
+    drpver varchar(10) NOT NULL, --/U  --/D MaNGA (for e.g.) DRP Version  
+    version varchar(10) NOT NULL, --/U  --/D All Pipeline Version  
+    racen float NOT NULL, --/U deg --/D Multiplex center's right ascension  
+    deccen float NOT NULL, --/U deg --/D Multiplex center's declination  
+    position_angle float NOT NULL, --/U  --/D Multiplex position angle  
+    healpix int NOT NULL, --/U  --/D healpix  
+    healpixgrp smallint NOT NULL, --/U  --/D healpixgrp  
+    quality varchar(10) NOT NULL, --/U  --/D Quality flag for spectroscopic reduction  
+    programname varchar(40) NOT NULL, --/U  --/D Spectroscopic program Name  
+    survey varchar(20) NOT NULL, --/U  --/D Spectroscopic survey or sub-survey  
+    cas_url varchar(256) NOT NULL, --/U  --/D CAS URL  
+    sas_url varchar(256) NOT NULL, --/U  --/D SAS URL  
+)
+
+
+
+
+--// Created from HDU 1 in $ALLSPEC/1.0.1/allspec-dr19-1.0.1.fits
+
+if exists (select * from dbo.sysobjects 
+	where id = object_id(N'allspec')) 
+	drop table allspec
+GO
+--
+CREATE TABLE allspec (
+    ------- 
+    --/H Table of all spectroscopic reductions
+    --/T Table of all spectroscopic reductions across each SDSS instrument. 
+    ------- 
+    allspec_id varchar(128) NOT NULL, --/U  --/D Unique allspec ID
+    multiplex_id varchar(40) NOT NULL, --/U  --/D multiplex ID  
+    sdss_phase smallint NOT NULL, --/U  --/D SDSS Phase from 1 to 5  
+    observatory varchar(10) NOT NULL, --/U  --/D observatory  
+    instrument varchar(10) NOT NULL, --/U  --/D instrument  
+    sdss_id bigint NOT NULL, --/U  --/D sdss_id  
+    catalogid bigint NOT NULL, --/U  --/D BHM catalogid  
+    fiberid int NOT NULL, --/U  --/D SDSS/BOSS/eBOSS fiberid  
+    ifudsgn smallint NOT NULL, --/U  --/D MaNGA IFU DESIGN ID  
+    plate int NOT NULL, --/U  --/D SDSS/BOSS/eBOSS/BHM plate (before FPS era)  
+    fps_field int NOT NULL, --/U  --/D FPS Field (post Plate era)  
+    plate_or_fps_field int NOT NULL, --/U  --/D Plate or FPS Field (merges pre/post Plate era)  
+    mjd int NOT NULL, --/U  --/D MJD  
+    run2d varchar(10) NOT NULL, --/U  --/D idlspec2d version  
+    run1d varchar(10) NOT NULL, --/U  --/D idlspec1d version  
+    coadd varchar(10) NOT NULL, --/U  --/D either epoch, daily, or custom=allepoch  
+    apred_vers varchar(10) NOT NULL, --/U  --/D APOGEE DRP Version  
+    drpver varchar(10) NOT NULL, --/U  --/D MaNGA (for e.g.) DRP Version  
+    version varchar(10) NOT NULL, --/U  --/D All Pipeline Version  
+    programname varchar(40) NOT NULL, --/U  --/D Spectroscopic program Name  
+    survey varchar(40) NOT NULL, --/U  --/D Spectroscopic survey or sub-survey  
+    sas_file varchar(50) NOT NULL, --/U  --/D SAS File  
+    cas_url varchar(256) NOT NULL, --/U  --/D CAS URL  
+    sas_url varchar(256) NOT NULL, --/U  --/D SAS URL  
+    ra float NOT NULL, --/U deg --/D Right ascension  
+    dec float NOT NULL, --/U deg --/D Declination  
+    healpix int NOT NULL, --/U  --/D healpix  
+    healpixgrp smallint NOT NULL, --/U  --/D healpixgrp  
+    apogee_id varchar(32) NOT NULL, --/U  --/D APOGEE ID  
+    apogee_field varchar(32) NOT NULL, --/U  --/D APOGEE Field (prior to SDSS-V)  
+    telescope varchar(10) NOT NULL, --/U  --/D 2.5m Telescope  
+    file_spec varchar(10) NOT NULL, --/U  --/D sdss_access file species name  
+    apstar_id varchar(60) NOT NULL, --/U  --/D APOGEE (combined) star ID  
+    visit_id varchar(40) NOT NULL, --/U  --/D APOGEE visit ID  
+    mangaid varchar(10) NOT NULL, --/U  --/D MaNGA ID  
+    specobjid varchar(32) NOT NULL, --/U  --/D spectroscopic object id
+)
+
+
 
 
 if exists (select * from dbo.sysobjects 

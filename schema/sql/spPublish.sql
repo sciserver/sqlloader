@@ -81,9 +81,10 @@
 --* 2019-11-24 Ani: Added mangaGalaxyZoo, mangaAlfalfaDR15 to PublishManga (DR16).
 --* 2021-06-18 Ani: Swapped in MaNGA DR17 (GZ) VACs.
 --* 2021-07-30 Ani: Added Mastar VACs (DR17).
---^ 2024-09-06 Ani: Re-added eBOSS. (DR19)
---^ 2025-04-16 Ani: Added Astra. (DR19)
+--* 2024-09-06 Ani: Re-added eBOSS. (DR19)
+--* 2025-04-16 Ani: Added Astra. (DR19)
 --* 2025-04-25 Ani: Added DR19 VACs. (DR19)
+--* 2025-05-16 Ani: Added Allspec. (DR19)
 ----------------------------------------------------------------------
 -- We are not copying 
 -- DBcolumns, DBObjects, DBViewCols, DataConstants, Globe,Glossary, 
@@ -1722,6 +1723,58 @@ GO
 
 
 --=============================================================
+IF EXISTS (SELECT name FROM   sysobjects 
+    WHERE  name = N'spPublishAllspec' AND  type = 'P')
+    DROP PROCEDURE spPublishAllspec
+GO
+--
+CREATE PROCEDURE [dbo].[spPublishAllspec](
+	@taskID int, 
+	@stepID int,
+	@fromDB varchar(100), 
+	@toDB varchar(100), 
+	@firstTime int) 
+---------------------------------------------------------------
+--/H Publishes the Allspec tables of one DB to another 
+--/A
+--/T <p> parameters:   
+--/T <li> taskid int,   		-- Task identifier
+--/T <li> stepid int,   		-- Step identifier
+--/T <li> fromDB varchar(100),   	-- source DB (e.g. verify.photo)
+--/T <li> toDB varchar(100),   		-- destination DB (e.g. dr1.best)
+--/T <li> firstTime int 		-- if 1, creates target table.
+--/T <li> returns  0 if OK, non zero if something wrong  
+--/T <samp> spPublishAllspec 1,1,'SkyServerV4','tempDB', 1 </samp>
+---------------------------------------------------------------
+AS BEGIN
+	set nocount on
+	declare @err int, @summary int 
+	declare @message varchar(1000) 
+	declare @status  varchar(16) 
+	set @summary = 0 
+
+	set @message = 'Starting spPublishAllspec';
+	exec spNewPhase @taskID, @stepID, 'spPublishAllspec', 'OK', @message;
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'multiplex', @firstTime 
+	set @summary = @summary + @err 
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'allspec', @firstTime 
+	set @summary = @summary + @err 
+
+	--------------------------------------------------
+	set @message = 'Publish of database ' + @fromDB + ' to database ' + @toDB + ' found ' + str(@summary) + ' errors.' 
+	if  @summary = 0 set @status = 'OK' else set @status = 'ABORTING' 
+	--
+	exec spNewPhase @taskID, @stepID, 'spPublishAllspec', @status, 'Published Allspec Tables';
+	--
+	return @summary
+END   -- END spPublishAllspec
+GO
+
+
+
+--=============================================================
 IF EXISTS (SELECT [name] FROM sysobjects 
     WHERE  [name] = N'spPublishStep' ) 
     DROP PROCEDURE spPublishStep
@@ -2171,6 +2224,25 @@ BEGIN
                 begin 
                 set @stepMsg =  'Failed to publish WISE ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
                 set @phaseMsg = 'Failed to publish WISE ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        goto commonExit 
+        end 
+
+
+    --------------------------------------------------------------------------------------------- 
+    -- Handle Allspec databases 
+    IF @type in ('allspec') 
+        begin 
+        exec @err = spPublishAllspec @taskID, @stepID, @DBname, @publishDB, @firstTime 
+        if @err = 0 
+                begin 
+                set @stepMsg =  'Published Allspec ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Published Allspec ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        else 
+                begin 
+                set @stepMsg =  'Failed to publish Allspec ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Failed to publish Allspec ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
                 end 
         goto commonExit 
         end 

@@ -273,6 +273,7 @@
 --* 2023-02-20 Ani: Added eFEDS PKs (DR18).
 --* 2025-04-18 Ani: Added Astra and APOGEE DRP files (DR19).
 --* 2025-04-23 Ani: Added DR19 VAC PKs (DR19).
+--* 2025-05-20 Ani: Added allspec PKs (DR19).
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -546,6 +547,8 @@ INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'minesweeper','source_id'
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'DR19Q_prop', 'field,mjd,catalogid','', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'occam_cluster', 'name','', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'occam_member', 'sdss_id','', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'multiplex', 'multiplex_id', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'allspec', 'allspec_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 
 -----------------------------------------------------
 -- Primary Keys for the TILES tables
@@ -1205,7 +1208,7 @@ AS BEGIN
 	set @ret = 0
 	RETURN (case when (@ret < 0) then 0 else @ret end) 
 END
-
+GO
 
 
 
