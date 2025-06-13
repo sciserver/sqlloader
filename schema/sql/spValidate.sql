@@ -97,6 +97,12 @@
 --* 2025-04-16 Ani: Added spValidateAstra. (DR19)
 --* 2025-04-21 Ani: Added spValidateDR19VACs. (DR19)
 --* 2025-05-16 Ani: Added spValidateAllspec. (DR19)
+--* 2025-05-26 Ani: Added StarFlow, StarHorse and eROSITA VACs to 
+--*                 spValidateDR19VACs. (DR19)
+--* 2025-06-11 Ani: Added apogee_drp_all[star|visit] to
+--*                 spValidateApogee. (DR19)
+--* 2025-06-12 Ani: Replaced StarFlow_summary PK with identity
+--*                 column. (DR19)
 --====================================================================
 SET NOCOUNT ON;
 GO
@@ -1947,6 +1953,18 @@ AS BEGIN
 		set @summary = @summary + @error;
             END
 
+	IF @summary = 0
+            BEGIN
+	    	exec dbo.spTestUniqueKey  @taskid , @stepid,  'apogee_drp_allstar', 'PK', @error OUTPUT
+		set @summary = @summary + @error;
+            END
+
+	IF @summary = 0
+            BEGIN
+	    	exec dbo.spTestUniqueKey  @taskid , @stepid,  'apogee_drp_allvisit', '[FILE]', @error OUTPUT
+		set @summary = @summary + @error;
+            END
+
                 
 	IF @summary = 0 
 	    BEGIN
@@ -2448,8 +2466,38 @@ AS BEGIN
 	exec dbo.spTestUniqueKey  @taskid , @stepid,  'occam_member', 'sdss_id',	@error OUTPUT
 	set @summary = @summary + @error;
 
-	-- generate completion message.
+	-- Special handling required for StarFlow_summary duplicates
 
+	/* delete the duplicates
+	DELETE T
+	FROM
+	(
+	SELECT *
+	, DupRank = ROW_NUMBER() OVER (
+              PARTITION BY sdss_id
+              ORDER BY (SELECT NULL)
+              )
+	FROM StarFlow_summary
+	) AS T
+	WHERE DupRank > 1 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'StarFlow_summary', 'sdss_id',	@error OUTPUT
+	set @summary = @summary + @error;
+
+	*/
+	-- leave the duplicates in, define new identity column instead as PK
+	ALTER TABLE StarFlow_summary ADD PK INT IDENTITY(1,1) CONSTRAINT PK_starflow_summary PRIMARY KEY CLUSTERED
+ 	EXEC spNewPhase @taskid, @stepid, 'spValidateDR19VACs', 'OK', 'PK_starflow_summary created'
+
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'DL1_eROSITA_eRASS1', 'sdss_field,sdss_mjd,sdss_catalogid',	@error OUTPUT
+	set @summary = @summary + @error;
+
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'DL1_eROSITA_eRASS1_allepoch', 'sdss_field,sdss_mjd,sdss_catalogid',	@error OUTPUT
+	set @summary = @summary + @error;
+
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'apogee_starhorse', 'sdss_id',	@error OUTPUT
+	set @summary = @summary + @error;
+
+	-- generate completion message.
 	IF @summary = 0 
 	    BEGIN
 		SET @errorMsg =   'DR19 VAC tables validated in '  

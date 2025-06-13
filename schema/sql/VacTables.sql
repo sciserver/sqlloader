@@ -18,7 +18,9 @@
 --* 2022-12-27  Ani: Added eFEDs VACs (DR18).
 --* 2022-12-28  Ani: Replaced "--\" with "--/" and removed indents for table
 --*             description rows in eFEDs VACs (DR18).
---* 2025-04-21  Ani: Added VACs (DR19),
+--* 2025-04-21  Ani: Added VACs (DR19).
+--* 2025-05-26  Ani: Added StarFlow, StarHorse (DR19 version) and 
+--*                  eROSITA VACs (DR19).
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -312,63 +314,6 @@ warningflag   smallint  NOT NULL, --/U 			--/D  flag indicating unreliable measu
 )
 GO
 
-
-
-
---=============================================================
-IF EXISTS (SELECT name FROM sysobjects
-         WHERE xtype='U' AND name = 'apogee_starhorse')
-	DROP TABLE apogee_starhorse
-GO
---
-EXEC spSetDefaultFileGroup 'apogee_starhorse'
-GO
-
-
-CREATE TABLE apogee_starhorse (
----------------------------------------------------------------------------------- 
---/H StarHorse distance, extinction and other astrophysical parameters for APOGEE
---/H DR17 + Gaia EDR3 
----------------------------------------------------------------------------------- 
---/T parameters computed with Bayesian code, using  stellar evolutionary models,
---/T Galactic priors and a set of spectroscopic/astrometric/photometric
---/T measurements For more information on StarHorse code see Queiroz et al 2010
---/T (https://arxiv.org/pdf/1710.09970.pdf)  
----------------------------------------------------------------------------------- 
-    apogee_id varchar(32) NOT NULL, --/U  --/D TMASS-STYLE object name
-    aspcap_id varchar(128) NOT NULL, --/U  --/D Unique ID for ASPCAP results of form apogee.[telescope].[cs].results_version.location_id.star (Primary key)
-    apstar_id varchar(128) NOT NULL, --/U  --/D Unique ID for combined star spectrum of form apogee.[telescope].[cs].apstar_version.location_id.apogee_id (Primary key)
-    edr3_source_id varchar(32) NOT NULL, --/U  --/D Gaia EDR3 Source ID
-    glon float NOT NULL, --/U deg --/D Galactic Longitude
-    glat float NOT NULL, --/U deg --/D Galactic Latitude  
-    ra float NOT NULL, --/U deg --/D Right Ascention J200
-    dec float NOT NULL, --/U deg --/D Declination J200
-    mass16 real NOT NULL, --/U solar mass   --/D StarHorse 16th astro-spectro-photometric mass percentile (Queiroz et al. 2018)
-    mass50 real NOT NULL, --/U  solar mass --/D StarHorse median astro-spectro-photometric mass (Queiroz et al. 2018)
-    mass84 real NOT NULL, --/U solar mass  --/D  StarHorse 84th astro-spectro-photometric mass percentile (Queiroz et al. 2018)
-    teff16 real NOT NULL, --/U K  --/D   StarHorse 16th astro-spectro-photometric effective temperature percentile (Queiroz et al. 2018)
-    teff50 real NOT NULL, --/U K --/D   StarHorse median astro-spectro-photometric effective temperature (Queiroz et al. 2018)
-    teff84 real NOT NULL, --/U K --/D  StarHorse 84th astro-spectro-photometric effective temperature percentile (Queiroz et al. 2018)
-    logg16 real NOT NULL, --/U dex --/D StarHorse 16th astro-spectro-photometric surface gravity percentile (Queiroz et al. 2018)  
-    logg50 real NOT NULL, --/U dex --/D   StarHorse median astro-spectro-photometric surface gravity (Queiroz et al. 2018)
-    logg84 real NOT NULL, --/U dex --/D   StarHorse 84th astro-spectro-photometric surface gravity percentile (Queiroz et al. 2018) 
-    met16 real NOT NULL, --/U dex --/D StarHorse 16th astro-spectro-photometric metallicity percentile (Queiroz et al. 2018)
-    met50 real NOT NULL, --/U dex --/D StarHorse median astro-spectro-photometric metallicity (Queiroz et al. 2018)
-    met84 real NOT NULL, --/U dex --/D StarHorse 84th astro-spectro-photometric metallicity percentile (Queiroz et al. 2018)
-    dist05 real NOT NULL, --/U kpc --/D StarHorse 5th astro-spectro-photometric distance percentile (Queiroz et al. 2018)
-    dist16 real NOT NULL, --/U kpc --/D   StarHorse 16th astro-spectro-photometric distance percentile (Queiroz et al. 2018) 
-    dist50 real NOT NULL, --/U kpc --/D StarHorse median astro-spectro-photometric distance (Queiroz et al. 2018)
-    dist84 real NOT NULL, --/U kpc --/D StarHorse 84th astro-spectro-photometric distance percentile (Queiroz et al. 2018)
-    dist95 real NOT NULL, --/U kpc --/D StarHorse 95th posterior extinction (at 542 nm) percentile (Queiroz et al. 2018)
-    av05 real NOT NULL, --/U mag --/D   StarHorse 5th posterior extinction (at 542 nm) percentile (Queiroz et al. 2018)
-    av16 real NOT NULL, --/U mag --/D StarHorse 16th posterior extinction (at 542 nm) percentile (Queiroz et al. 2018)
-    av50 real NOT NULL, --/U mag --/D StarHorse median posterior extinction (at 542 nm) (Queiroz et al. 2018)
-    av84 real NOT NULL, --/U mag --/D StarHorse 84th posterior extinction (at 542 nm) percentile (Queiroz et al. 2018)   
-    av95 real NOT NULL, --/U mag --/D   StarHorse 95th posterior extinction (at 542 nm) percentile (Queiroz et al. 2018)
-    starhorse_inputflags varchar(80) NOT NULL, --/U  --/D StarHorse Input flags (Queiroz et al. 2018) 
-    starhorse_outputflags varchar(80) NOT NULL, --/U  --/D StarHorse Output flags (Queiroz et al. 2018)
-)
-GO
 
 
 
@@ -809,7 +754,7 @@ GO
 --// HDU 1 (113 columns x 2618012 rows)
 CREATE TABLE allVisit_MADGICS_th (
 -------------------------------------------------------------------------------
---/H Summary file of scalar outputs from apMADGICS pipeline processing of all 
+--/H Summary file of scalar outputs from apMADGICS pipeline processing of all
 --/H visit spectra in APOGEE DR17 for star_prior_type = "th"
 -------------------------------------------------------------------------------
 --/T Summary file of scalar outputs from apMADGICS pipeline processing of all 
@@ -817,6 +762,7 @@ CREATE TABLE allVisit_MADGICS_th (
 --/T DIB properties, and crossmatches to the standard APOGEE DRP allStar and 
 --/T allVisit files, for star_prior_type = "dd".
 -------------------------------------------------------------------------------
+    SDSS_ID bigint NOT NULL, --/U  --/D SDSS_ID of Target
     dib_minchi2_final_1_15273 float NOT NULL, --/U  --/D minimum value of the delta chi2 at the optimum for adding DIB model 1_15273 to the MADGICS model for the visit spectrum  
     tot_p5chi2_v1_1_15273 float NOT NULL, --/U  --/D Total chi2 for the MADGICS model after including the DIB model 1_15273  
     dr17_logg real NOT NULL, --/U log10(cm/s²) --/D log(g) from ASPCAP allStar file for DR17  
@@ -934,6 +880,7 @@ CREATE TABLE allVisit_MADGICS_th (
 GO
 
 
+
 --=============================================================
 IF EXISTS (SELECT name FROM sysobjects
          WHERE xtype='U' AND name = 'allVisit_MADGICS_dd')
@@ -954,6 +901,7 @@ CREATE TABLE allVisit_MADGICS_dd (
 --/T DIB properties, and crossmatches to the standard APOGEE DRP allStar and 
 --/T allVisit files, for star_prior_type = "dd".
 -------------------------------------------------------------------------------
+    SDSS_ID bigint NOT NULL, --/U  --/D SDSS_ID of Target
     dib_minchi2_final_1_15273 float NOT NULL, --/U  --/D minimum value of the delta chi2 at the optimum for adding DIB model 1_15273 to the MADGICS model for the visit spectrum  
     tot_p5chi2_v1_1_15273 float NOT NULL, --/U  --/D Total chi2 for the MADGICS model after including the DIB model 1_15273  
     dr17_logg real NOT NULL, --/U log10(cm/s²) --/D log(g) from ASPCAP allStar file for DR17  
@@ -1066,6 +1014,7 @@ CREATE TABLE allVisit_MADGICS_dd (
     cartvisit bigint NOT NULL, --/U  --/D Cart identifier for plate cart used during the visit observation (variations in total throughput can depend on the throughput of the fibers in a given cart)  
 )
 GO
+
 
 
 --=============================================================
@@ -1287,7 +1236,7 @@ CREATE TABLE mwm_mdwarf_abundances (
 --/T Catalog of detailed elemental abundances for ~17,000 M dwarfs in MWM (Behmard et al. 2025, Table 2).
 -------------------------------------------------------------------------------
     gaia_dr3_source_id bigint NOT NULL, --/U  --/D Gaia DR3 source identifier  
-    name bigint NOT NULL, --/U  --/D SDSS ID  
+    [name] bigint NOT NULL, --/U  --/D SDSS ID  
     teff_cannon float NOT NULL, --/U Kelvin --/D M dwarf temperature  
     fe_h_cannon float NOT NULL, --/U dex --/D M dwarf [Fe/H]  
     mg_h_cannon float NOT NULL, --/U dex --/D M dwarf [Mg/H]  
@@ -2434,7 +2383,7 @@ CREATE TABLE occam_cluster (
 --/T (Adrian M. Price-Whelan 2017), an orbital dynamics code, and mean radial velocities
 --/T and chemical abundances from MWM/APOGEE.
 -------------------------------------------------------------------------------
-    name varchar(20) NOT NULL, --/U --- --/D Open cluster name   1  
+    [name] varchar(20) NOT NULL, --/U --- --/D Open cluster name   1  
     glon float NOT NULL, --/U deg --/D Galactic longitude   2  
     glat float NOT NULL, --/U deg --/D Galactic latitude  3  
     radeg float NOT NULL, --/U deg --/D Right ascencion in degrees   4  
@@ -2559,6 +2508,253 @@ CREATE TABLE occam_member (
     xmatch tinyint NOT NULL --/U --- --/D An unsigned integer to indicate whether a individual star has been observed by Galah, GaiaESO or OCCASO. The first bit corresponds to Galah, second to GaiaESO, and the thrid to OCCASO.  23  
 )
 GO
+
+
+--=============================================================
+IF EXISTS (SELECT name FROM sysobjects
+         WHERE xtype='U' AND name = 'StarFlow_summary')
+	DROP TABLE StarFlow_summary
+GO
+--
+EXEC spSetDefaultFileGroup 'StarFlow_summary'
+GO
+--// Created from HDU 1 in $MWM_STARFLOW/v1_0_0/StarFlow_summary_v1_0_0.fits
+CREATE TABLE StarFlow_summary (
+    ------- 
+    --/H Summary table of age and mass posteriors with the maximum liklihood and corresponding errorbars
+    --/T Stellar age and mass estimates for 378,720 evolved stars from SDSS-V DR19, derived using a
+    --/T normalizing flow model trained on asteroseismic data. Each entry includes maximum likelihood
+    --/T age and mass estimates, 1σ uncertainties, and a training space density metric indicating the
+    --/T models confidence based on parameter coverage.
+    ------- 
+    sdss_id bigint NOT NULL, --/U  --/D Unique SDSS-V ID  
+    sdss4_apogee_id varchar(20) NOT NULL, --/U  --/D 2MASS ID  
+    age float NOT NULL, --/U Gyr --/D Maximum likelihood age from the StarFlow age mo  
+    e_p_age float NOT NULL, --/U Gyr --/D Upper age uncertainty  
+    e_n_age float NOT NULL, --/U Gyr --/D Lower age uncertainty  
+    mass float NOT NULL, --/U Solar Mass --/D Maximum likelihood mass from the StarFlow mass  
+    e_p_mass float NOT NULL, --/U Solar Mass --/D Upper mass uncertainty  
+    e_n_mass float NOT NULL, --/U Solar Mass --/D Lower mass uncertainty  
+    training_density float NOT NULL, --/U  --/D Training density value. Describes how well samp  
+    bitmask bigint NOT NULL, --/U  --/D Contains flags to indicate notes about a given  
+)
+GO
+
+
+--=============================================================
+IF EXISTS (SELECT name FROM sysobjects
+         WHERE xtype='U' AND name = 'DL1_eROSITA_eRASS1')
+	DROP TABLE DL1_eROSITA_eRASS1
+GO
+--
+EXEC spSetDefaultFileGroup 'DL1_eROSITA_eRASS1'
+GO
+--// Created from HDU 1 in $DL1_SDSS_EROSITA/v1_0_2/DL1_spec_SDSSV_IPL3_eROSITA_eRASS1.fits
+CREATE TABLE DL1_eROSITA_eRASS1 (
+    ------- 
+    --/H SDSS and eROSITA data of the sources within the SPIDERS program
+    --/T Data Level 1 contains the data shared among the collaborations of SDSS and eROSITA, with optical and X-ray information
+    --/T of sources that were detected with eROSITA and followed-up with SDSS
+    -------
+    sdss_catalogid bigint NOT NULL, --/U  --/D SDSS CATALOGID (used before the unification with SDSS_ID)  
+    sdss_id bigint NOT NULL, --/U  --/D SDSS ID (unified for DR19)  
+    sdss_field bigint NOT NULL, --/U  --/D SDSS field sequence number  
+    sdss_mjd bigint NOT NULL, --/U day --/D SDSS modified Julian date of observation  
+    sdss_objtype varchar(20) NOT NULL, --/U  --/D SDSS object type  
+    sdss_fiber_ra float NOT NULL, --/U degree --/D SDSS fiber position coordinate: right ascension  
+    sdss_fiber_dec float NOT NULL, --/U degree --/D SDSS fiber position coordinate: declination  
+    sdss_z real NOT NULL, --/U  --/D SDSS best redshift fit  
+    sdss_z_err real NOT NULL, --/U  --/D SDSS redshift error  
+    sdss_zwarning bigint NOT NULL, --/U  --/D SDSS redshift measurement warning flag  
+    sdss_sn_median_all real NOT NULL, --/U  --/D SDSS median Signal to Noise over the entire spectral range  
+    sdss_class varchar(10) NOT NULL, --/U  --/D SDSS best fit spectroscopic classification  
+    sdss_subclass varchar(30) NOT NULL, --/U  --/D SDSS subclass  
+    sdss_obs varchar(10) NOT NULL, --/U  --/D SDSS observatory (APO or LCO)  
+    sdss_run2d varchar(10) NOT NULL, --/U  --/D Tagged version of idlspec2d that was used to reduce the SDSS BOSS spectra  
+    sdss_nspec smallint NOT NULL, --/U  --/D Number of observed SDSS spectra  
+    sdss_vrad_astra real NOT NULL, --/U km/s --/D ASTRA stellar fit: Radial velocity  
+    sdss_evrad_astra real NOT NULL, --/U km/s --/D ASTRA stellar fit: Radial velocity error  
+    sdss_teff_astra real NOT NULL, --/U  --/D ASTRA stellar fit: Effective temperature  
+    sdss_eteff_astra real NOT NULL, --/U  --/D ASTRA stellar fit: Effective temperature error  
+    sdss_logg_astra real NOT NULL, --/U  --/D ASTRA stellar fit: Surface gravity  
+    sdss_elogg_astra real NOT NULL, --/U  --/D ASTRA stellar fit: Surface gravity error  
+    sdss_feh_astra real NOT NULL, --/U  --/D ASTRA stellar fit: Metallicity [Fe/H]  
+    sdss_efeh_astra real NOT NULL, --/U  --/D ASTRA stellar fit: Metallicity [Fe/H] error  
+    sdss_ewha_astra real NOT NULL, --/U  --/D ASTRA stellar fit: H alpha equivalent width  
+    sdss_eewha_astra_0 real NOT NULL, --/F sdss_eewha_astra 0 --/U  --/D ASTRA stellar fit: H alpha equivalent width error (percentiles)  Measurements specifically for 0.  
+    sdss_eewha_astra_1 real NOT NULL, --/F sdss_eewha_astra 1 --/U  --/D ASTRA stellar fit: H alpha equivalent width error (percentiles)  Measurements specifically for 1.  
+    sdss_eewha_astra_2 real NOT NULL, --/F sdss_eewha_astra 2 --/U  --/D ASTRA stellar fit: H alpha equivalent width error (percentiles)  Measurements specifically for 2.  
+    gaia_bp real NOT NULL, --/U Vega mag --/D Gaia DR2 BP passband  
+    gaia_rp real NOT NULL, --/U Vega mag --/D Gaia DR2 RP passband  
+    gaia_g real NOT NULL, --/U Vega mag --/D Gaia DR2 G passband  
+    racat float NOT NULL, --/U degree --/D Right ascension of the SDSS-V target, as derived from external catalogs  
+    deccat float NOT NULL, --/U degree --/D Declination of the SDSS-V target, as derived from external catalogs  
+    coord_epoch real NOT NULL, --/U  --/D Coordinate epoch of the SDSS-V target, as derived from external catalogs  
+    pmra real NOT NULL, --/U mas/yr --/D Proper Motion in right ascension of the SDSS-V target, as derived from external catalogs  
+    pmdec real NOT NULL, --/U mas/yr --/D Proper Motion in declination of the SDSS-V target, as derived from external catalogs  
+    parallax real NOT NULL, --/U mas --/D Parallax of the SDSS-V target, as derived from external catalogs  
+    wise_mag_0 real NOT NULL, --/F wise_mag 0 --/U  --/D WISE photometry (W1, W2, W3, W4)  Measurements specifically for 0.  
+    wise_mag_1 real NOT NULL, --/F wise_mag 1 --/U  --/D WISE photometry (W1, W2, W3, W4)  Measurements specifically for 1.  
+    wise_mag_2 real NOT NULL, --/F wise_mag 2 --/U  --/D WISE photometry (W1, W2, W3, W4)  Measurements specifically for 2.  
+    wise_mag_3 real NOT NULL, --/F wise_mag 3 --/U  --/D WISE photometry (W1, W2, W3, W4)  Measurements specifically for 3.  
+    twomass_mag_0 real NOT NULL, --/F twomass_mag 0 --/U  --/D 2MASS photometry (J, H, Ks)  Measurements specifically for 0.  
+    twomass_mag_1 real NOT NULL, --/F twomass_mag 1 --/U  --/D 2MASS photometry (J, H, Ks)  Measurements specifically for 1.  
+    twomass_mag_2 real NOT NULL, --/F twomass_mag 2 --/U  --/D 2MASS photometry (J, H, Ks)  Measurements specifically for 2.  
+    guvcat_mag_0 real NOT NULL, --/F guvcat_mag 0 --/U  --/D GALEX UV photometry (FUV, NUV)  Measurements specifically for 0.  
+    guvcat_mag_1 real NOT NULL, --/F guvcat_mag 1 --/U  --/D GALEX UV photometry (FUV, NUV)  Measurements specifically for 1.  
+    ero_detuid varchar(40) NOT NULL, --/U  --/D eROSITA unique X-ray source identifier  
+    ero_ra float NOT NULL, --/U degree --/D eROSITA position estimate: right ascension  
+    ero_dec float NOT NULL, --/U degree --/D eROSITA position estimate: declination  
+    ero_pos_err float NOT NULL, --/U arcsec --/D eROSITA positional error  
+    ero_mjd int NOT NULL, --/U day --/D eROSITA modified Julian date of observation  
+    ero_mjd_flag smallint NOT NULL, --/U  --/D eROSITA MJD flag (1 for sources close to the boundaries of the survey)  
+    ero_morph varchar(10) NOT NULL, --/U  --/D eROSITA source morphological classification (point-like or extended)  
+    ero_flux real NOT NULL, --/U erg/s/cm^2 --/D eROSITA flux  
+    ero_flux_err real NOT NULL, --/U erg/s/cm^2 --/D eROSITA flux error  
+    ero_det_like real NOT NULL, --/U  --/D eROSITA source detection likelihood in the given band  
+    ero_flux_type varchar(10) NOT NULL, --/U keV --/D eROSITA band for the given flux  
+)
+GO
+
+
+
+--=============================================================
+IF EXISTS (SELECT name FROM sysobjects
+         WHERE xtype='U' AND name = 'DL1_eROSITA_eRASS1_allepoch')
+	DROP TABLE DL1_eROSITA_eRASS1_allepoch
+GO
+--
+EXEC spSetDefaultFileGroup 'DL1_eROSITA_eRASS1_allepoch'
+GO
+--// Created from HDU 1 in $DL1_SDSS_EROSITA/v1_0_2/DL1_spec_SDSSV_IPL3_eROSITA_eRASS1_allepoch.fits
+CREATE TABLE DL1_eROSITA_eRASS1_allepoch (
+    ------- 
+    --/H SDSS and eROSITA data of the sources within the SPIDERS program (allepoch)
+    --/T Data Level 1 contains the data shared among the collaborations of SDSS and eROSITA, with optical and X-ray information
+    --/T of sources that were detected with eROSITA and followed-up with SDSS (allepoch)
+    ------- 
+    sdss_catalogid bigint NOT NULL, --/U  --/D SDSS CATALOGID (used before the unification with SDSS_ID)  
+    sdss_id bigint NOT NULL, --/U  --/D SDSS ID (unified for DR19)  
+    sdss_field bigint NOT NULL, --/U  --/D SDSS field sequence number  
+    sdss_mjd bigint NOT NULL, --/U day --/D SDSS modified Julian date of observation  
+    sdss_objtype varchar(20) NOT NULL, --/U  --/D SDSS object type  
+    sdss_fiber_ra float NOT NULL, --/U degree --/D SDSS fiber position coordinate: right ascension  
+    sdss_fiber_dec float NOT NULL, --/U degree --/D SDSS fiber position coordinate: declination  
+    sdss_z real NOT NULL, --/U  --/D SDSS best redshift fit  
+    sdss_z_err real NOT NULL, --/U  --/D SDSS redshift error  
+    sdss_zwarning bigint NOT NULL, --/U  --/D SDSS redshift measurement warning flag  
+    sdss_sn_median_all real NOT NULL, --/U  --/D SDSS median Signal to Noise over the entire spectral range  
+    sdss_class varchar(10) NOT NULL, --/U  --/D SDSS best fit spectroscopic classification  
+    sdss_subclass varchar(30) NOT NULL, --/U  --/D SDSS subclass  
+    sdss_obs varchar(10) NOT NULL, --/U  --/D SDSS observatory (APO or LCO)  
+    sdss_run2d varchar(10) NOT NULL, --/U  --/D Tagged version of idlspec2d that was used to reduce the SDSS BOSS spectra  
+    sdss_nspec bigint NOT NULL, --/U  --/D Number of observed SDSS spectra  
+    sdss_vrad_astra real NOT NULL, --/U km/s --/D ASTRA stellar fit: Radial velocity  
+    sdss_evrad_astra real NOT NULL, --/U km/s --/D ASTRA stellar fit: Radial velocity error  
+    sdss_teff_astra real NOT NULL, --/U  --/D ASTRA stellar fit: Effective temperature  
+    sdss_eteff_astra real NOT NULL, --/U  --/D ASTRA stellar fit: Effective temperature error  
+    sdss_logg_astra real NOT NULL, --/U  --/D ASTRA stellar fit: Surface gravity  
+    sdss_elogg_astra real NOT NULL, --/U  --/D ASTRA stellar fit: Surface gravity error  
+    sdss_feh_astra real NOT NULL, --/U  --/D ASTRA stellar fit: Metallicity [Fe/H]  
+    sdss_efeh_astra real NOT NULL, --/U  --/D ASTRA stellar fit: Metallicity [Fe/H] error  
+    sdss_ewha_astra real NOT NULL, --/U  --/D ASTRA stellar fit: H alpha equivalent width  
+    sdss_eewha_astra_0 real NOT NULL, --/F sdss_eewha_astra 0 --/U  --/D ASTRA stellar fit: H alpha equivalent width error (percentiles)  Measurements specifically for 0.  
+    sdss_eewha_astra_1 real NOT NULL, --/F sdss_eewha_astra 1 --/U  --/D ASTRA stellar fit: H alpha equivalent width error (percentiles)  Measurements specifically for 1.  
+    sdss_eewha_astra_2 real NOT NULL, --/F sdss_eewha_astra 2 --/U  --/D ASTRA stellar fit: H alpha equivalent width error (percentiles)  Measurements specifically for 2.  
+    gaia_bp real NOT NULL, --/U Vega mag --/D Gaia DR2 BP passband  
+    gaia_rp real NOT NULL, --/U Vega mag --/D Gaia DR2 RP passband  
+    gaia_g real NOT NULL, --/U Vega mag --/D Gaia DR2 G passband  
+    racat float NOT NULL, --/U degree --/D Right ascension of the SDSS-V target, as derived from external catalogs  
+    deccat float NOT NULL, --/U degree --/D Declination of the SDSS-V target, as derived from external catalogs  
+    coord_epoch real NOT NULL, --/U  --/D Coordinate epoch of the SDSS-V target, as derived from external catalogs  
+    pmra real NOT NULL, --/U mas/yr --/D Proper Motion in right ascension of the SDSS-V target, as derived from external catalogs  
+    pmdec real NOT NULL, --/U mas/yr --/D Proper Motion in declination of the SDSS-V target, as derived from external catalogs  
+    parallax real NOT NULL, --/U mas --/D Parallax of the SDSS-V target, as derived from external catalogs  
+    wise_mag_0 real NOT NULL, --/F wise_mag 0 --/U  --/D WISE photometry (W1, W2, W3, W4)  Measurements specifically for 0.  
+    wise_mag_1 real NOT NULL, --/F wise_mag 1 --/U  --/D WISE photometry (W1, W2, W3, W4)  Measurements specifically for 1.  
+    wise_mag_2 real NOT NULL, --/F wise_mag 2 --/U  --/D WISE photometry (W1, W2, W3, W4)  Measurements specifically for 2.  
+    wise_mag_3 real NOT NULL, --/F wise_mag 3 --/U  --/D WISE photometry (W1, W2, W3, W4)  Measurements specifically for 3.  
+    twomass_mag_0 real NOT NULL, --/F twomass_mag 0 --/U  --/D 2MASS photometry (J, H, Ks)  Measurements specifically for 0.  
+    twomass_mag_1 real NOT NULL, --/F twomass_mag 1 --/U  --/D 2MASS photometry (J, H, Ks)  Measurements specifically for 1.  
+    twomass_mag_2 real NOT NULL, --/F twomass_mag 2 --/U  --/D 2MASS photometry (J, H, Ks)  Measurements specifically for 2.  
+    guvcat_mag_0 real NOT NULL, --/F guvcat_mag 0 --/U  --/D GALEX UV photometry (FUV, NUV)  Measurements specifically for 0.  
+    guvcat_mag_1 real NOT NULL, --/F guvcat_mag 1 --/U  --/D GALEX UV photometry (FUV, NUV)  Measurements specifically for 1.  
+    ero_detuid varchar(40) NOT NULL, --/U  --/D eROSITA unique X-ray source identifier  
+    ero_ra float NOT NULL, --/U degree --/D eROSITA position estimate: right ascension  
+    ero_dec float NOT NULL, --/U degree --/D eROSITA position estimate: declination  
+    ero_pos_err float NOT NULL, --/U arcsec --/D eROSITA positional error  
+    ero_mjd int NOT NULL, --/U day --/D eROSITA modified Julian date of observation  
+    ero_mjd_flag smallint NOT NULL, --/U  --/D eROSITA MJD flag (1 for sources close to the boundaries of the survey)  
+    ero_morph varchar(10) NOT NULL, --/U  --/D eROSITA source morphological classification (point-like or extended)  
+    ero_flux real NOT NULL, --/U erg/s/cm^2 --/D eROSITA flux  
+    ero_flux_err real NOT NULL, --/U erg/s/cm^2 --/D eROSITA flux error  
+    ero_det_like real NOT NULL, --/U  --/D eROSITA source detection likelihood in the given band  
+    ero_flux_type varchar(10) NOT NULL, --/U keV --/D eROSITA band for the given flux  
+)
+GO
+
+
+--=============================================================
+IF EXISTS (SELECT name FROM sysobjects
+         WHERE xtype='U' AND name = 'apogee_starhorse')
+	DROP TABLE apogee_starhorse
+GO
+--
+EXEC spSetDefaultFileGroup 'apogee_starhorse'
+GO
+--// Created from HDU 1 in $APOGEE_STARHORSE/APOGEE_DR19_DR3_STARHORSE_v2.fits
+CREATE TABLE apogee_starhorse (
+    ------- 
+    --/H StarHorse results for the SDSS-V DR19 APOGEE giants
+    --/T This file contains spectro-photo-astrometric distances, extinctions, and stellar parameters such as temperature,
+    --/T masses and metallicity for giant stars with the SDSS-V DR19 APOGEE spectroscopy using the StarHorse code
+    --/T Queiroz et al. 2018 (https://ui.adsabs.harvard.edu/abs/2018MNRAS.476.2556Q/abstract,
+    --/T Queiroz et al. 2023 https://ui.adsabs.harvard.edu/abs/2023A%26A...673A.155Q/abstract). Parameters are estimated
+    --/T for each unique sdss_id in the data release, provided the StarHorse code successfully converges. If a star has
+    --/T multiple sdss_ids, the ASPCAP results with the highest signal-to-noise ratio (snr) are used. For each star, StarHorse
+    --/T computes the joint posterior probability distribution function (PDF) over a grid of PARSEC 1.2S stellar models, using
+    --/T input values including ASPCAP-derived effective temperature, surface gravity, metallicity, and alpha-element abundance,
+    --/T as well as Gaia DR3 parallaxes (when available), and multi-band photometry from Pan-STARRS1, 2MASS, and AllWISE. ASPCAP
+    --/T effective temperature and surface gravity are calibrated before input to StarHorse. Calibration details are described
+    --/T in the SDSS DR19 main publication. The VAC includes median values of marginalized PDFs for mass, temperature, surface
+    --/T gravity, metallicity, distance, and extinction. The StarHorse_INPUTFLAGS column indicates the input data used, while
+    --/T StarHorse_OUTFLAGS flags possibly uncertain outputs. Calibrated temperature and surface gravity are also included.
+    ------- 
+    sdss_id bigint NOT NULL, --/U  --/D SDSS-5 unique identifier  
+    dr3_source_id bigint NOT NULL, --/U  --/D Gaia-DR3 source id  
+    glon real NOT NULL, --/U deg --/D Galactic Longitude  
+    glat real NOT NULL, --/U deg --/D Galactic Latitude  
+    ra real NOT NULL, --/U deg --/D Right Ascention J2000  
+    dec real NOT NULL, --/U deg --/D Declination J2000  
+    logg_shcalib real NOT NULL, --/U dex --/D StarHorse calibrated spectroscopic surface gravity  
+    teff_shcalib real NOT NULL, --/U K --/D StarHorse calibrated spectroscopic effective temperature  
+    mass16 real NOT NULL, --/U solar masses --/D StarHorse 16th astro-spectro-photometric mass percentile (Queiroz et al. 2018)  
+    mass50 real NOT NULL, --/U solar masses --/D StarHorse median astro-spectro-photometric mass (Queiroz et al. 2018)  
+    mass84 real NOT NULL, --/U solar masses --/D StarHorse 84th astro-spectro-photometric mass percentile (Queiroz et al. 2018)  
+    teff16 real NOT NULL, --/U K --/D StarHorse 16th astro-spectro-photometric effective temperature percentile (Queiroz et al. 2018)  
+    teff50 real NOT NULL, --/U K --/D StarHorse median astro-spectro-photometric effective temperature (Queiroz et al. 2018)  
+    teff84 real NOT NULL, --/U K --/D StarHorse 84th astro-spectro-photometric effective temperature percentile (Queiroz et al. 2018)  
+    logg16 real NOT NULL, --/U dex --/D StarHorse 16th astro-spectro-photometric surface gravity percentile (Queiroz et al. 2018)  
+    logg50 real NOT NULL, --/U dex --/D StarHorse median astro-spectro-photometric surface gravity (Queiroz et al. 2018)  
+    logg84 real NOT NULL, --/U dex --/D StarHorse 84th astro-spectro-photometric surface gravity percentile (Queiroz et al. 2018)  
+    met16 real NOT NULL, --/U dex --/D StarHorse 16th astro-spectro-photometric metallicity percentile (Queiroz et al. 2018)  
+    met50 real NOT NULL, --/U dex --/D StarHorse median astro-spectro-photometric metallicity (Queiroz et al. 2018)  
+    met84 real NOT NULL, --/U dex --/D StarHorse 84th astro-spectro-photometric metallicity percentile (Queiroz et al. 2018)  
+    dist05 real NOT NULL, --/U kpc --/D StarHorse 5th astro-spectro-photometric distance percentile (Queiroz et al. 2018)  
+    dist16 real NOT NULL, --/U kpc --/D StarHorse 16th astro-spectro-photometric distance percentile (Queiroz et al. 2018)  
+    dist50 real NOT NULL, --/U kpc --/D StarHorse median astro-spectro-photometric distance (Queiroz et al. 2018)  
+    dist84 real NOT NULL, --/U kpc --/D StarHorse 84th astro-spectro-photometric distance percentile (Queiroz et al. 2018)  
+    dist95 real NOT NULL, --/U kpc --/D StarHorse 95th astro-spectro-photometric distance percentile (Queiroz et al. 2018)  
+    av05 real NOT NULL, --/U mag --/D StarHorse 5th posterior extinction (at 542 nm) percentile (Queiroz et al. 2018)  
+    av16 real NOT NULL, --/U mag --/D StarHorse 16th posterior extinction (at 542 nm) percentile (Queiroz et al. 2018)  
+    av50 real NOT NULL, --/U mag --/D StarHorse median posterior extinction (at 542 nm) (Queiroz et al. 2018)  
+    av84 real NOT NULL, --/U mag --/D StarHorse 84th posterior extinction (at 542 nm) percentile (Queiroz et al. 2018)  
+    av95 real NOT NULL, --/U mag --/D StarHorse 95th posterior extinction (at 542 nm) percentile (Queiroz et al. 2018)  
+    starhorse_inputflags varchar(80) NOT NULL, --/U  --/D StarHorse Input flags (Queiroz et al. 2023)  
+    starhorse_outputflags varchar(80) NOT NULL, --/U  --/D StarHorse Output flags (Queiroz et al. 2023)  
+)
+GO
+
 
 
 -- revert to primary file group

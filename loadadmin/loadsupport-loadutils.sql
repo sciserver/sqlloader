@@ -6,7 +6,7 @@
 -- 2002-12-22	Alex: moved here the spNextFile proc
 ----------------------------------------------------------
 -- 2010-06-21 Naren: Modified spLoadZoom,spLoadSpecobj to run without DTS
-
+-- 2025-05-29 Ani: updated options for bulk-insert cmd in spLoadCsv. (DR19)
 --========================================================
 
 SET NOCOUNT ON;
@@ -368,11 +368,11 @@ AS BEGIN
     SET @cmd = N'BULK INSERT '+@dbname+'.dbo.'+@targettable
 	+ ' FROM '''+@fname+''' WITH ('
     + ' FORMAT = ''CSV'', '	
-	+ ' DATAFILETYPE = ''char'','
-	+ ' FIELDTERMINATOR = '','','
-	+ ' ROWTERMINATOR = ''\n'','
-	+ ' BATCHSIZE =10000,'
-	+ ' CODEPAGE = ''RAW'','
+--	+ ' DATAFILETYPE = ''char'','
+--	+ ' FIELDTERMINATOR = '','','
+--	+ ' ROWTERMINATOR = ''\n'','
+--	+ ' BATCHSIZE =10000,'
+--	+ ' CODEPAGE = ''RAW'','
 	+ @options + ' TABLOCK)';
     --
     EXEC @ret=sp_executesql @cmd;

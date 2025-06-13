@@ -274,6 +274,9 @@
 --* 2025-04-18 Ani: Added Astra and APOGEE DRP files (DR19).
 --* 2025-04-23 Ani: Added DR19 VAC PKs (DR19).
 --* 2025-05-20 Ani: Added allspec PKs (DR19).
+--* 2025-06-11 Ani: Added apogee_drp_all[star|visit] PKs. (DR19)
+--* 2025-06-12 Ani: Commented out StarFlow_summary PK creation (identity column
+--*                 PK to be added as for all Astra tables. (DR19)
 -------------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO
@@ -527,7 +530,6 @@ INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mastar_goodstars_xmatch_
 INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mastar_goodstars_params', 'mangaid', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mastar_goodvisits_params', 'plate,ifudesign,mjd', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'PawlikMorph', 'mangaid', '', 'SPECTRO', 'page', 'SPEC', 0)
-INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'apogee_starhorse', 'aspcap_id,apstar_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'apogeeDistMass', 'apstar_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 -- INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'SDSS17Pipe3D_v3_1_1', 'name', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]   VALUES  ('K', 'primary key', 'mangaFirefly_mastar', 'plateIFU', '', 'SPECTRO', 'page', 'SPEC', 0)
@@ -542,13 +544,45 @@ INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'MWM_WD_SDSSV_DA_df', 'fi
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'MWM_WD_eSDSS_DA_df', 'plate,mjd,fiber', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'allVisit_MADGICS_th', 'plate,mjd,fiberid', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'allVisit_MADGICS_dd', 'plate,mjd,fiberid', '', 'SPECTRO', 'page', 'SPEC', 0)
-INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'mwm_mdwarf_abundances','name', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'mwm_mdwarf_abundances','[name]', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'minesweeper','source_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'DR19Q_prop', 'field,mjd,catalogid','', 'SPECTRO', 'page', 'SPEC', 0)
-INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'occam_cluster', 'name','', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'occam_cluster', '[name]','', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'occam_member', 'sdss_id','', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'multiplex', 'multiplex_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'allspec', 'allspec_id', '', 'SPECTRO', 'page', 'SPEC', 0)
+/* Uncomment before running runAll.bat to generate metadata ingest scipts, then comment back again
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'StarFlow_summary', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'apogee_net_apogee_star', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'aspcap_apogee_star', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'astro_nn_apogee_star', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'astro_nn_apogee_visit', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'astro_nn_dist_apogee_star', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'boss_net_boss_star', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'boss_net_boss_visit', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'corv_boss_visit', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'line_forest_boss_star', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'line_forest_boss_visit', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'lite_all_star', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'm_dwarf_type_boss_star', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'm_dwarf_type_boss_visit', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mwm_apogee_allstar', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mwm_apogee_allvisit', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mwm_boss_allstar', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mwm_boss_allvisit', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'mwm_targets', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'slam_boss_star', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'snow_white_boss_star', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'snow_white_boss_visit', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'the_cannon_apogee_star', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'the_payne_apogee_star', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'the_payne_apogee_visit', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+*/
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'DL1_eROSITA_eRASS1', 'sdss_field,sdss_mjd,sdss_catalogid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'DL1_eROSITA_eRASS1_allepoch', 'sdss_field,sdss_mjd,sdss_catalogid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'apogee_starhorse', 'sdss_id', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'apogee_drp_allstar', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'apogee_drp_allvisit', '[FILE]', '', 'SPECTRO', 'page', 'SPEC', 0)
 
 -----------------------------------------------------
 -- Primary Keys for the TILES tables

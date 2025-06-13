@@ -85,6 +85,10 @@
 --* 2025-04-16 Ani: Added Astra. (DR19)
 --* 2025-04-25 Ani: Added DR19 VACs. (DR19)
 --* 2025-05-16 Ani: Added Allspec. (DR19)
+--* 2025-05-26 Ani: StarFlow, StarHorse and eROSITA VACs to 
+--*                 spPublishDR19VACs. (DR19)
+--* 2025-06-11 Ani: Added apogee_drp_all[star|visit] to
+--*                 spPublishApogee. (DR19)
 ----------------------------------------------------------------------
 -- We are not copying 
 -- DBcolumns, DBObjects, DBViewCols, DataConstants, Globe,Glossary, 
@@ -1409,6 +1413,12 @@ AS BEGIN
 	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'cannonStar', @firstTime 
 	set @summary = @summary + @err 
 
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'apogee_drp_allstar', @firstTime 
+	set @summary = @summary + @err
+
+	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'apogee_drp_allvisit', @firstTime 
+	set @summary = @summary + @err
+
 	---------------------------------------------------------
 	set @message = 'Publish of APOGEE database ' + @fromDB + ' to database ' + @toDB + ' found ' + str(@summary) + ' errors.' 
 	if @summary = 0 set @status = 'OK' else set @status = 'FAILED' 
@@ -1655,6 +1665,19 @@ AS BEGIN
 
 	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'occam_member', @firstTime 
 	set @summary = @summary + @err 
+
+	exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'StarFlow_summary',  @firstTime
+	set @summary = @summary + @err
+
+	exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'DL1_eROSITA_eRASS1', @firstTime
+	set @summary = @summary + @err
+
+	exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'DL1_eROSITA_eRASS1_allepoch', @firstTime
+	set @summary = @summary + @err
+
+	exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'apogee_starhorse', @firstTime
+	set @summary = @summary + @err
+
 
 	--------------------------------------------------
 	set @message = 'Publish of database ' + @fromDB + ' to database ' + @toDB + ' found ' + str(@summary) + ' errors.' 

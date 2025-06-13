@@ -40,24 +40,27 @@
 --* 2014-11-25 Ani: Incorporated schema changes for DR12 (new columns
 --*            param_m_h_err and param_alpha_m_err in aspcapStar) and
 --*            changed http bitmask help links to internal info links.
---* 2016-03-16 DR13 updates.
---* 2016-03-30 More DR13 updates - ce_* and felem_ce* columns removed..
---* 2016-05-13 Updated felem* column descriptions in aspcapStar as per Jen
+--* 2016-03-16 Ani: DR13 updates.
+--* 2016-03-30 Ani: More DR13 updates - ce_* and felem_ce* columns removed..
+--* 2016-05-13 Ani: Updated felem* column descriptions in aspcapStar as per Jen
 --*            Sobeck.
---* 2017-04-11 Added the DR14 schema updates, including new table
+--* 2017-04-11 Ani: Added the DR14 schema updates, including new table
 --*            cannonStar.
---* 2017-04-19 Updated cannonStar schema from SVN, added default values for
+--* 2017-04-19 Ani: Updated cannonStar schema from SVN, added default values for
 --*            cannonStar.filename and field columns because the CSVs have
 --*            NULL values.
---* 2017-05-06 Added columns to apogeeVisit and apogeeStar for DR14.
---* 2018-07-18 Removed conditional DROP TABLE from tables that do not
+--* 2017-05-06 Ani: Added columns to apogeeVisit and apogeeStar for DR14.
+--* 2018-07-18 Ani: Removed conditional DROP TABLE from tables that do not
 --*            get recreated with each release (apogeeDesign/Field/Object).
---* 2019-11-14 DR16 schema changes.
+--* 2019-11-14 Ani: DR16 schema changes.
 --* 2021-06-23 DR17 schema changes.
---* 2021-06-23 Fixed bug in ApogeeStar, put "file" column name in []. Also
+--* 2021-06-23 Ani: Fixed bug in ApogeeStar, put "file" column name in []. Also
 --*            commented out cannonStar which is not reloaded in DR17.
---* 2021-07-28 Updated ApogeeVisit - added new "field" column (DR17).
---* 2023-02-16 Added cx, cy, cz to ApogeeStar
+--* 2021-07-28 Ani: Updated ApogeeVisit - added new "field" column (DR17).
+--* 2023-02-16 Ani: Added cx, cy, cz to ApogeeStar
+--* 2025-06-11 Ani: added apogee_drp_all[star|visit]. (DR19)
+--* 2025-06-13 Ani: Made PK columns NOT NULL for apogee_drp_all[star|visit].
+--*            (DR19)
 -------------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -775,6 +778,7 @@ CREATE TABLE apogeeObject (
 )
 GO
 
+-- DR19
 
 EXEC spSetDefaultFileGroup 'apogee_drp_allstar'
 GO
@@ -785,7 +789,7 @@ CREATE TABLE apogee_drp_allstar (
 -------------------------------------------------------------------------------
 --/T This table contains the data in the combined spectrum for an APOGEE star.
 -------------------------------------------------------------------------------    
-    PK bigint, --/D Primary Key
+    PK bigint NOT NULL, --/D Primary Key
     APOGEE_ID	varchar(28),  --/D 2MASS-style star identification
     [FILE]	varchar(57),  --/D File base name with combined apStar spectrum and catalog information
     URI         varchar(106),  --/D Resource identifier for the full path of the combined apStar spectrum file
@@ -878,7 +882,7 @@ CREATE TABLE apogee_drp_allvisit (
     APOGEE_ID	varchar(28),  --/D 2MASS-style star identification
     TARGET_ID	varchar(28),  --/D Unique ID for visit spectrum, of form apogee.[telescope].[cs].[apred_version].plate.mjd.fiberid (Primary key)
     APRED_VERS  varchar(13),  --/D APOGEE reduction version
-    [FILE]	varchar(49),  --/D File base name with visit spectrum and catalog information
+    [FILE]	varchar(49) NOT NULL,  --/D PK, File base name with visit spectrum and catalog information
     URI         varchar(122),  --/D Resource identifier for the full path of the combined apVisit spectrum file
     FIBERID	bigint,  --/D Fiber ID for this visit
     PLATE	varchar(15),  --/D Plate (for plate era) or configurationID (for FPS era) of this visit

@@ -47,22 +47,26 @@
 ' 2013-05-22:   Ani Thakar, added aspcapStarCovar table for APOGEE.
 ' 2013-07-03:   Ani Thakar, added apogeeDesign, apogeeField and 
 '               apogeeObject tables for APOGEE.
-' 2013-07-09    Ani Thakar: added apogeeStarVisit and apogeeStarAllVisit.
-' 2013-12-11    Ani Thakar: fixed typo in iDebug check and removed
-'               call to FatalError.
-' 2016-03-03    Replaced theExportType" with skyvsersion (2) in
-'               photo batch file names, and added new export 
-'               type "mask".
-' 2016-03-10    Added WISE forced photometry batch in export type "forced".
-' 2016-03-29    Added MaNGA batch in export type "manga".
-' 2016-05-04    Added NSA batch in export type "nsa".
-' 2018-06-08    Added MangaDAPall, MangaHI* to MaNGA batch.
-' 2018-07-19    Added mastar batch.
-' 2019-11-19    Added Apogee2Object files.
-' 2019-11-24    Added MangaGalaxyZoo and MangaAlfalfaDR15.
-' 2021-06-18    Added updated MaNGA GZ tables for DR17.
-' 2024-09-03    Added eBOSS for DR19.
-' 2025-04-25    Added astra and dr19vacs for DR19.
+' 2013-07-09    Ani Thakar: added apogeeStarVisit and
+'               apogeeStarAllVisit.
+' 2013-12-11    Ani Thakar: fixed typo in iDebug check and
+'               removed call to FatalError.
+' 2016-03-03    Ani: Replaced theExportType" with skyvsersion
+'               (2) in photo batch file names, and added new 
+'               export type "mask".
+' 2016-03-10    Ani: Added WISE forced photometry batch in 
+'               export type "forced".
+' 2016-03-29    Ani: Added MaNGA batch in export type "manga".
+' 2016-05-04    Ani: Added NSA batch in export type "nsa".
+' 2018-06-08    Ani: Added MangaDAPall, MangaHI* to MaNGA batch.
+' 2018-07-19    Ani: Added mastar batch.
+' 2019-11-19    Ani: Added Apogee2Object files.
+' 2019-11-24    Ani: Added MangaGalaxyZoo and MangaAlfalfaDR15.
+' 2021-06-18    Ani: Added updated MaNGA GZ tables for DR17.
+' 2024-09-03    Ani: Added eBOSS for DR19.
+' 2025-04-25    Ani: Added astra and dr19vacs for DR19.
+' 2025-05-16    Ani: Added allspec for DR19.
+' 2025-06-11    Ani: Added apogge_drp_all[star|visit] for DR19.
 '==============================================================
 
 Option Explicit
@@ -182,7 +186,7 @@ Public Sub CheckDir (root,level)
 	ElseIf ( theexporttype = "resolve" ) Then
 		s = s & "(^sql(ThingIndex|DetectionIndex).csv" & "_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "apogee" ) Then
-		s = s & "(^sql(ApogeeVisit|ApogeeStar|aspcapStar|aspcapStarCovar|ApogeePlate|ApogeeDesign|ApogeeField|ApogeeObject|Apogee2Object|ApogeeStarVisit|ApogeeStarAllVisit)" & "_*[0-9]*\.csv$)"
+		s = s & "(^sql(ApogeeVisit|ApogeeStar|aspcapStar|aspcapStarCovar|ApogeePlate|ApogeeDesign|ApogeeField|ApogeeObject|Apogee2Object|ApogeeStarVisit|ApogeeStarAllVisit|Apogee_DRP_AllStar|Apogee_DRP_AllVisit)" & "_*[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "wise" ) Then
 		s = s & "(^sqlWise(XMatch|AllSky)" & "_[0-9]*\.csv$)"
 	ElseIf ( theexporttype = "eboss" ) Then
@@ -202,6 +206,8 @@ Public Sub CheckDir (root,level)
 		s = s & "(^sql(Astra|Mwm)" & "[\-_a-zA-Z0-9]*\.csv$)"
 	ElseIf ( theexporttype = "dr19vacs" ) Then
 		s = s & "(^sql(A|D|E|M|O|S)" & "[\-_a-zA-Z0-9]*\.csv$)"
+	ElseIf ( theexporttype = "allspec" ) Then
+		s = s & "(^sql(All|Mul)" & "[\-_a-zA-Z0-9]*\.csv$)"
 	Else
 			s = s & "(^sql(AtlasOutline|Field|FieldProfile|PhotoObjAll|PhotoProfile|Run|2MASS|2MASSXSC|First|RC3|ROSAT|USNOB)"
 			s = s & "-2-" & rootname & "-[0-9]*_*[0-9]*\.csv$)"
