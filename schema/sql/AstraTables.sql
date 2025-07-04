@@ -8,6 +8,8 @@
 --* 2025-04-14 Ani: Imported all the table definitions from
 --*                 https://github.com/sdss/casload/tree/master/sql/astra
 --* 2025-04-14 Ani: Replaced "bool" columns with "bit" iin MWM tables.
+--* 2025-07-03 Ani: Added PK column to all tables, commented out table
+--*                 the_cannon_apogee_star.
 -------------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -219,6 +221,7 @@ CREATE TABLE apogee_net_apogee_star (
   raw_e_teff float NOT NULL, --/U K --/D Raw error on stellar effective temperature 
   raw_e_logg float NOT NULL, --/U log10(cm/s^2) --/D Raw error on surface gravity 
   raw_e_fe_h float NOT NULL, --/U dex --/D Raw error on [Fe/H] 
+  PK int NOT NULL,
 )
 GO
 
@@ -638,6 +641,7 @@ CREATE TABLE aspcap_apogee_star (
   raw_e_ti_2_h float NOT NULL, --/U dex --/D Raw error on [Ti/H] from singly ionized Ti line
   raw_v_h float NOT NULL, --/U dex --/D Raw [V/H] 
   raw_e_v_h float NOT NULL, --/U dex --/D Raw error on [V/H] 
+  PK int NOT NULL,
 )
 GO
 
@@ -926,6 +930,7 @@ CREATE TABLE astro_nn_apogee_star (
   result_flags bigint NOT NULL, --/D Flags describing the results
   flag_warn bit NOT NULL, --/D Warning flag for results
   flag_bad bit NOT NULL, --/D Bad flag for results
+  PK int NOT NULL,
 )
 GO
 
@@ -1225,6 +1230,7 @@ CREATE TABLE astro_nn_apogee_visit (
   result_flags bigint NOT NULL, --/D Flags describing the results
   flag_warn bit NOT NULL, --/D Warning flag for results
   flag_bad bit NOT NULL, --/D Bad flag for results
+  PK int NOT NULL,
 )
 GO
 
@@ -1444,6 +1450,7 @@ CREATE TABLE astro_nn_dist_apogee_star (
   result_flags bigint NOT NULL, --/D Flags describing the results
   flag_warn bit NOT NULL, --/D Warning flag for results
   flag_bad bit NOT NULL, --/D Bad flag for results
+  PK int NOT NULL,
 )
 GO
 
@@ -1638,6 +1645,7 @@ CREATE TABLE boss_net_boss_star (
   result_flags bigint NOT NULL, --/D Flags describing the results
   flag_warn bit NOT NULL, --/D Warning flag for results
   flag_bad bit NOT NULL, --/D Bad flag for results
+  PK int NOT NULL,
 )
 GO
 
@@ -1904,6 +1912,7 @@ CREATE TABLE boss_net_boss_visit (
   flag_bad bit NOT NULL, --/D Bad flag for results
   v_rad float NOT NULL, --/U km/s --/D Barycentric rest frame radial velocity 
   e_v_rad float NOT NULL, --/U km/s --/D Error on radial velocity 
+  PK int NOT NULL,
 )
 GO
 
@@ -2162,6 +2171,7 @@ CREATE TABLE corv_boss_visit (
   initial_v_rad float NOT NULL, --/U km/s --/D Initial radial velocity 
   rchi2 float NOT NULL, --/D Reduced chi-square value
   result_flags int NOT NULL, --/D Flags describing the results
+  PK int NOT NULL,
 )
 GO
 
@@ -2866,6 +2876,7 @@ CREATE TABLE line_forest_boss_star (
   abs_percentiles_li_i_16 float NOT NULL, --/U  --/D 16th ABS percentiles of Li I at 6707 A  --/F abs_percentiles_li_i
   abs_percentiles_li_i_50 float NOT NULL, --/U  --/D 50th ABS percentiles of Li I at 6707 A  --/F abs_percentiles_li_i
   abs_percentiles_li_i_84 float NOT NULL, --/U  --/D 84th ABS percentiles of Li I at 6707 A  --/F abs_percentiles_li_i
+  PK int NOT NULL,
 )
 GO
 
@@ -3639,6 +3650,7 @@ CREATE TABLE line_forest_boss_visit (
   abs_percentiles_li_i_16 float NOT NULL, --/U  --/D 16th ABS percentiles of Li I at 6707 A  --/F abs_percentiles_li_i
   abs_percentiles_li_i_50 float NOT NULL, --/U  --/D 50th ABS percentiles of Li I at 6707 A  --/F abs_percentiles_li_i
   abs_percentiles_li_i_84 float NOT NULL, --/U  --/D 84th ABS percentiles of Li I at 6707 A  --/F abs_percentiles_li_i
+  PK int NOT NULL,
 )
 GO
 
@@ -3989,6 +4001,7 @@ CREATE TABLE lite_all_star (
   sub_type float NOT NULL, --/D Spectral sub-type
   rchi2 float NOT NULL, --/D Reduced chi-square value
   pipeline_flags bigint NOT NULL, --/D Amalgamated pipeline flags
+  PK int NOT NULL,
 )
 GO
 
@@ -4180,6 +4193,7 @@ CREATE TABLE m_dwarf_type_boss_star (
   continuum float NOT NULL, --/D Scalar continuum value used
   result_flags bigint NOT NULL, --/D Flags describing the results
   flag_bad bit NOT NULL, --/D Bad flag for results
+  PK int NOT NULL,
 )
 GO
 
@@ -4439,6 +4453,7 @@ CREATE TABLE m_dwarf_type_boss_visit (
   continuum float NOT NULL, --/D Scalar continuum value used
   result_flags bigint NOT NULL, --/D Flags describing the results
   flag_bad bit NOT NULL, --/D Bad flag for results
+  PK int NOT NULL,
 )
 GO
 
@@ -4628,6 +4643,7 @@ CREATE TABLE mwm_apogee_allstar (
     ccfwhm real NOT NULL, --/U  --/D Cross-correlation function FWHM  
     autofwhm real NOT NULL, --/U  --/D Auto-correlation function FWHM  
     n_components int NOT NULL, --/U  --/D Number of components in CCF  
+    PK int NOT NULL,
 )
 GO
 
@@ -4826,6 +4842,7 @@ CREATE TABLE mwm_apogee_allvisit (
     ccfwhm real NOT NULL, --/U  --/D Cross-correlation function FWHM  
     autofwhm real NOT NULL, --/U  --/D Auto-correlation function FWHM  
     n_components int NOT NULL, --/U  --/D Number of components in CCF  
+    PK int NOT NULL,
 )
 GO
 
@@ -5004,6 +5021,7 @@ CREATE TABLE mwm_boss_allstar (
     zwarning_flags bigint NOT NULL, --/U  --/D BOSS DRP warning flags  
     nmf_rchi2 real NOT NULL, --/U  --/D Reduced chi-square value of NMF continuum fit  
     nmf_flags bigint NOT NULL, --/U  --/D NMF Continuum method flags  
+    PK int NOT NULL,
 )
 GO
 
@@ -5249,6 +5267,7 @@ CREATE TABLE mwm_boss_allvisit (
     xcsao_fe_h real NOT NULL, --/U dex --/D [Fe/H]   
     xcsao_e_fe_h real NOT NULL, --/U dex --/D Error on [Fe/H]   
     xcsao_rxc real NOT NULL, --/U  --/D Cross-correlation R-value (1979AJ.....84.1511T)  
+    PK int NOT NULL,
 )
 GO
 
@@ -5399,6 +5418,7 @@ CREATE TABLE mwm_targets (
     n_apogee_visits int NOT NULL, --/U  --/D Number of APOGEE visits  
     apogee_min_mjd int NOT NULL, --/U  --/D Minimum MJD of APOGEE visits  
     apogee_max_mjd int NOT NULL, --/U  --/D Maximum MJD of APOGEE visits  
+    PK int NOT NULL,
 )
 GO
 
@@ -5607,6 +5627,7 @@ CREATE TABLE slam_boss_star (
   flag_bad bit NOT NULL, --/D Bad flag for results
   chi2 float NOT NULL, --/D Chi-square value
   rchi2 float NOT NULL, --/D Reduced chi-square value
+  PK int NOT NULL,
 )
 GO
 
@@ -5828,6 +5849,7 @@ CREATE TABLE snow_white_boss_star (
   raw_e_teff float NOT NULL, --/U K --/D Raw error on stellar effective temperature 
   raw_e_logg float NOT NULL, --/U log10(cm/s^2) --/D Raw error on surface gravity 
   result_flags bigint NOT NULL, --/D Result flags
+  PK int NOT NULL,
 )
 GO
 
@@ -6109,11 +6131,12 @@ CREATE TABLE snow_white_boss_visit (
   raw_e_teff float NOT NULL, --/U K --/D Raw error on stellar effective temperature 
   raw_e_logg float NOT NULL, --/U log10(cm/s^2) --/D Raw error on surface gravity 
   result_flags bigint NOT NULL, --/D Result flags
+  PK int NOT NULL,
 )
 GO
 
 
-
+/* Commented out for DR19
 --=============================================================
 IF EXISTS (SELECT name FROM sysobjects
 	WHERE xtype='U' AND name = 'the_cannon_apogee_star')
@@ -6372,9 +6395,10 @@ CREATE TABLE the_cannon_apogee_star (
   nfev int NOT NULL, --/D Number of function evaluations
   x0_index int NOT NULL, --/D Index of initial guess used
   result_flags bigint NOT NULL, --/D Result flags
+  PK int NOT NULL,
 )
 GO
-
+*/
 
 
 --=============================================================
@@ -6650,6 +6674,7 @@ CREATE TABLE the_payne_apogee_star (
   raw_e_ge_h float NOT NULL, --/D 
   raw_e_c12_c13 float NOT NULL, --/D 
   raw_e_v_macro float NOT NULL, --/D 
+  PK int NOT NULL,
 )
 GO
 
@@ -6938,6 +6963,7 @@ CREATE TABLE the_payne_apogee_visit (
   raw_e_ge_h float NOT NULL, --/D 
   raw_e_c12_c13 float NOT NULL, --/D 
   raw_e_v_macro float NOT NULL, --/D 
+  PK int NOT NULL,
 )
 GO
 

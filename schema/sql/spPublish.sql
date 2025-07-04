@@ -1666,7 +1666,8 @@ AS BEGIN
 	exec @err = spCopyATable @taskid, @stepID, @fromDB, @toDB, 'occam_member', @firstTime 
 	set @summary = @summary + @err 
 
-	exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'StarFlow_summary',  @firstTime
+	-- Special case for StarFlow_summary since we created a new PK in spValidate step
+	exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'StarFlow_summary',  1
 	set @summary = @summary + @err
 
 	exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'DL1_eROSITA_eRASS1', @firstTime

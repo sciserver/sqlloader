@@ -865,7 +865,7 @@ CREATE TABLE apogee_drp_allstar (
     RV_AUTOFWHM	real,  --/U km/s --/D FWHM of auto-correlation of best-match Doppler template spectrum
     N_COMPONENTS	bigint,  --/D Number of components from RV cross correlation
     MEANFIB	real,  --/D Mean FiberID for all the star visits
-    SIGFIB	real  --/D Standard deviation of FiberID for all the star visits
+    SIGFIB	real,  --/D Standard deviation of FiberID for all the star visits
 )
 GO
 
@@ -948,7 +948,11 @@ CREATE TABLE apogee_drp_allvisit (
     N_COMPONENTS  bigint,  --/D Number of components from cross correlation 
     RV_COMPONENTS_0 float,  --/U km/s --/D RV offset for components 0 --/F RV_COMPONENTS
     RV_COMPONENTS_1 float,  --/U km/s --/D RV offset for components 1 --/F RV_COMPONENTS
-    RV_COMPONENTS_2 float  --/U km/s --/D RV offset for components 2 --/F RV_COMPONENTS
+    RV_COMPONENTS_2 float,  --/U km/s --/D RV offset for components 2 --/F RV_COMPONENTS
+	HTMID bigint not null, --/D the htmid
+	CX float, --/D cx coordinate
+	CY float, --/D cy coordinate
+	CZ float, --/D cz coordinate
 )
 GO
 

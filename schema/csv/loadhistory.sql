@@ -529,6 +529,7 @@ INSERT History VALUES('SpectroTables','2024-09-03','Ani','Swapped in spAll* tabl
 INSERT History VALUES('SpectroTables','2024-09-05','Ani','Swapped in new version of spAll_allepoch with bigger  varchars. (DR19) ');
 INSERT History VALUES('SpectroTables','2024-09-06','Ani','Increased size of carton_to_target_pk in spAll  tables. (DR19) ');
 INSERT History VALUES('SpectroTables','2025-05-16','Ani','Added allspec tables. (DR19) ');
+INSERT History VALUES('SpectroTables','2025-07-03','Ani','Added htmid,cx,cy,cz to spAll and allspec  tables. (DR19) ');
 INSERT History VALUES('GalaxyProductTables','2013-05-01','Ani','Moved galprod tables here from SpectroTables.sql and updated with new schema for DR10. ');
 INSERT History VALUES('GalaxyProductTables','2013-05-06','Ani','Made specobjid (PK) NOT NULL for galprod FSPSGran tables. ');
 INSERT History VALUES('GalaxyProductTables','2014-02-11','Ani','Swapped in updated definition of emissionLinesPort table that includes fixes for PR #1962 made by Ben Weaver. ');
@@ -645,8 +646,10 @@ INSERT History VALUES('ApogeeTables','2021-06-23','Ani','Fixed bug in ApogeeStar
 INSERT History VALUES('ApogeeTables','2021-07-28','Ani','Updated ApogeeVisit - added new "field" column (DR17). ');
 INSERT History VALUES('ApogeeTables','2023-02-16','Ani','Added cx, cy, cz to ApogeeStar ');
 INSERT History VALUES('ApogeeTables','2025-06-11','Ani','added apogee_drp_all[star|visit]. (DR19) ');
+INSERT History VALUES('ApogeeTables','2025-06-13','Ani','Made PK columns NOT NULL for apogee_drp_all[star|visit]. (DR19) ');
 INSERT History VALUES('AstraTables','2025-04-14','Ani','Imported all the table definitions from https://github.com/sdss/casload/tree/master/sql/astra ');
 INSERT History VALUES('AstraTables','2025-04-14','Ani','Replaced "bool" columns with "bit" iin MWM tables. ');
+INSERT History VALUES('AstraTables','2025-07-03','Ani','Added PK column to all tables, commented out table the_cannon_apogee_star. ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Adapted from sas-sql/mangadrp.sql. ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Increased length of mangaTarget.nsa_subdir to 128. ');
 INSERT History VALUES('MangaTables','2016-04-22','Ani','Added htmID to mangaDRPall. ');
@@ -836,6 +839,7 @@ INSERT History VALUES('spNearby','2023-01-05','Ani','Added fGetNearbyMosTargetEq
 INSERT History VALUES('spNearby','2023-02-16','Sue','updated fGetNearbyApogeeStarEq and fGetNearbyMosTargetEq for performance  added fGetNearbyApogeeStarXYZ and fGetNearbyMosTargetXYZ added fGetNearestMosTargetEq ');
 INSERT History VALUES('spNearby','2023-02-17','Ani','Added fGetNearestMosTargetXYZ, fGetNearestApogeeStar[Eq|XYZ], updated documentation text for new functions added for DR18. ');
 INSERT History VALUES('spNearby','2023-02-20','Ani','Added back fGetNear[by|est]MastarEq functions (DR18) with change to ');
+INSERT History VALUES('spNearby','2025-07-03','Sue','Adding fGetNearby and Nearest functions for Allspec, ApogeeDRPAllstar, spAll tables ');
 INSERT History VALUES('spApogee','2016-04-27','Ani','Created inital version as per JOn Holtzman request. ');
 INSERT History VALUES('spApogee','2016-05-13','Ani','Updated description of fAspcapFelem* functions. ');
 INSERT History VALUES('spApogee','2016-05-18','Ani','Removed dbo. prefix from function definitions and also. trailing spaces from some functions. ');
@@ -1373,6 +1377,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1363 lines inserted into History'
+PRINT '1367 lines inserted into History'
 ------------------------------------
 GO

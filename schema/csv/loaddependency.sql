@@ -142,6 +142,10 @@ INSERT Dependency VALUES('spHtmCSharp','fHtmGetString','SphericalHTM.[Spherical.
 INSERT Dependency VALUES('spHtmCSharp','fHtmVersion','SphericalHTM.[Spherical.Htm.Sql.fHtmVersion');
 INSERT Dependency VALUES('spHtmCSharp','fHtmXyz','SphericalHTM.[Spherical.Htm.Sql.fHtmXyz');
 INSERT Dependency VALUES('spHtmCSharp','fHtmXyzToEq','SphericalHTM.[Spherical.Htm.Sql.fHtmXyzToEq');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyAllspecEq]','fGetNearbyAllspecXYZ');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyAllspecXYZ]','fHtmCoverCircleXyz');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyApogeeDrpAllstarEq]','fGetNearbyApogeeDrpAllstarXYZ');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyApogeeDrpAllstarXYZ]','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyApogeeStarEq]','fGetNearbyApogeeStarXYZ');
 INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyApogeeStarXYZ]','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fDistanceEq');
@@ -149,10 +153,19 @@ INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fHtmCoverCirc
 INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMaStarObjEq]','fHtmEq');
 INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMosTargetEq]','fGetNearbyMosTargetXYZ');
 INSERT Dependency VALUES('spNearby','dbo.[fGetNearbyMosTargetXYZ]','fHtmCoverCircleXyz');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbySpAllEq]','fGetNearbySpAllXYZ');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbySpAllXYZ]','fHtmCoverCircleXyz');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearbySpAllXYZ]','SpAll');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearestAllspecEq]','fGetNearbyAllspecXYZ');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearestAllspecXYZ]','fGetNearbyAllspecXYZ');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearestApogeeDrpAllstarEq]','fGetNearbyApogeeDrpAllstarXYZ');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearestApogeeDrpAllstarXYZ]','fGetNearbyApogeeDrpAllstarXYZ');
 INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMastarObjEq]','fDistanceEq');
 INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMastarObjEq]','fGetNearbyMaStarObjEq');
 INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMosTargetEq]','fGetNearbyMosTargetEq');
 INSERT Dependency VALUES('spNearby','dbo.[fGetNearestMosTargetXYZ]','fGetNearbyMosTargetXyz');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearestSpAllEq]','fGetNearbySpAllXYZ');
+INSERT Dependency VALUES('spNearby','dbo.[fGetNearestSpAllXYZ]','fGetNearbySpAllXYZ');
 INSERT Dependency VALUES('spNearby','dbo.[fGetObjectsEq]','fHtmCoverCircleXyz');
 INSERT Dependency VALUES('spNearby','fGetJpegObjects','fGetObjectsEq');
 INSERT Dependency VALUES('spNearby','fGetNearbyFrameEq','fHtmCoverCircleXyz');
@@ -461,6 +474,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '451 lines inserted into Dependency'
+PRINT '464 lines inserted into Dependency'
 ------------------------------------
 GO

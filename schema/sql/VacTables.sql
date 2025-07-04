@@ -21,6 +21,7 @@
 --* 2025-04-21  Ani: Added VACs (DR19).
 --* 2025-05-26  Ani: Added StarFlow, StarHorse (DR19 version) and 
 --*                  eROSITA VACs (DR19).
+--* 2025-06-03  Ani: Added PK column to StarFlow summary. (DR19)
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -2528,7 +2529,8 @@ CREATE TABLE StarFlow_summary (
     --/T models confidence based on parameter coverage.
     ------- 
     sdss_id bigint NOT NULL, --/U  --/D Unique SDSS-V ID  
-    sdss4_apogee_id varchar(20) NOT NULL, --/U  --/D 2MASS ID  
+    sdss4_apogee_id varchar(20) NOT NULL, --/U  --/D 2MASS ID 
+    catalogid bigint NOT NULL, --/U  --/D Catalog identifier used to target the source  
     age float NOT NULL, --/U Gyr --/D Maximum likelihood age from the StarFlow age mo  
     e_p_age float NOT NULL, --/U Gyr --/D Upper age uncertainty  
     e_n_age float NOT NULL, --/U Gyr --/D Lower age uncertainty  
@@ -2537,6 +2539,7 @@ CREATE TABLE StarFlow_summary (
     e_n_mass float NOT NULL, --/U Solar Mass --/D Lower mass uncertainty  
     training_density float NOT NULL, --/U  --/D Training density value. Describes how well samp  
     bitmask bigint NOT NULL, --/U  --/D Contains flags to indicate notes about a given  
+    PK int NOT NULL,
 )
 GO
 
@@ -2702,7 +2705,7 @@ GO
 --
 EXEC spSetDefaultFileGroup 'apogee_starhorse'
 GO
---// Created from HDU 1 in $APOGEE_STARHORSE/APOGEE_DR19_DR3_STARHORSE_v2.fits
+--// Created from HDU 1 in $APOGEE_STARHORSE/APOGEE_mos_DR3_STARHORSE_v2.fits
 CREATE TABLE apogee_starhorse (
     ------- 
     --/H StarHorse results for the SDSS-V DR19 APOGEE giants
