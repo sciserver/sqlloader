@@ -3,13 +3,15 @@
 import os
 
 
-date ="01272025"
-print(os.getcwd())
+date ="0430"
+#print(os.getcwd())
 
 
+os.chdir("H:/GitHub/sqlloader/dr19/")
 
-date ="01272025"
-filename = f"H:/GitHub/sqlloader/dr19/specobj.sql"
+
+#filename = f"H:/GitHub/sqlloader/dr19/create_minidb_{date}.sql"
+filename = "H:/GitHub/sqlloader/dr19/create_minidb_descriptions_ms.sql"
 
 
 tables = []
@@ -80,7 +82,9 @@ for table in tables:
             #print(tablename)
             #print(f'DROP TABLE IF EXISTS {tablename}')
             t.write(f'DROP TABLE IF EXISTS {tablename}\n')
-        t.write(line.replace('minidb_dr19.', 'dbo.').replace('boolean','bit').replace('character varying', 'varchar').replace('text', 'varchar(500)').replace('character', 'varchar').replace('plan', 'planname'))
+        t.write(line.replace('minidb_dr19.', 'dbo.').replace('boolean','bit').replace('character varying', 'varchar').replace('text', 'varchar(500)')\
+                .replace('character', 'varchar').replace('plan', 'planname').replace('timestamp without time zone', 'datetime').replace('public', '[public]')\
+                    .replace('uuid', 'uniqueidentifier').replace('bit(1)', 'bit'))
 
 # pks
 p = open(f'mssql_pk_{date}.sql', 'w')
@@ -93,7 +97,8 @@ i = open(f'mssql_indexes_{date}.sql', 'w')
 for idx in indexes:
     i.write('\n\n')
     for line in idx:
-        i.write(line.replace('minidb_dr19.', 'dbo.').replace('CREATE INDEX', 'CREATE NONCLUSTERED INDEX').replace('USING btree', ''))
+        if (line.find('q3c') == -1):
+            i.write(line.replace('minidb_dr19.', 'dbo.').replace('CREATE INDEX', 'CREATE NONCLUSTERED INDEX').replace('USING btree', ''))
 
 ff = open(f'mssql_fk_{date}.sql', 'w')
 for fk in fks:
