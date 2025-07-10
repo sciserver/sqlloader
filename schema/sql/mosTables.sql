@@ -3482,6 +3482,8 @@ DROP TABLE IF EXISTS mos_mangadapall
 CREATE TABLE mos_mangadapall (
 ----------------------------------------------------------------------
 --/H Final summary file of the MaNGA Data Analysis Pipeline (DAP).
+--/H This table is identical to mangaDapAll and is included for 
+--/H completeness of the MOS catalog tables.
 ----------------------------------------------------------------------
     plate integer, --/D Plate number 
     ifudesign integer, --/D IFU design number 
@@ -4294,6 +4296,8 @@ DROP TABLE IF EXISTS mos_mangadrpall
 CREATE TABLE mos_mangadrpall (
 ----------------------------------------------------------------------
 --/H Final summary file of the MaNGA Data Reduction Pipeline (DRP).
+--/H This table is identical to mangaDrpAll and is included for 
+--/H completeness of the MOS catalog tables.
 ----------------------------------------------------------------------
     plate integer NOT NULL, --/D Plate ID 
     ifudsgn varchar(40), --/D IFU design id (e.g. 12701) 
@@ -4462,6 +4466,8 @@ DROP TABLE IF EXISTS mos_mangatarget
 CREATE TABLE mos_mangatarget (
 ----------------------------------------------------------------------
 --/H MaNGA Target Catalog
+--/H This table is identical to mangaTarget and is included for 
+--/H completeness of the MOS catalog tables.
 ----------------------------------------------------------------------
     catalog_ra double precision, --/U deg --/D Right Ascension of measured object center (J2000) as given in the input catalog (NSA for main samples and most ancillaries) 
     catalog_dec double precision, --/U deg --/D Declination of measured object center (J2000) as given in the input catalog (NSA for main samples and most ancillaries) 
@@ -4705,6 +4711,8 @@ DROP TABLE IF EXISTS mos_marvels_dr12_star
 CREATE TABLE mos_marvels_dr12_star (
 ----------------------------------------------------------------------
 --/H Contains data for a MARVELS star (DR12 release).
+--/H This table is identical to marvelsStar and is included for
+--/H completeness of the MOS catalog tables.
 ----------------------------------------------------------------------
     starname varchar, --/D The primary name of the star (STARNAME) 
     twomass_name varchar, --/D 2MASS Star Catalog Name 
@@ -4759,6 +4767,8 @@ DROP TABLE IF EXISTS mos_mastar_goodstars
 CREATE TABLE mos_mastar_goodstars (
 ----------------------------------------------------------------------
 --/H Summary file of MaNGA Stellar Library.
+--/H This table is identical to mastar_goodstars and is included for 
+--/H completeness of the MOS catalog tables.
 ----------------------------------------------------------------------
     drpver varchar(8), --/D Version of mangadrp. 
     mprocver varchar(8), --/D Version of mastarproc. 
@@ -4789,6 +4799,8 @@ DROP TABLE IF EXISTS mos_mastar_goodvisits
 CREATE TABLE mos_mastar_goodvisits (
 ----------------------------------------------------------------------
 --/H Summary file of all visits of stars included in MaNGA Stellar Library.
+--/H This table is identical to mastar_goodvisits and is included for 
+--/H completeness of the MOS catalog tables.
 ----------------------------------------------------------------------
     drpver varchar(8), --/D Version of mangadrp. 
     mprocver varchar(8), --/D Version of mastarproc. 

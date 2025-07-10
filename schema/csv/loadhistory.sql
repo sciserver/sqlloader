@@ -759,6 +759,7 @@ INSERT History VALUES('VacTables','2022-12-27','Ani','Added eFEDs VACs (DR18). '
 INSERT History VALUES('VacTables','2022-12-28','Ani','Replaced "--\" with "--/" and removed indents for table description rows in eFEDs VACs (DR18). ');
 INSERT History VALUES('VacTables','2025-04-21','Ani','Added VACs (DR19). ');
 INSERT History VALUES('VacTables','2025-05-26','Ani','Added StarFlow, StarHorse (DR19 version) and  eROSITA VACs (DR19). ');
+INSERT History VALUES('VacTables','2025-06-03','Ani','Added PK column to StarFlow summary. (DR19) ');
 INSERT History VALUES('spHtmCSharp','2005-05-01','Jim','started ');
 INSERT History VALUES('spHtmCSharp','2005-05-02','Jim','removed fHtmLookup and fHtmLookupError added fHtmToString ');
 INSERT History VALUES('spHtmCSharp','2005-05-05','GYF','added .pdb to assembly for symbolic debugging added fHtmToName (faster than fHtmToString and reports error) ');
@@ -1027,6 +1028,7 @@ INSERT History VALUES('spUrlFitsSupport','2021-08-17','Ani','Updated fGetUrlFits
 INSERT History VALUES('spUrlFitsSupport','2021-08-18','Ani','Fixed another bug in fGetUrlFitsSpectrum to allow  5-digit plate numbers in the path. ');
 INSERT History VALUES('spUrlFitsSupport','2023-01-17','Ani','Updated fGetUrlFitsSpectrum for DR18 paths, adding a special case for spAll paths (plate# >= 15000).  ');
 INSERT History VALUES('spUrlFitsSupport','2023-01-18','Ani','Updated all the imaging FITS paths for DR18, and also plate and manga URL functions. ');
+INSERT History VALUES('spUrlFitsSupport','2025-07-08','Ani','Fixed fGetUrlFitsSpectrum for DR19 - increased the size of specobjid argument, and fetched the URL just from the allspec table''s sas_url column. ');
 INSERT History VALUES('spNeighbor','2004-08-30','Alex','Moved here spNeighbors and spBuildMatchTables ');
 INSERT History VALUES('spNeighbor','2004-10-10','Jim+Alex','updated spBuildMatchTables ');
 INSERT History VALUES('spNeighbor','2004-10-10','Alex+Jim','Tied into load framework to record messages.  Added code to drop/build indices and foreign keys.  Optimized triple computation.  ');
@@ -1377,6 +1379,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1367 lines inserted into History'
+PRINT '1369 lines inserted into History'
 ------------------------------------
 GO

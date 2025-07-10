@@ -85,6 +85,9 @@
 --*            special case for spAll paths (plate# >= 15000). 
 --* 2023-01-18 Ani: Updated all the imaging FITS paths for DR18, and also
 --*            plate and manga URL functions.
+--* 2025-07-08 Ani: Fixed fGetUrlFitsSpectrum for DR19 - increased the
+--*            size of specobjid argument, and fetched the URL just
+--*            from the allspec table's sas_url column.
 ---------------------------------------------------------------------------
 SET NOCOUNT ON;
 GO 
@@ -516,7 +519,7 @@ if exists (select * from dbo.sysobjects
 	drop function [dbo].[fGetUrlFitsSpectrum]
 GO
 --
-CREATE FUNCTION fGetUrlFitsSpectrum(@specObjID numeric(20,0))
+CREATE FUNCTION fGetUrlFitsSpectrum(@specObjID numeric(30,0))
 -------------------------------------------------
 --/H Get the URL to the FITS file of the spectrum given the SpecObjID
 -------------------------------------------------
@@ -528,6 +531,10 @@ CREATE FUNCTION fGetUrlFitsSpectrum(@specObjID numeric(20,0))
 -------------------------------------------------
 RETURNS varchar(256)
 BEGIN
+	DECLARE @link varchar(256)
+	SELECT @link=sas_url FROM allspec WHERE specobjid=@specObjID
+
+	/*
 	DECLARE @link varchar(256), @plate varchar(8), @mjd varchar(8), 
 	    @fiber varchar(8), @run2d varchar(16), @release varchar(8), 
 	    @survey varchar(16), @oplate varchar(8), @ofiber varchar(8),
@@ -564,6 +571,7 @@ BEGIN
 			SET @link = @link + @oplate + '/' + @mjd + '/spec-' + @plate + '-' + @mjd + 
 				'-' + @ocatid + '.fits';
 		END
+	*/
 
 	RETURN @link;
 END

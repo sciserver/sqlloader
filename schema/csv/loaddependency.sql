@@ -377,8 +377,6 @@ INSERT Dependency VALUES('spTestQueries','spTestQueries','fPhotoType');
 INSERT Dependency VALUES('spTestQueries','spTestQueries','spTestTimeEnd');
 INSERT Dependency VALUES('spTestQueries','spTestQueries','spTestTimeStart');
 INSERT Dependency VALUES('spUrlFitsSupport','fGetUrlFitsField','fSkyVersion');
-INSERT Dependency VALUES('spUrlFitsSupport','fGetUrlFitsSpectrum','fSDSSfromSpecID');
-INSERT Dependency VALUES('spUrlFitsSupport','fGetUrlFitsSpectrum','spAll');
 INSERT Dependency VALUES('spValidate','spComputePhotoParentID','spNewPhase');
 INSERT Dependency VALUES('spValidate','spGenericTest','spNewPhase');
 INSERT Dependency VALUES('spValidate','spTestForeignKey','spNewPhase');
@@ -474,6 +472,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '464 lines inserted into Dependency'
+PRINT '462 lines inserted into Dependency'
 ------------------------------------
 GO

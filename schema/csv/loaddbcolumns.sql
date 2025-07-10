@@ -6562,10 +6562,6 @@ INSERT DBColumns VALUES('apogee_drp_allstar','RV_AUTOFWHM','km/s','','','FWHM of
 INSERT DBColumns VALUES('apogee_drp_allstar','N_COMPONENTS','','','','Number of components from RV cross correlation','0');
 INSERT DBColumns VALUES('apogee_drp_allstar','MEANFIB','','','','Mean FiberID for all the star visits','0');
 INSERT DBColumns VALUES('apogee_drp_allstar','SIGFIB','','','','Standard deviation of FiberID for all the star visits','0');
-INSERT DBColumns VALUES('apogee_drp_allstar','HTMID','','','','the htmid','0');
-INSERT DBColumns VALUES('apogee_drp_allstar','CX','','','','cx coordinate','0');
-INSERT DBColumns VALUES('apogee_drp_allstar','CY','','','','cy coordinate','0');
-INSERT DBColumns VALUES('apogee_drp_allstar','CZ','','','','cz coordinate','0');
 INSERT DBColumns VALUES('apogee_drp_allvisit','APOGEE_ID','','','','2MASS-style star identification','0');
 INSERT DBColumns VALUES('apogee_drp_allvisit','TARGET_ID','','','','Unique ID for visit spectrum, of form apogee.[telescope].[cs].[apred_version].plate.mjd.fiberid (Primary key)','0');
 INSERT DBColumns VALUES('apogee_drp_allvisit','APRED_VERS','','','','APOGEE reduction version','0');
@@ -25997,6 +25993,6 @@ INSERT DBColumns VALUES('mos_zari18pms','uwe','','','','Unit Weight Error, as de
 
 GO
 ----------------------------- 
-PRINT '25986 lines inserted into DBColumns '
+PRINT '25983 lines inserted into DBColumns '
 ----------------------------- 
 
