@@ -530,6 +530,7 @@ INSERT History VALUES('SpectroTables','2024-09-05','Ani','Swapped in new version
 INSERT History VALUES('SpectroTables','2024-09-06','Ani','Increased size of carton_to_target_pk in spAll  tables. (DR19) ');
 INSERT History VALUES('SpectroTables','2025-05-16','Ani','Added allspec tables. (DR19) ');
 INSERT History VALUES('SpectroTables','2025-07-03','Ani','Added htmid,cx,cy,cz to spAll and allspec  tables. (DR19) ');
+INSERT History VALUES('SpectroTables','2025-07-24','Ani','Added column has_mwmStar to allspec. (DR19) ');
 INSERT History VALUES('GalaxyProductTables','2013-05-01','Ani','Moved galprod tables here from SpectroTables.sql and updated with new schema for DR10. ');
 INSERT History VALUES('GalaxyProductTables','2013-05-06','Ani','Made specobjid (PK) NOT NULL for galprod FSPSGran tables. ');
 INSERT History VALUES('GalaxyProductTables','2014-02-11','Ani','Swapped in updated definition of emissionLinesPort table that includes fixes for PR #1962 made by Ben Weaver. ');
@@ -1379,6 +1380,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1369 lines inserted into History'
+PRINT '1370 lines inserted into History'
 ------------------------------------
 GO

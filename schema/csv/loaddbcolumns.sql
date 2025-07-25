@@ -4301,6 +4301,7 @@ INSERT DBColumns VALUES('allspec','htmid','','','','the htmid','0');
 INSERT DBColumns VALUES('allspec','cx','','','','cx coordinate','0');
 INSERT DBColumns VALUES('allspec','cy','','','','cy coordinate','0');
 INSERT DBColumns VALUES('allspec','cz','','','','cz coordinate','0');
+INSERT DBColumns VALUES('allspec','has_mwmStar','','','','does it have an asscociated mwmStar file if it was (co-)observed with apogee','0');
 INSERT DBColumns VALUES('stellarMassPCAWiscBC03','specObjID','','ID_CATALOG','','Unique ID','0');
 INSERT DBColumns VALUES('stellarMassPCAWiscBC03','plate','','','','Plate number','0');
 INSERT DBColumns VALUES('stellarMassPCAWiscBC03','fiberID','','','','Fiber ID','0');
@@ -25993,6 +25994,6 @@ INSERT DBColumns VALUES('mos_zari18pms','uwe','','','','Unit Weight Error, as de
 
 GO
 ----------------------------- 
-PRINT '25983 lines inserted into DBColumns '
+PRINT '25984 lines inserted into DBColumns '
 ----------------------------- 
 

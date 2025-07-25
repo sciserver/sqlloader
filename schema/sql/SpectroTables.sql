@@ -163,6 +163,7 @@
 --* 2025-05-16  Ani: Added allspec tables. (DR19)
 --* 2025-07-03  Ani: Added htmid,cx,cy,cz to spAll and allspec 
 --*                  tables. (DR19)
+--* 2025-07-24  Ani: Added column has_mwmStar to allspec. (DR19)
 ------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -2207,10 +2208,11 @@ CREATE TABLE allspec (
     visit_id varchar(40) NOT NULL, --/U  --/D APOGEE visit ID  
     mangaid varchar(10) NOT NULL, --/U  --/D MaNGA ID  
     specobjid varchar(32) NOT NULL, --/U  --/D spectroscopic object id
-	htmid bigint not null, --/D the htmid
+	htmid bigint NOT NULL, --/D the htmid
 	cx float, --/D cx coordinate
 	cy float, --/D cy coordinate
 	cz float, --/D cz coordinate
+    has_mwmStar bit NOT NULL, --/U  --/D does it have an asscociated mwmStar file if it was (co-)observed with apogee
 )
 
 
