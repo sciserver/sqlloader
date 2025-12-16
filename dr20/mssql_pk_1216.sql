@@ -5,7 +5,8 @@ ALTER TABLE dbo.dr20_allstar_dr17_synspec_rev1
 
 
 ALTER TABLE dbo.dr20_allwise
-    ADD CONSTRAINT dr20_allwise_pkey PRIMARY KEY CLUSTERED (cntr);
+    ADD CONSTRAINT dr20_allwise_pkey PRIMARY KEY CLUSTERED (cntr)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_assignment
@@ -85,7 +86,8 @@ ALTER TABLE dbo.dr20_carton
 
 
 ALTER TABLE dbo.dr20_carton_to_target
-    ADD CONSTRAINT dr20_carton_to_target_pkey PRIMARY KEY CLUSTERED (carton_to_target_pk);
+    ADD CONSTRAINT dr20_carton_to_target_pkey PRIMARY KEY CLUSTERED (carton_to_target_pk)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_cataclysmic_variables
@@ -93,7 +95,8 @@ ALTER TABLE dbo.dr20_cataclysmic_variables
 
 
 ALTER TABLE dbo.dr20_catalog
-    ADD CONSTRAINT dr20_catalog_pkey PRIMARY KEY CLUSTERED (catalogid);
+    ADD CONSTRAINT dr20_catalog_pkey PRIMARY KEY CLUSTERED (catalogid)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_catalog_to_allstar_dr17_synspec_rev1
@@ -253,7 +256,8 @@ ALTER TABLE dbo.dr20_category
 
 
 ALTER TABLE dbo.dr20_catwise2020
-    ADD CONSTRAINT dr20_catwise2020_pkey PRIMARY KEY CLUSTERED (source_id);
+    ADD CONSTRAINT dr20_catwise2020_pkey PRIMARY KEY CLUSTERED (source_id)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_design_mode_check_results
@@ -409,15 +413,18 @@ ALTER TABLE dbo.dr20_legacy_catalog_catalogid
 
 
 ALTER TABLE dbo.dr20_legacy_survey_dr10
-    ADD CONSTRAINT dr20_legacy_survey_dr10_pkey PRIMARY KEY CLUSTERED (ls_id);
+    ADD CONSTRAINT dr20_legacy_survey_dr10_pkey PRIMARY KEY CLUSTERED (ls_id)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_legacy_survey_dr8
-    ADD CONSTRAINT dr20_legacy_survey_dr8_pkey PRIMARY KEY CLUSTERED (ls_id);
+    ADD CONSTRAINT dr20_legacy_survey_dr8_pkey PRIMARY KEY CLUSTERED (ls_id)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_magnitude
-    ADD CONSTRAINT dr20_magnitude_pkey PRIMARY KEY CLUSTERED (magnitude_pk);
+    ADD CONSTRAINT dr20_magnitude_pkey PRIMARY KEY CLUSTERED (magnitude_pk)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_mangadapall
@@ -525,7 +532,8 @@ ALTER TABLE dbo.dr20_opsdb_lco_exposure
 
 
 ALTER TABLE dbo.dr20_panstarrs1
-    ADD CONSTRAINT dr20_panstarrs1_pkey PRIMARY KEY CLUSTERED (catid_objid);
+    ADD CONSTRAINT dr20_panstarrs1_pkey PRIMARY KEY CLUSTERED (catid_objid)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_positioner_status
@@ -581,7 +589,8 @@ ALTER TABLE dbo.dr20_sdss_dr19p_speclite
 
 
 ALTER TABLE dbo.dr20_sdss_id_flat
-    ADD CONSTRAINT dr20_sdss_id_flat_pkey PRIMARY KEY CLUSTERED (pk);
+    ADD CONSTRAINT dr20_sdss_id_flat_pkey PRIMARY KEY CLUSTERED (pk)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_sdss_id_stacked
@@ -589,7 +598,8 @@ ALTER TABLE dbo.dr20_sdss_id_stacked
 
 
 ALTER TABLE dbo.dr20_sdss_id_to_catalog
-    ADD CONSTRAINT dr20_sdss_id_to_catalog_pkey PRIMARY KEY CLUSTERED (pk);
+    ADD CONSTRAINT dr20_sdss_id_to_catalog_pkey PRIMARY KEY CLUSTERED (pk)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_sdssv_boss_conflist
@@ -617,7 +627,8 @@ ALTER TABLE dbo.dr20_skies_v2
 
 
 ALTER TABLE dbo.dr20_skymapper_dr2
-    ADD CONSTRAINT dr20_skymapper_dr2_pkey PRIMARY KEY CLUSTERED (object_id);
+    ADD CONSTRAINT dr20_skymapper_dr2_pkey PRIMARY KEY CLUSTERED (object_id)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_skymapper_gaia
@@ -625,11 +636,13 @@ ALTER TABLE dbo.dr20_skymapper_gaia
 
 
 ALTER TABLE dbo.dr20_supercosmos
-    ADD CONSTRAINT dr20_supercosmos_pkey PRIMARY KEY CLUSTERED (objid);
+    ADD CONSTRAINT dr20_supercosmos_pkey PRIMARY KEY CLUSTERED (objid)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_target
-    ADD CONSTRAINT dr20_target_pkey PRIMARY KEY CLUSTERED (target_pk);
+    ADD CONSTRAINT dr20_target_pkey PRIMARY KEY CLUSTERED (target_pk)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_targetdb_version
@@ -661,7 +674,8 @@ ALTER TABLE dbo.dr20_tess_toi_v1
 
 
 ALTER TABLE dbo.dr20_tic_v8
-    ADD CONSTRAINT dr20_tic_v8_pkey PRIMARY KEY CLUSTERED (id);
+    ADD CONSTRAINT dr20_tic_v8_pkey PRIMARY KEY CLUSTERED (id)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_twomass_psc_part1
@@ -673,7 +687,8 @@ ALTER TABLE dbo.dr20_twomass_psc_part2
 
 
 ALTER TABLE dbo.dr20_twomass_psc
-    ADD CONSTRAINT dr20_twomass_psc_pkey PRIMARY KEY CLUSTERED (pts_key);
+    ADD CONSTRAINT dr20_twomass_psc_pkey PRIMARY KEY CLUSTERED (pts_key)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_tycho2
@@ -681,7 +696,8 @@ ALTER TABLE dbo.dr20_tycho2
 
 
 ALTER TABLE dbo.dr20_unwise
-    ADD CONSTRAINT dr20_unwise_pkey PRIMARY KEY CLUSTERED (unwise_objid);
+    ADD CONSTRAINT dr20_unwise_pkey PRIMARY KEY CLUSTERED (unwise_objid)
+WITH (DATA_COMPRESSION = PAGE);
 
 
 ALTER TABLE dbo.dr20_uvotssc1

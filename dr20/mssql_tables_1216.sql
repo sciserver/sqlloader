@@ -2,7 +2,7 @@
 
 DROP TABLE IF EXISTS dbo.dr20_allstar_dr17_synspec_rev1
 CREATE TABLE dbo.dr20_allstar_dr17_synspec_rev1 (
-    file varchar(500),
+    [file] varchar(500),
     apogee_id varchar(500),
     target_id varchar(500),
     apstar_id varchar(500) NOT NULL,
@@ -4462,7 +4462,7 @@ CREATE TABLE dbo.dr20_lamost_dr6 (
     fibertype varchar(500),
     tfrom varchar(500),
     tcomment varchar(500),
-    offsets smallint,
+    [offsets] smallint,
     offsets_v real,
     ra double precision,
     "dec" double precision,

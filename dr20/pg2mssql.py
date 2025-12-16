@@ -18,20 +18,34 @@ from datetime import datetime
 class PgToMsSqlConverter:
     """Converts PostgreSQL schema to SQL Server T-SQL."""
 
-    def __init__(self, pg_schema_prefix='minidb_dr20.', output_schema='dbo.'):
+    # Tables that should use PAGE compression (Tier 1 + Tier 2: >10 GB CSV files)
+    COMPRESSION_TABLES = {
+        # Tier 1: >20 GB
+        'dr20_allwise', 'dr20_catwise2020', 'dr20_panstarrs1', 'dr20_tic_v8',
+        'dr20_sdss_id_to_catalog', 'dr20_unwise', 'dr20_legacy_survey_dr10',
+        'dr20_supercosmos', 'dr20_sdss_id_flat', 'dr20_magnitude',
+        'dr20_legacy_survey_dr8', 'dr20_catalog',
+        # Tier 2: 10-20 GB
+        'dr20_twomass_psc', 'dr20_skymapper_dr2', 'dr20_carton_to_target', 'dr20_target',
+    }
+
+    def __init__(self, pg_schema_prefix='minidb_dr20.', output_schema='dbo.', enable_compression=True):
         """
         Initialize converter with schema prefixes.
 
         Args:
             pg_schema_prefix: PostgreSQL schema prefix to replace (e.g., 'minidb_dr20.')
             output_schema: SQL Server schema to use (e.g., 'dbo.')
+            enable_compression: Whether to add PAGE compression to large tables
         """
         self.pg_schema_prefix = pg_schema_prefix
         self.output_schema = output_schema
+        self.enable_compression = enable_compression
         self.tables = []
         self.pks = []
         self.indexes = []
         self.fks = []
+        self.compressed_tables = set()
 
     def convert_data_types(self, line):
         """Convert PostgreSQL data types to SQL Server equivalents."""
@@ -59,6 +73,10 @@ class PgToMsSqlConverter:
             'public.': '[public].',
             ' public ': ' [public] ',
             ' public,': ' [public],',
+            ' file ': ' [file] ',
+            ' file,': ' [file],',
+            ' offsets ': ' [offsets] ',
+            ' offsets,': ' [offsets],',
         }
 
         result = line
@@ -147,15 +165,57 @@ class PgToMsSqlConverter:
         print(f"\nWriting {filename}...")
 
         with open(filename, 'w', encoding='utf-8') as f:
-            for pk in self.pks:
+            for pk_idx, pk in enumerate(self.pks):
                 f.write('\n\n')
+
+                # Extract table name from ALTER TABLE statement
+                table_name = None
+                for line in pk:
+                    if 'ALTER TABLE' in line:
+                        # Process the line and remove ONLY keyword
+                        processed = self.process_line(line)
+                        processed = processed.replace('ONLY ', '')
+                        parts = processed.split()
+                        for i, part in enumerate(parts):
+                            if part == 'TABLE':
+                                # Get tablename with schema (e.g., "dbo.dr20_allwise")
+                                # The table name is right after TABLE keyword
+                                full_name = parts[i + 1].strip()
+                                # Remove schema prefix to get just table name
+                                if '.' in full_name:
+                                    table_name = full_name.split('.', 1)[1]
+                                else:
+                                    table_name = full_name
+                                break
+                        break
+
+                # Write the PK constraint - collect all lines first
+                pk_lines = []
                 for line in pk:
                     processed = self.process_line(line)
                     processed = processed.replace('ONLY ', '')
                     processed = processed.replace('PRIMARY KEY', 'PRIMARY KEY CLUSTERED')
-                    f.write(processed)
+                    pk_lines.append(processed)
 
-        print(f"  Wrote {len(self.pks)} primary keys")
+                # Add compression if table qualifies
+                if self.enable_compression and table_name in self.COMPRESSION_TABLES:
+                    # Find the line with the semicolon and replace it
+                    for i in range(len(pk_lines) - 1, -1, -1):
+                        if ';' in pk_lines[i]:
+                            pk_lines[i] = pk_lines[i].rstrip(';\n\r\t ')
+                            pk_lines[i] += '\nWITH (DATA_COMPRESSION = PAGE);\n'
+                            self.compressed_tables.add(table_name)
+                            break
+
+                # Write all lines
+                for line in pk_lines:
+                    f.write(line)
+
+        if self.compressed_tables:
+            print(f"  Wrote {len(self.pks)} primary keys ({len(self.compressed_tables)} with PAGE compression)")
+        else:
+            print(f"  Wrote {len(self.pks)} primary keys")
+
         return filename
 
     def write_indexes(self, output_dir, date_suffix):
@@ -233,6 +293,8 @@ Examples:
                        help='PostgreSQL schema prefix to replace (default: minidb_dr20)')
     parser.add_argument('--dry-run', action='store_true',
                        help='Parse input but do not write output files')
+    parser.add_argument('--no-compression', action='store_true',
+                       help='Disable automatic PAGE compression on large tables')
 
     args = parser.parse_args()
 
@@ -248,6 +310,7 @@ Examples:
     # Initialize converter
     pg_schema_prefix = f"{args.pg_schema}."
     output_schema = f"{args.schema}."
+    enable_compression = not args.no_compression
 
     print(f"\nPostgreSQL to SQL Server Schema Converter")
     print(f"=" * 60)
@@ -255,11 +318,12 @@ Examples:
     print(f"Output dir:    {args.output_dir}")
     print(f"Date suffix:   {args.date}")
     print(f"Schema:        {pg_schema_prefix} -> {output_schema}")
+    print(f"Compression:   {'Enabled (16 large tables)' if enable_compression else 'Disabled'}")
     print(f"Dry run:       {args.dry_run}")
     print(f"=" * 60)
 
     # Parse and convert
-    converter = PgToMsSqlConverter(pg_schema_prefix, output_schema)
+    converter = PgToMsSqlConverter(pg_schema_prefix, output_schema, enable_compression)
     converter.parse_file(args.input_file)
 
     if args.dry_run:
