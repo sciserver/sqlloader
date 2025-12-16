@@ -2,6 +2,7 @@ schema/patches/fixWeblogPermsOrigSkyserver.sql
 
 # Claude Code documentation
 CLAUDE.md
+.claude/
 
 # Visual Studio
 .vs/
