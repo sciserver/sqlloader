@@ -1,1 +1,10 @@
 schema/patches/fixWeblogPermsOrigSkyserver.sql
+
+# Claude Code documentation
+CLAUDE.md
+
+# Visual Studio
+.vs/
+*.ssmssln
+*.suo
+*.user

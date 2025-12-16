@@ -3,7 +3,7 @@
 import os
 
 
-date ="0430"
+date ="0726"
 #print(os.getcwd())
 
 
@@ -11,7 +11,7 @@ os.chdir("H:/GitHub/sqlloader/dr19/")
 
 
 #filename = f"H:/GitHub/sqlloader/dr19/create_minidb_{date}.sql"
-filename = "H:/GitHub/sqlloader/dr19/create_minidb_descriptions_ms.sql"
+filename = "H:/GitHub/sqlloader/dr19/FIXED_create_minidb_descriptions.sql"
 
 
 tables = []
@@ -34,7 +34,8 @@ with open(filename) as file:
                 table.append(line)
 
     # next comes the pk's and fk's
-    elif line.startswith('ALTER TABLE'): 
+    elif line.startswith('ALTER TABLE'):
+
         pk = []
         fk = []
         pk.append(line)
@@ -61,9 +62,9 @@ with open(filename) as file:
             break
    
 print(tables)
-print(pks)
-print(indexes)
-print(fks)
+#print(pks)
+#print(indexes)
+#print(fks)
 
 
 
@@ -73,16 +74,17 @@ print(fks)
 
 t = open(f'mssql_tables_{date}.sql', 'w')
 
+#CREATE TABLE minidb_dr19.dr19_allstar_dr17_synspec_rev1
 for table in tables:
     t.write('\n\n')
     for idx,line in enumerate(table):
         if idx == 0:
             s = line.split()
-            tablename = s[2].replace('minidb_dr19.', 'dbo.')
+            tablename = s[2].replace('minidb_dr19.dr19_', 'dbo.mos_')
             #print(tablename)
             #print(f'DROP TABLE IF EXISTS {tablename}')
             t.write(f'DROP TABLE IF EXISTS {tablename}\n')
-        t.write(line.replace('minidb_dr19.', 'dbo.').replace('boolean','bit').replace('character varying', 'varchar').replace('text', 'varchar(500)')\
+        t.write(line.replace('minidb_dr19.dr19_', 'dbo.mos_').replace('boolean','bit').replace('character varying', 'varchar').replace('text', 'varchar(500)')\
                 .replace('character', 'varchar').replace('plan', 'planname').replace('timestamp without time zone', 'datetime').replace('public', '[public]')\
                     .replace('uuid', 'uniqueidentifier').replace('bit(1)', 'bit'))
 

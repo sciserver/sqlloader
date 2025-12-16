@@ -43,7 +43,7 @@ where id=110
 */
 ----------------------------------------------
 -- set these!!!!
-declare @doExecute bit = 1
+declare @doExecute bit = 0
 declare @truncate bit = 1
 -----------------------------------------------
 
@@ -55,8 +55,7 @@ declare @targettable sysname
 
 declare cur cursor fast_forward for 
 select id, path, prefix, targettable from filestoload
-where loadStatus = 999
-and id > 8
+where id = 118
 
 open cur
 fetch next from cur into @id, @path, @prefix, @targettable
@@ -65,7 +64,7 @@ begin
 /*
 BULK INSERT Sales.Orders
 FROM '\\SystemX\DiskZ\Sales\data\orders.csv'
-WITH ( FORMAT = 'CSV');
+WITH ( FORMAT = 'CSV') ON [SPEC];
 */
 	declare @fullpath nvarchar(1000)
 	set @fullpath = concat(@path, @prefix, @targettable, '.csv')
@@ -73,10 +72,10 @@ WITH ( FORMAT = 'CSV');
 	set @sql = ''
 	if @truncate = 1
 		set @sql = concat('TRUNCATE TABLE ',@targettable,';')
-	--BULK INSERT dr18_allwise FROM 'd:\dr18loading\minidb\csv\minidb.dr18_allwise.csv' WITH (DATAFILETYPE='char', FIRSTROW=2, FIELDTERMINATOR=',', rowterminator='0x0a');
+	--BULK INSERT dr18_allwise FROM 'd:\dr18loading\minidb\csv\minidb.dr18_allwise.csv' WITH (DATAFILETYPE='char', FIRSTROW=2, FIELDTERMINATOR=',', rowterminator='0x0a') ON [SPEC];
 
 	
-	set @sql = concat(@sql, 'BULK INSERT ', @targettable, ' FROM ''', @fullpath, ''' WITH (DATAFILETYPE=''char'', FIRSTROW=2, FIELDTERMINATOR='','', rowterminator=''0x0a'', TABLOCK, FIELDQUOTE=''"'');','
+	set @sql = concat(@sql, 'BULK INSERT ', @targettable, ' FROM ''', @fullpath, ''' WITH (DATAFILETYPE=''char'', FIRSTROW=2, FIELDTERMINATOR='','', rowterminator=''0x0a'', TABLOCK, FIELDQUOTE=''"'') ON [SPEC];','
 	')
 	print @sql
 	if (@doExecute = 1)

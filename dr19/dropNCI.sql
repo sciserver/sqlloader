@@ -12,4 +12,4 @@ AND i.index_id <> 0
 AND o.is_ms_shipped = 0;
 
 PRINT @sql;
--- EXEC sp_executesql @sql;
+EXEC sp_executesql @sql;

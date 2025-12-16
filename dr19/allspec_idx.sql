@@ -1,0 +1,7 @@
+CREATE INDEX [ix_allspec2_apogee_id] ON [BestDR19].[dbo].[allspec] ( [apogee_id] ) WITH (FILLFACTOR=100, ONLINE=OFF, SORT_IN_TEMPDB=OFF, DATA_COMPRESSION=NONE) ON [SPEC];
+CREATE INDEX [ix_allspec2_apstar_id] ON [BestDR19].[dbo].[allspec] ( [apstar_id] ) WITH (FILLFACTOR=100, ONLINE=OFF, SORT_IN_TEMPDB=OFF, DATA_COMPRESSION=NONE) ON [SPEC];
+CREATE INDEX [ix_allspec2_htmid] ON [BestDR19].[dbo].[allspec] ( [htmid] ) INCLUDE ( [cx], [cy], [cz]) WITH (FILLFACTOR=100, ONLINE=OFF, SORT_IN_TEMPDB=OFF, DATA_COMPRESSION=NONE) ON [SPEC];
+CREATE INDEX [ix_allspec2_mangaid] ON [BestDR19].[dbo].[allspec] ( [mangaid] ) WITH (FILLFACTOR=100, ONLINE=OFF, SORT_IN_TEMPDB=OFF, DATA_COMPRESSION=NONE) ON [SPEC];
+CREATE INDEX [ix_mjd_fiberid_plate_or_fps_field2] ON [BestDR19].[dbo].[allspec] ( [mjd], [fiberid], [plate_or_fps_field] ) WITH (FILLFACTOR=100, ONLINE=OFF, SORT_IN_TEMPDB=OFF, DATA_COMPRESSION=NONE) ON [SPEC];
+CREATE INDEX [ix_allspec2_sdssid] ON [BestDR19].[dbo].[allspec] ( [sdss_id] ) WITH (FILLFACTOR=100, ONLINE=OFF, SORT_IN_TEMPDB=OFF, DATA_COMPRESSION=NONE) ON [SPEC];
+CREATE INDEX [ix_allspec2_specobjid] ON [BestDR19].[dbo].[allspec] ( [specobjid] ) WITH (FILLFACTOR=100, ONLINE=OFF, SORT_IN_TEMPDB=OFF, DATA_COMPRESSION=NONE) ON [SPEC];

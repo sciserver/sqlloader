@@ -300,7 +300,7 @@ CREATE TABLE dbo.dr19_allwise (
     z numeric(17,16),
     spt_ind integer,
     htm20 bigint
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_assignment
@@ -310,7 +310,7 @@ CREATE TABLE dbo.dr19_assignment (
     hole_pk integer,
     instrument_pk integer,
     design_id integer
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_best_brightest
@@ -351,7 +351,7 @@ CREATE TABLE dbo.dr19_best_brightest (
     version integer,
     original_ext_source_id varchar(16),
     cntr bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_bhm_csc
@@ -367,7 +367,7 @@ CREATE TABLE dbo.dr19_bhm_csc (
     mag_z real,
     mag_h real,
     spectrograph varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_bhm_csc_v2
@@ -397,7 +397,7 @@ CREATE TABLE dbo.dr19_bhm_csc_v2 (
     idg2 bigint,
     idps bigint,
     pk bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_bhm_efeds_veto
@@ -425,7 +425,7 @@ CREATE TABLE dbo.dr19_bhm_efeds_veto (
     anyandmask integer,
     anyormask integer,
     pk bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_bhm_rm_tweaks
@@ -448,7 +448,7 @@ CREATE TABLE dbo.dr19_bhm_rm_tweaks (
     gaia_g real,
     date_set varchar(11),
     pkey bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_bhm_rm_v0
@@ -702,7 +702,7 @@ CREATE TABLE dbo.dr19_bhm_rm_v0 (
     ps1_var_sn_i double precision,
     ps1_var_sn_z double precision,
     ps1_var_sn_y double precision
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_bhm_rm_v0_2
@@ -956,7 +956,7 @@ CREATE TABLE dbo.dr19_bhm_rm_v0_2 (
     ps1_var_sn_i double precision,
     ps1_var_sn_z double precision,
     ps1_var_sn_y double precision
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_bhm_spiders_agn_superset
@@ -1001,7 +1001,7 @@ CREATE TABLE dbo.dr19_bhm_spiders_agn_superset (
     opt_modelflux_ivar_i real,
     opt_modelflux_z real,
     opt_modelflux_ivar_z real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_bhm_spiders_clusters_superset
@@ -1046,7 +1046,7 @@ CREATE TABLE dbo.dr19_bhm_spiders_clusters_superset (
     opt_modelflux_ivar_i real,
     opt_modelflux_z real,
     opt_modelflux_ivar_z real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_cadence
@@ -1058,7 +1058,7 @@ CREATE TABLE dbo.dr19_cadence (
     label_version varchar(500),
     max_skybrightness real,
     nexp_total integer
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_cadence_epoch
@@ -1074,7 +1074,7 @@ CREATE TABLE dbo.dr19_cadence_epoch (
     nexp integer,
     max_length real,
     obsmode_pk varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_carton
@@ -1086,7 +1086,7 @@ CREATE TABLE dbo.dr19_carton (
 	version_pk integer,
 	program varchar(1000),
     target_selection_plan varchar(500)
-);
+) ON [SPEC];
 
 
 
@@ -1105,7 +1105,7 @@ CREATE TABLE dbo.dr19_carton_to_target (
     delta_ra double precision,
     delta_dec double precision,
     inertial bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_cataclysmic_variables
@@ -1205,7 +1205,7 @@ CREATE TABLE dbo.dr19_cataclysmic_variables (
     lum_val double precision,
     lum_percentile_lower double precision,
     lum_percentile_upper double precision
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog
@@ -1219,7 +1219,7 @@ CREATE TABLE dbo.dr19_catalog (
     parallax real,
     lead varchar(500),
     version_id integer
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_allwise
@@ -1229,7 +1229,7 @@ CREATE TABLE dbo.dr19_catalog_to_allwise (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_bhm_csc
@@ -1239,7 +1239,7 @@ CREATE TABLE dbo.dr19_catalog_to_bhm_csc (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_bhm_efeds_veto
@@ -1249,7 +1249,7 @@ CREATE TABLE dbo.dr19_catalog_to_bhm_efeds_veto (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_bhm_rm_v0
@@ -1259,7 +1259,7 @@ CREATE TABLE dbo.dr19_catalog_to_bhm_rm_v0 (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_bhm_rm_v0_2
@@ -1269,7 +1269,7 @@ CREATE TABLE dbo.dr19_catalog_to_bhm_rm_v0_2 (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_catwise2020
@@ -1279,7 +1279,7 @@ CREATE TABLE dbo.dr19_catalog_to_catwise2020 (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_glimpse
@@ -1289,7 +1289,7 @@ CREATE TABLE dbo.dr19_catalog_to_glimpse (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_guvcat
@@ -1299,7 +1299,7 @@ CREATE TABLE dbo.dr19_catalog_to_guvcat (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_legacy_survey_dr8
@@ -1309,7 +1309,7 @@ CREATE TABLE dbo.dr19_catalog_to_legacy_survey_dr8 (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_panstarrs1
@@ -1319,7 +1319,7 @@ CREATE TABLE dbo.dr19_catalog_to_panstarrs1 (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_sdss_dr13_photoobj_primary
@@ -1329,7 +1329,7 @@ CREATE TABLE dbo.dr19_catalog_to_sdss_dr13_photoobj_primary (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_sdss_dr16_specobj
@@ -1339,7 +1339,7 @@ CREATE TABLE dbo.dr19_catalog_to_sdss_dr16_specobj (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_skies_v1
@@ -1349,7 +1349,7 @@ CREATE TABLE dbo.dr19_catalog_to_skies_v1 (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_skies_v2
@@ -1359,7 +1359,7 @@ CREATE TABLE dbo.dr19_catalog_to_skies_v2 (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_skymapper_dr2
@@ -1369,7 +1369,7 @@ CREATE TABLE dbo.dr19_catalog_to_skymapper_dr2 (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_supercosmos
@@ -1379,7 +1379,7 @@ CREATE TABLE dbo.dr19_catalog_to_supercosmos (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_tic_v8
@@ -1389,7 +1389,7 @@ CREATE TABLE dbo.dr19_catalog_to_tic_v8 (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_tycho2
@@ -1399,7 +1399,7 @@ CREATE TABLE dbo.dr19_catalog_to_tycho2 (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_unwise
@@ -1409,7 +1409,7 @@ CREATE TABLE dbo.dr19_catalog_to_unwise (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_uvotssc1
@@ -1419,7 +1419,7 @@ CREATE TABLE dbo.dr19_catalog_to_uvotssc1 (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalog_to_xmm_om_suss_4_1
@@ -1429,7 +1429,7 @@ CREATE TABLE dbo.dr19_catalog_to_xmm_om_suss_4_1 (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catalogdb_version
@@ -1437,14 +1437,14 @@ CREATE TABLE dbo.dr19_catalogdb_version (
     id integer NOT NULL,
     planname varchar(500),
     tag varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_category
 CREATE TABLE dbo.dr19_category (
     pk integer NOT NULL,
     label varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_catwise2020
@@ -1636,7 +1636,7 @@ CREATE TABLE dbo.dr19_catwise2020 (
     elon double precision,
     elat double precision,
     unwise_objid varchar(20)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_design
@@ -1647,7 +1647,7 @@ CREATE TABLE dbo.dr19_design (
     run_on date,
     assignment_hash uniqueidentifier,
     design_version_pk integer
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_design_mode
@@ -1751,7 +1751,7 @@ CREATE TABLE dbo.dr19_design_mode (
     apogee_bright_limit_targets_max_j double precision,
     apogee_bright_limit_targets_max_h double precision,
     apogee_bright_limit_targets_max_k double precision
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_design_mode_check_results
@@ -1783,7 +1783,7 @@ CREATE TABLE dbo.dr19_design_mode_check_results (
     boss_sky_neighbors_targets_pass bit,
     apogee_sky_neighbors_targets_pass bit,
     apogee_trace_diff_targets_pass bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_design_to_field
@@ -1793,7 +1793,7 @@ CREATE TABLE dbo.dr19_design_to_field (
     field_pk integer,
     exposure bigint,
     field_exposure bigint
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_ebosstarget_v5
@@ -1897,7 +1897,7 @@ CREATE TABLE dbo.dr19_ebosstarget_v5 (
     has_wise_phot bit,
     objid_targeting bigint,
     pk bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_erosita_superset_agn
@@ -1933,7 +1933,7 @@ CREATE TABLE dbo.dr19_erosita_superset_agn (
     opt_pmdec real,
     opt_epoch real,
     pkey bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_erosita_superset_clusters
@@ -1969,7 +1969,7 @@ CREATE TABLE dbo.dr19_erosita_superset_clusters (
     opt_pmdec real,
     opt_epoch real,
     pkey bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_erosita_superset_compactobjects
@@ -2005,7 +2005,7 @@ CREATE TABLE dbo.dr19_erosita_superset_compactobjects (
     opt_pmdec real,
     opt_epoch real,
     pkey bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_erosita_superset_stars
@@ -2041,7 +2041,7 @@ CREATE TABLE dbo.dr19_erosita_superset_stars (
     opt_pmdec real,
     opt_epoch real,
     pkey bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_field
@@ -2055,7 +2055,7 @@ CREATE TABLE dbo.dr19_field (
     position_angle real,
     slots_exposures varchar(500),
     field_id integer
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_gaia_assas_sn_cepheids
@@ -2138,14 +2138,14 @@ CREATE TABLE dbo.dr19_gaia_assas_sn_cepheids (
     x smallint,
     measurejd double precision,
     angdist double precision
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_gaia_dr2_ruwe
 CREATE TABLE dbo.dr19_gaia_dr2_ruwe (
     source_id bigint NOT NULL,
     ruwe real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_gaia_dr2_source
@@ -2244,7 +2244,7 @@ CREATE TABLE dbo.dr19_gaia_dr2_source (
     lum_val real,
     lum_percentile_lower real,
     lum_percentile_upper real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_gaia_dr2_wd
@@ -2306,7 +2306,7 @@ CREATE TABLE dbo.dr19_gaia_dr2_wd (
     masshe real,
     e_masshe real,
     chisqhe real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_gaia_unwise_agn
@@ -2348,7 +2348,7 @@ CREATE TABLE dbo.dr19_gaia_unwise_agn (
     cnt32 integer,
     phot_z double precision,
     prob_rf double precision
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_gaiadr2_tmass_best_neighbour
@@ -2362,7 +2362,7 @@ CREATE TABLE dbo.dr19_gaiadr2_tmass_best_neighbour (
     angular_distance double precision,
     gaia_astrometric_params integer,
     tmass_pts_key integer
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_geometric_distances_gaia_dr2
@@ -2374,7 +2374,7 @@ CREATE TABLE dbo.dr19_geometric_distances_gaia_dr2 (
     r_len real,
     result_flag varchar(1),
     modality_flag smallint
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_glimpse
@@ -2458,7 +2458,7 @@ CREATE TABLE dbo.dr19_glimpse (
     mf5_8 integer,
     mf8_0 integer,
     pk bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_guvcat
@@ -2558,7 +2558,7 @@ CREATE TABLE dbo.dr19_guvcat (
     sepasdist real,
     inlargeobj varchar(500),
     largeobjsize real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_hole
@@ -2568,7 +2568,7 @@ CREATE TABLE dbo.dr19_hole (
     column_num integer,
     holeid varchar(500),
     observatory_pk integer
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_instrument
@@ -2576,7 +2576,7 @@ CREATE TABLE dbo.dr19_instrument (
     pk integer NOT NULL,
     label varchar(500),
     default_lambda_eff real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_legacy_survey_dr8
@@ -2708,7 +2708,7 @@ CREATE TABLE dbo.dr19_legacy_survey_dr8 (
     ls_id bigint NOT NULL,
     tycho_ref bigint,
     gaia_sourceid bigint
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_magnitude
@@ -2726,14 +2726,14 @@ CREATE TABLE dbo.dr19_magnitude (
     k real,
     gaia_g real,
     optical_prov varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_mapper
 CREATE TABLE dbo.dr19_mapper (
     pk integer NOT NULL,
     label varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_mipsgal
@@ -2801,7 +2801,7 @@ CREATE TABLE dbo.dr19_mipsgal (
     sky double precision,
     lim1 double precision,
     lim2 double precision
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_mwm_tess_ob
@@ -2812,14 +2812,14 @@ CREATE TABLE dbo.dr19_mwm_tess_ob (
     h_mag double precision,
     instrument varchar(20),
     cadence varchar(20)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_observatory
 CREATE TABLE dbo.dr19_observatory (
     pk integer NOT NULL,
     label varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_obsmode
@@ -2830,14 +2830,14 @@ CREATE TABLE dbo.dr19_obsmode (
     min_twilight_ang real,
     max_airmass_apo real,
     max_airmass_lco real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_opsdb_apo_camera
 CREATE TABLE dbo.dr19_opsdb_apo_camera (
     pk integer NOT NULL,
     label varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_opsdb_apo_camera_frame
@@ -2847,14 +2847,14 @@ CREATE TABLE dbo.dr19_opsdb_apo_camera_frame (
     camera_pk smallint,
     sn2 real,
     comment varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_opsdb_apo_completion_status
 CREATE TABLE dbo.dr19_opsdb_apo_completion_status (
     pk integer NOT NULL,
     label varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_opsdb_apo_configuration
@@ -2865,7 +2865,7 @@ CREATE TABLE dbo.dr19_opsdb_apo_configuration (
     temperature varchar(500),
     epoch double precision,
     calibration_version varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_opsdb_apo_design_to_status
@@ -2875,7 +2875,7 @@ CREATE TABLE dbo.dr19_opsdb_apo_design_to_status (
     completion_status_pk smallint,
     mjd real,
     manual bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_opsdb_apo_exposure
@@ -2887,14 +2887,14 @@ CREATE TABLE dbo.dr19_opsdb_apo_exposure (
     start_time datetime,
     exposure_time real,
     exposure_flavor_pk smallint
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_opsdb_apo_exposure_flavor
 CREATE TABLE dbo.dr19_opsdb_apo_exposure_flavor (
     pk integer NOT NULL,
     label varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_panstarrs1
@@ -3091,14 +3091,14 @@ CREATE TABLE dbo.dr19_panstarrs1 (
     y_psfqfperf real,
     catid_objid bigint NOT NULL,
     extid_hi_lo bigint
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_positioner_status
 CREATE TABLE dbo.dr19_positioner_status (
     pk integer NOT NULL,
     label varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_revised_magnitude
@@ -3116,7 +3116,7 @@ CREATE TABLE dbo.dr19_revised_magnitude (
     k real,
     gaia_g real,
     optical_prov varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_sagitta
@@ -3129,7 +3129,7 @@ CREATE TABLE dbo.dr19_sagitta (
     yso_std real,
     age real,
     age_std real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_sdss_apogeeallstarmerge_r13
@@ -3183,7 +3183,7 @@ CREATE TABLE dbo.dr19_sdss_apogeeallstarmerge_r13 (
     rstar_err real,
     mstar_src varchar(500),
     designation varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_sdss_dr13_photoobj_primary
@@ -3191,7 +3191,7 @@ CREATE TABLE dbo.dr19_sdss_dr13_photoobj_primary (
     objid bigint NOT NULL,
     ra double precision,
     "dec" double precision
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_sdss_dr16_qso
@@ -3400,7 +3400,7 @@ CREATE TABLE dbo.dr19_sdss_dr16_qso (
     gaia_rp_flux_snr double precision,
     sdss2gaia_sep double precision,
     pk bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_sdss_dr16_specobj
@@ -3599,7 +3599,7 @@ CREATE TABLE dbo.dr19_sdss_dr16_specobj (
     elodiedof real,
     htmid bigint,
     loadversion integer
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_sdssv_boss_conflist
@@ -3698,7 +3698,7 @@ CREATE TABLE dbo.dr19_sdssv_boss_conflist (
     qualcomments varchar(500),
     moon_frac real,
     pkey bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_sdssv_boss_spall
@@ -3839,7 +3839,7 @@ CREATE TABLE dbo.dr19_sdssv_boss_spall (
     rchi2diff_noqso real,
     specobjid bigint,
     pkey bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_sdssv_plateholes
@@ -3993,7 +3993,7 @@ CREATE TABLE dbo.dr19_sdssv_plateholes (
     yanny_uid integer,
     yanny_filename varchar(500),
     pkey bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_sdssv_plateholes_meta
@@ -4111,7 +4111,7 @@ CREATE TABLE dbo.dr19_sdssv_plateholes_meta (
     plateinput23 varchar(500),
     skyinput8 varchar(500),
     isvalid bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_skies_v1
@@ -4136,7 +4136,7 @@ CREATE TABLE dbo.dr19_skies_v1 (
     tmass_xsc_sky bit,
     sep_neighbour_tmass_xsc real,
     mag_neighbour_tmass_xsc real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_skies_v2
@@ -4169,7 +4169,7 @@ CREATE TABLE dbo.dr19_skies_v2 (
     valid_tmass_xsc bit,
     selected_tmass_xsc bit,
     sep_neighbour_tmass_xsc real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_skymapper_dr2
@@ -4274,7 +4274,7 @@ CREATE TABLE dbo.dr19_skymapper_dr2 (
     gaia_dr2_dist1 real,
     gaia_dr2_id2 bigint,
     gaia_dr2_dist2 real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_skymapper_gaia
@@ -4285,7 +4285,7 @@ CREATE TABLE dbo.dr19_skymapper_gaia (
     e_teff real,
     feh real,
     e_feh real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_supercosmos
@@ -4347,7 +4347,7 @@ CREATE TABLE dbo.dr19_supercosmos (
     b real,
     d real,
     ebmv real
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_target
@@ -4360,7 +4360,7 @@ CREATE TABLE dbo.dr19_target (
     epoch real,
     parallax real,
     catalogid bigint
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_targetdb_version
@@ -4370,7 +4370,7 @@ CREATE TABLE dbo.dr19_targetdb_version (
     tag varchar(500),
     target_selection bit,
     robostrategy bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_targeting_generation
@@ -4378,7 +4378,7 @@ CREATE TABLE dbo.dr19_targeting_generation (
     pk integer NOT NULL,
     label varchar(500),
     first_release varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_targeting_generation_to_carton
@@ -4388,7 +4388,7 @@ CREATE TABLE dbo.dr19_targeting_generation_to_carton (
     carton_pk integer,
     rs_stage varchar(500),
     rs_active bit
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_targeting_generation_to_version
@@ -4396,7 +4396,7 @@ CREATE TABLE dbo.dr19_targeting_generation_to_version (
     generation_pk integer,
     version_pk integer,
     pk integer NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_tess_toi
@@ -4410,7 +4410,7 @@ CREATE TABLE dbo.dr19_tess_toi (
     user_disposition varchar(2),
     num_sectors real,
     pk bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_tess_toi_v05
@@ -4424,7 +4424,7 @@ CREATE TABLE dbo.dr19_tess_toi_v05 (
     user_disposition varchar(2),
     num_sectors double precision,
     pkey bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_tic_v8
@@ -4559,7 +4559,7 @@ CREATE TABLE dbo.dr19_tic_v8 (
     twomass_psc_pts_key integer,
     tycho2_tycid integer,
     allwise_cntr bigint
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_twomass_psc
@@ -4624,7 +4624,7 @@ CREATE TABLE dbo.dr19_twomass_psc (
     coadd_key integer,
     coadd smallint,
     designation varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_tycho2
@@ -4669,7 +4669,7 @@ CREATE TABLE dbo.dr19_tycho2 (
     designation varchar(500) NOT NULL,
     tycid integer,
     designation2 varchar(500)
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_unwise
@@ -4723,7 +4723,7 @@ CREATE TABLE dbo.dr19_unwise (
     "dec" double precision,
     primary_status integer,
     unwise_objid varchar(500) NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_uvotssc1
@@ -4811,7 +4811,7 @@ CREATE TABLE dbo.dr19_uvotssc1 (
     fb integer,
     fv integer,
     id bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_xmm_om_suss_4_1
@@ -4931,7 +4931,7 @@ CREATE TABLE dbo.dr19_xmm_om_suss_4_1 (
     b_sky_image varchar(4),
     v_sky_image varchar(4),
     pk bigint NOT NULL
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_yso_clustering
@@ -4954,7 +4954,7 @@ CREATE TABLE dbo.dr19_yso_clustering (
     eav double precision,
     dist double precision,
     edist double precision
-);
+) ON [SPEC];
 
 
 DROP TABLE IF EXISTS dbo.dr19_zari18pms
@@ -4980,7 +4980,7 @@ CREATE TABLE dbo.dr19_zari18pms (
     ag real,
     bp_rp real,
     uwe real
-);
+) ON [SPEC];
 
 
 CREATE TABLE dr19_catalog_to_twomass_psc (
@@ -4989,13 +4989,13 @@ CREATE TABLE dr19_catalog_to_twomass_psc (
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];
 
-
+drop table if exists dr19_catalog_to_gaia_dr2_source
 CREATE TABLE dr19_catalog_to_gaia_dr2_source (
     catalogid bigint NOT NULL,
     target_id bigint NOT NULL,
     version_id smallint NOT NULL,
     distance double precision,
     best bit
-);
+) ON [SPEC];

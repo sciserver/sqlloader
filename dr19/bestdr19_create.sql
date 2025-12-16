@@ -1,11 +1,541 @@
-USE [minidbTEMPLATE]
+/****** Object:  Table [dbo].[mos_zari18pms]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_zari18pms]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_zari18pms]
 GO
-/****** Object:  Table [dbo].[dr19_allstar_dr17_synspec_rev1]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_yso_clustering]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_yso_clustering]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_yso_clustering]
+GO
+/****** Object:  Table [dbo].[mos_xmm_om_suss_4_1]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_xmm_om_suss_4_1]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_xmm_om_suss_4_1]
+GO
+/****** Object:  Table [dbo].[mos_uvotssc1]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_uvotssc1]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_uvotssc1]
+GO
+/****** Object:  Table [dbo].[mos_unwise]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_unwise]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_unwise]
+GO
+/****** Object:  Table [dbo].[mos_tycho2]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_tycho2]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_tycho2]
+GO
+/****** Object:  Table [dbo].[mos_twomass_psc]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_twomass_psc]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_twomass_psc]
+GO
+/****** Object:  Table [dbo].[mos_tic_v8]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_tic_v8]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_tic_v8]
+GO
+/****** Object:  Table [dbo].[mos_tess_toi_v05]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_tess_toi_v05]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_tess_toi_v05]
+GO
+/****** Object:  Table [dbo].[mos_tess_toi]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_tess_toi]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_tess_toi]
+GO
+/****** Object:  Table [dbo].[mos_targeting_generation_to_version]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_targeting_generation_to_version]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_targeting_generation_to_version]
+GO
+/****** Object:  Table [dbo].[mos_targeting_generation_to_carton]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_targeting_generation_to_carton]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_targeting_generation_to_carton]
+GO
+/****** Object:  Table [dbo].[mos_targeting_generation]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_targeting_generation]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_targeting_generation]
+GO
+/****** Object:  Table [dbo].[mos_targetdb_version]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_targetdb_version]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_targetdb_version]
+GO
+/****** Object:  Table [dbo].[mos_target_union_legacy]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_target_union_legacy]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_target_union_legacy]
+GO
+/****** Object:  Table [dbo].[mos_target]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_target]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_target]
+GO
+/****** Object:  Table [dbo].[mos_supercosmos]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_supercosmos]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_supercosmos]
+GO
+/****** Object:  Table [dbo].[mos_skymapper_gaia]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_skymapper_gaia]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_skymapper_gaia]
+GO
+/****** Object:  Table [dbo].[mos_skymapper_dr2]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_skymapper_dr2]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_skymapper_dr2]
+GO
+/****** Object:  Table [dbo].[mos_skies_v2]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_skies_v2]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_skies_v2]
+GO
+/****** Object:  Table [dbo].[mos_skies_v1]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_skies_v1]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_skies_v1]
+GO
+/****** Object:  Table [dbo].[mos_sdssv_plateholes_meta]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sdssv_plateholes_meta]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sdssv_plateholes_meta]
+GO
+/****** Object:  Table [dbo].[mos_sdssv_plateholes]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sdssv_plateholes]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sdssv_plateholes]
+GO
+/****** Object:  Table [dbo].[mos_sdssv_boss_spall]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sdssv_boss_spall]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sdssv_boss_spall]
+GO
+/****** Object:  Table [dbo].[mos_sdssv_boss_conflist]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sdssv_boss_conflist]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sdssv_boss_conflist]
+GO
+/****** Object:  Table [dbo].[mos_sdss_id_to_catalog_full]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sdss_id_to_catalog_full]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sdss_id_to_catalog_full]
+GO
+/****** Object:  Table [dbo].[mos_sdss_id_to_catalog]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sdss_id_to_catalog]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sdss_id_to_catalog]
+GO
+/****** Object:  Table [dbo].[mos_sdss_id_stacked]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sdss_id_stacked]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sdss_id_stacked]
+GO
+/****** Object:  Table [dbo].[mos_sdss_id_flat]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sdss_id_flat]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sdss_id_flat]
+GO
+/****** Object:  Table [dbo].[mos_sdss_dr17_specobj]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sdss_dr17_specobj]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sdss_dr17_specobj]
+GO
+/****** Object:  Table [dbo].[mos_sdss_dr16_specobj]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sdss_dr16_specobj]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sdss_dr16_specobj]
+GO
+/****** Object:  Table [dbo].[mos_sdss_dr16_qso]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sdss_dr16_qso]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sdss_dr16_qso]
+GO
+/****** Object:  Table [dbo].[mos_sdss_dr13_photoobj_primary]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sdss_dr13_photoobj_primary]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sdss_dr13_photoobj_primary]
+GO
+/****** Object:  Table [dbo].[mos_sdss_apogeeallstarmerge_r13]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sdss_apogeeallstarmerge_r13]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sdss_apogeeallstarmerge_r13]
+GO
+/****** Object:  Table [dbo].[mos_sagitta]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_sagitta]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_sagitta]
+GO
+/****** Object:  Table [dbo].[mos_revised_magnitude]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_revised_magnitude]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_revised_magnitude]
+GO
+/****** Object:  Table [dbo].[mos_positioner_status]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_positioner_status]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_positioner_status]
+GO
+/****** Object:  Table [dbo].[mos_panstarrs1]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_panstarrs1]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_panstarrs1]
+GO
+/****** Object:  Table [dbo].[mos_opsdb_apo_exposure_flavor]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_opsdb_apo_exposure_flavor]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_opsdb_apo_exposure_flavor]
+GO
+/****** Object:  Table [dbo].[mos_opsdb_apo_exposure]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_opsdb_apo_exposure]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_opsdb_apo_exposure]
+GO
+/****** Object:  Table [dbo].[mos_opsdb_apo_design_to_status]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_opsdb_apo_design_to_status]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_opsdb_apo_design_to_status]
+GO
+/****** Object:  Table [dbo].[mos_opsdb_apo_configuration]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_opsdb_apo_configuration]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_opsdb_apo_configuration]
+GO
+/****** Object:  Table [dbo].[mos_opsdb_apo_completion_status]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_opsdb_apo_completion_status]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_opsdb_apo_completion_status]
+GO
+/****** Object:  Table [dbo].[mos_opsdb_apo_camera_frame]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_opsdb_apo_camera_frame]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_opsdb_apo_camera_frame]
+GO
+/****** Object:  Table [dbo].[mos_opsdb_apo_camera]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_opsdb_apo_camera]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_opsdb_apo_camera]
+GO
+/****** Object:  Table [dbo].[mos_obsmode]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_obsmode]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_obsmode]
+GO
+/****** Object:  Table [dbo].[mos_observatory]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_observatory]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_observatory]
+GO
+/****** Object:  Table [dbo].[mos_mwm_tess_ob]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_mwm_tess_ob]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_mwm_tess_ob]
+GO
+/****** Object:  Table [dbo].[mos_mipsgal]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_mipsgal]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_mipsgal]
+GO
+/****** Object:  Table [dbo].[mos_mastar_goodvisits]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_mastar_goodvisits]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_mastar_goodvisits]
+GO
+/****** Object:  Table [dbo].[mos_mastar_goodstars]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_mastar_goodstars]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_mastar_goodstars]
+GO
+/****** Object:  Table [dbo].[mos_marvels_dr12_star]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_marvels_dr12_star]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_marvels_dr12_star]
+GO
+/****** Object:  Table [dbo].[mos_marvels_dr11_star]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_marvels_dr11_star]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_marvels_dr11_star]
+GO
+/****** Object:  Table [dbo].[mos_mapper]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_mapper]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_mapper]
+GO
+/****** Object:  Table [dbo].[mos_mangatarget]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_mangatarget]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_mangatarget]
+GO
+/****** Object:  Table [dbo].[mos_mangadrpall]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_mangadrpall]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_mangadrpall]
+GO
+/****** Object:  Table [dbo].[mos_mangadapall]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_mangadapall]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_mangadapall]
+GO
+/****** Object:  Table [dbo].[mos_magnitude]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_magnitude]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_magnitude]
+GO
+/****** Object:  Table [dbo].[mos_legacy_survey_dr8]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_legacy_survey_dr8]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_legacy_survey_dr8]
+GO
+/****** Object:  Table [dbo].[mos_legacy_catalog_catalogid]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_legacy_catalog_catalogid]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_legacy_catalog_catalogid]
+GO
+/****** Object:  Table [dbo].[mos_instrument]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_instrument]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_instrument]
+GO
+/****** Object:  Table [dbo].[mos_hole]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_hole]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_hole]
+GO
+/****** Object:  Table [dbo].[mos_guvcat]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_guvcat]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_guvcat]
+GO
+/****** Object:  Table [dbo].[mos_glimpse]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_glimpse]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_glimpse]
+GO
+/****** Object:  Table [dbo].[mos_geometric_distances_gaia_dr2]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_geometric_distances_gaia_dr2]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_geometric_distances_gaia_dr2]
+GO
+/****** Object:  Table [dbo].[mos_gaiadr2_tmass_best_neighbour]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_gaiadr2_tmass_best_neighbour]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_gaiadr2_tmass_best_neighbour]
+GO
+/****** Object:  Table [dbo].[mos_gaia_unwise_agn]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_gaia_unwise_agn]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_gaia_unwise_agn]
+GO
+/****** Object:  Table [dbo].[mos_gaia_dr2_wd]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_gaia_dr2_wd]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_gaia_dr2_wd]
+GO
+/****** Object:  Table [dbo].[mos_gaia_dr2_source]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_gaia_dr2_source]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_gaia_dr2_source]
+GO
+/****** Object:  Table [dbo].[mos_gaia_dr2_ruwe]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_gaia_dr2_ruwe]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_gaia_dr2_ruwe]
+GO
+/****** Object:  Table [dbo].[mos_gaia_assas_sn_cepheids]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_gaia_assas_sn_cepheids]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_gaia_assas_sn_cepheids]
+GO
+/****** Object:  Table [dbo].[mos_field]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_field]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_field]
+GO
+/****** Object:  Table [dbo].[mos_erosita_superset_stars]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_erosita_superset_stars]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_erosita_superset_stars]
+GO
+/****** Object:  Table [dbo].[mos_erosita_superset_compactobjects]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_erosita_superset_compactobjects]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_erosita_superset_compactobjects]
+GO
+/****** Object:  Table [dbo].[mos_erosita_superset_clusters]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_erosita_superset_clusters]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_erosita_superset_clusters]
+GO
+/****** Object:  Table [dbo].[mos_erosita_superset_agn]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_erosita_superset_agn]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_erosita_superset_agn]
+GO
+/****** Object:  Table [dbo].[mos_ebosstarget_v5]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_ebosstarget_v5]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_ebosstarget_v5]
+GO
+/****** Object:  Table [dbo].[mos_design_to_field]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_design_to_field]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_design_to_field]
+GO
+/****** Object:  Table [dbo].[mos_design_mode_check_results]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_design_mode_check_results]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_design_mode_check_results]
+GO
+/****** Object:  Table [dbo].[mos_design_mode]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_design_mode]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_design_mode]
+GO
+/****** Object:  Table [dbo].[mos_design]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_design]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_design]
+GO
+/****** Object:  Table [dbo].[mos_catwise2020]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catwise2020]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catwise2020]
+GO
+/****** Object:  Table [dbo].[mos_category]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_category]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_category]
+GO
+/****** Object:  Table [dbo].[mos_catalogdb_version]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalogdb_version]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalogdb_version]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_xmm_om_suss_4_1]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_xmm_om_suss_4_1]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_xmm_om_suss_4_1]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_uvotssc1]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_uvotssc1]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_uvotssc1]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_unwise]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_unwise]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_unwise]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_tycho2]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_tycho2]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_tycho2]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_twomass_psc]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_twomass_psc]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_twomass_psc]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_tic_v8]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_tic_v8]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_tic_v8]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_supercosmos]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_supercosmos]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_supercosmos]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_skymapper_dr2]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_skymapper_dr2]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_skymapper_dr2]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_skies_v2]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_skies_v2]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_skies_v2]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_skies_v1]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_skies_v1]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_skies_v1]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_sdss_dr17_specobj]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_sdss_dr17_specobj]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_sdss_dr17_specobj]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_sdss_dr16_specobj]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_sdss_dr16_specobj]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_sdss_dr16_specobj]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_sdss_dr13_photoobj_primary]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_sdss_dr13_photoobj_primary]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_sdss_dr13_photoobj_primary]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_panstarrs1]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_panstarrs1]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_panstarrs1]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_mastar_goodstars]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_mastar_goodstars]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_mastar_goodstars]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_marvels_dr12_star]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_marvels_dr12_star]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_marvels_dr12_star]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_marvels_dr11_star]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_marvels_dr11_star]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_marvels_dr11_star]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_mangatarget]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_mangatarget]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_mangatarget]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_legacy_survey_dr8]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_legacy_survey_dr8]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_legacy_survey_dr8]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_guvcat]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_guvcat]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_guvcat]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_glimpse]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_glimpse]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_glimpse]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_gaia_dr2_source]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_gaia_dr2_source]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_gaia_dr2_source]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_catwise2020]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_catwise2020]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_catwise2020]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_bhm_rm_v0_2]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_bhm_rm_v0_2]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_bhm_rm_v0_2]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_bhm_rm_v0]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_bhm_rm_v0]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_bhm_rm_v0]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_bhm_efeds_veto]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_bhm_efeds_veto]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_bhm_efeds_veto]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_bhm_csc]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_bhm_csc]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_bhm_csc]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_allwise]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_allwise]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_allwise]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_allstar_dr17_synspec_rev1]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog_to_allstar_dr17_synspec_rev1]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog_to_allstar_dr17_synspec_rev1]
+GO
+/****** Object:  Table [dbo].[mos_catalog.bak]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog.bak]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog.bak]
+GO
+/****** Object:  Table [dbo].[mos_catalog]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_catalog]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_catalog]
+GO
+/****** Object:  Table [dbo].[mos_cataclysmic_variables]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_cataclysmic_variables]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_cataclysmic_variables]
+GO
+/****** Object:  Table [dbo].[mos_carton_to_target]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_carton_to_target]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_carton_to_target]
+GO
+/****** Object:  Table [dbo].[mos_carton_csv]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_carton_csv]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_carton_csv]
+GO
+/****** Object:  Table [dbo].[mos_carton]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_carton]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_carton]
+GO
+/****** Object:  Table [dbo].[mos_cadence_epoch]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_cadence_epoch]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_cadence_epoch]
+GO
+/****** Object:  Table [dbo].[mos_cadence]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_cadence]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_cadence]
+GO
+/****** Object:  Table [dbo].[mos_bhm_spiders_clusters_superset]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_bhm_spiders_clusters_superset]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_bhm_spiders_clusters_superset]
+GO
+/****** Object:  Table [dbo].[mos_bhm_spiders_agn_superset]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_bhm_spiders_agn_superset]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_bhm_spiders_agn_superset]
+GO
+/****** Object:  Table [dbo].[mos_bhm_rm_v0_2]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_bhm_rm_v0_2]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_bhm_rm_v0_2]
+GO
+/****** Object:  Table [dbo].[mos_bhm_rm_v0]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_bhm_rm_v0]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_bhm_rm_v0]
+GO
+/****** Object:  Table [dbo].[mos_bhm_rm_tweaks]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_bhm_rm_tweaks]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_bhm_rm_tweaks]
+GO
+/****** Object:  Table [dbo].[mos_bhm_efeds_veto]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_bhm_efeds_veto]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_bhm_efeds_veto]
+GO
+/****** Object:  Table [dbo].[mos_bhm_csc_v2]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_bhm_csc_v2]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_bhm_csc_v2]
+GO
+/****** Object:  Table [dbo].[mos_bhm_csc]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_bhm_csc]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_bhm_csc]
+GO
+/****** Object:  Table [dbo].[mos_best_brightest]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_best_brightest]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_best_brightest]
+GO
+/****** Object:  Table [dbo].[mos_assignment]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_assignment]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_assignment]
+GO
+/****** Object:  Table [dbo].[mos_allwise]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_allwise]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_allwise]
+GO
+/****** Object:  Table [dbo].[mos_allstar_dr17_synspec_rev1]    Script Date: 5/23/2025 8:23:32 AM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[mos_allstar_dr17_synspec_rev1]') AND type in (N'U'))
+DROP TABLE [dbo].[mos_allstar_dr17_synspec_rev1]
+GO
+/****** Object:  Table [dbo].[mos_allstar_dr17_synspec_rev1]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_allstar_dr17_synspec_rev1](
+CREATE TABLE [dbo].[mos_allstar_dr17_synspec_rev1](
 	[filename] [varchar](500) NULL,
 	[apogee_id] [varchar](500) NULL,
 	[target_id] [varchar](500) NULL,
@@ -240,15 +770,19 @@ CREATE TABLE [dbo].[dr19_allstar_dr17_synspec_rev1](
 	[yb_fe_err] [real] NULL,
 	[yb_fe_flag] [int] NULL,
 	[visit_pk] [varchar](2000) NULL,
-	[twomass_designation] [varchar](500) NULL
-) ON [PRIMARY]
+	[twomass_designation] [varchar](500) NULL,
+ CONSTRAINT [mos_allstar_dr17_synspec_rev1_pkey] PRIMARY KEY CLUSTERED 
+(
+	[apstar_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_allwise]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_allwise]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_allwise](
+CREATE TABLE [dbo].[mos_allwise](
 	[designation] [varchar](20) NULL,
 	[ra] [numeric](10, 7) NULL,
 	[dec] [numeric](9, 7) NULL,
@@ -546,28 +1080,36 @@ CREATE TABLE [dbo].[dr19_allwise](
 	[y] [numeric](17, 16) NULL,
 	[z] [numeric](17, 16) NULL,
 	[spt_ind] [int] NULL,
-	[htm20] [bigint] NULL
-) ON [PRIMARY]
+	[htm20] [bigint] NULL,
+ CONSTRAINT [mos_allwise_pkey] PRIMARY KEY CLUSTERED 
+(
+	[cntr] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_assignment]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_assignment]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_assignment](
+CREATE TABLE [dbo].[mos_assignment](
 	[pk] [int] NOT NULL,
 	[carton_to_target_pk] [bigint] NULL,
 	[hole_pk] [int] NULL,
 	[instrument_pk] [int] NULL,
-	[design_id] [int] NULL
-) ON [PRIMARY]
+	[design_id] [int] NULL,
+ CONSTRAINT [mos_assignment_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_best_brightest]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_best_brightest]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_best_brightest](
+CREATE TABLE [dbo].[mos_best_brightest](
 	[designation] [varchar](19) NULL,
 	[ra_1] [float] NULL,
 	[dec_1] [float] NULL,
@@ -603,15 +1145,19 @@ CREATE TABLE [dbo].[dr19_best_brightest](
 	[ebv] [real] NULL,
 	[version] [int] NULL,
 	[original_ext_source_id] [varchar](16) NULL,
-	[cntr] [bigint] NOT NULL
-) ON [PRIMARY]
+	[cntr] [bigint] NOT NULL,
+ CONSTRAINT [mos_best_brightest_pkey] PRIMARY KEY CLUSTERED 
+(
+	[cntr] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_bhm_csc]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_bhm_csc]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_bhm_csc](
+CREATE TABLE [dbo].[mos_bhm_csc](
 	[pk] [bigint] NOT NULL,
 	[csc_version] [varchar](500) NULL,
 	[cxo_name] [varchar](500) NULL,
@@ -622,15 +1168,19 @@ CREATE TABLE [dbo].[dr19_bhm_csc](
 	[mag_i] [real] NULL,
 	[mag_z] [real] NULL,
 	[mag_h] [real] NULL,
-	[spectrograph] [varchar](500) NULL
-) ON [PRIMARY]
+	[spectrograph] [varchar](500) NULL,
+ CONSTRAINT [mos_bhm_csc_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_bhm_csc_v2]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_bhm_csc_v2]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_bhm_csc_v2](
+CREATE TABLE [dbo].[mos_bhm_csc_v2](
 	[cxoid] [varchar](500) NULL,
 	[xra] [float] NULL,
 	[xdec] [float] NULL,
@@ -655,15 +1205,19 @@ CREATE TABLE [dbo].[dr19_bhm_csc_v2](
 	[designation2m] [varchar](500) NULL,
 	[idg2] [bigint] NULL,
 	[idps] [bigint] NULL,
-	[pk] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pk] [bigint] NOT NULL,
+ CONSTRAINT [mos_bhm_csc_v2_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_bhm_efeds_veto]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_bhm_efeds_veto]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_bhm_efeds_veto](
+CREATE TABLE [dbo].[mos_bhm_efeds_veto](
 	[programname] [varchar](5) NULL,
 	[chunk] [varchar](7) NULL,
 	[platesn2] [real] NULL,
@@ -686,15 +1240,19 @@ CREATE TABLE [dbo].[dr19_bhm_efeds_veto](
 	[sn_median_all] [real] NULL,
 	[anyandmask] [int] NULL,
 	[anyormask] [int] NULL,
-	[pk] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pk] [bigint] NOT NULL,
+ CONSTRAINT [mos_bhm_efeds_veto_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_bhm_rm_tweaks]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_bhm_rm_tweaks]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_bhm_rm_tweaks](
+CREATE TABLE [dbo].[mos_bhm_rm_tweaks](
 	[rm_field_name] [varchar](12) NULL,
 	[plate] [int] NULL,
 	[fiberid] [int] NULL,
@@ -712,15 +1270,19 @@ CREATE TABLE [dbo].[dr19_bhm_rm_tweaks](
 	[mag_z] [real] NULL,
 	[gaia_g] [real] NULL,
 	[date_set] [varchar](11) NULL,
-	[pkey] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pkey] [bigint] NOT NULL,
+ CONSTRAINT [mos_bhm_rm_tweaks_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pkey] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_bhm_rm_v0]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_bhm_rm_v0]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_bhm_rm_v0](
+CREATE TABLE [dbo].[mos_bhm_rm_v0](
 	[field_name] [varchar](8) NULL,
 	[ra] [float] NULL,
 	[dec] [float] NULL,
@@ -969,15 +1531,19 @@ CREATE TABLE [dbo].[dr19_bhm_rm_v0](
 	[ps1_var_sn_r] [float] NULL,
 	[ps1_var_sn_i] [float] NULL,
 	[ps1_var_sn_z] [float] NULL,
-	[ps1_var_sn_y] [float] NULL
-) ON [PRIMARY]
+	[ps1_var_sn_y] [float] NULL,
+ CONSTRAINT [mos_bhm_rm_v0_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_bhm_rm_v0_2]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_bhm_rm_v0_2]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_bhm_rm_v0_2](
+CREATE TABLE [dbo].[mos_bhm_rm_v0_2](
 	[field_name] [varchar](8) NULL,
 	[ra] [float] NULL,
 	[dec] [float] NULL,
@@ -1226,15 +1792,19 @@ CREATE TABLE [dbo].[dr19_bhm_rm_v0_2](
 	[ps1_var_sn_r] [float] NULL,
 	[ps1_var_sn_i] [float] NULL,
 	[ps1_var_sn_z] [float] NULL,
-	[ps1_var_sn_y] [float] NULL
-) ON [PRIMARY]
+	[ps1_var_sn_y] [float] NULL,
+ CONSTRAINT [mos_bhm_rm_v0_2_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_bhm_spiders_agn_superset]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_bhm_spiders_agn_superset]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_bhm_spiders_agn_superset](
+CREATE TABLE [dbo].[mos_bhm_spiders_agn_superset](
 	[pk] [bigint] NOT NULL,
 	[ero_version] [varchar](500) NULL,
 	[ero_detuid] [varchar](500) NULL,
@@ -1274,15 +1844,19 @@ CREATE TABLE [dbo].[dr19_bhm_spiders_agn_superset](
 	[opt_modelflux_i] [real] NULL,
 	[opt_modelflux_ivar_i] [real] NULL,
 	[opt_modelflux_z] [real] NULL,
-	[opt_modelflux_ivar_z] [real] NULL
-) ON [PRIMARY]
+	[opt_modelflux_ivar_z] [real] NULL,
+ CONSTRAINT [mos_bhm_spiders_agn_superset_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_bhm_spiders_clusters_superset]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_bhm_spiders_clusters_superset]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_bhm_spiders_clusters_superset](
+CREATE TABLE [dbo].[mos_bhm_spiders_clusters_superset](
 	[pk] [bigint] NOT NULL,
 	[ero_version] [varchar](500) NULL,
 	[ero_detuid] [varchar](500) NULL,
@@ -1322,30 +1896,38 @@ CREATE TABLE [dbo].[dr19_bhm_spiders_clusters_superset](
 	[opt_modelflux_i] [real] NULL,
 	[opt_modelflux_ivar_i] [real] NULL,
 	[opt_modelflux_z] [real] NULL,
-	[opt_modelflux_ivar_z] [real] NULL
-) ON [PRIMARY]
+	[opt_modelflux_ivar_z] [real] NULL,
+ CONSTRAINT [mos_bhm_spiders_clusters_superset_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_cadence]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_cadence]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_cadence](
+CREATE TABLE [dbo].[mos_cadence](
 	[label] [varchar](500) NULL,
 	[nepochs] [int] NULL,
 	[pk] [bigint] NOT NULL,
 	[label_root] [varchar](500) NULL,
 	[label_version] [varchar](500) NULL,
 	[max_skybrightness] [real] NULL,
-	[nexp_total] [int] NULL
-) ON [PRIMARY]
+	[nexp_total] [int] NULL,
+ CONSTRAINT [mos_cadence_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_cadence_epoch]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_cadence_epoch]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_cadence_epoch](
+CREATE TABLE [dbo].[mos_cadence_epoch](
 	[label] [varchar](500) NOT NULL,
 	[nepochs] [int] NULL,
 	[cadence_pk] [bigint] NULL,
@@ -1356,41 +1938,50 @@ CREATE TABLE [dbo].[dr19_cadence_epoch](
 	[delta_min] [real] NULL,
 	[nexp] [int] NULL,
 	[max_length] [real] NULL,
-	[obsmode_pk] [varchar](500) NULL
-) ON [PRIMARY]
+	[obsmode_pk] [varchar](500) NULL,
+ CONSTRAINT [mos_cadence_epoch_pkey] PRIMARY KEY CLUSTERED 
+(
+	[label] ASC,
+	[epoch] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_carton]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_carton]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_carton](
+CREATE TABLE [dbo].[mos_carton](
 	[carton] [varchar](500) NULL,
 	[carton_pk] [int] NOT NULL,
 	[mapper_pk] [int] NULL,
 	[category_pk] [int] NULL,
 	[version_pk] [int] NULL,
 	[program] [varchar](500) NULL,
-	[target_selection_plan] [varchar](500) NOT NULL
-) ON [PRIMARY]
+	[target_selection_plan] [varchar](500) NOT NULL,
+ CONSTRAINT [mos_carton_pkey] PRIMARY KEY CLUSTERED 
+(
+	[carton_pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_carton_csv]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_carton_csv]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_carton_csv](
+CREATE TABLE [dbo].[mos_carton_csv](
 	[carton_pk] [int] NOT NULL,
 	[version_pk] [int] NOT NULL,
 	[carton] [varchar](500) NULL
-) ON [PRIMARY]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_carton_to_target]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_carton_to_target]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_carton_to_target](
+CREATE TABLE [dbo].[mos_carton_to_target](
 	[carton_to_target_pk] [bigint] NOT NULL,
 	[lambda_eff] [real] NULL,
 	[carton_pk] [int] NULL,
@@ -1401,15 +1992,19 @@ CREATE TABLE [dbo].[dr19_carton_to_target](
 	[instrument_pk] [int] NULL,
 	[delta_ra] [float] NULL,
 	[delta_dec] [float] NULL,
-	[inertial] [bit] NULL
-) ON [PRIMARY]
+	[inertial] [bit] NULL,
+ CONSTRAINT [mos_carton_to_target_pkey] PRIMARY KEY CLUSTERED 
+(
+	[carton_to_target_pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_cataclysmic_variables]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_cataclysmic_variables]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_cataclysmic_variables](
+CREATE TABLE [dbo].[mos_cataclysmic_variables](
 	[ref_id] [bigint] NOT NULL,
 	[solution_id] [bigint] NULL,
 	[designation] [varchar](500) NULL,
@@ -1504,15 +2099,41 @@ CREATE TABLE [dbo].[dr19_cataclysmic_variables](
 	[radius_percentile_upper] [float] NULL,
 	[lum_val] [float] NULL,
 	[lum_percentile_lower] [float] NULL,
-	[lum_percentile_upper] [float] NULL
-) ON [PRIMARY]
+	[lum_percentile_upper] [float] NULL,
+ CONSTRAINT [mos_cataclysmic_variables_pkey] PRIMARY KEY CLUSTERED 
+(
+	[ref_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog](
+CREATE TABLE [dbo].[mos_catalog](
+	[catalogid] [bigint] NOT NULL,
+	[iauname] [varchar](500) NULL,
+	[ra] [float] NULL,
+	[dec] [float] NULL,
+	[pmra] [real] NULL,
+	[pmdec] [real] NULL,
+	[parallax] [real] NULL,
+	[lead] [nvarchar](500) NULL,
+	[version_id] [int] NULL,
+	[htmid]  AS ([dbo].[fhtmeq]([ra],[dec])) PERSISTED,
+ CONSTRAINT [PK_catalog2] PRIMARY KEY CLUSTERED 
+(
+	[catalogid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
+GO
+/****** Object:  Table [dbo].[mos_catalog.bak]    Script Date: 5/23/2025 8:23:32 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[mos_catalog.bak](
 	[catalogid] [bigint] NOT NULL,
 	[iauname] [varchar](500) NULL,
 	[ra] [float] NULL,
@@ -1521,424 +2142,610 @@ CREATE TABLE [dbo].[dr19_catalog](
 	[pmdec] [real] NULL,
 	[parallax] [real] NULL,
 	[lead] [varchar](500) NULL,
-	[version_id] [int] NULL
-) ON [PRIMARY]
+	[version_id] [int] NULL,
+ CONSTRAINT [mos_catalog_pkey] PRIMARY KEY CLUSTERED 
+(
+	[catalogid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_allstar_dr17_synspec_rev1]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_allstar_dr17_synspec_rev1]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_allstar_dr17_synspec_rev1](
+CREATE TABLE [dbo].[mos_catalog_to_allstar_dr17_synspec_rev1](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [varchar](500) NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
 	[best] [bit] NULL,
-	[planname_id] [varchar](500) NULL
-) ON [PRIMARY]
+	[planname_id] [varchar](500) NULL,
+ CONSTRAINT [mos_catalog_to_allstar_dr17_synspec_rev1_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_allwise]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_allwise]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_allwise](
+CREATE TABLE [dbo].[mos_catalog_to_allwise](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_allwise_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_bhm_csc]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_bhm_csc]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_bhm_csc](
+CREATE TABLE [dbo].[mos_catalog_to_bhm_csc](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_bhm_csc_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_bhm_efeds_veto]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_bhm_efeds_veto]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_bhm_efeds_veto](
+CREATE TABLE [dbo].[mos_catalog_to_bhm_efeds_veto](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_bhm_efeds_veto_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_bhm_rm_v0]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_bhm_rm_v0]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_bhm_rm_v0](
+CREATE TABLE [dbo].[mos_catalog_to_bhm_rm_v0](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_bhm_rm_v0_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_bhm_rm_v0_2]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_bhm_rm_v0_2]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_bhm_rm_v0_2](
+CREATE TABLE [dbo].[mos_catalog_to_bhm_rm_v0_2](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_bhm_rm_v0_2_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_catwise2020]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_catwise2020]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_catwise2020](
+CREATE TABLE [dbo].[mos_catalog_to_catwise2020](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [varchar](25) NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_catwise2020_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_gaia_dr2_source]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_gaia_dr2_source]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_gaia_dr2_source](
+CREATE TABLE [dbo].[mos_catalog_to_gaia_dr2_source](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_gaia_dr2_source_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_glimpse]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_glimpse]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_glimpse](
+CREATE TABLE [dbo].[mos_catalog_to_glimpse](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_glimpse_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_guvcat]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_guvcat]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_guvcat](
+CREATE TABLE [dbo].[mos_catalog_to_guvcat](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_guvcat_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_legacy_survey_dr8]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_legacy_survey_dr8]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_legacy_survey_dr8](
+CREATE TABLE [dbo].[mos_catalog_to_legacy_survey_dr8](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_legacy_survey_dr8_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_mangatarget]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_mangatarget]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_mangatarget](
+CREATE TABLE [dbo].[mos_catalog_to_mangatarget](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [varchar](20) NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
 	[best] [bit] NULL,
 	[planname_id] [varchar](500) NULL,
-	[added_by_phase] [smallint] NULL
-) ON [PRIMARY]
+	[added_by_phase] [smallint] NULL,
+ CONSTRAINT [mos_catalog_to_mangatarget_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_marvels_dr11_star]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_marvels_dr11_star]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_marvels_dr11_star](
+CREATE TABLE [dbo].[mos_catalog_to_marvels_dr11_star](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [varchar](100) NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
 	[best] [bit] NULL,
 	[planname_id] [varchar](500) NULL,
-	[added_by_phase] [smallint] NULL
-) ON [PRIMARY]
+	[added_by_phase] [smallint] NULL,
+ CONSTRAINT [mos_catalog_to_marvels_dr11_star_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_marvels_dr12_star]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_marvels_dr12_star]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_marvels_dr12_star](
+CREATE TABLE [dbo].[mos_catalog_to_marvels_dr12_star](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
 	[best] [bit] NULL,
 	[planname_id] [varchar](500) NULL,
-	[added_by_phase] [smallint] NULL
-) ON [PRIMARY]
+	[added_by_phase] [smallint] NULL,
+ CONSTRAINT [mos_catalog_to_marvels_dr12_star_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_mastar_goodstars]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_mastar_goodstars]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_mastar_goodstars](
+CREATE TABLE [dbo].[mos_catalog_to_mastar_goodstars](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [varchar](25) NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
 	[best] [bit] NULL,
 	[planname_id] [varchar](500) NULL,
-	[added_by_phase] [smallint] NULL
-) ON [PRIMARY]
+	[added_by_phase] [smallint] NULL,
+ CONSTRAINT [mos_catalog_to_mastar_goodstars_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_panstarrs1]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_panstarrs1]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_panstarrs1](
+CREATE TABLE [dbo].[mos_catalog_to_panstarrs1](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_panstarrs1_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_sdss_dr13_photoobj_primary]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_sdss_dr13_photoobj_primary]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_sdss_dr13_photoobj_primary](
+CREATE TABLE [dbo].[mos_catalog_to_sdss_dr13_photoobj_primary](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_sdss_dr13_photoobj_primary_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_sdss_dr16_specobj]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_sdss_dr16_specobj]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_sdss_dr16_specobj](
-	[catalogid] [bigint] NOT NULL,
-	[target_id] [numeric](20, 0) NOT NULL,
-	[version_id] [smallint] NOT NULL,
-	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[dr19_catalog_to_sdss_dr17_specobj]    Script Date: 2/12/2025 1:10:30 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[dr19_catalog_to_sdss_dr17_specobj](
+CREATE TABLE [dbo].[mos_catalog_to_sdss_dr16_specobj](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [numeric](20, 0) NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
 	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_sdss_dr16_specobj_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
+GO
+/****** Object:  Table [dbo].[mos_catalog_to_sdss_dr17_specobj]    Script Date: 5/23/2025 8:23:32 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[mos_catalog_to_sdss_dr17_specobj](
+	[catalogid] [bigint] NOT NULL,
+	[target_id] [numeric](20, 0) NOT NULL,
+	[version_id] [smallint] NOT NULL,
+	[distance] [float] NULL,
+	[best] [bit] NOT NULL,
 	[planname_id] [varchar](500) NULL,
-	[added_by_phase] [smallint] NULL
-) ON [PRIMARY]
+	[added_by_phase] [smallint] NULL,
+ CONSTRAINT [mos_catalog_to_sdss_dr17_specobj_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_skies_v1]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_skies_v1]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_skies_v1](
+CREATE TABLE [dbo].[mos_catalog_to_skies_v1](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_skies_v1_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_skies_v2]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_skies_v2]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_skies_v2](
+CREATE TABLE [dbo].[mos_catalog_to_skies_v2](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_skies_v2_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_skymapper_dr2]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_skymapper_dr2]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_skymapper_dr2](
+CREATE TABLE [dbo].[mos_catalog_to_skymapper_dr2](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_skymapper_dr2_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_supercosmos]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_supercosmos]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_supercosmos](
+CREATE TABLE [dbo].[mos_catalog_to_supercosmos](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_supercosmos_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_tic_v8]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_tic_v8]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_tic_v8](
+CREATE TABLE [dbo].[mos_catalog_to_tic_v8](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_tic_v8_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_twomass_psc]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_twomass_psc]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_twomass_psc](
+CREATE TABLE [dbo].[mos_catalog_to_twomass_psc](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [int] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_twomass_psc_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_tycho2]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_tycho2]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_tycho2](
+CREATE TABLE [dbo].[mos_catalog_to_tycho2](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [varchar](500) NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_tycho2_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_unwise]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_unwise]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_unwise](
+CREATE TABLE [dbo].[mos_catalog_to_unwise](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [varchar](500) NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_unwise_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_uvotssc1]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_uvotssc1]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_uvotssc1](
+CREATE TABLE [dbo].[mos_catalog_to_uvotssc1](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_uvotssc1_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalog_to_xmm_om_suss_4_1]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalog_to_xmm_om_suss_4_1]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalog_to_xmm_om_suss_4_1](
+CREATE TABLE [dbo].[mos_catalog_to_xmm_om_suss_4_1](
 	[catalogid] [bigint] NOT NULL,
 	[target_id] [bigint] NOT NULL,
 	[version_id] [smallint] NOT NULL,
 	[distance] [float] NULL,
-	[best] [bit] NULL
-) ON [PRIMARY]
+	[best] [bit] NULL,
+ CONSTRAINT [mos_catalog_to_xmm_om_suss_4_1_pkey] PRIMARY KEY CLUSTERED 
+(
+	[version_id] ASC,
+	[catalogid] ASC,
+	[target_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catalogdb_version]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catalogdb_version]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catalogdb_version](
+CREATE TABLE [dbo].[mos_catalogdb_version](
 	[id] [int] NOT NULL,
 	[planname] [varchar](500) NULL,
-	[tag] [varchar](500) NULL
-) ON [PRIMARY]
+	[tag] [varchar](500) NULL,
+ CONSTRAINT [mos_catalogdb_version_pkey] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_category]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_category]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_category](
+CREATE TABLE [dbo].[mos_category](
 	[pk] [int] NOT NULL,
-	[label] [varchar](500) NULL
-) ON [PRIMARY]
+	[label] [varchar](500) NULL,
+ CONSTRAINT [mos_category_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_catwise2020]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_catwise2020]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_catwise2020](
+CREATE TABLE [dbo].[mos_catwise2020](
 	[source_name] [varchar](21) NULL,
 	[source_id] [varchar](25) NOT NULL,
 	[ra] [float] NULL,
@@ -2125,29 +2932,37 @@ CREATE TABLE [dbo].[dr19_catwise2020](
 	[glat] [float] NULL,
 	[elon] [float] NULL,
 	[elat] [float] NULL,
-	[unwise_objid] [varchar](20) NULL
-) ON [PRIMARY]
+	[unwise_objid] [varchar](20) NULL,
+ CONSTRAINT [mos_catwise2020_pkey] PRIMARY KEY CLUSTERED 
+(
+	[source_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_design]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_design]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_design](
+CREATE TABLE [dbo].[mos_design](
 	[design_id] [int] NOT NULL,
 	[design_mode_label] [varchar](500) NULL,
 	[mugatu_version] [varchar](500) NULL,
 	[run_on] [date] NULL,
 	[assignment_hash] [uniqueidentifier] NULL,
-	[design_version_pk] [int] NULL
-) ON [PRIMARY]
+	[design_version_pk] [int] NULL,
+ CONSTRAINT [mos_design_pkey] PRIMARY KEY CLUSTERED 
+(
+	[design_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_design_mode]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_design_mode]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_design_mode](
+CREATE TABLE [dbo].[mos_design_mode](
 	[label] [varchar](500) NOT NULL,
 	[boss_skies_min] [int] NULL,
 	[apogee_skies_min] [int] NULL,
@@ -2246,15 +3061,19 @@ CREATE TABLE [dbo].[dr19_design_mode](
 	[apogee_bright_limit_targets_max_rp] [float] NULL,
 	[apogee_bright_limit_targets_max_j] [float] NULL,
 	[apogee_bright_limit_targets_max_h] [float] NULL,
-	[apogee_bright_limit_targets_max_k] [float] NULL
-) ON [PRIMARY]
+	[apogee_bright_limit_targets_max_k] [float] NULL,
+ CONSTRAINT [mos_design_mode_pkey] PRIMARY KEY CLUSTERED 
+(
+	[label] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_design_mode_check_results]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_design_mode_check_results]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_design_mode_check_results](
+CREATE TABLE [dbo].[mos_design_mode_check_results](
 	[pk] [int] NOT NULL,
 	[design_id] [int] NULL,
 	[design_pass] [bit] NULL,
@@ -2281,28 +3100,36 @@ CREATE TABLE [dbo].[dr19_design_mode_check_results](
 	[apogee_bright_limit_targets_pass] [bit] NULL,
 	[boss_sky_neighbors_targets_pass] [bit] NULL,
 	[apogee_sky_neighbors_targets_pass] [bit] NULL,
-	[apogee_trace_diff_targets_pass] [bit] NULL
-) ON [PRIMARY]
+	[apogee_trace_diff_targets_pass] [bit] NULL,
+ CONSTRAINT [mos_design_mode_check_results_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_design_to_field]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_design_to_field]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_design_to_field](
+CREATE TABLE [dbo].[mos_design_to_field](
 	[pk] [int] NOT NULL,
 	[design_id] [int] NULL,
 	[field_pk] [int] NULL,
 	[exposure] [bigint] NULL,
-	[field_exposure] [bigint] NULL
-) ON [PRIMARY]
+	[field_exposure] [bigint] NULL,
+ CONSTRAINT [mos_design_to_field_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_ebosstarget_v5]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_ebosstarget_v5]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_ebosstarget_v5](
+CREATE TABLE [dbo].[mos_ebosstarget_v5](
 	[run] [int] NULL,
 	[camcol] [int] NULL,
 	[field] [int] NULL,
@@ -2401,15 +3228,19 @@ CREATE TABLE [dbo].[dr19_ebosstarget_v5](
 	[w2_nanomaggies_ivar] [real] NULL,
 	[has_wise_phot] [bit] NULL,
 	[objid_targeting] [bigint] NULL,
-	[pk] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pk] [bigint] NOT NULL,
+ CONSTRAINT [mos_ebosstarget_v5_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_erosita_superset_agn]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_erosita_superset_agn]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_erosita_superset_agn](
+CREATE TABLE [dbo].[mos_erosita_superset_agn](
 	[ero_version] [varchar](24) NULL,
 	[ero_detuid] [varchar](32) NULL,
 	[ero_flux] [real] NULL,
@@ -2440,15 +3271,19 @@ CREATE TABLE [dbo].[dr19_erosita_superset_agn](
 	[opt_pmra] [real] NULL,
 	[opt_pmdec] [real] NULL,
 	[opt_epoch] [real] NULL,
-	[pkey] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pkey] [bigint] NOT NULL,
+ CONSTRAINT [mos_erosita_superset_agn_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pkey] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_erosita_superset_clusters]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_erosita_superset_clusters]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_erosita_superset_clusters](
+CREATE TABLE [dbo].[mos_erosita_superset_clusters](
 	[ero_version] [varchar](24) NULL,
 	[ero_detuid] [varchar](32) NULL,
 	[ero_flux] [real] NULL,
@@ -2479,15 +3314,19 @@ CREATE TABLE [dbo].[dr19_erosita_superset_clusters](
 	[opt_pmra] [real] NULL,
 	[opt_pmdec] [real] NULL,
 	[opt_epoch] [real] NULL,
-	[pkey] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pkey] [bigint] NOT NULL,
+ CONSTRAINT [mos_erosita_superset_clusters_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pkey] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_erosita_superset_compactobjects]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_erosita_superset_compactobjects]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_erosita_superset_compactobjects](
+CREATE TABLE [dbo].[mos_erosita_superset_compactobjects](
 	[ero_version] [varchar](24) NULL,
 	[ero_detuid] [varchar](32) NULL,
 	[ero_flux] [real] NULL,
@@ -2518,15 +3357,19 @@ CREATE TABLE [dbo].[dr19_erosita_superset_compactobjects](
 	[opt_pmra] [real] NULL,
 	[opt_pmdec] [real] NULL,
 	[opt_epoch] [real] NULL,
-	[pkey] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pkey] [bigint] NOT NULL,
+ CONSTRAINT [mos_erosita_superset_compactobjects_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pkey] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_erosita_superset_stars]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_erosita_superset_stars]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_erosita_superset_stars](
+CREATE TABLE [dbo].[mos_erosita_superset_stars](
 	[ero_version] [varchar](24) NULL,
 	[ero_detuid] [varchar](32) NULL,
 	[ero_flux] [real] NULL,
@@ -2557,15 +3400,19 @@ CREATE TABLE [dbo].[dr19_erosita_superset_stars](
 	[opt_pmra] [real] NULL,
 	[opt_pmdec] [real] NULL,
 	[opt_epoch] [real] NULL,
-	[pkey] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pkey] [bigint] NOT NULL,
+ CONSTRAINT [mos_erosita_superset_stars_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pkey] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_field]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_field]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_field](
+CREATE TABLE [dbo].[mos_field](
 	[pk] [int] NOT NULL,
 	[racen] [float] NULL,
 	[deccen] [float] NULL,
@@ -2574,15 +3421,19 @@ CREATE TABLE [dbo].[dr19_field](
 	[observatory_pk] [int] NULL,
 	[position_angle] [real] NULL,
 	[slots_exposures] [varchar](1000) NULL,
-	[field_id] [int] NULL
-) ON [PRIMARY]
+	[field_id] [int] NULL,
+ CONSTRAINT [mos_field_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_gaia_assas_sn_cepheids]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_gaia_assas_sn_cepheids]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_gaia_assas_sn_cepheids](
+CREATE TABLE [dbo].[mos_gaia_assas_sn_cepheids](
 	[source] [varchar](500) NULL,
 	[ref] [varchar](500) NULL,
 	[star] [varchar](500) NULL,
@@ -2660,25 +3511,33 @@ CREATE TABLE [dbo].[dr19_gaia_assas_sn_cepheids](
 	[rfl] [smallint] NULL,
 	[x] [smallint] NULL,
 	[measurejd] [float] NULL,
-	[angdist] [float] NULL
-) ON [PRIMARY]
+	[angdist] [float] NULL,
+ CONSTRAINT [mos_gaia_assas_sn_cepheids_pkey] PRIMARY KEY CLUSTERED 
+(
+	[source_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_gaia_dr2_ruwe]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_gaia_dr2_ruwe]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_gaia_dr2_ruwe](
+CREATE TABLE [dbo].[mos_gaia_dr2_ruwe](
 	[source_id] [bigint] NOT NULL,
-	[ruwe] [real] NULL
-) ON [PRIMARY]
+	[ruwe] [real] NULL,
+ CONSTRAINT [mos_gaia_dr2_ruwe_pkey] PRIMARY KEY CLUSTERED 
+(
+	[source_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_gaia_dr2_source]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_gaia_dr2_source]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_gaia_dr2_source](
+CREATE TABLE [dbo].[mos_gaia_dr2_source](
 	[solution_id] [bigint] NULL,
 	[designation] [varchar](500) NULL,
 	[source_id] [bigint] NOT NULL,
@@ -2772,15 +3631,19 @@ CREATE TABLE [dbo].[dr19_gaia_dr2_source](
 	[radius_percentile_upper] [real] NULL,
 	[lum_val] [real] NULL,
 	[lum_percentile_lower] [real] NULL,
-	[lum_percentile_upper] [real] NULL
-) ON [PRIMARY]
+	[lum_percentile_upper] [real] NULL,
+ CONSTRAINT [mos_gaia_dr2_source_pkey] PRIMARY KEY CLUSTERED 
+(
+	[source_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_gaia_dr2_wd]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_gaia_dr2_wd]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_gaia_dr2_wd](
+CREATE TABLE [dbo].[mos_gaia_dr2_wd](
 	[wd] [varchar](500) NULL,
 	[dr2name] [varchar](500) NULL,
 	[source_id] [bigint] NOT NULL,
@@ -2837,15 +3700,19 @@ CREATE TABLE [dbo].[dr19_gaia_dr2_wd](
 	[e_logghe] [real] NULL,
 	[masshe] [real] NULL,
 	[e_masshe] [real] NULL,
-	[chisqhe] [real] NULL
-) ON [PRIMARY]
+	[chisqhe] [real] NULL,
+ CONSTRAINT [mos_gaia_dr2_wd_pkey] PRIMARY KEY CLUSTERED 
+(
+	[source_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_gaia_unwise_agn]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_gaia_unwise_agn]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_gaia_unwise_agn](
+CREATE TABLE [dbo].[mos_gaia_unwise_agn](
 	[ra] [float] NULL,
 	[dec] [float] NULL,
 	[gaia_sourceid] [bigint] NOT NULL,
@@ -2882,15 +3749,19 @@ CREATE TABLE [dbo].[dr19_gaia_unwise_agn](
 	[cnt16] [int] NULL,
 	[cnt32] [int] NULL,
 	[phot_z] [float] NULL,
-	[prob_rf] [float] NULL
-) ON [PRIMARY]
+	[prob_rf] [float] NULL,
+ CONSTRAINT [mos_gaia_unwise_agn_pkey] PRIMARY KEY CLUSTERED 
+(
+	[gaia_sourceid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_gaiadr2_tmass_best_neighbour]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_gaiadr2_tmass_best_neighbour]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_gaiadr2_tmass_best_neighbour](
+CREATE TABLE [dbo].[mos_gaiadr2_tmass_best_neighbour](
 	[tmass_oid] [bigint] NULL,
 	[number_of_neighbours] [int] NULL,
 	[number_of_mates] [int] NULL,
@@ -2899,30 +3770,38 @@ CREATE TABLE [dbo].[dr19_gaiadr2_tmass_best_neighbour](
 	[original_ext_source_id] [varchar](17) NULL,
 	[angular_distance] [float] NULL,
 	[gaia_astrometric_params] [int] NULL,
-	[tmass_pts_key] [int] NULL
-) ON [PRIMARY]
+	[tmass_pts_key] [int] NULL,
+ CONSTRAINT [mos_gaiadr2_tmass_best_neighbour_pkey] PRIMARY KEY CLUSTERED 
+(
+	[source_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_geometric_distances_gaia_dr2]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_geometric_distances_gaia_dr2]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_geometric_distances_gaia_dr2](
+CREATE TABLE [dbo].[mos_geometric_distances_gaia_dr2](
 	[source_id] [bigint] NOT NULL,
 	[r_est] [real] NULL,
 	[r_lo] [real] NULL,
 	[r_hi] [real] NULL,
 	[r_len] [real] NULL,
 	[result_flag] [varchar](1) NULL,
-	[modality_flag] [smallint] NULL
-) ON [PRIMARY]
+	[modality_flag] [smallint] NULL,
+ CONSTRAINT [mos_geometric_distances_gaia_dr2_pkey] PRIMARY KEY CLUSTERED 
+(
+	[source_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_glimpse]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_glimpse]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_glimpse](
+CREATE TABLE [dbo].[mos_glimpse](
 	[designation] [varchar](500) NULL,
 	[tmass_designation] [varchar](18) NULL,
 	[tmass_cntr] [int] NULL,
@@ -3001,15 +3880,19 @@ CREATE TABLE [dbo].[dr19_glimpse](
 	[mf4_5] [int] NULL,
 	[mf5_8] [int] NULL,
 	[mf8_0] [int] NULL,
-	[pk] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pk] [bigint] NOT NULL,
+ CONSTRAINT [mos_glimpse_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_guvcat]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_guvcat]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_guvcat](
+CREATE TABLE [dbo].[mos_guvcat](
 	[objid] [bigint] NOT NULL,
 	[photoextractid] [bigint] NULL,
 	[mpstype] [varchar](500) NULL,
@@ -3104,48 +3987,64 @@ CREATE TABLE [dbo].[dr19_guvcat](
 	[sepas] [real] NULL,
 	[sepasdist] [real] NULL,
 	[inlargeobj] [varchar](500) NULL,
-	[largeobjsize] [real] NULL
-) ON [PRIMARY]
+	[largeobjsize] [real] NULL,
+ CONSTRAINT [mos_guvcat_pkey] PRIMARY KEY CLUSTERED 
+(
+	[objid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_hole]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_hole]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_hole](
+CREATE TABLE [dbo].[mos_hole](
 	[pk] [int] NOT NULL,
 	[row_num] [int] NULL,
 	[column_num] [int] NULL,
 	[holeid] [varchar](500) NULL,
-	[observatory_pk] [int] NULL
-) ON [PRIMARY]
+	[observatory_pk] [int] NULL,
+ CONSTRAINT [mos_hole_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_instrument]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_instrument]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_instrument](
+CREATE TABLE [dbo].[mos_instrument](
 	[pk] [int] NOT NULL,
 	[label] [varchar](500) NULL,
-	[default_lambda_eff] [real] NULL
-) ON [PRIMARY]
+	[default_lambda_eff] [real] NULL,
+ CONSTRAINT [mos_instrument_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_legacy_catalog_catalogid]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_legacy_catalog_catalogid]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_legacy_catalog_catalogid](
-	[catalogid] [bigint] NOT NULL
-) ON [PRIMARY]
+CREATE TABLE [dbo].[mos_legacy_catalog_catalogid](
+	[catalogid] [bigint] NOT NULL,
+ CONSTRAINT [mos_legacy_catalog_catalogid_pkey] PRIMARY KEY CLUSTERED 
+(
+	[catalogid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_legacy_survey_dr8]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_legacy_survey_dr8]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_legacy_survey_dr8](
+CREATE TABLE [dbo].[mos_legacy_survey_dr8](
 	[release] [int] NULL,
 	[brickid] [bigint] NULL,
 	[brickname] [varchar](500) NULL,
@@ -3272,15 +4171,19 @@ CREATE TABLE [dbo].[dr19_legacy_survey_dr8](
 	[maskbits] [int] NULL,
 	[ls_id] [bigint] NOT NULL,
 	[tycho_ref] [bigint] NULL,
-	[gaia_sourceid] [bigint] NULL
-) ON [PRIMARY]
+	[gaia_sourceid] [bigint] NULL,
+ CONSTRAINT [mos_legacy_survey_dr8_pkey] PRIMARY KEY CLUSTERED 
+(
+	[ls_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_magnitude]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_magnitude]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_magnitude](
+CREATE TABLE [dbo].[mos_magnitude](
 	[carton_to_target_pk] [bigint] NULL,
 	[magnitude_pk] [bigint] NOT NULL,
 	[g] [real] NULL,
@@ -3293,15 +4196,19 @@ CREATE TABLE [dbo].[dr19_magnitude](
 	[j] [real] NULL,
 	[k] [real] NULL,
 	[gaia_g] [real] NULL,
-	[optical_prov] [varchar](500) NULL
-) ON [PRIMARY]
+	[optical_prov] [varchar](500) NULL,
+ CONSTRAINT [mos_magnitude_pkey] PRIMARY KEY CLUSTERED 
+(
+	[magnitude_pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_mangadapall]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_mangadapall]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_mangadapall](
+CREATE TABLE [dbo].[mos_mangadapall](
 	[plate] [int] NULL,
 	[ifudesign] [int] NULL,
 	[plateifu] [varchar](32) NULL,
@@ -4105,15 +5012,19 @@ CREATE TABLE [dbo].[dr19_mangadapall](
 	[sfr_1re] [real] NULL,
 	[sfr_tot] [real] NULL,
 	[htmid] [bigint] NULL,
-	[pk] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pk] [bigint] NOT NULL,
+ CONSTRAINT [mos_mangadapall_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_mangadrpall]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_mangadrpall]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_mangadrpall](
+CREATE TABLE [dbo].[mos_mangadrpall](
 	[plate] [int] NOT NULL,
 	[ifudsgn] [varchar](40) NULL,
 	[plateifu] [varchar](40) NULL,
@@ -4273,15 +5184,20 @@ CREATE TABLE [dbo].[dr19_mangadrpall](
 	[nsa_extinction_r] [real] NULL,
 	[nsa_extinction_i] [real] NULL,
 	[nsa_extinction_z] [real] NULL,
-	[htmid] [bigint] NULL
-) ON [PRIMARY]
+	[htmid] [bigint] NULL,
+ CONSTRAINT [mos_mangadrpall_pkey] PRIMARY KEY CLUSTERED 
+(
+	[mangaid] ASC,
+	[plate] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_mangatarget]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_mangatarget]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_mangatarget](
+CREATE TABLE [dbo].[mos_mangatarget](
 	[catalog_ra] [float] NULL,
 	[catalog_dec] [float] NULL,
 	[nsa_z] [real] NULL,
@@ -4453,25 +5369,33 @@ CREATE TABLE [dbo].[dr19_mangatarget](
 	[manga_target3] [bigint] NULL,
 	[priorityanc] [int] NULL,
 	[unalloc] [smallint] NULL,
-	[specobjid] [varchar](500) NULL
-) ON [PRIMARY]
+	[specobjid] [varchar](500) NULL,
+ CONSTRAINT [mos_mangatarget_pkey] PRIMARY KEY CLUSTERED 
+(
+	[mangaid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_mapper]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_mapper]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_mapper](
+CREATE TABLE [dbo].[mos_mapper](
 	[pk] [int] NOT NULL,
-	[label] [varchar](500) NULL
-) ON [PRIMARY]
+	[label] [varchar](500) NULL,
+ CONSTRAINT [mos_mapper_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_marvels_dr11_star]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_marvels_dr11_star]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_marvels_dr11_star](
+CREATE TABLE [dbo].[mos_marvels_dr11_star](
 	[starname] [varchar](100) NOT NULL,
 	[twomass_name] [varchar](100) NULL,
 	[plate] [varchar](100) NULL,
@@ -4516,15 +5440,19 @@ CREATE TABLE [dbo].[dr19_marvels_dr11_star](
 	[hip_plx_e] [real] NULL,
 	[hip_sptype] [varchar](100) NULL,
 	[twomass_designation] [varchar](500) NULL,
-	[tycho2_designation] [varchar](500) NULL
-) ON [PRIMARY]
+	[tycho2_designation] [varchar](500) NULL,
+ CONSTRAINT [mos_marvels_dr11_star_pkey] PRIMARY KEY CLUSTERED 
+(
+	[starname] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_marvels_dr12_star]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_marvels_dr12_star]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_marvels_dr12_star](
+CREATE TABLE [dbo].[mos_marvels_dr12_star](
 	[starname] [varchar](100) NULL,
 	[twomass_name] [varchar](100) NULL,
 	[plate] [varchar](100) NULL,
@@ -4570,15 +5498,19 @@ CREATE TABLE [dbo].[dr19_marvels_dr12_star](
 	[hip_sptype] [varchar](100) NULL,
 	[pk] [bigint] NOT NULL,
 	[twomass_designation] [varchar](500) NULL,
-	[tycho2_designation] [varchar](500) NULL
-) ON [PRIMARY]
+	[tycho2_designation] [varchar](500) NULL,
+ CONSTRAINT [mos_marvels_dr12_star_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_mastar_goodstars]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_mastar_goodstars]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_mastar_goodstars](
+CREATE TABLE [dbo].[mos_mastar_goodstars](
 	[drpver] [varchar](8) NULL,
 	[mprocver] [varchar](8) NULL,
 	[mangaid] [varchar](25) NOT NULL,
@@ -4600,15 +5532,19 @@ CREATE TABLE [dbo].[dr19_mastar_goodstars](
 	[input_fe_h] [real] NULL,
 	[input_alpha_m] [real] NULL,
 	[input_source] [varchar](16) NULL,
-	[photocat] [varchar](10) NULL
-) ON [PRIMARY]
+	[photocat] [varchar](10) NULL,
+ CONSTRAINT [mos_mastar_goodstars_pkey] PRIMARY KEY CLUSTERED 
+(
+	[mangaid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_mastar_goodvisits]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_mastar_goodvisits]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_mastar_goodvisits](
+CREATE TABLE [dbo].[mos_mastar_goodvisits](
 	[drpver] [varchar](8) NULL,
 	[mprocver] [varchar](8) NULL,
 	[mangaid] [varchar](25) NULL,
@@ -4645,15 +5581,19 @@ CREATE TABLE [dbo].[dr19_mastar_goodvisits](
 	[badpixfrac] [real] NULL,
 	[coord_source] [varchar](10) NULL,
 	[photocat] [varchar](10) NULL,
-	[pk] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pk] [bigint] NOT NULL,
+ CONSTRAINT [mos_mastar_goodvisits_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_mipsgal]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_mipsgal]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_mipsgal](
+CREATE TABLE [dbo].[mos_mipsgal](
 	[mipsgal] [varchar](18) NOT NULL,
 	[glon] [float] NULL,
 	[glat] [float] NULL,
@@ -4663,7 +5603,7 @@ CREATE TABLE [dbo].[dr19_mipsgal](
 	[e_s24] [float] NULL,
 	[mag_24] [float] NULL,
 	[e_mag_24] [float] NULL,
-	[twomass_name] [varchar](17) NULL,
+	[twomass_name] [varchar](500) NOT NULL,
 	[sj] [float] NULL,
 	[e_sj] [float] NULL,
 	[sh] [float] NULL,
@@ -4716,138 +5656,182 @@ CREATE TABLE [dbo].[dr19_mipsgal](
 	[fwhm] [float] NULL,
 	[sky] [float] NULL,
 	[lim1] [float] NULL,
-	[lim2] [float] NULL
-) ON [PRIMARY]
+	[lim2] [float] NULL,
+ CONSTRAINT [mos_mipsgal_pkey] PRIMARY KEY CLUSTERED 
+(
+	[mipsgal] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_mwm_tess_ob]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_mwm_tess_ob]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_mwm_tess_ob](
+CREATE TABLE [dbo].[mos_mwm_tess_ob](
 	[gaia_dr2_id] [bigint] NOT NULL,
 	[ra] [float] NULL,
 	[dec] [float] NULL,
 	[h_mag] [float] NULL,
 	[instrument] [varchar](20) NULL,
-	[cadence] [varchar](20) NULL
-) ON [PRIMARY]
+	[cadence] [varchar](20) NULL,
+ CONSTRAINT [mos_mwm_tess_ob_pkey] PRIMARY KEY CLUSTERED 
+(
+	[gaia_dr2_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_observatory]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_observatory]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_observatory](
+CREATE TABLE [dbo].[mos_observatory](
 	[pk] [int] NOT NULL,
-	[label] [varchar](500) NULL
-) ON [PRIMARY]
+	[label] [varchar](500) NULL,
+ CONSTRAINT [mos_observatory_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_obsmode]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_obsmode]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_obsmode](
+CREATE TABLE [dbo].[mos_obsmode](
 	[label] [varchar](500) NOT NULL,
 	[min_moon_sep] [real] NULL,
 	[min_deltav_ks91] [real] NULL,
 	[min_twilight_ang] [real] NULL,
 	[max_airmass_apo] [real] NULL,
-	[max_airmass_lco] [real] NULL
-) ON [PRIMARY]
+	[max_airmass_lco] [real] NULL,
+ CONSTRAINT [mos_obsmode_pkey] PRIMARY KEY CLUSTERED 
+(
+	[label] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_opsdb_apo_camera]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_opsdb_apo_camera]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_opsdb_apo_camera](
+CREATE TABLE [dbo].[mos_opsdb_apo_camera](
 	[pk] [int] NOT NULL,
-	[label] [varchar](500) NULL
-) ON [PRIMARY]
+	[label] [varchar](500) NULL,
+ CONSTRAINT [mos_opsdb_apo_camera_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_opsdb_apo_camera_frame]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_opsdb_apo_camera_frame]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_opsdb_apo_camera_frame](
+CREATE TABLE [dbo].[mos_opsdb_apo_camera_frame](
 	[pk] [int] NOT NULL,
 	[exposure_pk] [int] NULL,
 	[camera_pk] [int] NULL,
 	[sn2] [real] NULL,
-	[comment] [varchar](500) NULL
-) ON [PRIMARY]
+	[comment] [varchar](500) NULL,
+ CONSTRAINT [mos_opsdb_apo_camera_frame_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_opsdb_apo_completion_status]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_opsdb_apo_completion_status]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_opsdb_apo_completion_status](
+CREATE TABLE [dbo].[mos_opsdb_apo_completion_status](
 	[pk] [int] NOT NULL,
-	[label] [varchar](500) NULL
-) ON [PRIMARY]
+	[label] [varchar](500) NULL,
+ CONSTRAINT [mos_opsdb_apo_completion_status_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_opsdb_apo_configuration]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_opsdb_apo_configuration]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_opsdb_apo_configuration](
+CREATE TABLE [dbo].[mos_opsdb_apo_configuration](
 	[configuration_id] [int] NOT NULL,
 	[design_id] [int] NULL,
 	[comment] [varchar](500) NULL,
 	[temperature] [varchar](500) NULL,
 	[epoch] [float] NULL,
-	[calibration_version] [varchar](500) NULL
-) ON [PRIMARY]
+	[calibration_version] [varchar](500) NULL,
+ CONSTRAINT [mos_opsdb_apo_configuration_pkey] PRIMARY KEY CLUSTERED 
+(
+	[configuration_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_opsdb_apo_design_to_status]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_opsdb_apo_design_to_status]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_opsdb_apo_design_to_status](
+CREATE TABLE [dbo].[mos_opsdb_apo_design_to_status](
 	[pk] [int] NOT NULL,
 	[design_id] [int] NULL,
-	[completion_status_pk] [smallint] NULL,
+	[completion_status_pk] [int] NULL,
 	[mjd] [real] NULL,
-	[manual] [bit] NULL
-) ON [PRIMARY]
+	[manual] [bit] NULL,
+ CONSTRAINT [mos_opsdb_apo_design_to_status_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_opsdb_apo_exposure]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_opsdb_apo_exposure]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_opsdb_apo_exposure](
+CREATE TABLE [dbo].[mos_opsdb_apo_exposure](
 	[pk] [int] NOT NULL,
 	[configuration_id] [int] NULL,
 	[exposure_no] [bigint] NULL,
 	[comment] [varchar](500) NULL,
 	[start_time] [datetime] NULL,
 	[exposure_time] [real] NULL,
-	[exposure_flavor_pk] [smallint] NULL
-) ON [PRIMARY]
+	[exposure_flavor_pk] [int] NULL,
+ CONSTRAINT [mos_opsdb_apo_exposure_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_opsdb_apo_exposure_flavor]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_opsdb_apo_exposure_flavor]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_opsdb_apo_exposure_flavor](
+CREATE TABLE [dbo].[mos_opsdb_apo_exposure_flavor](
 	[pk] [int] NOT NULL,
-	[label] [varchar](500) NULL
-) ON [PRIMARY]
+	[label] [varchar](500) NULL,
+ CONSTRAINT [mos_opsdb_apo_exposure_flavor_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_panstarrs1]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_panstarrs1]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_panstarrs1](
+CREATE TABLE [dbo].[mos_panstarrs1](
 	[ra] [float] NULL,
 	[dec] [float] NULL,
 	[dra] [real] NULL,
@@ -5039,25 +6023,33 @@ CREATE TABLE [dbo].[dr19_panstarrs1](
 	[y_psfqf] [real] NULL,
 	[y_psfqfperf] [real] NULL,
 	[catid_objid] [bigint] NOT NULL,
-	[extid_hi_lo] [bigint] NULL
-) ON [PRIMARY]
+	[extid_hi_lo] [bigint] NULL,
+ CONSTRAINT [mos_panstarrs1_pkey] PRIMARY KEY CLUSTERED 
+(
+	[catid_objid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_positioner_status]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_positioner_status]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_positioner_status](
+CREATE TABLE [dbo].[mos_positioner_status](
 	[pk] [int] NOT NULL,
-	[label] [varchar](500) NULL
-) ON [PRIMARY]
+	[label] [varchar](500) NULL,
+ CONSTRAINT [mos_positioner_status_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_revised_magnitude]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_revised_magnitude]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_revised_magnitude](
+CREATE TABLE [dbo].[mos_revised_magnitude](
 	[carton_to_target_pk] [bigint] NULL,
 	[revised_magnitude_pk] [bigint] NOT NULL,
 	[g] [float] NULL,
@@ -5070,15 +6062,19 @@ CREATE TABLE [dbo].[dr19_revised_magnitude](
 	[j] [real] NULL,
 	[k] [real] NULL,
 	[gaia_g] [real] NULL,
-	[optical_prov] [varchar](500) NULL
-) ON [PRIMARY]
+	[optical_prov] [varchar](500) NULL,
+ CONSTRAINT [mos_revised_magnitude_pkey] PRIMARY KEY CLUSTERED 
+(
+	[revised_magnitude_pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sagitta]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sagitta]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sagitta](
+CREATE TABLE [dbo].[mos_sagitta](
 	[source_id] [bigint] NOT NULL,
 	[ra] [float] NULL,
 	[dec] [float] NULL,
@@ -5086,15 +6082,19 @@ CREATE TABLE [dbo].[dr19_sagitta](
 	[yso] [real] NULL,
 	[yso_std] [real] NULL,
 	[age] [real] NULL,
-	[age_std] [real] NULL
-) ON [PRIMARY]
+	[age_std] [real] NULL,
+ CONSTRAINT [mos_sagitta_pkey] PRIMARY KEY CLUSTERED 
+(
+	[source_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sdss_apogeeallstarmerge_r13]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sdss_apogeeallstarmerge_r13]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sdss_apogeeallstarmerge_r13](
+CREATE TABLE [dbo].[mos_sdss_apogeeallstarmerge_r13](
 	[apogee_id] [varchar](500) NOT NULL,
 	[nvisits] [smallint] NULL,
 	[nentries] [int] NULL,
@@ -5119,8 +6119,8 @@ CREATE TABLE [dbo].[dr19_sdss_apogeeallstarmerge_r13](
 	[baseline] [real] NULL,
 	[mean_fiber] [real] NULL,
 	[sig_fiber] [real] NULL,
-	[apstar_ids] [varchar](500) NULL,
-	[visits] [varchar](500) NULL,
+	[apstar_ids] [varchar](1500) NULL,
+	[visits] [varchar](2000) NULL,
 	[fields] [varchar](500) NULL,
 	[surveys] [varchar](500) NULL,
 	[telescopes] [varchar](500) NULL,
@@ -5143,26 +6143,34 @@ CREATE TABLE [dbo].[dr19_sdss_apogeeallstarmerge_r13](
 	[rstar] [real] NULL,
 	[rstar_err] [real] NULL,
 	[mstar_src] [varchar](500) NULL,
-	[designation] [varchar](500) NULL
-) ON [PRIMARY]
+	[designation] [varchar](500) NULL,
+ CONSTRAINT [mos_sdss_apogeeallstarmerge_r13_pkey] PRIMARY KEY CLUSTERED 
+(
+	[apogee_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sdss_dr13_photoobj_primary]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sdss_dr13_photoobj_primary]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sdss_dr13_photoobj_primary](
+CREATE TABLE [dbo].[mos_sdss_dr13_photoobj_primary](
 	[objid] [bigint] NOT NULL,
 	[ra] [float] NULL,
-	[dec] [float] NULL
-) ON [PRIMARY]
+	[dec] [float] NULL,
+ CONSTRAINT [mos_sdss_dr13_photoobj_primary_pkey] PRIMARY KEY CLUSTERED 
+(
+	[objid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sdss_dr16_qso]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sdss_dr16_qso]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sdss_dr16_qso](
+CREATE TABLE [dbo].[mos_sdss_dr16_qso](
 	[sdss_name] [varchar](500) NULL,
 	[ra] [float] NULL,
 	[dec] [float] NULL,
@@ -5366,15 +6374,19 @@ CREATE TABLE [dbo].[dr19_sdss_dr16_qso](
 	[gaia_rp_mag] [float] NULL,
 	[gaia_rp_flux_snr] [float] NULL,
 	[sdss2gaia_sep] [float] NULL,
-	[pk] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pk] [bigint] NOT NULL,
+ CONSTRAINT [mos_sdss_dr16_qso_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sdss_dr16_specobj]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sdss_dr16_specobj]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sdss_dr16_specobj](
+CREATE TABLE [dbo].[mos_sdss_dr16_specobj](
 	[specobjid] [numeric](20, 0) NOT NULL,
 	[bestobjid] [bigint] NULL,
 	[fluxobjid] [bigint] NULL,
@@ -5450,7 +6462,7 @@ CREATE TABLE [dbo].[dr19_sdss_dr16_specobj](
 	[z_person] [real] NULL,
 	[class_person] [varchar](32) NULL,
 	[comments_person] [varchar](200) NULL,
-	[tfilename] [varchar](32) NULL,
+	[tfile] [varchar](32) NULL,
 	[tcolumn_0] [smallint] NULL,
 	[tcolumn_1] [smallint] NULL,
 	[tcolumn_2] [smallint] NULL,
@@ -5555,7 +6567,7 @@ CREATE TABLE [dbo].[dr19_sdss_dr16_specobj](
 	[sn2_g] [real] NULL,
 	[sn2_r] [real] NULL,
 	[sn2_i] [real] NULL,
-	[elodiefilenamename] [varchar](32) NULL,
+	[elodiefilename] [varchar](32) NULL,
 	[elodieobject] [varchar](32) NULL,
 	[elodiesptype] [varchar](32) NULL,
 	[elodiebv] [real] NULL,
@@ -5568,15 +6580,19 @@ CREATE TABLE [dbo].[dr19_sdss_dr16_specobj](
 	[elodierchi2] [real] NULL,
 	[elodiedof] [real] NULL,
 	[htmid] [bigint] NULL,
-	[loadversion] [int] NULL
-) ON [PRIMARY]
+	[loadversion] [int] NULL,
+ CONSTRAINT [mos_sdss_dr16_specobj_pkey] PRIMARY KEY CLUSTERED 
+(
+	[specobjid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sdss_dr17_specobj]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sdss_dr17_specobj]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sdss_dr17_specobj](
+CREATE TABLE [dbo].[mos_sdss_dr17_specobj](
 	[specobjid] [numeric](20, 0) NOT NULL,
 	[bestobjid] [bigint] NULL,
 	[fluxobjid] [bigint] NULL,
@@ -5652,7 +6668,7 @@ CREATE TABLE [dbo].[dr19_sdss_dr17_specobj](
 	[z_person] [real] NULL,
 	[class_person] [varchar](32) NULL,
 	[comments_person] [varchar](200) NULL,
-	[tfilename] [varchar](32) NULL,
+	[tfile] [varchar](32) NULL,
 	[tcolumn_0] [smallint] NULL,
 	[tcolumn_1] [smallint] NULL,
 	[tcolumn_2] [smallint] NULL,
@@ -5757,7 +6773,7 @@ CREATE TABLE [dbo].[dr19_sdss_dr17_specobj](
 	[sn2_g] [real] NULL,
 	[sn2_r] [real] NULL,
 	[sn2_i] [real] NULL,
-	[elodiefilenamename] [varchar](32) NULL,
+	[elodiefilename] [varchar](32) NULL,
 	[elodieobject] [varchar](32) NULL,
 	[elodiesptype] [varchar](32) NULL,
 	[elodiebv] [real] NULL,
@@ -5772,15 +6788,19 @@ CREATE TABLE [dbo].[dr19_sdss_dr17_specobj](
 	[htmid] [bigint] NULL,
 	[loadversion] [int] NULL,
 	[bestobjid_bigint] [bigint] NULL,
-	[fluxobjid_bigint] [bigint] NULL
-) ON [PRIMARY]
+	[fluxobjid_bigint] [bigint] NULL,
+ CONSTRAINT [mos_sdss_dr17_specobj_pkey] PRIMARY KEY CLUSTERED 
+(
+	[specobjid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sdss_id_flat]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sdss_id_flat]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sdss_id_flat](
+CREATE TABLE [dbo].[mos_sdss_id_flat](
 	[sdss_id] [bigint] NULL,
 	[catalogid] [bigint] NULL,
 	[version_id] [smallint] NULL,
@@ -5790,28 +6810,36 @@ CREATE TABLE [dbo].[dr19_sdss_id_flat](
 	[ra_catalogid] [float] NULL,
 	[dec_catalogid] [float] NULL,
 	[pk] [bigint] NOT NULL,
-	[rank] [int] NULL
-) ON [PRIMARY]
+	[rank] [int] NULL,
+ CONSTRAINT [mos_sdss_id_flat_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sdss_id_stacked]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sdss_id_stacked]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sdss_id_stacked](
+CREATE TABLE [dbo].[mos_sdss_id_stacked](
 	[catalogid21] [bigint] NULL,
 	[catalogid25] [bigint] NULL,
 	[ra_sdss_id] [float] NULL,
 	[dec_sdss_id] [float] NULL,
-	[sdss_id] [bigint] NOT NULL
-) ON [PRIMARY]
+	[sdss_id] [bigint] NOT NULL,
+ CONSTRAINT [mos_sdss_id_stacked_pkey] PRIMARY KEY CLUSTERED 
+(
+	[sdss_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sdss_id_to_catalog]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sdss_id_to_catalog]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sdss_id_to_catalog](
+CREATE TABLE [dbo].[mos_sdss_id_to_catalog](
 	[pk] [bigint] NOT NULL,
 	[sdss_id] [bigint] NULL,
 	[catalogid] [bigint] NULL,
@@ -5843,16 +6871,20 @@ CREATE TABLE [dbo].[dr19_sdss_id_to_catalog](
 	[tic_v8__id] [bigint] NULL,
 	[twomass_psc__pts_key] [int] NULL,
 	[tycho2__designation] [varchar](500) NULL,
-	[unwise__unwise_objid] [varchar](500) NULL
-) ON [PRIMARY]
+	[unwise__unwise_objid] [varchar](500) NULL,
+ CONSTRAINT [mos_sdss_id_to_catalog_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sdss_id_to_catalog_full]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sdss_id_to_catalog_full]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sdss_id_to_catalog_full](
-	[pk] [bigint] not NULL,
+CREATE TABLE [dbo].[mos_sdss_id_to_catalog_full](
+	[pk] [bigint] NOT NULL,
 	[sdss_id] [bigint] NULL,
 	[catalogid] [bigint] NULL,
 	[version_id] [int] NULL,
@@ -5883,15 +6915,19 @@ CREATE TABLE [dbo].[dr19_sdss_id_to_catalog_full](
 	[tic_v8__id] [bigint] NULL,
 	[twomass_psc__pts_key] [int] NULL,
 	[tycho2__designation] [varchar](500) NULL,
-	[unwise__unwise_objid] [varchar](500) NULL
-) ON [PRIMARY]
+	[unwise__unwise_objid] [varchar](500) NULL,
+ CONSTRAINT [mos_sdss_id_to_catalog_full_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sdssv_boss_conflist]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sdssv_boss_conflist]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sdssv_boss_conflist](
+CREATE TABLE [dbo].[mos_sdssv_boss_conflist](
 	[plate] [int] NULL,
 	[designid] [int] NULL,
 	[mjd] [int] NULL,
@@ -5985,15 +7021,19 @@ CREATE TABLE [dbo].[dr19_sdssv_boss_conflist](
 	[public] [varchar](500) NULL,
 	[qualcomments] [varchar](500) NULL,
 	[moon_frac] [real] NULL,
-	[pkey] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pkey] [bigint] NOT NULL,
+ CONSTRAINT [mos_sdssv_boss_conflist_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pkey] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sdssv_boss_spall]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sdssv_boss_spall]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sdssv_boss_spall](
+CREATE TABLE [dbo].[mos_sdssv_boss_spall](
 	[programname] [varchar](500) NULL,
 	[chunk] [varchar](500) NULL,
 	[survey] [varchar](500) NULL,
@@ -6129,15 +7169,19 @@ CREATE TABLE [dbo].[dr19_sdssv_boss_spall](
 	[subclass_noqso] [varchar](500) NULL,
 	[rchi2diff_noqso] [real] NULL,
 	[specobjid] [bigint] NULL,
-	[pkey] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pkey] [bigint] NOT NULL,
+ CONSTRAINT [mos_sdssv_boss_spall_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pkey] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sdssv_plateholes]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sdssv_plateholes]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sdssv_plateholes](
+CREATE TABLE [dbo].[mos_sdssv_plateholes](
 	[holetype] [varchar](500) NULL,
 	[targettype] [varchar](500) NULL,
 	[sourcetype] [varchar](500) NULL,
@@ -6286,15 +7330,19 @@ CREATE TABLE [dbo].[dr19_sdssv_plateholes](
 	[yfocal] [float] NULL,
 	[yanny_uid] [int] NULL,
 	[yanny_filename] [varchar](500) NULL,
-	[pkey] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pkey] [bigint] NOT NULL,
+ CONSTRAINT [mos_sdssv_plateholes_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pkey] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_sdssv_plateholes_meta]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_sdssv_plateholes_meta]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_sdssv_plateholes_meta](
+CREATE TABLE [dbo].[mos_sdssv_plateholes_meta](
 	[plateid] [int] NULL,
 	[ha] [real] NULL,
 	[ha_observable_min] [real] NULL,
@@ -6407,15 +7455,19 @@ CREATE TABLE [dbo].[dr19_sdssv_plateholes_meta](
 	[skyinput22] [varchar](500) NULL,
 	[plateinput23] [varchar](500) NULL,
 	[skyinput8] [varchar](500) NULL,
-	[isvalid] [bit] NULL
-) ON [PRIMARY]
+	[isvalid] [bit] NULL,
+ CONSTRAINT [mos_sdssv_plateholes_meta_pkey] PRIMARY KEY CLUSTERED 
+(
+	[yanny_uid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_skies_v1]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_skies_v1]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_skies_v1](
+CREATE TABLE [dbo].[mos_skies_v1](
 	[pix_32768] [bigint] NOT NULL,
 	[ra] [float] NULL,
 	[dec] [float] NULL,
@@ -6435,15 +7487,19 @@ CREATE TABLE [dbo].[dr19_skies_v1](
 	[mag_neighbour_tycho2] [real] NULL,
 	[tmass_xsc_sky] [bit] NULL,
 	[sep_neighbour_tmass_xsc] [real] NULL,
-	[mag_neighbour_tmass_xsc] [real] NULL
-) ON [PRIMARY]
+	[mag_neighbour_tmass_xsc] [real] NULL,
+ CONSTRAINT [mos_skies_v1_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pix_32768] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_skies_v2]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_skies_v2]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_skies_v2](
+CREATE TABLE [dbo].[mos_skies_v2](
 	[pix_32768] [bigint] NOT NULL,
 	[ra] [float] NULL,
 	[dec] [float] NULL,
@@ -6471,15 +7527,19 @@ CREATE TABLE [dbo].[dr19_skies_v2](
 	[mag_neighbour_tycho2] [real] NULL,
 	[valid_tmass_xsc] [bit] NULL,
 	[selected_tmass_xsc] [bit] NULL,
-	[sep_neighbour_tmass_xsc] [real] NULL
-) ON [PRIMARY]
+	[sep_neighbour_tmass_xsc] [real] NULL,
+ CONSTRAINT [mos_skies_v2_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pix_32768] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_skymapper_dr2]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_skymapper_dr2]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_skymapper_dr2](
+CREATE TABLE [dbo].[mos_skymapper_dr2](
 	[object_id] [bigint] NOT NULL,
 	[raj2000] [float] NULL,
 	[dej2000] [float] NULL,
@@ -6579,29 +7639,37 @@ CREATE TABLE [dbo].[dr19_skymapper_dr2](
 	[gaia_dr2_id1] [bigint] NULL,
 	[gaia_dr2_dist1] [real] NULL,
 	[gaia_dr2_id2] [bigint] NULL,
-	[gaia_dr2_dist2] [real] NULL
-) ON [PRIMARY]
+	[gaia_dr2_dist2] [real] NULL,
+ CONSTRAINT [mos_skymapper_dr2_pkey] PRIMARY KEY CLUSTERED 
+(
+	[object_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_skymapper_gaia]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_skymapper_gaia]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_skymapper_gaia](
+CREATE TABLE [dbo].[mos_skymapper_gaia](
 	[skymapper_object_id] [bigint] NOT NULL,
 	[gaia_source_id] [bigint] NULL,
 	[teff] [real] NULL,
 	[e_teff] [real] NULL,
 	[feh] [real] NULL,
-	[e_feh] [real] NULL
-) ON [PRIMARY]
+	[e_feh] [real] NULL,
+ CONSTRAINT [mos_skymapper_gaia_pkey] PRIMARY KEY CLUSTERED 
+(
+	[skymapper_object_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_supercosmos]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_supercosmos]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_supercosmos](
+CREATE TABLE [dbo].[mos_supercosmos](
 	[objid] [bigint] NOT NULL,
 	[objidb] [bigint] NULL,
 	[objidr1] [bigint] NULL,
@@ -6658,15 +7726,19 @@ CREATE TABLE [dbo].[dr19_supercosmos](
 	[l] [real] NULL,
 	[b] [real] NULL,
 	[d] [real] NULL,
-	[ebmv] [real] NULL
-) ON [PRIMARY]
+	[ebmv] [real] NULL,
+ CONSTRAINT [mos_supercosmos_pkey] PRIMARY KEY CLUSTERED 
+(
+	[objid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_target]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_target]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_target](
+CREATE TABLE [dbo].[mos_target](
 	[target_pk] [bigint] NOT NULL,
 	[ra] [float] NULL,
 	[dec] [float] NULL,
@@ -6674,72 +7746,100 @@ CREATE TABLE [dbo].[dr19_target](
 	[pmdec] [real] NULL,
 	[epoch] [real] NULL,
 	[parallax] [real] NULL,
-	[catalogid] [bigint] NULL
-) ON [PRIMARY]
+	[catalogid] [bigint] NULL,
+	[htmid]  AS ([dbo].[fhtmeq]([ra],[dec])) PERSISTED,
+	[cx] [float] NULL,
+	[cy] [float] NULL,
+	[cz] [float] NULL,
+ CONSTRAINT [mos_target_pkey] PRIMARY KEY CLUSTERED 
+(
+	[target_pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_target_union_legacy]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_target_union_legacy]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_target_union_legacy](
+CREATE TABLE [dbo].[mos_target_union_legacy](
 	[catalogid] [bigint] NULL
-) ON [PRIMARY]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_targetdb_version]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_targetdb_version]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_targetdb_version](
+CREATE TABLE [dbo].[mos_targetdb_version](
 	[pk] [int] NOT NULL,
 	[planname] [varchar](500) NOT NULL,
 	[tag] [varchar](500) NULL,
 	[target_selection] [bit] NULL,
-	[robostrategy] [bit] NULL
-) ON [PRIMARY]
+	[robostrategy] [bit] NULL,
+ CONSTRAINT [mos_targetdb_version_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB],
+ CONSTRAINT [uq_mos_targetdb_version] UNIQUE NONCLUSTERED 
+(
+	[planname] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_targeting_generation]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_targeting_generation]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_targeting_generation](
+CREATE TABLE [dbo].[mos_targeting_generation](
 	[pk] [int] NOT NULL,
 	[label] [varchar](500) NULL,
-	[first_release] [varchar](500) NULL
-) ON [PRIMARY]
+	[first_release] [varchar](500) NULL,
+ CONSTRAINT [mos_targeting_generation_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_targeting_generation_to_carton]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_targeting_generation_to_carton]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_targeting_generation_to_carton](
+CREATE TABLE [dbo].[mos_targeting_generation_to_carton](
 	[pk] [int] NOT NULL,
 	[generation_pk] [int] NULL,
 	[carton_pk] [int] NULL,
 	[rs_stage] [varchar](500) NULL,
-	[rs_active] [bit] NULL
-) ON [PRIMARY]
+	[rs_active] [bit] NULL,
+ CONSTRAINT [mos_targeting_generation_to_carton_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_targeting_generation_to_version]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_targeting_generation_to_version]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_targeting_generation_to_version](
+CREATE TABLE [dbo].[mos_targeting_generation_to_version](
 	[generation_pk] [int] NULL,
 	[version_pk] [int] NULL,
-	[pk] [int] NOT NULL
-) ON [PRIMARY]
+	[pk] [int] NOT NULL,
+ CONSTRAINT [mos_targeting_generation_to_version_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_tess_toi]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_tess_toi]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_tess_toi](
+CREATE TABLE [dbo].[mos_tess_toi](
 	[ticid] [bigint] NULL,
 	[target_type] [varchar](8) NULL,
 	[toi] [varchar](32) NULL,
@@ -6748,15 +7848,19 @@ CREATE TABLE [dbo].[dr19_tess_toi](
 	[ctoi] [varchar](32) NULL,
 	[user_disposition] [varchar](2) NULL,
 	[num_sectors] [real] NULL,
-	[pk] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pk] [bigint] NOT NULL,
+ CONSTRAINT [mos_tess_toi_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_tess_toi_v05]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_tess_toi_v05]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_tess_toi_v05](
+CREATE TABLE [dbo].[mos_tess_toi_v05](
 	[ticid] [bigint] NULL,
 	[target_type] [varchar](8) NULL,
 	[toi] [varchar](32) NULL,
@@ -6765,15 +7869,19 @@ CREATE TABLE [dbo].[dr19_tess_toi_v05](
 	[ctoi] [varchar](32) NULL,
 	[user_disposition] [varchar](2) NULL,
 	[num_sectors] [float] NULL,
-	[pkey] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pkey] [bigint] NOT NULL,
+ CONSTRAINT [mos_tess_toi_v05_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pkey] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_tic_v8]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_tic_v8]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_tic_v8](
+CREATE TABLE [dbo].[mos_tic_v8](
 	[id] [bigint] NOT NULL,
 	[version] [varchar](8) NULL,
 	[hip] [int] NULL,
@@ -6903,15 +8011,19 @@ CREATE TABLE [dbo].[dr19_tic_v8](
 	[twomass_psc] [varchar](500) NULL,
 	[twomass_psc_pts_key] [int] NULL,
 	[tycho2_tycid] [int] NULL,
-	[allwise_cntr] [bigint] NULL
-) ON [PRIMARY]
+	[allwise_cntr] [bigint] NULL,
+ CONSTRAINT [mos_tic_v8_pkey] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_twomass_psc]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_twomass_psc]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_twomass_psc](
+CREATE TABLE [dbo].[mos_twomass_psc](
 	[ra] [float] NULL,
 	[decl] [float] NULL,
 	[err_maj] [real] NULL,
@@ -6971,15 +8083,23 @@ CREATE TABLE [dbo].[dr19_twomass_psc](
 	[scan_key] [int] NULL,
 	[coadd_key] [int] NULL,
 	[coadd] [smallint] NULL,
-	[designation] [varchar](500) NULL
-) ON [PRIMARY]
+	[designation] [varchar](500) NOT NULL,
+ CONSTRAINT [mos_twomass_psc_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pts_key] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB],
+ CONSTRAINT [UQ_mos_twomass_psc_designation] UNIQUE NONCLUSTERED 
+(
+	[designation] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_tycho2]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_tycho2]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_tycho2](
+CREATE TABLE [dbo].[mos_tycho2](
 	[tyc1] [int] NULL,
 	[tyc2] [int] NULL,
 	[tyc3] [int] NULL,
@@ -7019,15 +8139,19 @@ CREATE TABLE [dbo].[dr19_tycho2](
 	[mflag] [varchar](1) NULL,
 	[designation] [varchar](500) NOT NULL,
 	[tycid] [int] NULL,
-	[designation2] [varchar](500) NULL
-) ON [PRIMARY]
+	[designation2] [varchar](500) NULL,
+ CONSTRAINT [mos_tycho2_pkey] PRIMARY KEY CLUSTERED 
+(
+	[designation] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_unwise]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_unwise]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_unwise](
+CREATE TABLE [dbo].[mos_unwise](
 	[x_w1] [float] NULL,
 	[x_w2] [float] NULL,
 	[y_w1] [float] NULL,
@@ -7076,15 +8200,19 @@ CREATE TABLE [dbo].[dr19_unwise](
 	[ra] [float] NULL,
 	[dec] [float] NULL,
 	[primary_status] [int] NULL,
-	[unwise_objid] [varchar](500) NOT NULL
-) ON [PRIMARY]
+	[unwise_objid] [varchar](500) NOT NULL,
+ CONSTRAINT [mos_unwise_pkey] PRIMARY KEY CLUSTERED 
+(
+	[unwise_objid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_uvotssc1]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_uvotssc1]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_uvotssc1](
+CREATE TABLE [dbo].[mos_uvotssc1](
 	[name] [varchar](17) NULL,
 	[oseq] [bigint] NULL,
 	[obsid] [bigint] NULL,
@@ -7167,15 +8295,19 @@ CREATE TABLE [dbo].[dr19_uvotssc1](
 	[fu] [int] NULL,
 	[fb] [int] NULL,
 	[fv] [int] NULL,
-	[id] [bigint] NOT NULL
-) ON [PRIMARY]
+	[id] [bigint] NOT NULL,
+ CONSTRAINT [mos_uvotssc1_pkey] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_xmm_om_suss_4_1]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_xmm_om_suss_4_1]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_xmm_om_suss_4_1](
+CREATE TABLE [dbo].[mos_xmm_om_suss_4_1](
 	[iauname] [varchar](22) NULL,
 	[n_summary] [int] NULL,
 	[obsid] [varchar](10) NULL,
@@ -7290,15 +8422,19 @@ CREATE TABLE [dbo].[dr19_xmm_om_suss_4_1](
 	[u_sky_image] [varchar](4) NULL,
 	[b_sky_image] [varchar](4) NULL,
 	[v_sky_image] [varchar](4) NULL,
-	[pk] [bigint] NOT NULL
-) ON [PRIMARY]
+	[pk] [bigint] NOT NULL,
+ CONSTRAINT [mos_xmm_om_suss_4_1_pkey] PRIMARY KEY CLUSTERED 
+(
+	[pk] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_yso_clustering]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_yso_clustering]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_yso_clustering](
+CREATE TABLE [dbo].[mos_yso_clustering](
 	[source_id] [bigint] NOT NULL,
 	[twomass] [varchar](500) NULL,
 	[ra] [float] NULL,
@@ -7316,15 +8452,19 @@ CREATE TABLE [dbo].[dr19_yso_clustering](
 	[av] [float] NULL,
 	[eav] [float] NULL,
 	[dist] [float] NULL,
-	[edist] [float] NULL
-) ON [PRIMARY]
+	[edist] [float] NULL,
+ CONSTRAINT [mos_yso_clustering_pkey] PRIMARY KEY CLUSTERED 
+(
+	[source_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
 GO
-/****** Object:  Table [dbo].[dr19_zari18pms]    Script Date: 2/12/2025 1:10:30 PM ******/
+/****** Object:  Table [dbo].[mos_zari18pms]    Script Date: 5/23/2025 8:23:32 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[dr19_zari18pms](
+CREATE TABLE [dbo].[mos_zari18pms](
 	[source] [bigint] NOT NULL,
 	[glon] [float] NULL,
 	[glat] [float] NULL,
@@ -7345,5 +8485,10 @@ CREATE TABLE [dbo].[dr19_zari18pms](
 	[ngal] [int] NULL,
 	[ag] [real] NULL,
 	[bp_rp] [real] NULL,
-	[uwe] [real] NULL
-) ON [PRIMARY]
+	[uwe] [real] NULL,
+ CONSTRAINT [mos_zari18pms_pkey] PRIMARY KEY CLUSTERED 
+(
+	[source] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [MINIDB]
+) ON [MINIDB]
+GO

@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+
 DROP TABLE IF EXISTS dbo.dr19_allstar_dr17_synspec_rev1
 CREATE TABLE dbo.dr19_allstar_dr17_synspec_rev1 (
     filename varchar(500),
@@ -235,4 +244,4 @@ CREATE TABLE dbo.dr19_allstar_dr17_synspec_rev1 (
     yb_fe_flag integer,
     visit_pk varchar(500),
     twomass_designation varchar(500)
-);
+) ON [SPEC];

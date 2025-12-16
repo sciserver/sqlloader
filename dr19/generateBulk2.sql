@@ -32,7 +32,7 @@ BEGIN
 
         SET @sql = CONCAT(@sql, 'BULK INSERT ', @targettable, 
                           ' FROM ''', @fullpath, ''' WITH (DATAFILETYPE=''char'', FIRSTROW=2, 
-                          FIELDTERMINATOR='','', ROWTERMINATOR=''0x0a'', TABLOCK, FIELDQUOTE=''"'');')
+                          FIELDTERMINATOR='','', ROWTERMINATOR=''0x0a'', TABLOCK, FIELDQUOTE=''"'') ON [SPEC];')
 
         PRINT @sql
 
@@ -79,3 +79,6 @@ END
 
 CLOSE cur
 DEALLOCATE cur
+
+
+--create table error_log(error_time datetime, error_message nvarchar(4000), related_id int)
