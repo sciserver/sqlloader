@@ -11,6 +11,7 @@ Usage:
 
 import argparse
 import os
+import re
 import sys
 from datetime import datetime
 
@@ -49,17 +50,29 @@ class PgToMsSqlConverter:
 
     def convert_data_types(self, line):
         """Convert PostgreSQL data types to SQL Server equivalents."""
+        # Handle 'character varying' with and without size specification
+        # character varying(N) -> varchar(N) (preserve size)
+        # character varying    -> varchar(max) (generous default for data loading)
+        result = line
+
+        # First, handle sized character varying - must come before unsized
+        result = re.sub(r'character varying\((\d+)\)', r'varchar(\1)', result)
+
+        # Then handle unsized character varying (not followed by opening paren)
+        result = re.sub(r'character varying(?!\()', r'varchar(max)', result)
+
+        # Handle unsized 'character' type (rare, but for completeness)
+        result = re.sub(r'\bcharacter(?!\s+varying)(?!\()', r'varchar(1)', result)
+
+        # Simple replacements for other types
         conversions = {
             'boolean': 'bit',
-            'character varying': 'varchar',
-            'text': 'varchar(500)',
-            'character': 'varchar',
+            'text': 'varchar(max)',
             'timestamp without time zone': 'datetime',
             'uuid': 'uniqueidentifier',
             'bit(1)': 'bit',
         }
 
-        result = line
         for pg_type, mssql_type in conversions.items():
             result = result.replace(pg_type, mssql_type)
 
@@ -77,6 +90,7 @@ class PgToMsSqlConverter:
             ' file,': ' [file],',
             ' offsets ': ' [offsets] ',
             ' offsets,': ' [offsets],',
+            '"dec"': '[dec]',  # Fix dec column for SQL Server batch mode
         }
 
         result = line

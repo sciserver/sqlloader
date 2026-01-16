@@ -32,7 +32,8 @@ class TestResult:
 class BulkLoader:
     """Loads CSV files into SQL Server using BULK INSERT."""
 
-    def __init__(self, csv_dir: str, output_dir: str, connection_string: Optional[str] = None):
+    def __init__(self, csv_dir: str, output_dir: str, connection_string: Optional[str] = None,
+                 file_filter: Optional[List[str]] = None):
         """
         Initialize bulk loader.
 
@@ -40,12 +41,15 @@ class BulkLoader:
             csv_dir: Directory containing CSV files (e.g., E:\\DR20\\minidb_dr20\\casload)
             output_dir: Output directory for SQL and report files
             connection_string: SQL Server connection string (optional for SQL generation mode)
+            file_filter: Optional list of table names to process (e.g., ['dr20_field'])
         """
         self.csv_dir = csv_dir
         self.output_dir = output_dir
         self.connection_string = connection_string
+        self.file_filter = file_filter
         self.results: List[TestResult] = []
         self.conn = None
+        self.file_delimiters = {}  # Store detected delimiter per file
 
     def connect_database(self):
         """Establish database connection using pymssql."""
@@ -110,10 +114,17 @@ class BulkLoader:
             if filename.startswith('minidb_dr20.dr20_') and filename.endswith('.csv'):
                 filepath = os.path.join(self.csv_dir, filename)
                 table_name = self.extract_table_name(filename)
-                csv_files.append((filepath, table_name))
+
+                # Apply file filter if specified
+                if self.file_filter is None or table_name in self.file_filter:
+                    csv_files.append((filepath, table_name))
 
         csv_files.sort(key=lambda x: x[1])  # Sort by table name
-        print(f"Found {len(csv_files)} CSV files\n")
+
+        if self.file_filter:
+            print(f"Found {len(csv_files)} CSV files (filtered from {len(os.listdir(self.csv_dir))} total)\n")
+        else:
+            print(f"Found {len(csv_files)} CSV files\n")
 
         return csv_files
 
@@ -142,6 +153,32 @@ class BulkLoader:
         except:
             return 0.0
 
+    def detect_delimiter(self, filepath: str) -> str:
+        """
+        Auto-detect CSV delimiter by reading the header line.
+
+        Args:
+            filepath: Path to CSV file
+
+        Returns:
+            Detected delimiter (',' or '|')
+        """
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                header = f.readline()
+
+                # Count occurrences of each delimiter
+                comma_count = header.count(',')
+                pipe_count = header.count('|')
+
+                # Use whichever appears more frequently
+                delimiter = '|' if pipe_count > comma_count else ','
+
+                return delimiter
+        except Exception as e:
+            # Default to comma if detection fails
+            return ','
+
     def get_csv_sample(self, filepath: str, num_lines: int = 5) -> str:
         """
         Read first few lines of CSV for error reporting.
@@ -160,13 +197,14 @@ class BulkLoader:
         except Exception as e:
             return f"Could not read file: {e}"
 
-    def generate_bulk_insert_sql(self, csv_path: str, table_name: str, test_mode: bool = False) -> str:
+    def generate_bulk_insert_sql(self, csv_path: str, table_name: str, delimiter: str, test_mode: bool = False) -> str:
         """
         Generate BULK INSERT SQL statement.
 
         Args:
             csv_path: Full path to CSV file
             table_name: Target table name
+            delimiter: Field delimiter (',' or '|')
             test_mode: If True, add LASTROW=11 to load only first 10 rows
 
         Returns:
@@ -181,7 +219,7 @@ class BulkLoader:
         if test_mode:
             sql += "    LASTROW=11,\n"
 
-        sql += "    FIELDTERMINATOR=',',\n"
+        sql += f"    FIELDTERMINATOR='{delimiter}',\n"
         sql += "    ROWTERMINATOR='0x0a',\n"
         sql += "    TABLOCK,\n"
         sql += "    FIELDQUOTE='\"'\n"
@@ -215,6 +253,10 @@ class BulkLoader:
             )
 
         try:
+            # Auto-detect delimiter from file header
+            delimiter = self.detect_delimiter(csv_path)
+            self.file_delimiters[table_name] = delimiter
+
             cursor = self.conn.cursor()
 
             # Truncate table first to ensure clean slate
@@ -222,7 +264,7 @@ class BulkLoader:
             self.conn.commit()
 
             # Generate and execute BULK INSERT with LASTROW=11
-            bulk_sql = self.generate_bulk_insert_sql(csv_path, table_name, test_mode=True)
+            bulk_sql = self.generate_bulk_insert_sql(csv_path, table_name, delimiter, test_mode=True)
             cursor.execute(bulk_sql)
             self.conn.commit()
 
@@ -272,13 +314,21 @@ class BulkLoader:
         """
         print(f"\n{'='*80}")
         print(f"TEST MODE: Loading first 10 rows from each CSV file")
+        print(f"  (Auto-detecting delimiter from header line)")
         print(f"{'='*80}\n")
 
         total_files = len(csv_files)
 
         for idx, (csv_path, table_name) in enumerate(csv_files, 1):
             filename = os.path.basename(csv_path)
-            print(f"[{idx}/{total_files}] Testing {table_name}... ", end='', flush=True)
+
+            # Detect delimiter for display (only if we have a connection)
+            if self.conn:
+                delimiter = self.detect_delimiter(csv_path)
+                delim_str = "pipe" if delimiter == '|' else "comma"
+                print(f"[{idx}/{total_files}] Testing {table_name} ({delim_str})... ", end='', flush=True)
+            else:
+                print(f"[{idx}/{total_files}] Testing {table_name}... ", end='', flush=True)
 
             result = self.test_load_file(csv_path, table_name)
             self.results.append(result)
@@ -293,7 +343,10 @@ class BulkLoader:
         print(f"\n{'='*80}")
         passed = sum(1 for r in self.results if r.success)
         failed = total_files - passed
+        pipe_count = sum(1 for tbl in self.file_delimiters if self.file_delimiters[tbl] == '|')
         print(f"TESTING COMPLETE: {passed} passed, {failed} failed")
+        if pipe_count > 0:
+            print(f"  Detected {pipe_count} pipe-delimited file(s)")
         print(f"{'='*80}\n")
 
     def write_sql_file(self, date_suffix: str, csv_files: List[Tuple[str, str]]):
@@ -321,7 +374,7 @@ class BulkLoader:
                 f.write(f"-- Review test_results_{date_suffix}.md before proceeding\n\n")
 
             f.write(f"-- Total data volume: ~{sum(r.file_size_mb for r in passed_results):.1f} MB validated\n")
-            f.write(f"\n{'='*80}\n\n")
+            f.write(f"\n-- {'='*78}\n\n")
 
             # Generate BULK INSERT for each passed file
             for result in passed_results:
@@ -333,11 +386,19 @@ class BulkLoader:
                         break
 
                 if csv_path:
+                    # Get detected delimiter (or detect now if not already detected)
+                    delimiter = self.file_delimiters.get(result.table_name)
+                    if delimiter is None:
+                        delimiter = self.detect_delimiter(csv_path)
+                        self.file_delimiters[result.table_name] = delimiter
+
+                    delim_str = "pipe" if delimiter == '|' else "comma"
                     f.write(f"-- File: {result.filename} ({result.file_size_mb:.1f} MB)\n")
                     f.write(f"-- Table: dbo.{result.table_name}\n")
+                    f.write(f"-- Delimiter: {delim_str} ({delimiter})\n")
                     f.write(f"-- Test result: PASSED ({result.rows_tested}/10 rows)\n")
 
-                    bulk_sql = self.generate_bulk_insert_sql(csv_path, result.table_name, test_mode=False)
+                    bulk_sql = self.generate_bulk_insert_sql(csv_path, result.table_name, delimiter, test_mode=False)
                     f.write(bulk_sql)
                     f.write("\nGO\n\n")
 
@@ -476,12 +537,18 @@ Examples:
     parser.add_argument('--test-mode', action='store_true',
                        help='Load only first 10 rows to validate')
     parser.add_argument('--connection', help='SQL Server connection string')
-    parser.add_argument('--date', default=datetime.now().strftime('%m%d'),
-                       help='Date suffix for output files (default: today MMDD)')
+    parser.add_argument('--date', default=datetime.now().strftime('%m%d_%H%M'),
+                       help='Date suffix for output files (default: MMDD_HHMM)')
     parser.add_argument('--generate-sql', action='store_true',
                        help='Generate SQL file for validated files')
+    parser.add_argument('--files', help='Comma-separated list of table names to process (e.g., dr20_field,dr20_gaia_dr3_nss_two_body_orbit)')
 
     args = parser.parse_args()
+
+    # Parse file filter if provided
+    file_filter = None
+    if args.files:
+        file_filter = [f.strip() for f in args.files.split(',')]
 
     print(f"\n{'='*80}")
     print("SDSS DR20 CSV Bulk Loader")
@@ -491,10 +558,12 @@ Examples:
     print(f"Test mode:      {args.test_mode}")
     print(f"Generate SQL:   {args.generate_sql}")
     print(f"Connection:     {'Yes' if args.connection else 'No (SQL generation only)'}")
+    if file_filter:
+        print(f"File filter:    {len(file_filter)} table(s)")
     print(f"{'='*80}\n")
 
     # Initialize loader
-    loader = BulkLoader(args.csv_dir, args.output_dir, args.connection)
+    loader = BulkLoader(args.csv_dir, args.output_dir, args.connection, file_filter)
 
     # Scan for CSV files
     csv_files = loader.scan_csv_files()
