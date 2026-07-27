@@ -286,5 +286,69 @@
     "pk_col": "gaia_dr3_source_id",
     "compression": "NONE",
     "elapsed_s": 0.2
+  },
+  "DL1_eROSITA_eRASS3_allepoch": {
+    "loaded_at": "2026-07-27 14:34:26",
+    "rows": 263310,
+    "source_rows": 263310,
+    "pk_col": "sdss_id,sdss_mjd",
+    "compression": "PAGE",
+    "elapsed_s": 6.8
+  },
+  "DL1_eROSITA_eRASS3_daily": {
+    "loaded_at": "2026-07-27 14:34:39",
+    "rows": 478255,
+    "source_rows": 478255,
+    "pk_col": "sdss_id,sdss_mjd",
+    "compression": "PAGE",
+    "elapsed_s": 13.6
+  },
+  "efeds_spiders_agn_ctp_salvato": {
+    "loaded_at": "2026-07-27 14:34:41",
+    "rows": 13143,
+    "source_rows": 13143,
+    "pk_col": "PK_index",
+    "compression": "PAGE",
+    "elapsed_s": 1.4
+  },
+  "efeds_spiders_agn_hard_xray_cat": {
+    "loaded_at": "2026-07-27 14:34:41",
+    "rows": 277,
+    "source_rows": 277,
+    "pk_col": "PK_index",
+    "compression": "PAGE",
+    "elapsed_s": 0.1
+  },
+  "efeds_spiders_agn_host_decomp": {
+    "loaded_at": "2026-07-27 14:34:41",
+    "rows": 13143,
+    "source_rows": 13143,
+    "pk_col": "PK_index",
+    "compression": "PAGE",
+    "elapsed_s": 0.3
+  },
+  "efeds_spiders_agn_line_props": {
+    "loaded_at": "2026-07-27 14:34:43",
+    "rows": 13143,
+    "source_rows": 13143,
+    "pk_col": "PK_index",
+    "compression": "PAGE",
+    "elapsed_s": 2.1
+  },
+  "efeds_spiders_agn_main_xray_cat": {
+    "loaded_at": "2026-07-27 14:34:44",
+    "rows": 12866,
+    "source_rows": 12866,
+    "pk_col": "PK_index",
+    "compression": "PAGE",
+    "elapsed_s": 1.0
+  },
+  "efeds_spiders_agn_xray_props": {
+    "loaded_at": "2026-07-27 14:34:45",
+    "rows": 13143,
+    "source_rows": 13143,
+    "pk_col": "PK_index",
+    "compression": "PAGE",
+    "elapsed_s": 0.3
   }
 }

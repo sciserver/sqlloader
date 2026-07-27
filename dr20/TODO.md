@@ -9,14 +9,14 @@ carried forward from earlier notes.
 
 ## Current Status
 
-**Loading is complete.** 392 user tables across 8 filegroups. Something may still
+**Loading is complete.** 400 user tables across 8 filegroups. Something may still
 sneak in under the wire, and a missing index may turn up here and there, but the
 bulk load is done.
 
 | Filegroup | Tables | Contents |
 |---|---|---|
 | MINIDB | 172 | `mos_*` tables — CI + PAGE compression + 992 NCIs |
-| SPEC | 110 | spAll, allspec, astra/VAC, APOGEE tables |
+| SPEC | 118 | spAll, allspec, astra/VAC, APOGEE, eFEDS/eROSITA tables |
 | DATAFG | 69 | general data tables |
 | PRIMARY | 31 | metadata and system tables |
 | PHOTO | 6 | photometric |
@@ -31,6 +31,9 @@ Done:
 - spAll_epoch (4.9M), spAll_allepoch (507K), LVM_DAPall/DRPall, minesweeper (56K) — all on SPEC
 - Astra boss tables (boss_net, corv, line_forest, m_dwarf_type, slam, snow_white, mwm_boss_*) — all on SPEC
 - 10 APOGEE tables moved from PRIMARY heaps to SPEC with clustered PKs (2026-07-27)
+- 8 VAC tables loaded that had been missed entirely — 2 DL1_eROSITA_eRASS3_*
+  and 6 efeds_spiders_agn_* (2026-07-27). All 29 entries in the VAC loading
+  manifest now match by name and row count.
 - Metadata loaded: DBObjects 891, DBColumns 30,579, DBViewCols 234
 - Repo cleaned up, committed and pushed (2026-07-27)
 
