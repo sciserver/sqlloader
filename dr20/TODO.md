@@ -1,6 +1,6 @@
 # DR20 Loading - TODO List
 
-**Last Updated:** July 27, 2026
+**Last Updated:** July 27, 2026 (loading complete)
 
 State below was verified by querying BestDR20 directly on 2026-07-27, not
 carried forward from earlier notes.
@@ -9,14 +9,16 @@ carried forward from earlier notes.
 
 ## Current Status
 
-**BestDR20 is substantially complete.** 392 user tables across 8 filegroups:
+**Loading is complete.** 392 user tables across 8 filegroups. Something may still
+sneak in under the wire, and a missing index may turn up here and there, but the
+bulk load is done.
 
 | Filegroup | Tables | Contents |
 |---|---|---|
 | MINIDB | 172 | `mos_*` tables — CI + PAGE compression + 992 NCIs |
-| SPEC | 100 | spAll, allspec, astra/VAC tables |
+| SPEC | 110 | spAll, allspec, astra/VAC, APOGEE tables |
 | DATAFG | 69 | general data tables |
-| PRIMARY | 41 | metadata and system tables — **plus 10 that do not belong there, see below** |
+| PRIMARY | 31 | metadata and system tables |
 | PHOTO | 6 | photometric |
 | WISE | 2 | |
 | ATLAS, FRAME | 1 each | |
@@ -28,57 +30,37 @@ Done:
 - 36 VAC tables via `run_vac_load.py`; 7 eROSITA tables; 10 HTM indexes
 - spAll_epoch (4.9M), spAll_allepoch (507K), LVM_DAPall/DRPall, minesweeper (56K) — all on SPEC
 - Astra boss tables (boss_net, corv, line_forest, m_dwarf_type, slam, snow_white, mwm_boss_*) — all on SPEC
+- 10 APOGEE tables moved from PRIMARY heaps to SPEC with clustered PKs (2026-07-27)
 - Metadata loaded: DBObjects 891, DBColumns 30,579, DBViewCols 234
-- Repo cleaned up and committed (2026-07-27)
+- Repo cleaned up, committed and pushed (2026-07-27)
+
+**Filegroup sizing:** this is a write-once, read-only database. Once a DR is
+loaded it does not grow, so filegroups are *meant* to end up full — allocated
+but unused space is waste. SPEC at 446.29/446.50 GB is the desired end state,
+not a problem.
 
 ---
 
 ## Immediate Next Steps
 
-### 1. Fix 10 APOGEE tables loaded onto the wrong filegroup as uncompressed heaps
+### 1. ~~APOGEE tables on PRIMARY as uncompressed heaps~~ — DONE 2026-07-27
 
-**This is the highest-value item.** These tables bypassed the `gen_vac_load.py`
-path and were loaded directly, so they got none of the standard treatment.
-IndexMap already says what they should be — CI on `spectrum_PK`, PAGE
-compression, filegroup SPEC — but on disk they are heaps, uncompressed, on
-PRIMARY, occupying ~25.6 GB:
+Ten tables carried over in the BestDR19 to BestDR20 rename had never been
+rebuilt, so they sat on PRIMARY as uncompressed heaps (13.6M rows, 25.65 GB).
+Moved to SPEC with clustered primary keys named `pk_<table>_spectrum_pk`,
+PAGE compression on the 8 at or above 1M rows. 25.65 GB became 18.07 GB.
 
-| Table | Rows | Current size |
-|---|---|---|
-| aspcap_apogee_star | 1,095,480 | 4.18 GB |
-| astro_nn_apogee_star | 1,585,505 | 4.03 GB |
-| lite_all_star | 1,365,542 | 3.47 GB |
-| mwm_apogee_allvisit | 3,515,606 | 3.35 GB |
-| the_payne_apogee_star | 1,111,879 | 2.13 GB |
-| astro_nn_apogee_visit | 810,651 | 2.06 GB |
-| the_payne_apogee_visit | 793,385 | 2.02 GB |
-| apogee_net_apogee_star | 1,122,317 | 1.71 GB |
-| astro_nn_dist_apogee_star | 1,112,053 | 1.70 GB |
-| mwm_apogee_allstar | 1,122,272 | 1.00 GB |
+Scripts: `gen_apogee_move.py` -> `move_apogee_tables.sql`, then
+`drop_apogee_old_tables.sql` for the renamed originals. The move created the PK
+before loading so rows landed in key order already compressed, verified row
+count and key checksum before any rename, and kept the originals as `<t>_old`
+until verified.
 
-They are also bloating PRIMARY, which is meant to hold metadata only.
-
-- [ ] Re-run `gen_vac_load.py` for these 10 — it is IndexMap-driven, so it will
-      generate DROP > CREATE ON [SPEC] > CI WITH PAGE > INSERT WITH TABLOCK
-      with no hand-editing
-- [ ] Source is BESTTEST via INSERT...SELECT (same as the other astra tables)
-- [ ] Expect roughly 50-70% size reduction from PAGE compression
-- [ ] Verify row counts against the table above afterwards
-- [ ] Confirm PRIMARY shrinks back to metadata-only
-
-Verification query:
-```sql
-USE BestDR20;
-SELECT t.name, i.type_desc, p.data_compression_desc, fg.name AS filegroup_name,
-       SUM(p.rows) AS rows
-FROM sys.tables t
-JOIN sys.indexes i ON t.object_id = i.object_id AND i.index_id IN (0,1)
-JOIN sys.partitions p ON i.object_id = p.object_id AND i.index_id = p.index_id
-JOIN sys.data_spaces fg ON i.data_space_id = fg.data_space_id
-WHERE t.name LIKE '%apogee%' OR t.name = 'lite_all_star'
-GROUP BY t.name, i.type_desc, p.data_compression_desc, fg.name
-ORDER BY t.name;
-```
+**These tables are not reloaded from BESTTEST.** The DR19 APOGEE products are
+what ships for DR20. They therefore keep the vestigial `PK` column that the
+newer BESTTEST schema drops — the move was deliberately faithful to the
+existing schema. If that column should not ship, dropping it is a separate
+decision.
 
 ### 2. Add the 6 allspec NCIs to IndexMap
 
@@ -113,35 +95,53 @@ fails, there are orphaned metadata rows to clean up first. Note that ~29 other
 FKs across the DB are enabled but `is_not_trusted` — that is expected from bulk
 loads and does not affect correctness, only optimizer plan choices.
 
-### 4. Load `the_cannon_apogee_star`
+### 4. `the_cannon_apogee_star` — decide whether it ships
 
-Has an IndexMap entry (CI on `spectrum_PK`, PAGE, SPEC) but does not exist in
-BestDR20. Was still loading in BESTTEST as of June. Load it with the other 10
-in step 1 if it is ready.
+Has an IndexMap entry (`spectrum_PK`, PAGE, SPEC) but no table in BestDR20, and
+its BESTTEST source is empty. Since the APOGEE tables are not being reloaded
+from BESTTEST, either it is not part of DR20 and the IndexMap row should go, or
+it needs a source. Loose end, not a blocker.
 
 ### 5. multiplex NCIs
 
 Waiting on the column list from the tool owner. multiplex currently has only its
 CI on `multiplex_id`.
 
+### 6. Reclaim unused space in PRIMARY — end-of-load step
+
+PRIMARY is 190.54 GB allocated, 117.66 GB used, **72.88 GB free** (61.8% used).
+Moving the APOGEE tables out opened ~25.6 GB of that; the rest predates this
+release — the file is still named `BESTDR8_Data1`.
+
+Since the database is write-once and read-only, allocated-but-unused space is
+pure waste, and a one-time shrink after loading carries none of the usual
+fragmentation cost because nothing is modified afterwards.
+
+- [ ] Confirm nothing further is going to land on PRIMARY
+- [ ] `DBCC SHRINKFILE (BESTDR8_Data1, <target>)` to a small headroom margin
+- [ ] Re-check every other filegroup for the same waste — SPEC is already at
+      99.95%, which is correct; the others are worth a look
+
 ---
 
 ## Repo / Git
 
 - [x] Clean up dr20 branch — archive superseded files, gitignore run output (2026-07-27)
+- [x] Push dr20 branch to origin (2026-07-27)
 - [ ] Cherry-pick commit `89a9784` (parseSchema2sql.py + vbs/README.md +
       xschema.txt) to master — it is deliberately isolated for this
-- [ ] Push dr20 branch to origin
 - [ ] Decide whether the rest of dr20 merges to master or stays on the branch
 
 ---
 
 ## Validation
 
-- [ ] Row count comparison against BESTTEST for the migrated tables
 - [ ] Spot-check data integrity on large tables (numeric values, NULL handling)
 - [ ] Test cone searches against the HTM-indexed tables
-- [ ] Final `sp_spaceused` and per-filegroup size report once step 1 is done
+- [ ] Sweep for missing indexes — the most likely remaining gap now that loading
+      is done. Compare `sys.indexes` against IndexMap per table; the allspec
+      NCIs in step 2 were found exactly this way.
+- [ ] Final `sp_spaceused` and per-filegroup size report
 
 ---
 
@@ -152,12 +152,34 @@ CI on `multiplex_id`.
 - [x] **Replace `parseSchema2sql.vbs` with Python** — done, `vbs/parseSchema2sql.py`,
       ~1 second vs 15 minutes, validated against VBS output
 
-- [ ] **Everything goes through the IndexMap-driven loader.** The step 1 problem
-      above happened because 10 tables were loaded outside `gen_vac_load.py`.
-      IndexMap had the right answer the whole time. Make the IndexMap-driven
-      path the only path, and add a post-load check that fails loudly when a
-      table's actual filegroup, compression or index type disagrees with its
-      IndexMap row.
+- [ ] **Decide what IndexMap is actually authoritative for.** Right now it is
+      half-trusted, which is the worst of both. Measured 2026-07-27 across the
+      294 tables with a `code='K'` row and a compression value set:
+
+      - **Compression — sound.** IndexMap says PAGE for essentially everything
+        with a filegroup assigned (275 `page`/SPEC + 30 `PAGE`/PHOTO; the 40
+        blanks are legacy CAS system tables). But 116 tables are uncompressed
+        on disk, totalling 2,378 GB. 102 of those are below 1M rows, i.e. the
+        loaders' row-count threshold overriding IndexMap; the other 14 were
+        simply missed. Worth adopting IndexMap and dropping the threshold.
+      - **Filegroup — not sound.** Only 97 of 294 tables sit where IndexMap
+        says. It claims SPEC for 129 `mos_*` tables that correctly live on
+        MINIDB by design, plus PHOTO for tables on DATAFG/WISE/ATLAS/FRAME.
+        The column looks like a stale default that never tracked the real
+        placement scheme. `run_vac_load.py` hardcoding `FILEGROUP='SPEC'` is
+        the safer behaviour; following IndexMap here would scatter tables.
+
+      Either fix the filegroup column or stop reading it. Then add a post-load
+      check that flags any table whose actual compression or index type
+      disagrees with its IndexMap row.
+
+- [ ] **Consolidate the two VAC loaders.** `gen_vac_load.py` (writes SQL for
+      SSMS) and `run_vac_load.py` (executes unattended, with `--force` and
+      `vac_loaded.json` tracking) implement the same pattern and have drifted:
+      different filegroup sources, different compression rules. Neither reads
+      IndexMap's `compression` column. `run_vac_load.py --dry-run` already
+      prints the exact SQL, so the SSMS path could be `--dry-run > load.sql`
+      rather than a second implementation.
 
 - [ ] **Metadata workflow** — `pg2mos_descriptions.py` needs:
   - Utah to supply `pg_schema_descriptions.sql` earlier, so discrepancies are
@@ -212,7 +234,9 @@ CI on `multiplex_id`.
 **Key files:**
 - `mssql_tables_0603.sql` — canonical schema, 171 tables, all varchar fixes
 - `gen_bestdr20.py` — generates the four `bestdr20_*.sql` scripts
-- `gen_vac_load.py` — IndexMap-driven loader generator; use this for step 1
+- `gen_apogee_move.py` + `move_apogee_tables.sql` — PRIMARY heap to SPEC move
+- `drop_apogee_old_tables.sql` — self-verifying cleanup of the `_old` originals
+- `gen_vac_load.py` — IndexMap-driven loader generator (superseded by run_vac_load.py)
 - `gen_spec_load.py` — the original DROP > CREATE > CI > INSERT pattern
 - `run_vac_load.py`, `run_htm_add.py`, `run_erosita_load.py` — unattended
   executors, resumable via `*_loaded.json`
