@@ -29,3 +29,20 @@ GO
 
 PRINT 'dr20_target table recreated with computed columns';
 GO
+
+
+
+  BULK INSERT dbo.dr20_target
+  FROM 'E:\DR20\minidb_dr20\casload\minidb_dr20.dr20_target.csv'
+  WITH (
+      DATAFILETYPE='char',
+      FIRSTROW=2,
+      FIELDTERMINATOR=',',
+      ROWTERMINATOR='0x0a',
+      TABLOCK,
+      FIELDQUOTE='"'
+  );
+  GO
+
+  SELECT 'Loaded dr20_target', COUNT(*) AS row_count FROM dbo.dr20_target;
+  GO

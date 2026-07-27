@@ -2,17 +2,17 @@
 
 DROP TABLE IF EXISTS dbo.dr20_allstar_dr17_synspec_rev1
 CREATE TABLE dbo.dr20_allstar_dr17_synspec_rev1 (
-    [file] varchar(max),
-    apogee_id varchar(max),
-    target_id varchar(max),
-    apstar_id varchar(max) NOT NULL,
-    aspcap_id varchar(max),
-    telescope varchar(max),
+    [file] varchar(100),
+    apogee_id varchar(100),
+    target_id varchar(100),
+    apstar_id varchar(100) NOT NULL,
+    aspcap_id varchar(500),
+    telescope varchar(100),
     location_id integer,
-    field varchar(max),
-    alt_id varchar(max),
+    field varchar(100),
+    alt_id varchar(100),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     glon double precision,
     glat double precision,
     j real,
@@ -21,7 +21,7 @@ CREATE TABLE dbo.dr20_allstar_dr17_synspec_rev1 (
     h_err real,
     k real,
     k_err real,
-    src_h varchar(max),
+    src_h varchar(500),
     wash_m real,
     wash_m_err real,
     wash_t2 real,
@@ -44,9 +44,9 @@ CREATE TABLE dbo.dr20_allstar_dr17_synspec_rev1 (
     wash_ddo51_star_flag integer,
     targ_pmra real,
     targ_pmdec real,
-    targ_pm_src varchar(max),
+    targ_pm_src varchar(500),
     ak_targ real,
-    ak_targ_method varchar(max),
+    ak_targ_method varchar(500),
     ak_wise real,
     sfd_ebv real,
     apogee_target1 integer,
@@ -55,16 +55,16 @@ CREATE TABLE dbo.dr20_allstar_dr17_synspec_rev1 (
     apogee2_target2 integer,
     apogee2_target3 integer,
     apogee2_target4 integer,
-    targflags varchar(max),
-    survey varchar(max),
-    programname varchar(max),
+    targflags varchar(100),
+    survey varchar(100),
+    programname varchar(500),
     nvisits integer,
     snr real,
     snrev real,
     starflag bigint,
-    starflags varchar(max),
+    starflags varchar(100),
     andflag bigint,
-    andflags varchar(max),
+    andflags varchar(100),
     vhelio_avg real,
     vscatter real,
     verr real,
@@ -102,34 +102,34 @@ CREATE TABLE dbo.dr20_allstar_dr17_synspec_rev1 (
     gaiaedr3_r_med_photogeo real,
     gaiaedr3_r_lo_photogeo real,
     gaiaedr3_r_hi_photogeo real,
-    aspcap_grid varchar(max),
-    fparam_grid varchar(max),
-    chi2_grid varchar(max),
-    fparam varchar(max),
-    fparam_cov varchar(max),
+    aspcap_grid varchar(100),
+    fparam_grid varchar(8000),
+    chi2_grid varchar(500),
+    fparam varchar(500),
+    fparam_cov varchar(2000),
     aspcap_chi2 real,
-    param varchar(max),
-    param_cov varchar(max),
-    paramflag varchar(max),
+    param varchar(500),
+    param_cov varchar(2000),
+    paramflag varchar(100),
     aspcapflag bigint,
-    aspcapflags varchar(max),
+    aspcapflags varchar(500),
     frac_badpix real,
     frac_lowsnr real,
     frac_sigsky real,
-    felem varchar(max),
-    felem_err varchar(max),
-    x_h varchar(max),
-    x_h_err varchar(max),
-    x_m varchar(max),
-    x_m_err varchar(max),
-    elem_chi2 varchar(max),
-    elemfrac varchar(max),
-    elemflag varchar(max),
+    felem varchar(2000),
+    felem_err varchar(2000),
+    x_h varchar(2000),
+    x_h_err varchar(2000),
+    x_m varchar(2000),
+    x_m_err varchar(2000),
+    elem_chi2 varchar(2000),
+    elemfrac varchar(2000),
+    elemflag varchar(500),
     extratarg integer,
     memberflag bigint,
-    member varchar(max),
-    x_h_spec varchar(max),
-    x_m_spec varchar(max),
+    member varchar(100),
+    x_h_spec varchar(2000),
+    x_m_spec varchar(2000),
     teff real,
     teff_err real,
     logg real,
@@ -235,8 +235,8 @@ CREATE TABLE dbo.dr20_allstar_dr17_synspec_rev1 (
     yb_fe_spec real,
     yb_fe_err real,
     yb_fe_flag integer,
-    visit_pk varchar(max),
-    twomass_designation varchar(max)
+    visit_pk varchar(8000),
+    twomass_designation varchar(100)
 );
 
 
@@ -244,7 +244,7 @@ DROP TABLE IF EXISTS dbo.dr20_allwise
 CREATE TABLE dbo.dr20_allwise (
     designation character(20),
     ra numeric(10,7),
-    "dec" numeric(9,7),
+    [dec] numeric(9,7),
     sigra numeric(7,4),
     sigdec numeric(7,4),
     sigradec numeric(8,4),
@@ -562,7 +562,7 @@ CREATE TABLE dbo.dr20_bailer_jones_edr3 (
     r_med_photogeo double precision,
     r_lo_photogeo double precision,
     r_hi_photogeo double precision,
-    flag varchar(max)
+    flag varchar(100)
 );
 
 
@@ -610,8 +610,8 @@ CREATE TABLE dbo.dr20_best_brightest (
 DROP TABLE IF EXISTS dbo.dr20_bhm_csc
 CREATE TABLE dbo.dr20_bhm_csc (
     pk bigint NOT NULL,
-    csc_version varchar(max),
-    cxo_name varchar(max),
+    csc_version varchar(100),
+    cxo_name varchar(100),
     oir_ra double precision,
     oir_dec double precision,
     mag_g real,
@@ -619,23 +619,23 @@ CREATE TABLE dbo.dr20_bhm_csc (
     mag_i real,
     mag_z real,
     mag_h real,
-    spectrograph varchar(max)
+    spectrograph varchar(100)
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_bhm_csc_v2
 CREATE TABLE dbo.dr20_bhm_csc_v2 (
-    cxoid varchar(max),
+    cxoid varchar(100),
     xra double precision,
     xdec double precision,
     pri smallint,
-    ocat varchar(max),
+    ocat varchar(100),
     oid bigint,
     ora double precision,
     odec double precision,
     omag real,
     omatchtype smallint,
-    irid varchar(max),
+    irid varchar(100),
     ra2m double precision,
     dec2m double precision,
     hmag real,
@@ -643,10 +643,10 @@ CREATE TABLE dbo.dr20_bhm_csc_v2 (
     lgal double precision,
     bgal double precision,
     logfx real,
-    xband varchar(max),
+    xband varchar(100),
     xsn double precision,
     xflags integer,
-    designation2m varchar(max),
+    designation2m varchar(100),
     idg2 bigint,
     idps bigint,
     pk bigint NOT NULL
@@ -655,13 +655,13 @@ CREATE TABLE dbo.dr20_bhm_csc_v2 (
 
 DROP TABLE IF EXISTS dbo.dr20_bhm_csc_v3
 CREATE TABLE dbo.dr20_bhm_csc_v3 (
-    csc21p_id varchar(max),
-    csc21p_ensemble varchar(max),
+    csc21p_id varchar(100),
+    csc21p_ensemble varchar(100),
     ra double precision,
-    "dec" double precision,
-    best_oir_cat varchar(max),
+    [dec] double precision,
+    best_oir_cat varchar(100),
     best_mag real,
-    mag_type varchar(max),
+    mag_type varchar(100),
     gaia_dr3_srcid bigint,
     ls_dr10_lsid bigint,
     ls_dr10_objid integer,
@@ -669,14 +669,14 @@ CREATE TABLE dbo.dr20_bhm_csc_v3 (
     ls_dr10_release smallint,
     ps21p_objid bigint,
     ps21p_ippobjid bigint,
-    tmass_designation varchar(max),
+    tmass_designation varchar(100),
     tmass_ra double precision,
     tmass_dec double precision,
     tmass_h real,
     csc21p_ra double precision,
     csc21p_dec double precision,
     logfx double precision,
-    xband varchar(max),
+    xband varchar(100),
     extent bit,
     xsig double precision,
     xpriority integer,
@@ -735,7 +735,7 @@ CREATE TABLE dbo.dr20_bhm_rm_tweaks (
     mjd integer,
     catalogid bigint,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     rm_suitability integer,
     in_plate bit,
     firstcarton character(17),
@@ -754,7 +754,7 @@ DROP TABLE IF EXISTS dbo.dr20_bhm_rm_v0
 CREATE TABLE dbo.dr20_bhm_rm_v0 (
     field_name varchar(8),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     distance double precision,
     pos_ref varchar(4),
     ebv double precision,
@@ -1008,7 +1008,7 @@ DROP TABLE IF EXISTS dbo.dr20_bhm_rm_v0_2
 CREATE TABLE dbo.dr20_bhm_rm_v0_2 (
     field_name varchar(8),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     distance double precision,
     pos_ref varchar(4),
     ebv double precision,
@@ -1262,7 +1262,7 @@ DROP TABLE IF EXISTS dbo.dr20_bhm_rm_v1
 CREATE TABLE dbo.dr20_bhm_rm_v1 (
     rm_field_name character(8),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     catalogidv05 bigint,
     rm_known_spec bit,
     rm_core bit,
@@ -1290,7 +1290,7 @@ DROP TABLE IF EXISTS dbo.dr20_bhm_rm_v1_1
 CREATE TABLE dbo.dr20_bhm_rm_v1_1 (
     rm_field_name character(8),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     catalogidv05 bigint,
     rm_known_spec bit,
     rm_core bit,
@@ -1318,7 +1318,7 @@ DROP TABLE IF EXISTS dbo.dr20_bhm_rm_v1_3
 CREATE TABLE dbo.dr20_bhm_rm_v1_3 (
     rm_field_name character(8),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     catalogidv05 bigint,
     rm_known_spec bit,
     rm_core bit,
@@ -1345,8 +1345,8 @@ CREATE TABLE dbo.dr20_bhm_rm_v1_3 (
 DROP TABLE IF EXISTS dbo.dr20_bhm_spiders_agn_superset
 CREATE TABLE dbo.dr20_bhm_spiders_agn_superset (
     pk bigint NOT NULL,
-    ero_version varchar(max),
-    ero_detuid varchar(max),
+    ero_version varchar(100),
+    ero_detuid varchar(100),
     ero_flux real,
     ero_flux_err real,
     ero_ext real,
@@ -1356,19 +1356,19 @@ CREATE TABLE dbo.dr20_bhm_spiders_agn_superset (
     ero_ra double precision,
     ero_dec double precision,
     ero_radec_err real,
-    xmatch_method varchar(max),
-    xmatch_version varchar(max),
+    xmatch_method varchar(100),
+    xmatch_version varchar(100),
     xmatch_dist real,
     xmatch_metric real,
     xmatch_flags bigint,
-    target_class varchar(max),
+    target_class varchar(100),
     target_priority integer,
     target_has_spec integer,
-    best_opt varchar(max),
+    best_opt varchar(100),
     ls_id bigint,
     ps1_dr2_objid bigint,
     gaia_dr2_source_id bigint,
-    unwise_dr1_objid varchar(max),
+    unwise_dr1_objid varchar(100),
     des_dr1_coadd_object_id bigint,
     sdss_dr16_objid bigint,
     opt_ra double precision,
@@ -1390,8 +1390,8 @@ CREATE TABLE dbo.dr20_bhm_spiders_agn_superset (
 DROP TABLE IF EXISTS dbo.dr20_bhm_spiders_clusters_superset
 CREATE TABLE dbo.dr20_bhm_spiders_clusters_superset (
     pk bigint NOT NULL,
-    ero_version varchar(max),
-    ero_detuid varchar(max),
+    ero_version varchar(100),
+    ero_detuid varchar(100),
     ero_flux real,
     ero_flux_err real,
     ero_ext real,
@@ -1401,19 +1401,19 @@ CREATE TABLE dbo.dr20_bhm_spiders_clusters_superset (
     ero_ra double precision,
     ero_dec double precision,
     ero_radec_err real,
-    xmatch_method varchar(max),
-    xmatch_version varchar(max),
+    xmatch_method varchar(100),
+    xmatch_version varchar(100),
     xmatch_dist real,
     xmatch_metric real,
     xmatch_flags bigint,
-    target_class varchar(max),
+    target_class varchar(100),
     target_priority integer,
     target_has_spec integer,
-    best_opt varchar(max),
+    best_opt varchar(100),
     ls_id bigint,
     ps1_dr2_objid bigint,
     gaia_dr2_source_id bigint,
-    unwise_dr1_objid varchar(max),
+    unwise_dr1_objid varchar(100),
     des_dr1_coadd_object_id bigint,
     sdss_dr16_objid bigint,
     opt_ra double precision,
@@ -1434,11 +1434,11 @@ CREATE TABLE dbo.dr20_bhm_spiders_clusters_superset (
 
 DROP TABLE IF EXISTS dbo.dr20_cadence
 CREATE TABLE dbo.dr20_cadence (
-    label varchar(max),
+    label varchar(100),
     nepochs integer,
     pk bigint NOT NULL,
-    label_root varchar(max),
-    label_version varchar(max),
+    label_root varchar(100),
+    label_version varchar(100),
     max_skybrightness real,
     nexp_total integer
 );
@@ -1446,7 +1446,7 @@ CREATE TABLE dbo.dr20_cadence (
 
 DROP TABLE IF EXISTS dbo.dr20_cadence_epoch
 CREATE TABLE dbo.dr20_cadence_epoch (
-    label varchar(max) NOT NULL,
+    label varchar(100) NOT NULL,
     nepochs integer,
     cadence_pk bigint,
     epoch integer NOT NULL,
@@ -1456,19 +1456,19 @@ CREATE TABLE dbo.dr20_cadence_epoch (
     delta_min real,
     nexp integer,
     max_length real,
-    obsmode_pk varchar(max)
+    obsmode_pk varchar(100)
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_carton
 CREATE TABLE dbo.dr20_carton (
-    carton varchar(max),
+    carton varchar(500),
     carton_pk integer NOT NULL,
     mapper_pk integer,
     category_pk integer,
     version_pk integer,
-    program varchar(max),
-    target_selection_plan varchar(max)
+    program varchar(100),
+    target_selection_plan varchar(100)
 );
 
 
@@ -1476,7 +1476,7 @@ DROP TABLE IF EXISTS dbo.dr20_carton_csv
 CREATE TABLE dbo.dr20_carton_csv (
     carton_pk integer NOT NULL,
     version_pk integer NOT NULL,
-    carton varchar(max)
+    carton varchar(500)
 );
 
 
@@ -1500,13 +1500,13 @@ DROP TABLE IF EXISTS dbo.dr20_cataclysmic_variables
 CREATE TABLE dbo.dr20_cataclysmic_variables (
     ref_id bigint NOT NULL,
     solution_id bigint,
-    designation varchar(max),
+    designation varchar(100),
     source_id bigint,
     random_index integer,
     ref_epoch real,
     ra double precision,
     ra_error double precision,
-    "dec" double precision,
+    [dec] double precision,
     dec_error double precision,
     parallax double precision,
     parallax_error double precision,
@@ -1571,7 +1571,7 @@ CREATE TABLE dbo.dr20_cataclysmic_variables (
     rv_template_teff real,
     rv_template_logg real,
     rv_template_fe_h real,
-    phot_variable_flag varchar(max),
+    phot_variable_flag varchar(100),
     l double precision,
     b double precision,
     ecl_lon double precision,
@@ -1599,13 +1599,13 @@ CREATE TABLE dbo.dr20_cataclysmic_variables (
 DROP TABLE IF EXISTS dbo.dr20_catalog
 CREATE TABLE dbo.dr20_catalog (
     catalogid bigint NOT NULL,
-    iauname varchar(max),
+    iauname varchar(500),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     pmra real,
     pmdec real,
     parallax real,
-    lead varchar(max),
+    lead varchar(100),
     version_id integer
 );
 
@@ -1623,11 +1623,11 @@ CREATE TABLE dbo.dr20_catalog_from_sdss_dr19p_speclite (
 DROP TABLE IF EXISTS dbo.dr20_catalog_to_allstar_dr17_synspec_rev1
 CREATE TABLE dbo.dr20_catalog_to_allstar_dr17_synspec_rev1 (
     catalogid bigint NOT NULL,
-    target_id varchar(max) NOT NULL,
+    target_id varchar(100) NOT NULL,
     version_id smallint NOT NULL,
     distance double precision,
     best bit,
-    plan_id varchar(max)
+    plan_id varchar(100)
 );
 
 
@@ -1778,7 +1778,7 @@ CREATE TABLE dbo.dr20_catalog_to_mangatarget (
     version_id smallint NOT NULL,
     distance double precision,
     best bit,
-    plan_id varchar(max),
+    plan_id varchar(100),
     added_by_phase smallint
 );
 
@@ -1790,7 +1790,7 @@ CREATE TABLE dbo.dr20_catalog_to_marvels_dr11_star (
     version_id smallint NOT NULL,
     distance double precision,
     best bit,
-    plan_id varchar(max),
+    plan_id varchar(100),
     added_by_phase smallint
 );
 
@@ -1802,7 +1802,7 @@ CREATE TABLE dbo.dr20_catalog_to_marvels_dr12_star (
     version_id smallint NOT NULL,
     distance double precision,
     best bit,
-    plan_id varchar(max),
+    plan_id varchar(100),
     added_by_phase smallint
 );
 
@@ -1814,7 +1814,7 @@ CREATE TABLE dbo.dr20_catalog_to_mastar_goodstars (
     version_id smallint NOT NULL,
     distance double precision,
     best bit,
-    plan_id varchar(max),
+    plan_id varchar(100),
     added_by_phase smallint
 );
 
@@ -1866,7 +1866,7 @@ CREATE TABLE dbo.dr20_catalog_to_sdss_dr17_specobj (
     version_id smallint NOT NULL,
     distance double precision,
     best bit,
-    plan_id varchar(max),
+    plan_id varchar(100),
     added_by_phase smallint
 );
 
@@ -1954,7 +1954,7 @@ CREATE TABLE dbo.dr20_catalog_to_twomass_psc_part2 (
 DROP TABLE IF EXISTS dbo.dr20_catalog_to_tycho2
 CREATE TABLE dbo.dr20_catalog_to_tycho2 (
     catalogid bigint NOT NULL,
-    target_id varchar(max) NOT NULL,
+    target_id varchar(100) NOT NULL,
     version_id smallint NOT NULL,
     distance double precision,
     best bit
@@ -1964,7 +1964,7 @@ CREATE TABLE dbo.dr20_catalog_to_tycho2 (
 DROP TABLE IF EXISTS dbo.dr20_catalog_to_unwise
 CREATE TABLE dbo.dr20_catalog_to_unwise (
     catalogid bigint NOT NULL,
-    target_id varchar(max) NOT NULL,
+    target_id varchar(100) NOT NULL,
     version_id smallint NOT NULL,
     distance double precision,
     best bit
@@ -2004,15 +2004,15 @@ CREATE TABLE dbo.dr20_catalog_to_xmm_om_suss_5_0 (
 DROP TABLE IF EXISTS dbo.dr20_catalogdb_version
 CREATE TABLE dbo.dr20_catalogdb_version (
     id integer NOT NULL,
-    planname varchar(max),
-    tag varchar(max)
+    planname varchar(100),
+    tag varchar(100)
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_category
 CREATE TABLE dbo.dr20_category (
     pk integer NOT NULL,
-    label varchar(max)
+    label varchar(100)
 );
 
 
@@ -2021,7 +2021,7 @@ CREATE TABLE dbo.dr20_catwise2020 (
     source_name character(21),
     source_id character(25) NOT NULL,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     sigra real,
     sigdec real,
     sigradec real,
@@ -2211,8 +2211,8 @@ CREATE TABLE dbo.dr20_catwise2020 (
 DROP TABLE IF EXISTS dbo.dr20_design
 CREATE TABLE dbo.dr20_design (
     design_id integer NOT NULL,
-    design_mode_label varchar(max),
-    mugatu_version varchar(max),
+    design_mode_label varchar(100),
+    mugatu_version varchar(100),
     run_on date,
     assignment_hash uniqueidentifier,
     design_version_pk integer
@@ -2221,7 +2221,7 @@ CREATE TABLE dbo.dr20_design (
 
 DROP TABLE IF EXISTS dbo.dr20_design_mode
 CREATE TABLE dbo.dr20_design_mode (
-    label varchar(max) NOT NULL,
+    label varchar(100) NOT NULL,
     boss_skies_min integer,
     apogee_skies_min integer,
     boss_stds_min integer,
@@ -2371,7 +2371,7 @@ CREATE TABLE dbo.dr20_ebosstarget_v5 (
     camcol integer,
     field integer,
     id integer,
-    rerun varchar(max),
+    rerun varchar(100),
     fibermag_u real,
     fibermag_g real,
     fibermag_r real,
@@ -2388,7 +2388,7 @@ CREATE TABLE dbo.dr20_ebosstarget_v5 (
     calib_status_i integer,
     calib_status_z integer,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     epoch real,
     pmra real,
     pmdec real,
@@ -2615,26 +2615,26 @@ CREATE TABLE dbo.dr20_erosita_superset_stars (
 
 DROP TABLE IF EXISTS dbo.dr20_erosita_superset_v1_agn
 CREATE TABLE dbo.dr20_erosita_superset_v1_agn (
-    ero_version varchar(max),
-    ero_detuid varchar(max),
+    ero_version varchar(100),
+    ero_detuid varchar(100),
     ero_flux real,
-    ero_flux_type varchar(max),
-    ero_mjd varchar(max),
-    ero_morph varchar(max),
+    ero_flux_type varchar(100),
+    ero_mjd varchar(100),
+    ero_morph varchar(100),
     ero_flags bigint,
     ero_det_like real,
     ero_ra double precision,
     ero_dec double precision,
     ero_radec_err real,
-    xmatch_method varchar(max),
-    xmatch_version varchar(max),
+    xmatch_method varchar(100),
+    xmatch_version varchar(100),
     xmatch_dist real,
     xmatch_metric real,
     xmatch_flags bigint,
-    target_class varchar(max),
+    target_class varchar(100),
     target_priority integer,
     target_has_spec bigint,
-    opt_cat varchar(max),
+    opt_cat varchar(100),
     ls_id bigint,
     gaia_dr3_source_id bigint,
     opt_ra double precision,
@@ -2648,26 +2648,26 @@ CREATE TABLE dbo.dr20_erosita_superset_v1_agn (
 
 DROP TABLE IF EXISTS dbo.dr20_erosita_superset_v1_clusters
 CREATE TABLE dbo.dr20_erosita_superset_v1_clusters (
-    ero_version varchar(max),
-    ero_detuid varchar(max),
+    ero_version varchar(100),
+    ero_detuid varchar(100),
     ero_flux real,
-    ero_flux_type varchar(max),
-    ero_mjd varchar(max),
-    ero_morph varchar(max),
+    ero_flux_type varchar(100),
+    ero_mjd varchar(100),
+    ero_morph varchar(100),
     ero_flags bigint,
     ero_det_like real,
     ero_ra double precision,
     ero_dec double precision,
     ero_radec_err real,
-    xmatch_method varchar(max),
-    xmatch_version varchar(max),
+    xmatch_method varchar(100),
+    xmatch_version varchar(100),
     xmatch_dist real,
     xmatch_metric real,
     xmatch_flags bigint,
-    target_class varchar(max),
+    target_class varchar(100),
     target_priority integer,
     target_has_spec bigint,
-    opt_cat varchar(max),
+    opt_cat varchar(100),
     ls_id bigint,
     gaia_dr3_source_id bigint,
     opt_ra double precision,
@@ -2683,26 +2683,26 @@ CREATE TABLE dbo.dr20_erosita_superset_v1_clusters (
 
 DROP TABLE IF EXISTS dbo.dr20_erosita_superset_v1_compactobjects
 CREATE TABLE dbo.dr20_erosita_superset_v1_compactobjects (
-    ero_version varchar(max),
-    ero_detuid varchar(max),
+    ero_version varchar(100),
+    ero_detuid varchar(100),
     ero_flux real,
-    ero_flux_type varchar(max),
-    ero_mjd varchar(max),
-    ero_morph varchar(max),
+    ero_flux_type varchar(100),
+    ero_mjd varchar(100),
+    ero_morph varchar(100),
     ero_flags bigint,
     ero_det_like real,
     ero_ra double precision,
     ero_dec double precision,
     ero_radec_err real,
-    xmatch_method varchar(max),
-    xmatch_version varchar(max),
+    xmatch_method varchar(100),
+    xmatch_version varchar(100),
     xmatch_dist real,
     xmatch_metric real,
     xmatch_flags bigint,
-    target_class varchar(max),
+    target_class varchar(100),
     target_priority integer,
     target_has_spec bigint,
-    opt_cat varchar(max),
+    opt_cat varchar(100),
     ls_id bigint,
     gaia_dr3_source_id bigint,
     opt_ra double precision,
@@ -2716,26 +2716,26 @@ CREATE TABLE dbo.dr20_erosita_superset_v1_compactobjects (
 
 DROP TABLE IF EXISTS dbo.dr20_erosita_superset_v1_stars
 CREATE TABLE dbo.dr20_erosita_superset_v1_stars (
-    ero_version varchar(max),
-    ero_detuid varchar(max),
+    ero_version varchar(100),
+    ero_detuid varchar(100),
     ero_flux real,
-    ero_flux_type varchar(max),
-    ero_mjd varchar(max),
-    ero_morph varchar(max),
+    ero_flux_type varchar(100),
+    ero_mjd varchar(100),
+    ero_morph varchar(100),
     ero_flags bigint,
     ero_det_like real,
     ero_ra double precision,
     ero_dec double precision,
     ero_radec_err real,
-    xmatch_method varchar(max),
-    xmatch_version varchar(max),
+    xmatch_method varchar(100),
+    xmatch_version varchar(100),
     xmatch_dist real,
     xmatch_metric real,
     xmatch_flags bigint,
-    target_class varchar(max),
+    target_class varchar(100),
     target_priority integer,
     target_has_spec bigint,
-    opt_cat varchar(max),
+    opt_cat varchar(100),
     ls_id bigint,
     gaia_dr3_source_id bigint,
     opt_ra double precision,
@@ -2756,16 +2756,16 @@ CREATE TABLE dbo.dr20_field (
     cadence_pk integer,
     observatory_pk integer,
     position_angle real,
-    slots_exposures varchar(max),
+    slots_exposures varchar(500),
     field_id integer
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_gaia_assas_sn_cepheids
 CREATE TABLE dbo.dr20_gaia_assas_sn_cepheids (
-    source varchar(max),
-    ref varchar(max),
-    star varchar(max),
+    source varchar(100),
+    ref varchar(100),
+    star varchar(100),
     period double precision,
     amp_v double precision,
     mean_v double precision,
@@ -2775,7 +2775,7 @@ CREATE TABLE dbo.dr20_gaia_assas_sn_cepheids (
     ref_epoch real,
     ra double precision,
     ra_error double precision,
-    "dec" double precision,
+    [dec] double precision,
     dec_error double precision,
     parallax double precision,
     parallax_error double precision,
@@ -2823,8 +2823,8 @@ CREATE TABLE dbo.dr20_gaia_assas_sn_cepheids (
     e_bp_min_rp_percentile_lower double precision,
     e_bp_min_rp_percentile_upper double precision,
     variability double precision,
-    type varchar(max),
-    twomass varchar(max),
+    type varchar(100),
+    twomass varchar(100),
     raj2000 double precision,
     dej2000 double precision,
     errhalfmaj real,
@@ -2836,7 +2836,7 @@ CREATE TABLE dbo.dr20_gaia_assas_sn_cepheids (
     e_jmag real,
     e_hmag real,
     e_kmag real,
-    qfl varchar(max),
+    qfl varchar(100),
     rfl smallint,
     x smallint,
     measurejd double precision,
@@ -2854,13 +2854,13 @@ CREATE TABLE dbo.dr20_gaia_dr2_ruwe (
 DROP TABLE IF EXISTS dbo.dr20_gaia_dr2_source
 CREATE TABLE dbo.dr20_gaia_dr2_source (
     solution_id bigint,
-    designation varchar(max),
+    designation varchar(100),
     source_id bigint NOT NULL,
     random_index bigint,
     ref_epoch double precision,
     ra double precision,
     ra_error double precision,
-    "dec" double precision,
+    [dec] double precision,
     dec_error double precision,
     parallax double precision,
     parallax_error double precision,
@@ -2925,7 +2925,7 @@ CREATE TABLE dbo.dr20_gaia_dr2_source (
     rv_template_teff real,
     rv_template_logg real,
     rv_template_fe_h real,
-    phot_variable_flag varchar(max),
+    phot_variable_flag varchar(100),
     l double precision,
     b double precision,
     ecl_lon double precision,
@@ -2953,13 +2953,13 @@ CREATE TABLE dbo.dr20_gaia_dr2_source (
 DROP TABLE IF EXISTS dbo.dr20_gaia_dr2_source_part1
 CREATE TABLE dbo.dr20_gaia_dr2_source_part1 (
     solution_id bigint,
-    designation varchar(max),
+    designation varchar(500),
     source_id bigint NOT NULL,
     random_index bigint,
     ref_epoch double precision,
     ra double precision,
     ra_error double precision,
-    "dec" double precision,
+    [dec] double precision,
     dec_error double precision,
     parallax double precision,
     parallax_error double precision,
@@ -3024,7 +3024,7 @@ CREATE TABLE dbo.dr20_gaia_dr2_source_part1 (
     rv_template_teff real,
     rv_template_logg real,
     rv_template_fe_h real,
-    phot_variable_flag varchar(max),
+    phot_variable_flag varchar(500),
     l double precision,
     b double precision,
     ecl_lon double precision,
@@ -3052,13 +3052,13 @@ CREATE TABLE dbo.dr20_gaia_dr2_source_part1 (
 DROP TABLE IF EXISTS dbo.dr20_gaia_dr2_source_part2
 CREATE TABLE dbo.dr20_gaia_dr2_source_part2 (
     solution_id bigint,
-    designation varchar(max),
+    designation varchar(500),
     source_id bigint NOT NULL,
     random_index bigint,
     ref_epoch double precision,
     ra double precision,
     ra_error double precision,
-    "dec" double precision,
+    [dec] double precision,
     dec_error double precision,
     parallax double precision,
     parallax_error double precision,
@@ -3123,7 +3123,7 @@ CREATE TABLE dbo.dr20_gaia_dr2_source_part2 (
     rv_template_teff real,
     rv_template_logg real,
     rv_template_fe_h real,
-    phot_variable_flag varchar(max),
+    phot_variable_flag varchar(500),
     l double precision,
     b double precision,
     ecl_lon double precision,
@@ -3150,13 +3150,13 @@ CREATE TABLE dbo.dr20_gaia_dr2_source_part2 (
 
 DROP TABLE IF EXISTS dbo.dr20_gaia_dr2_wd
 CREATE TABLE dbo.dr20_gaia_dr2_wd (
-    wd varchar(max),
-    dr2name varchar(max),
+    wd varchar(100),
+    dr2name varchar(100),
     source_id bigint NOT NULL,
     source integer,
     ra double precision,
     e_ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     e_dec double precision,
     plx real,
     e_plx real,
@@ -3180,7 +3180,7 @@ CREATE TABLE dbo.dr20_gaia_dr2_wd (
     glat double precision,
     density real,
     ag real,
-    sdss varchar(max),
+    sdss varchar(100),
     umag real,
     e_umag real,
     gmag real,
@@ -3262,7 +3262,7 @@ CREATE TABLE dbo.dr20_gaia_dr3_astrophysical_parameters (
     radius_gspphot_upper real,
     logposterior_gspphot real,
     mcmcaccept_gspphot real,
-    libname_gspphot varchar(max),
+    libname_gspphot varchar(100),
     teff_gspspec real,
     teff_gspspec_lower real,
     teff_gspspec_upper real,
@@ -3353,14 +3353,14 @@ CREATE TABLE dbo.dr20_gaia_dr3_astrophysical_parameters (
     dibp2_gspspec real,
     dibp2_gspspec_uncertainty real,
     dibqf_gspspec integer,
-    flags_gspspec varchar(max),
+    flags_gspspec varchar(100),
     logchisq_gspspec real,
     ew_espels_halpha real,
     ew_espels_halpha_uncertainty real,
-    ew_espels_halpha_flag varchar(max),
+    ew_espels_halpha_flag varchar(100),
     ew_espels_halpha_model real,
-    classlabel_espels varchar(max),
-    classlabel_espels_flag varchar(max),
+    classlabel_espels varchar(500),
+    classlabel_espels_flag varchar(500),
     classprob_espels_wcstar real,
     classprob_espels_wnstar real,
     classprob_espels_bestar real,
@@ -3380,14 +3380,14 @@ CREATE TABLE dbo.dr20_gaia_dr3_astrophysical_parameters (
     logg_esphs_uncertainty real,
     vsini_esphs real,
     vsini_esphs_uncertainty real,
-    flags_esphs varchar(max),
-    spectraltype_esphs varchar(max),
+    flags_esphs varchar(100),
+    spectraltype_esphs varchar(100),
     activityindex_espcs real,
     activityindex_espcs_uncertainty real,
-    activityindex_espcs_input varchar(max),
+    activityindex_espcs_input varchar(100),
     teff_espucd real,
     teff_espucd_uncertainty real,
-    flags_espucd varchar(max),
+    flags_espucd varchar(100),
     radius_flame real,
     radius_flame_lower real,
     radius_flame_upper real,
@@ -3400,7 +3400,7 @@ CREATE TABLE dbo.dr20_gaia_dr3_astrophysical_parameters (
     age_flame real,
     age_flame_lower real,
     age_flame_upper real,
-    flags_flame varchar(max),
+    flags_flame varchar(100),
     evolstage_flame integer,
     gravredshift_flame real,
     gravredshift_flame_lower real,
@@ -3433,11 +3433,11 @@ CREATE TABLE dbo.dr20_gaia_dr3_astrophysical_parameters (
     logposterior_msc real,
     mcmcaccept_msc real,
     mcmcdrift_msc real,
-    flags_msc varchar(max),
+    flags_msc varchar(100),
     neuron_oa_id bigint,
     neuron_oa_dist double precision,
     neuron_oa_dist_percentile_rank integer,
-    flags_oa varchar(max)
+    flags_oa varchar(100)
 );
 
 
@@ -3445,10 +3445,10 @@ DROP TABLE IF EXISTS dbo.dr20_gaia_dr3_nss_two_body_orbit
 CREATE TABLE dbo.dr20_gaia_dr3_nss_two_body_orbit (
     solution_id bigint,
     source_id bigint NOT NULL,
-    nss_solution_type varchar(max),
+    nss_solution_type varchar(100),
     ra double precision,
     ra_error real,
-    "dec" double precision,
+    [dec] double precision,
     dec_error real,
     parallax double precision,
     parallax_error real,
@@ -3502,7 +3502,7 @@ CREATE TABLE dbo.dr20_gaia_dr3_nss_two_body_orbit (
     phot_g_n_obs integer,
     phot_g_n_good_obs integer,
     bit_index bigint,
-    corr_vec varchar(max),
+    corr_vec varchar(8000),
     obj_func real,
     goodness_of_fit real,
     efficiency real,
@@ -3526,13 +3526,13 @@ CREATE TABLE dbo.dr20_gaia_dr3_nss_two_body_orbit (
 DROP TABLE IF EXISTS dbo.dr20_gaia_dr3_source
 CREATE TABLE dbo.dr20_gaia_dr3_source (
     solution_id bigint,
-    designation varchar(max),
+    designation varchar(100),
     source_id bigint NOT NULL,
     random_index bigint,
     ref_epoch double precision,
     ra double precision,
     ra_error real,
-    "dec" double precision,
+    [dec] double precision,
     dec_error real,
     parallax double precision,
     parallax_error real,
@@ -3636,7 +3636,7 @@ CREATE TABLE dbo.dr20_gaia_dr3_source (
     grvs_mag_error real,
     grvs_mag_nb_transits smallint,
     rvs_spec_sig_to_noise real,
-    phot_variable_flag varchar(max),
+    phot_variable_flag varchar(100),
     l double precision,
     b double precision,
     ecl_lon double precision,
@@ -3676,7 +3676,7 @@ CREATE TABLE dbo.dr20_gaia_dr3_source (
     ebpminrp_gspphot double precision,
     ebpminrp_gspphot_lower double precision,
     ebpminrp_gspphot_upper double precision,
-    libname_gspphot varchar(max)
+    libname_gspphot varchar(100)
 );
 
 
@@ -3800,23 +3800,23 @@ CREATE TABLE dbo.dr20_gaia_dr3_vari_rrlyrae (
     fund_freq1_error real,
     fund_freq2 double precision,
     fund_freq2_error real,
-    fund_freq1_harmonic_ampl_g varchar(max),
-    fund_freq1_harmonic_ampl_g_error varchar(max),
-    fund_freq1_harmonic_phase_g varchar(max),
-    fund_freq1_harmonic_phase_g_error varchar(max),
-    fund_freq1_harmonic_ampl_bp varchar(max),
-    fund_freq1_harmonic_ampl_bp_error varchar(max),
-    fund_freq1_harmonic_phase_bp varchar(max),
-    fund_freq1_harmonic_phase_bp_error varchar(max),
-    fund_freq1_harmonic_ampl_rp varchar(max),
-    fund_freq1_harmonic_ampl_rp_error varchar(max),
-    fund_freq1_harmonic_phase_rp varchar(max),
-    fund_freq1_harmonic_phase_rp_error varchar(max),
-    fund_freq1_harmonic_ampl_rv varchar(max),
-    fund_freq1_harmonic_ampl_rv_error varchar(max),
-    fund_freq1_harmonic_phase_rv varchar(max),
-    fund_freq1_harmonic_phase_rv_error varchar(max),
-    best_classification varchar(max),
+    fund_freq1_harmonic_ampl_g varchar(500),
+    fund_freq1_harmonic_ampl_g_error varchar(500),
+    fund_freq1_harmonic_phase_g varchar(500),
+    fund_freq1_harmonic_phase_g_error varchar(500),
+    fund_freq1_harmonic_ampl_bp varchar(500),
+    fund_freq1_harmonic_ampl_bp_error varchar(500),
+    fund_freq1_harmonic_phase_bp varchar(500),
+    fund_freq1_harmonic_phase_bp_error varchar(500),
+    fund_freq1_harmonic_ampl_rp varchar(500),
+    fund_freq1_harmonic_ampl_rp_error varchar(500),
+    fund_freq1_harmonic_phase_rp varchar(500),
+    fund_freq1_harmonic_phase_rp_error varchar(500),
+    fund_freq1_harmonic_ampl_rv varchar(500),
+    fund_freq1_harmonic_ampl_rv_error varchar(500),
+    fund_freq1_harmonic_phase_rv varchar(500),
+    fund_freq1_harmonic_phase_rv_error varchar(500),
+    best_classification varchar(100),
     g_absorption real,
     g_absorption_error real
 );
@@ -3825,9 +3825,9 @@ CREATE TABLE dbo.dr20_gaia_dr3_vari_rrlyrae (
 DROP TABLE IF EXISTS dbo.dr20_gaia_unwise_agn
 CREATE TABLE dbo.dr20_gaia_unwise_agn (
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     gaia_sourceid bigint NOT NULL,
-    unwise_objid varchar(max),
+    unwise_objid varchar(100),
     plx double precision,
     plx_err double precision,
     pmra double precision,
@@ -3880,21 +3880,21 @@ CREATE TABLE dbo.dr20_gaiadr2_tmass_best_neighbour (
 
 DROP TABLE IF EXISTS dbo.dr20_galah_dr3
 CREATE TABLE dbo.dr20_galah_dr3 (
-    star_id varchar(max),
+    star_id varchar(100),
     sobject_id bigint NOT NULL,
     dr2_source_id bigint,
     dr3_source_id bigint,
-    survey_name varchar(max),
+    survey_name varchar(100),
     field_id bigint,
     flag_repeat bigint,
-    wg4_field varchar(max),
-    wg4_pipeline varchar(max),
+    wg4_field varchar(100),
+    wg4_pipeline varchar(100),
     flag_sp bigint,
     teff real,
     e_teff double precision,
     irfm_teff real,
     irfm_ebv real,
-    irfm_ebv_ref varchar(max),
+    irfm_ebv_ref varchar(100),
     logg real,
     e_logg double precision,
     fe_h real,
@@ -4069,10 +4069,10 @@ CREATE TABLE dbo.dr20_galah_dr3 (
     h_msigcom real,
     ks_m real,
     ks_msigcom real,
-    ph_qual_tmass varchar(max),
+    ph_qual_tmass varchar(100),
     w2mpro double precision,
     w2mpro_error double precision,
-    ph_qual_wise varchar(max),
+    ph_qual_wise varchar(100),
     a_ks double precision,
     e_a_ks double precision,
     bc_ks real,
@@ -4123,7 +4123,7 @@ CREATE TABLE dbo.dr20_geometric_distances_gaia_dr2 (
 
 DROP TABLE IF EXISTS dbo.dr20_glimpse
 CREATE TABLE dbo.dr20_glimpse (
-    designation varchar(max),
+    designation varchar(100),
     tmass_designation varchar(18),
     tmass_cntr integer,
     l double precision,
@@ -4131,7 +4131,7 @@ CREATE TABLE dbo.dr20_glimpse (
     dl double precision,
     db double precision,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     dra double precision,
     ddec double precision,
     csf integer,
@@ -4209,13 +4209,13 @@ DROP TABLE IF EXISTS dbo.dr20_guvcat
 CREATE TABLE dbo.dr20_guvcat (
     objid bigint NOT NULL,
     photoextractid bigint,
-    mpstype varchar(max),
+    mpstype varchar(100),
     avaspra double precision,
     avaspdec double precision,
     fexptime real,
     nexptime real,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     glon double precision,
     glat double precision,
     tilenum integer,
@@ -4284,23 +4284,23 @@ CREATE TABLE dbo.dr20_guvcat (
     ib_poserr real,
     nuv_pperr real,
     fuv_pperr real,
-    corv varchar(max),
+    corv varchar(100),
     grank smallint,
     ngrank smallint,
     primgid bigint,
-    groupgid varchar(max),
+    groupgid varchar(100),
     grankdist smallint,
     ngrankdist bigint,
     primgiddist bigint,
-    groupgiddist varchar(max),
-    groupgidtot varchar(max),
+    groupgiddist varchar(100),
+    groupgidtot varchar(100),
     difffuv real,
     diffnuv real,
     difffuvdist real,
     diffnuvdist real,
     sepas real,
     sepasdist real,
-    inlargeobj varchar(max),
+    inlargeobj varchar(100),
     largeobjsize real
 );
 
@@ -4308,20 +4308,20 @@ CREATE TABLE dbo.dr20_guvcat (
 DROP TABLE IF EXISTS dbo.dr20_hecate_1_1
 CREATE TABLE dbo.dr20_hecate_1_1 (
     pgc integer NOT NULL,
-    objname varchar(max),
-    id_ned varchar(max),
-    id_nedd varchar(max),
-    id_iras varchar(max),
-    id_2mass varchar(max),
-    sdss_photid varchar(max),
-    sdss_specid varchar(max),
+    objname varchar(100),
+    id_ned varchar(100),
+    id_nedd varchar(100),
+    id_iras varchar(100),
+    id_2mass varchar(100),
+    sdss_photid varchar(100),
+    sdss_specid varchar(100),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     f_astrom smallint,
     r1 real,
     r2 real,
     pa real,
-    rsource varchar(max),
+    rsource varchar(100),
     rflag smallint,
     t real,
     e_t real,
@@ -4338,7 +4338,7 @@ CREATE TABLE dbo.dr20_hecate_1_1 (
     d_hi68 double precision,
     d_lo95 double precision,
     d_hi95 double precision,
-    dmethod varchar(max),
+    dmethod varchar(100),
     ut real,
     bt real,
     vt real,
@@ -4397,7 +4397,7 @@ CREATE TABLE dbo.dr20_hecate_1_1 (
     logsfr_12u real,
     logsfr_22u real,
     logsfr_hec real,
-    flag_sfr_hec varchar(max),
+    flag_sfr_hec varchar(100),
     logm_hec real,
     logsfr_gsw real,
     logm_gsw real,
@@ -4405,8 +4405,8 @@ CREATE TABLE dbo.dr20_hecate_1_1 (
     metal real,
     flag_metal smallint,
     class_sp smallint,
-    agn_s17 varchar(max),
-    agn_hec varchar(max)
+    agn_s17 varchar(100),
+    agn_hec varchar(100)
 );
 
 
@@ -4415,7 +4415,7 @@ CREATE TABLE dbo.dr20_hole (
     pk integer NOT NULL,
     row_num integer,
     column_num integer,
-    holeid varchar(max),
+    holeid varchar(100),
     observatory_pk integer
 );
 
@@ -4423,7 +4423,7 @@ CREATE TABLE dbo.dr20_hole (
 DROP TABLE IF EXISTS dbo.dr20_instrument
 CREATE TABLE dbo.dr20_instrument (
     pk integer NOT NULL,
-    label varchar(max),
+    label varchar(100),
     default_lambda_eff real
 );
 
@@ -4431,11 +4431,11 @@ CREATE TABLE dbo.dr20_instrument (
 DROP TABLE IF EXISTS dbo.dr20_lamost_dr6
 CREATE TABLE dbo.dr20_lamost_dr6 (
     obsid integer NOT NULL,
-    designation varchar(max),
-    obsdate varchar(max),
+    designation varchar(100),
+    obsdate varchar(100),
     lmjd integer,
     mjd integer,
-    planid varchar(max),
+    planid varchar(100),
     spid smallint,
     fiberid smallint,
     ra_obs double precision,
@@ -4445,12 +4445,12 @@ CREATE TABLE dbo.dr20_lamost_dr6 (
     snrr real,
     snri real,
     snrz real,
-    objtype varchar(max),
-    class varchar(max),
-    subclass varchar(max),
+    objtype varchar(100),
+    class varchar(100),
+    subclass varchar(100),
     z real,
     z_err real,
-    magtype varchar(max),
+    magtype varchar(100),
     mag1 real,
     mag2 real,
     mag3 real,
@@ -4458,14 +4458,14 @@ CREATE TABLE dbo.dr20_lamost_dr6 (
     mag5 real,
     mag6 real,
     mag7 real,
-    tsource varchar(max),
-    fibertype varchar(max),
-    tfrom varchar(max),
-    tcomment varchar(max),
+    tsource varchar(100),
+    fibertype varchar(100),
+    tfrom varchar(100),
+    tcomment varchar(100),
     [offsets] smallint,
     offsets_v real,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     fibermask smallint,
     ra_x double precision,
     dec_x double precision,
@@ -4486,11 +4486,11 @@ DROP TABLE IF EXISTS dbo.dr20_legacy_survey_dr10
 CREATE TABLE dbo.dr20_legacy_survey_dr10 (
     release smallint,
     brickid integer,
-    brickname varchar(max),
+    brickname varchar(100),
     objid integer,
-    type varchar(max),
+    type varchar(100),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     ra_ivar real,
     dec_ivar real,
     ebv real,
@@ -4574,7 +4574,7 @@ CREATE TABLE dbo.dr20_legacy_survey_dr10 (
     galdepth_z real,
     psfdepth_w1 real,
     psfdepth_w2 real,
-    wise_coadd_id varchar(max),
+    wise_coadd_id varchar(100),
     shape_r real,
     shape_r_ivar real,
     shape_e1 real,
@@ -4589,7 +4589,7 @@ CREATE TABLE dbo.dr20_legacy_survey_dr10 (
     fibertotflux_r real,
     fibertotflux_i real,
     fibertotflux_z real,
-    ref_cat varchar(max),
+    ref_cat varchar(100),
     ref_id bigint,
     ref_epoch real,
     gaia_phot_g_mean_mag real,
@@ -4624,11 +4624,11 @@ DROP TABLE IF EXISTS dbo.dr20_legacy_survey_dr8
 CREATE TABLE dbo.dr20_legacy_survey_dr8 (
     release integer,
     brickid bigint,
-    brickname varchar(max),
+    brickname varchar(100),
     objid bigint,
-    type varchar(max),
+    type varchar(100),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     ra_ivar real,
     dec_ivar real,
     dchisq_psf real,
@@ -4704,7 +4704,7 @@ CREATE TABLE dbo.dr20_legacy_survey_dr8 (
     galdepth_z real,
     psfdepth_w1 real,
     psfdepth_w2 real,
-    wise_coadd_id varchar(max),
+    wise_coadd_id varchar(100),
     fracdev real,
     fracdev_ivar real,
     shapedev_r real,
@@ -4725,7 +4725,7 @@ CREATE TABLE dbo.dr20_legacy_survey_dr8 (
     fibertotflux_g real,
     fibertotflux_r real,
     fibertotflux_z real,
-    ref_cat varchar(max),
+    ref_cat varchar(100),
     ref_id bigint,
     ref_epoch real,
     gaia_phot_g_mean_mag real,
@@ -4766,7 +4766,7 @@ CREATE TABLE dbo.dr20_magnitude (
     j real,
     k real,
     gaia_g real,
-    optical_prov varchar(max)
+    optical_prov varchar(500)
 );
 
 
@@ -5917,25 +5917,25 @@ CREATE TABLE dbo.dr20_mangatarget (
     manga_target3 bigint,
     priorityanc integer,
     unalloc smallint,
-    specobjid varchar(max)
+    specobjid varchar(100)
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_mapper
 CREATE TABLE dbo.dr20_mapper (
     pk integer NOT NULL,
-    label varchar(max)
+    label varchar(100)
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_marvels_dr11_star
 CREATE TABLE dbo.dr20_marvels_dr11_star (
-    starname varchar(max) NOT NULL,
-    twomass_name varchar(max),
-    plate varchar(max),
-    gsc_name varchar(max),
-    tyc_name varchar(max),
-    hip_name varchar(max),
+    starname varchar(100) NOT NULL,
+    twomass_name varchar(100),
+    plate varchar(100),
+    gsc_name varchar(100),
+    tyc_name varchar(100),
+    hip_name varchar(100),
     ra_final double precision,
     dec_final double precision,
     gsc_b double precision,
@@ -5943,9 +5943,9 @@ CREATE TABLE dbo.dr20_marvels_dr11_star (
     twomass_j real,
     twomass_h real,
     twomass_k real,
-    sp1 varchar(max),
-    sp2 varchar(max),
-    rpm_log_g varchar(max),
+    sp1 varchar(100),
+    sp2 varchar(100),
+    rpm_log_g varchar(100),
     teff real,
     log_g real,
     feh real,
@@ -5972,20 +5972,20 @@ CREATE TABLE dbo.dr20_marvels_dr11_star (
     tyc_v_e real,
     hip_plx real,
     hip_plx_e real,
-    hip_sptype varchar(max),
-    twomass_designation varchar(max),
-    tycho2_designation varchar(max)
+    hip_sptype varchar(100),
+    twomass_designation varchar(100),
+    tycho2_designation varchar(100)
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_marvels_dr12_star
 CREATE TABLE dbo.dr20_marvels_dr12_star (
-    starname varchar(max),
-    twomass_name varchar(max),
-    plate varchar(max),
-    gsc_name varchar(max),
-    tyc_name varchar(max),
-    hip_name varchar(max),
+    starname varchar(100),
+    twomass_name varchar(100),
+    plate varchar(100),
+    gsc_name varchar(100),
+    tyc_name varchar(100),
+    hip_name varchar(100),
     ra_final double precision,
     dec_final double precision,
     gsc_b double precision,
@@ -5993,9 +5993,9 @@ CREATE TABLE dbo.dr20_marvels_dr12_star (
     twomass_j real,
     twomass_h real,
     twomass_k real,
-    sp1 varchar(max),
-    sp2 varchar(max),
-    rpm_log_g varchar(max),
+    sp1 varchar(100),
+    sp2 varchar(100),
+    rpm_log_g varchar(100),
     teff real,
     log_g real,
     feh real,
@@ -6022,10 +6022,10 @@ CREATE TABLE dbo.dr20_marvels_dr12_star (
     tyc_v_e real,
     hip_plx real,
     hip_plx_e real,
-    hip_sptype varchar(max),
+    hip_sptype varchar(100),
     pk bigint NOT NULL,
-    twomass_designation varchar(max),
-    tycho2_designation varchar(max)
+    twomass_designation varchar(100),
+    tycho2_designation varchar(100)
 );
 
 
@@ -6039,7 +6039,7 @@ CREATE TABLE dbo.dr20_mastar_goodstars (
     nvisits integer,
     nplates integer,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     epoch real,
     psfmag_1 real,
     psfmag_2 real,
@@ -6067,7 +6067,7 @@ CREATE TABLE dbo.dr20_mastar_goodvisits (
     ifura double precision,
     ifudec double precision,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     epoch real,
     psfmag_1 real,
     psfmag_2 real,
@@ -6101,23 +6101,23 @@ CREATE TABLE dbo.dr20_mastar_goodvisits (
 DROP TABLE IF EXISTS dbo.dr20_milliquas_7_7
 CREATE TABLE dbo.dr20_milliquas_7_7 (
     ra double precision,
-    "dec" double precision,
-    name varchar(max),
-    type varchar(max),
+    [dec] double precision,
+    name varchar(100),
+    type varchar(100),
     rmag real,
     bmag real,
-    comment varchar(max),
-    r varchar(max),
-    b varchar(max),
+    comment varchar(100),
+    r varchar(100),
+    b varchar(100),
     z real,
-    cite varchar(max),
-    zcite varchar(max),
+    cite varchar(100),
+    zcite varchar(100),
     rxpct smallint,
     qpct smallint,
-    xname varchar(max),
-    rname varchar(max),
-    lobe1 varchar(max),
-    lobe2 varchar(max),
+    xname varchar(100),
+    rname varchar(100),
+    lobe1 varchar(100),
+    lobe2 varchar(100),
     pk bigint NOT NULL
 );
 
@@ -6194,23 +6194,23 @@ DROP TABLE IF EXISTS dbo.dr20_mwm_tess_ob
 CREATE TABLE dbo.dr20_mwm_tess_ob (
     gaia_dr2_id bigint NOT NULL,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     h_mag double precision,
-    instrument varchar(max),
-    cadence varchar(max)
+    instrument varchar(100),
+    cadence varchar(100)
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_observatory
 CREATE TABLE dbo.dr20_observatory (
     pk integer NOT NULL,
-    label varchar(max)
+    label varchar(100)
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_obsmode
 CREATE TABLE dbo.dr20_obsmode (
-    label varchar(max) NOT NULL,
+    label varchar(100) NOT NULL,
     min_moon_sep real,
     min_deltav_ks91 real,
     min_twilight_ang real,
@@ -6222,7 +6222,7 @@ CREATE TABLE dbo.dr20_obsmode (
 DROP TABLE IF EXISTS dbo.dr20_opsdb_apo_camera
 CREATE TABLE dbo.dr20_opsdb_apo_camera (
     pk integer NOT NULL,
-    label varchar(max)
+    label varchar(100)
 );
 
 
@@ -6232,14 +6232,14 @@ CREATE TABLE dbo.dr20_opsdb_apo_camera_frame (
     exposure_pk integer,
     camera_pk smallint,
     sn2 real,
-    comment varchar(max)
+    comment varchar(100)
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_opsdb_apo_completion_status
 CREATE TABLE dbo.dr20_opsdb_apo_completion_status (
     pk integer NOT NULL,
-    label varchar(max)
+    label varchar(100)
 );
 
 
@@ -6247,10 +6247,10 @@ DROP TABLE IF EXISTS dbo.dr20_opsdb_apo_configuration
 CREATE TABLE dbo.dr20_opsdb_apo_configuration (
     configuration_id integer NOT NULL,
     design_id integer,
-    comment varchar(max),
-    temperature varchar(max),
+    comment varchar(500),
+    temperature varchar(500),
     epoch double precision,
-    calibration_version varchar(max)
+    calibration_version varchar(100)
 );
 
 
@@ -6269,7 +6269,7 @@ CREATE TABLE dbo.dr20_opsdb_apo_exposure (
     pk integer,
     configuration_id integer,
     exposure_no bigint,
-    comment varchar(max),
+    comment varchar(100),
     start_time datetime,
     exposure_time real,
     exposure_flavor_pk smallint
@@ -6279,14 +6279,14 @@ CREATE TABLE dbo.dr20_opsdb_apo_exposure (
 DROP TABLE IF EXISTS dbo.dr20_opsdb_apo_exposure_flavor
 CREATE TABLE dbo.dr20_opsdb_apo_exposure_flavor (
     pk integer NOT NULL,
-    label varchar(max)
+    label varchar(100)
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_opsdb_lco_camera
 CREATE TABLE dbo.dr20_opsdb_lco_camera (
     pk integer NOT NULL,
-    label varchar(max)
+    label varchar(100)
 );
 
 
@@ -6296,14 +6296,14 @@ CREATE TABLE dbo.dr20_opsdb_lco_camera_frame (
     exposure_pk integer,
     camera_pk smallint,
     sn2 real,
-    comment varchar(max)
+    comment varchar(2000)
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_opsdb_lco_completion_status
 CREATE TABLE dbo.dr20_opsdb_lco_completion_status (
     pk integer NOT NULL,
-    label varchar(max)
+    label varchar(100)
 );
 
 
@@ -6311,10 +6311,10 @@ DROP TABLE IF EXISTS dbo.dr20_opsdb_lco_configuration
 CREATE TABLE dbo.dr20_opsdb_lco_configuration (
     configuration_id integer NOT NULL,
     design_id integer,
-    comment varchar(max),
-    temperature varchar(max),
+    comment varchar(500),
+    temperature varchar(500),
     epoch double precision,
-    calibration_version varchar(max)
+    calibration_version varchar(100)
 );
 
 
@@ -6333,7 +6333,7 @@ CREATE TABLE dbo.dr20_opsdb_lco_exposure (
     pk integer NOT NULL,
     configuration_id integer,
     exposure_no bigint,
-    comment varchar(max),
+    comment varchar(100),
     start_time datetime,
     exposure_time real,
     exposure_flavor_pk smallint
@@ -6343,14 +6343,14 @@ CREATE TABLE dbo.dr20_opsdb_lco_exposure (
 DROP TABLE IF EXISTS dbo.dr20_opsdb_lco_exposure_flavor
 CREATE TABLE dbo.dr20_opsdb_lco_exposure_flavor (
     pk integer NOT NULL,
-    label varchar(max)
+    label varchar(100)
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_panstarrs1
 CREATE TABLE dbo.dr20_panstarrs1 (
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     dra real,
     ddec real,
     tmean real,
@@ -6547,13 +6547,13 @@ CREATE TABLE dbo.dr20_panstarrs1 (
 DROP TABLE IF EXISTS dbo.dr20_positioner_status
 CREATE TABLE dbo.dr20_positioner_status (
     pk integer NOT NULL,
-    label varchar(max)
+    label varchar(100)
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_rave_dr6_gauguin_madera
 CREATE TABLE dbo.dr20_rave_dr6_gauguin_madera (
-    rave_obs_id varchar(max) NOT NULL,
+    rave_obs_id varchar(100) NOT NULL,
     fe_h_gauguin real,
     fe_h_error_gauguin real,
     fe_h_chisq_gauguin real,
@@ -6575,9 +6575,9 @@ CREATE TABLE dbo.dr20_rave_dr6_gauguin_madera (
 
 DROP TABLE IF EXISTS dbo.dr20_rave_dr6_xgaiae3
 CREATE TABLE dbo.dr20_rave_dr6_xgaiae3 (
-    obsid varchar(max) NOT NULL,
+    obsid varchar(100) NOT NULL,
     gaiae3 bigint,
-    id varchar(max),
+    id varchar(100),
     epoch smallint,
     radeg double precision,
     e_radeg double precision,
@@ -6589,7 +6589,7 @@ CREATE TABLE dbo.dr20_rave_dr6_xgaiae3 (
     e_pmra real,
     pmde real,
     e_pmde real,
-    dup varchar(max),
+    dup varchar(100),
     ng smallint,
     fg real,
     e_fg real,
@@ -6611,7 +6611,7 @@ CREATE TABLE dbo.dr20_revised_magnitude (
     j real,
     k real,
     gaia_g real,
-    optical_prov varchar(max)
+    optical_prov varchar(100)
 );
 
 
@@ -6619,7 +6619,7 @@ DROP TABLE IF EXISTS dbo.dr20_sagitta
 CREATE TABLE dbo.dr20_sagitta (
     source_id bigint NOT NULL,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     av real,
     yso real,
     yso_std real,
@@ -6644,16 +6644,16 @@ CREATE TABLE dbo.dr20_sagitta_edr3 (
 
 DROP TABLE IF EXISTS dbo.dr20_sdss_apogeeallstarmerge_r13
 CREATE TABLE dbo.dr20_sdss_apogeeallstarmerge_r13 (
-    apogee_id varchar(max) NOT NULL,
+    apogee_id varchar(100) NOT NULL,
     nvisits smallint,
     nentries integer,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     glon double precision,
     glat double precision,
     pmra double precision,
     pmdec double precision,
-    pm_src varchar(max),
+    pm_src varchar(100),
     j real,
     j_err real,
     h real,
@@ -6668,31 +6668,31 @@ CREATE TABLE dbo.dr20_sdss_apogeeallstarmerge_r13 (
     baseline real,
     mean_fiber real,
     sig_fiber real,
-    apstar_ids varchar(max),
-    visits varchar(max),
-    fields varchar(max),
-    surveys varchar(max),
-    telescopes varchar(max),
-    targflags varchar(max),
-    starflags varchar(max),
-    aspcapflags varchar(max),
+    apstar_ids varchar(500),
+    visits varchar(2000),
+    fields varchar(100),
+    surveys varchar(100),
+    telescopes varchar(100),
+    targflags varchar(500),
+    starflags varchar(500),
+    aspcapflags varchar(500),
     teff real,
     teff_err real,
     logg real,
     logg_err real,
     feh real,
     feh_err real,
-    startype varchar(max),
+    startype varchar(100),
     vjitter real,
     dist real,
     dist_err real,
-    dist_src varchar(max),
+    dist_src varchar(100),
     mstar real,
     mstar_err real,
     rstar real,
     rstar_err real,
-    mstar_src varchar(max),
-    designation varchar(max)
+    mstar_src varchar(100),
+    designation varchar(100)
 );
 
 
@@ -6700,20 +6700,20 @@ DROP TABLE IF EXISTS dbo.dr20_sdss_dr13_photoobj_primary
 CREATE TABLE dbo.dr20_sdss_dr13_photoobj_primary (
     objid bigint NOT NULL,
     ra double precision,
-    "dec" double precision
+    [dec] double precision
 );
 
 
 DROP TABLE IF EXISTS dbo.dr20_sdss_dr16_qso
 CREATE TABLE dbo.dr20_sdss_dr16_qso (
-    sdss_name varchar(max),
+    sdss_name varchar(100),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     plate integer,
     mjd integer,
     fiberid integer,
-    autoclass_pqn varchar(max),
-    autoclass_dr14q varchar(max),
+    autoclass_pqn varchar(100),
+    autoclass_dr14q varchar(100),
     is_qso_qn integer,
     z_qn double precision,
     random_select integer,
@@ -6733,10 +6733,10 @@ CREATE TABLE dbo.dr20_sdss_dr16_qso (
     z_dr7q_hw double precision,
     is_qso_final integer,
     z double precision,
-    source_z varchar(max),
+    source_z varchar(100),
     z_pipe double precision,
     zwarning integer,
-    objid varchar(max),
+    objid varchar(100),
     z_pca double precision,
     zwarn_pca bigint,
     deltachi2_pca double precision,
@@ -6759,9 +6759,9 @@ CREATE TABLE dbo.dr20_sdss_dr16_qso (
     zwarn_lya bigint,
     deltachi2_lya double precision,
     z_lyawg real,
-    z_dla varchar(max),
-    nhi_dla varchar(max),
-    conf_dla varchar(max),
+    z_dla varchar(100),
+    nhi_dla varchar(100),
+    conf_dla varchar(100),
     bal_prob real,
     bi_civ double precision,
     err_bi_civ double precision,
@@ -6780,13 +6780,13 @@ CREATE TABLE dbo.dr20_sdss_dr16_qso (
     nspec_sdss integer,
     nspec_boss integer,
     nspec integer,
-    plate_duplicate varchar(max),
-    mjd_duplicate varchar(max),
-    fiberid_duplicate varchar(max),
-    spectro_duplicate varchar(max),
+    plate_duplicate varchar(100),
+    mjd_duplicate varchar(100),
+    fiberid_duplicate varchar(100),
+    spectro_duplicate varchar(100),
     skyversion integer,
     run_number integer,
-    rerun_number varchar(max),
+    rerun_number varchar(100),
     camcol_number integer,
     field_number integer,
     id_number integer,
@@ -6794,7 +6794,7 @@ CREATE TABLE dbo.dr20_sdss_dr16_qso (
     zoffset double precision,
     xfocal double precision,
     yfocal double precision,
-    chunk varchar(max),
+    chunk varchar(100),
     tile integer,
     platesn2 double precision,
     psfflux_u real,
@@ -6875,7 +6875,7 @@ CREATE TABLE dbo.dr20_sdss_dr16_qso (
     ksnr double precision,
     krdflag integer,
     sdss2mass_sep double precision,
-    rass2rxs_id varchar(max),
+    rass2rxs_id varchar(100),
     rass2rxs_ra double precision,
     rass2rxs_dec double precision,
     rass2rxs_src_flux real,
@@ -6893,7 +6893,7 @@ CREATE TABLE dbo.dr20_sdss_dr16_qso (
     xmm_total_lum real,
     sdss2xmm_sep double precision,
     gaia_matched integer,
-    gaia_designation varchar(max),
+    gaia_designation varchar(100),
     gaia_ra double precision,
     gaia_dec double precision,
     gaia_parallax double precision,
@@ -6964,7 +6964,7 @@ CREATE TABLE dbo.dr20_sdss_dr16_specobj (
     sourcetype varchar(128),
     targettype varchar(128),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     cx double precision,
     cy double precision,
     cz double precision,
@@ -7114,16 +7114,16 @@ CREATE TABLE dbo.dr20_sdss_dr16_specobj (
 
 DROP TABLE IF EXISTS dbo.dr20_sdss_dr17_apogee_allstarmerge
 CREATE TABLE dbo.dr20_sdss_dr17_apogee_allstarmerge (
-    apogee_id varchar(max) NOT NULL,
+    apogee_id varchar(100) NOT NULL,
     nvisits smallint,
     nentries integer,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     glon double precision,
     glat double precision,
     pmra real,
     pmdec real,
-    pm_src varchar(max),
+    pm_src varchar(100),
     j real,
     j_err real,
     h real,
@@ -7138,26 +7138,26 @@ CREATE TABLE dbo.dr20_sdss_dr17_apogee_allstarmerge (
     baseline real,
     mean_fiber real,
     sig_fiber real,
-    stars_pk varchar(max),
-    nvisits_entry varchar(max),
-    snr_entry varchar(max),
-    telescopes varchar(max),
-    fields varchar(max),
-    targflags varchar(max),
-    starflags varchar(max),
-    aspcapflags varchar(max),
-    member varchar(max),
+    stars_pk varchar(100),
+    nvisits_entry varchar(100),
+    snr_entry varchar(100),
+    telescopes varchar(100),
+    fields varchar(100),
+    targflags varchar(500),
+    starflags varchar(500),
+    aspcapflags varchar(500),
+    member varchar(100),
     gaia_source_id bigint,
     dist real,
     dist_err real,
-    dist_src varchar(max),
+    dist_src varchar(100),
     teff_avg real,
     teff_avg_err real,
     logg_avg real,
     logg_avg_err real,
     m_h_avg real,
     m_h_avg_err real,
-    visits_pk varchar(max)
+    visits_pk varchar(500)
 );
 
 
@@ -7212,7 +7212,7 @@ CREATE TABLE dbo.dr20_sdss_dr17_specobj (
     sourcetype varchar(128),
     targettype varchar(128),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     cx double precision,
     cy double precision,
     cz double precision,
@@ -7371,14 +7371,14 @@ CREATE TABLE dbo.dr20_sdss_dr19p_speclite (
     catalogid bigint,
     bestobjid bigint,
     targetobjid bigint,
-    run2d varchar(max),
-    run1d varchar(max),
-    firstrelease varchar(max),
+    run2d varchar(100),
+    run1d varchar(500),
+    firstrelease varchar(100),
     plug_ra double precision,
     plug_dec double precision,
-    sourcetype varchar(max),
-    objtype varchar(max),
-    targettype varchar(max),
+    sourcetype varchar(100),
+    objtype varchar(500),
+    targettype varchar(100),
     lambda_eff real,
     sn_median_all real,
     sn_median_u real,
@@ -7387,14 +7387,14 @@ CREATE TABLE dbo.dr20_sdss_dr19p_speclite (
     sn_median_i real,
     sn_median_z real,
     platesn2 real,
-    platequality varchar(max),
+    platequality varchar(100),
     z real,
     z_err real,
     zwarning integer,
     zwarning_noqso integer,
-    class varchar(max),
-    subclass varchar(max),
-    tfile varchar(max),
+    class varchar(100),
+    subclass varchar(100),
+    tfile varchar(100),
     specprimary integer,
     nspecobs integer,
     pk bigint NOT NULL
@@ -7440,8 +7440,8 @@ CREATE TABLE dbo.dr20_sdss_id_to_catalog (
     sdss_id bigint,
     catalogid bigint,
     version_id integer,
-    lead varchar(max),
-    allstar_dr17_synspec_rev1__apstar_id varchar(max),
+    lead varchar(100),
+    allstar_dr17_synspec_rev1__apstar_id varchar(500),
     allwise__cntr bigint,
     bhm_rm_v0__pk bigint,
     bhm_rm_v0_2__pk bigint,
@@ -7454,7 +7454,7 @@ CREATE TABLE dbo.dr20_sdss_id_to_catalog (
     legacy_survey_dr10__ls_id bigint,
     legacy_survey_dr8__ls_id bigint,
     mangatarget__mangaid varchar(20),
-    marvels_dr11_star__starname varchar(max),
+    marvels_dr11_star__starname varchar(500),
     marvels_dr12_star__pk bigint,
     mastar_goodstars__mangaid varchar(25),
     panstarrs1__catid_objid bigint,
@@ -7466,8 +7466,8 @@ CREATE TABLE dbo.dr20_sdss_id_to_catalog (
     supercosmos__objid bigint,
     tic_v8__id bigint,
     twomass_psc__pts_key integer,
-    tycho2__designation varchar(max),
-    unwise__unwise_objid varchar(max)
+    tycho2__designation varchar(100),
+    unwise__unwise_objid varchar(100)
 );
 
 
@@ -7477,8 +7477,8 @@ CREATE TABLE dbo.dr20_sdss_id_to_catalog_full (
     sdss_id bigint,
     catalogid bigint,
     version_id integer,
-    lead varchar(max),
-    allstar_dr17_synspec_rev1__apstar_id varchar(max),
+    lead varchar(500),
+    allstar_dr17_synspec_rev1__apstar_id varchar(500),
     allwise__cntr bigint,
     bhm_rm_v0__pk bigint,
     bhm_rm_v0_2__pk bigint,
@@ -7491,7 +7491,7 @@ CREATE TABLE dbo.dr20_sdss_id_to_catalog_full (
     legacy_survey_dr10__ls_id bigint,
     legacy_survey_dr8__ls_id bigint,
     mangatarget__mangaid varchar(20),
-    marvels_dr11_star__starname varchar(max),
+    marvels_dr11_star__starname varchar(500),
     marvels_dr12_star__pk bigint,
     mastar_goodstars__mangaid varchar(25),
     panstarrs1__catid_objid bigint,
@@ -7503,8 +7503,8 @@ CREATE TABLE dbo.dr20_sdss_id_to_catalog_full (
     supercosmos__objid bigint,
     tic_v8__id bigint,
     twomass_psc__pts_key integer,
-    tycho2__designation varchar(max),
-    unwise__unwise_objid varchar(max)
+    tycho2__designation varchar(500),
+    unwise__unwise_objid varchar(500)
 );
 
 
@@ -7513,8 +7513,8 @@ CREATE TABLE dbo.dr20_sdssv_boss_conflist (
     plate integer,
     designid integer,
     mjd integer,
-    run2d varchar(max),
-    run1d varchar(max),
+    run2d varchar(100),
+    run1d varchar(100),
     racen real,
     deccen real,
     epoch real,
@@ -7524,16 +7524,16 @@ CREATE TABLE dbo.dr20_sdssv_boss_conflist (
     tai_end double precision,
     airmass real,
     exptime real,
-    mapname varchar(max),
-    survey varchar(max),
-    programname varchar(max),
-    chunk varchar(max),
-    platequality varchar(max),
+    mapname varchar(100),
+    survey varchar(100),
+    programname varchar(100),
+    chunk varchar(100),
+    platequality varchar(100),
     platesn2 real,
     deredsn2 real,
     qsurvey integer,
-    mjdlist varchar(max),
-    tailist varchar(max),
+    mjdlist varchar(100),
+    tailist varchar(500),
     nexp integer,
     nexp_b1 integer,
     nexp_r1 integer,
@@ -7597,11 +7597,11 @@ CREATE TABLE dbo.dr20_sdssv_boss_conflist (
     n_std integer,
     n_target_qso integer,
     success_qso real,
-    status2d varchar(max),
-    statuscombine varchar(max),
-    status1d varchar(max),
-    [public] varchar(max),
-    qualcomments varchar(max),
+    status2d varchar(100),
+    statuscombine varchar(100),
+    status1d varchar(100),
+    [public] varchar(100),
+    qualcomments varchar(100),
     moon_frac real,
     pkey bigint NOT NULL
 );
@@ -7609,10 +7609,10 @@ CREATE TABLE dbo.dr20_sdssv_boss_conflist (
 
 DROP TABLE IF EXISTS dbo.dr20_sdssv_boss_spall
 CREATE TABLE dbo.dr20_sdssv_boss_spall (
-    programname varchar(max),
-    chunk varchar(max),
-    survey varchar(max),
-    platequality varchar(max),
+    programname varchar(100),
+    chunk varchar(100),
+    survey varchar(100),
+    platequality varchar(100),
     platesn2 real,
     deredsn2 real,
     primtarget integer,
@@ -7639,7 +7639,7 @@ CREATE TABLE dbo.dr20_sdssv_boss_spall (
     gaia_bp real,
     gaia_rp real,
     gaia_g real,
-    firstcarton varchar(max),
+    firstcarton varchar(100),
     mag_u real,
     mag_g real,
     mag_r real,
@@ -7652,29 +7652,29 @@ CREATE TABLE dbo.dr20_sdssv_boss_spall (
     airmass real,
     healpix integer,
     healpixgrp smallint,
-    healpix_dir varchar(max),
+    healpix_dir varchar(500),
     mjd_final real,
-    mjd_list varchar(max),
-    tai_list varchar(max),
+    mjd_list varchar(100),
+    tai_list varchar(100),
     catalogid bigint,
     sdssv_boss_target0 bigint,
     field integer,
     tile integer,
     mjd integer,
     fiberid integer,
-    run2d varchar(max),
-    run1d varchar(max),
-    objtype varchar(max),
+    run2d varchar(100),
+    run1d varchar(100),
+    objtype varchar(100),
     plug_ra double precision,
     plug_dec double precision,
-    class varchar(max),
-    subclass varchar(max),
+    class varchar(100),
+    subclass varchar(100),
     z real,
     z_err real,
     rchi2 real,
     dof integer,
     rchi2diff real,
-    tfile varchar(max),
+    tfile varchar(100),
     npoly integer,
     vdisp real,
     vdisp_err real,
@@ -7724,9 +7724,9 @@ CREATE TABLE dbo.dr20_sdssv_boss_spall (
     spec1_g real,
     spec1_r real,
     spec1_i real,
-    elodie_filename varchar(max),
-    elodie_object varchar(max),
-    elodie_sptype varchar(max),
+    elodie_filename varchar(100),
+    elodie_object varchar(100),
+    elodie_sptype varchar(100),
     elodie_bv real,
     elodie_teff real,
     elodie_logg real,
@@ -7740,8 +7740,8 @@ CREATE TABLE dbo.dr20_sdssv_boss_spall (
     z_err_noqso real,
     znum_noqso integer,
     zwarning_noqso integer,
-    class_noqso varchar(max),
-    subclass_noqso varchar(max),
+    class_noqso varchar(100),
+    subclass_noqso varchar(100),
     rchi2diff_noqso real,
     specobjid bigint,
     pkey bigint NOT NULL
@@ -7750,9 +7750,9 @@ CREATE TABLE dbo.dr20_sdssv_boss_spall (
 
 DROP TABLE IF EXISTS dbo.dr20_sdssv_plateholes
 CREATE TABLE dbo.dr20_sdssv_plateholes (
-    holetype varchar(max),
-    targettype varchar(max),
-    sourcetype varchar(max),
+    holetype varchar(100),
+    targettype varchar(100),
+    sourcetype varchar(100),
     target_ra double precision,
     target_dec double precision,
     iplateinput integer,
@@ -7768,7 +7768,7 @@ CREATE TABLE dbo.dr20_sdssv_plateholes (
     bluefiber integer,
     chunk integer,
     ifinal integer,
-    origfile varchar(max),
+    origfile varchar(100),
     fileindx integer,
     diameter real,
     buffer real,
@@ -7777,7 +7777,7 @@ CREATE TABLE dbo.dr20_sdssv_plateholes (
     conflicted integer,
     ranout integer,
     outside integer,
-    mangaid varchar(max),
+    mangaid varchar(100),
     ifudesign integer,
     ifudesignsize integer,
     bundle_size integer,
@@ -7800,7 +7800,7 @@ CREATE TABLE dbo.dr20_sdssv_plateholes (
     usnob_mag_z real,
     source_id bigint,
     phot_g_mean_mag real,
-    sp_param_source varchar(max),
+    sp_param_source varchar(100),
     marvels_target1 integer,
     marvels_target2 integer,
     boss_target1 bigint,
@@ -7826,7 +7826,7 @@ CREATE TABLE dbo.dr20_sdssv_plateholes (
     apogee2_target2 integer,
     apogee2_target3 integer,
     run integer,
-    rerun varchar(max),
+    rerun varchar(100),
     camcol integer,
     field integer,
     id integer,
@@ -7883,21 +7883,21 @@ CREATE TABLE dbo.dr20_sdssv_plateholes (
     epoch real,
     pmra real,
     pmdec real,
-    targetids varchar(max),
+    targetids varchar(100),
     ifuid integer,
     catalogid bigint,
     gaia_bp real,
     gaia_rp real,
     gaia_g real,
-    tmass_id varchar(max),
+    tmass_id varchar(100),
     sdssv_apogee_target0 integer,
     sdssv_boss_target0 bigint,
     gri_gaia_transform integer,
-    firstcarton varchar(max),
+    firstcarton varchar(100),
     xfocal double precision,
     yfocal double precision,
     yanny_uid integer,
-    yanny_filename varchar(max),
+    yanny_filename varchar(500),
     pkey bigint NOT NULL
 );
 
@@ -7908,7 +7908,7 @@ CREATE TABLE dbo.dr20_sdssv_plateholes_meta (
     ha real,
     ha_observable_min real,
     ha_observable_max real,
-    programname varchar(max),
+    programname varchar(100),
     temp real,
     design_platescale_alt real,
     design_platescale_az real,
@@ -7924,13 +7924,13 @@ CREATE TABLE dbo.dr20_sdssv_plateholes_meta (
     guider_coeff_8 real,
     guider_coeff_9 real,
     locationid integer,
-    instruments varchar(max),
+    instruments varchar(100),
     npointings integer,
     noffsets integer,
-    minstdinblockboss_shared varchar(max),
+    minstdinblockboss_shared varchar(100),
     maxskyinblockboss_shared integer,
-    gfibertype varchar(max),
-    guidetype varchar(max),
+    gfibertype varchar(100),
+    guidetype varchar(100),
     guidemag_min real,
     guidemag_max real,
     guide_lambda_eff real,
@@ -7941,31 +7941,31 @@ CREATE TABLE dbo.dr20_sdssv_plateholes_meta (
     buffersizeapogee_shared real,
     ferrulesizeguide real,
     buffersizeguide real,
-    platedesignstandards varchar(max),
-    standardtype varchar(max),
-    platedesignskies varchar(max),
-    skytype varchar(max),
-    plugmapstyle varchar(max),
-    bossmagtype varchar(max),
-    pointing_name varchar(max),
+    platedesignstandards varchar(100),
+    standardtype varchar(100),
+    platedesignskies varchar(100),
+    skytype varchar(100),
+    plugmapstyle varchar(100),
+    bossmagtype varchar(100),
+    pointing_name varchar(100),
     max_off_fiber_for_ha real,
     collectfactor integer,
     designid integer,
-    platedesignversion varchar(max),
-    platetype varchar(max),
+    platedesignversion varchar(100),
+    platetype varchar(100),
     racen real,
     deccen real,
     ninputs integer,
-    plateinput1 varchar(max),
-    plateinput2 varchar(max),
-    plateinput3 varchar(max),
-    plateinput4 varchar(max),
-    plateinput5 varchar(max),
-    plateinput6 varchar(max),
-    plateinput7 varchar(max),
-    priority varchar(max),
+    plateinput1 varchar(500),
+    plateinput2 varchar(500),
+    plateinput3 varchar(500),
+    plateinput4 varchar(500),
+    plateinput5 varchar(500),
+    plateinput6 varchar(500),
+    plateinput7 varchar(500),
+    priority varchar(500),
     relaxed_fiber_classes integer,
-    targettypes varchar(max),
+    targettypes varchar(100),
     napogee_shared_standard integer,
     napogee_shared_science integer,
     napogee_shared_sky integer,
@@ -7973,7 +7973,7 @@ CREATE TABLE dbo.dr20_sdssv_plateholes_meta (
     nboss_shared_science integer,
     nboss_shared_sky integer,
     minskyinblockboss_shared integer,
-    minstandardinblockboss_shared varchar(max),
+    minstandardinblockboss_shared varchar(100),
     reddeningmed_u real,
     reddeningmed_g real,
     reddeningmed_r real,
@@ -7981,41 +7981,41 @@ CREATE TABLE dbo.dr20_sdssv_plateholes_meta (
     reddeningmed_z real,
     tileid integer,
     theta integer,
-    platerun varchar(max),
-    platedesign_version varchar(max),
+    platerun varchar(100),
+    platedesign_version varchar(100),
     yanny_uid integer NOT NULL,
-    yanny_filename varchar(max),
-    plateinput8 varchar(max),
-    plateinput9 varchar(max),
-    plateinput10 varchar(max),
-    plateinput11 varchar(max),
-    plateinput12 varchar(max),
-    plateinput13 varchar(max),
-    plateinput14 varchar(max),
-    plateinput15 varchar(max),
-    plateinput16 varchar(max),
-    skyinput17 varchar(max),
-    plateinput18 varchar(max),
-    plateinput17 varchar(max),
-    skyinput18 varchar(max),
-    plateinput19 varchar(max),
-    skyinput16 varchar(max),
-    skyinput19 varchar(max),
-    plateinput20 varchar(max),
-    skyinput15 varchar(max),
-    skyinput21 varchar(max),
-    plateinput22 varchar(max),
-    skyinput13 varchar(max),
-    skyinput20 varchar(max),
-    plateinput21 varchar(max),
-    skyinput14 varchar(max),
-    skyinput6 varchar(max),
-    defaultsurveymode varchar(max),
-    skyinput23 varchar(max),
-    plateinput24 varchar(max),
-    skyinput22 varchar(max),
-    plateinput23 varchar(max),
-    skyinput8 varchar(max),
+    yanny_filename varchar(500),
+    plateinput8 varchar(500),
+    plateinput9 varchar(500),
+    plateinput10 varchar(500),
+    plateinput11 varchar(500),
+    plateinput12 varchar(500),
+    plateinput13 varchar(500),
+    plateinput14 varchar(500),
+    plateinput15 varchar(500),
+    plateinput16 varchar(500),
+    skyinput17 varchar(500),
+    plateinput18 varchar(500),
+    plateinput17 varchar(500),
+    skyinput18 varchar(500),
+    plateinput19 varchar(500),
+    skyinput16 varchar(500),
+    skyinput19 varchar(500),
+    plateinput20 varchar(500),
+    skyinput15 varchar(500),
+    skyinput21 varchar(500),
+    plateinput22 varchar(500),
+    skyinput13 varchar(500),
+    skyinput20 varchar(500),
+    plateinput21 varchar(500),
+    skyinput14 varchar(500),
+    skyinput6 varchar(500),
+    defaultsurveymode varchar(100),
+    skyinput23 varchar(500),
+    plateinput24 varchar(500),
+    skyinput22 varchar(500),
+    plateinput23 varchar(500),
+    skyinput8 varchar(500),
     isvalid bit
 );
 
@@ -8024,7 +8024,7 @@ DROP TABLE IF EXISTS dbo.dr20_skies_v1
 CREATE TABLE dbo.dr20_skies_v1 (
     pix_32768 bigint NOT NULL,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     down_pix integer,
     tile_32 integer,
     gaia_sky bit,
@@ -8049,7 +8049,7 @@ DROP TABLE IF EXISTS dbo.dr20_skies_v2
 CREATE TABLE dbo.dr20_skies_v2 (
     pix_32768 bigint NOT NULL,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     down_pix bigint,
     tile_32 bigint,
     valid_gaia bit,
@@ -8204,7 +8204,7 @@ CREATE TABLE dbo.dr20_supercosmos (
     htmid bigint,
     epoch real,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     sigra double precision,
     sigdec double precision,
     cx double precision,
@@ -8260,7 +8260,7 @@ DROP TABLE IF EXISTS dbo.dr20_target
 CREATE TABLE dbo.dr20_target (
     target_pk bigint NOT NULL,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     pmra real,
     pmdec real,
     epoch real,
@@ -8284,8 +8284,8 @@ CREATE TABLE dbo.dr20_target_union_legacy_initial (
 DROP TABLE IF EXISTS dbo.dr20_targetdb_version
 CREATE TABLE dbo.dr20_targetdb_version (
     pk integer NOT NULL,
-    planname varchar(max),
-    tag varchar(max),
+    planname varchar(100),
+    tag varchar(100),
     target_selection bit,
     robostrategy bit
 );
@@ -8294,8 +8294,8 @@ CREATE TABLE dbo.dr20_targetdb_version (
 DROP TABLE IF EXISTS dbo.dr20_targeting_generation
 CREATE TABLE dbo.dr20_targeting_generation (
     pk integer NOT NULL,
-    label varchar(max),
-    first_release varchar(max)
+    label varchar(100),
+    first_release varchar(100)
 );
 
 
@@ -8304,7 +8304,7 @@ CREATE TABLE dbo.dr20_targeting_generation_to_carton (
     pk integer NOT NULL,
     generation_pk integer,
     carton_pk integer,
-    rs_stage varchar(max),
+    rs_stage varchar(100),
     rs_active bit
 );
 
@@ -8375,7 +8375,7 @@ CREATE TABLE dbo.dr20_tic_v8 (
     objtype varchar(16),
     typesrc varchar(16),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     posflag varchar(12),
     pmra real,
     e_pmra real,
@@ -8487,7 +8487,7 @@ CREATE TABLE dbo.dr20_tic_v8 (
     wdflag integer,
     objid bigint,
     gaia_int bigint,
-    twomass_psc varchar(max),
+    twomass_psc varchar(100),
     twomass_psc_pts_key integer,
     tycho2_tycid integer,
     allwise_cntr bigint
@@ -8555,7 +8555,7 @@ CREATE TABLE dbo.dr20_twomass_psc (
     scan_key integer,
     coadd_key integer,
     coadd smallint,
-    designation varchar(max)
+    designation varchar(100)
 );
 
 
@@ -8620,7 +8620,7 @@ CREATE TABLE dbo.dr20_twomass_psc_part1 (
     scan_key integer,
     coadd_key integer,
     coadd smallint,
-    designation varchar(max)
+    designation varchar(500)
 );
 
 
@@ -8685,7 +8685,7 @@ CREATE TABLE dbo.dr20_twomass_psc_part2 (
     scan_key integer,
     coadd_key integer,
     coadd smallint,
-    designation varchar(max)
+    designation varchar(500)
 );
 
 
@@ -8728,9 +8728,9 @@ CREATE TABLE dbo.dr20_tycho2 (
     corr real,
     flag varchar(1),
     mflag varchar(1),
-    designation varchar(max) NOT NULL,
+    designation varchar(100) NOT NULL,
     tycid integer,
-    designation2 varchar(max)
+    designation2 varchar(100)
 );
 
 
@@ -8770,9 +8770,9 @@ CREATE TABLE dbo.dr20_unwise (
     ra12_w2 double precision,
     dec12_w1 double precision,
     dec12_w2 double precision,
-    coadd_id varchar(max),
-    unwise_detid_w1 varchar(max),
-    unwise_detid_w2 varchar(max),
+    coadd_id varchar(100),
+    unwise_detid_w1 varchar(100),
+    unwise_detid_w2 varchar(100),
     nm_w1 integer,
     nm_w2 integer,
     primary12_w1 integer,
@@ -8782,9 +8782,9 @@ CREATE TABLE dbo.dr20_unwise (
     flags_info_w1 integer,
     flags_info_w2 integer,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     primary_status integer,
-    unwise_objid varchar(max) NOT NULL
+    unwise_objid varchar(100) NOT NULL
 );
 
 
@@ -9076,7 +9076,7 @@ CREATE TABLE dbo.dr20_visual_binary_gaia_dr3 (
     ecl_lat2 double precision,
     pairdistance double precision,
     sep_au double precision,
-    binary_type varchar(max),
+    binary_type varchar(100),
     sigma18 double precision,
     r_chance_align double precision,
     dr2_source_id1 bigint,
@@ -9100,10 +9100,10 @@ CREATE TABLE dbo.dr20_visual_binary_gaia_dr3 (
 
 DROP TABLE IF EXISTS dbo.dr20_wd_gaia_dr3
 CREATE TABLE dbo.dr20_wd_gaia_dr3 (
-    wdjname varchar(max),
+    wdjname varchar(100),
     gaiaedr3 bigint NOT NULL,
     gaiadr2 bigint,
-    edr3name varchar(max),
+    edr3name varchar(100),
     radeg double precision,
     e_radeg double precision,
     dedeg double precision,
@@ -9247,7 +9247,7 @@ CREATE TABLE dbo.dr20_wd_gaia_dr3 (
     b_rpgeo1 double precision,
     b_rpgeo2 double precision,
     fidel_v1 double precision,
-    sdss12 varchar(max),
+    sdss12 varchar(100),
     sdssclean bigint,
     umag_sdss double precision,
     e_umag_sdss double precision,
@@ -9277,7 +9277,7 @@ CREATE TABLE dbo.dr20_xmm_om_suss_4_1 (
     b_srcdist real,
     v_srcdist real,
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     ra_hms varchar(13),
     dec_dms varchar(14),
     poserr real,
@@ -9386,9 +9386,9 @@ CREATE TABLE dbo.dr20_xmm_om_suss_4_1 (
 
 DROP TABLE IF EXISTS dbo.dr20_xmm_om_suss_5_0
 CREATE TABLE dbo.dr20_xmm_om_suss_5_0 (
-    iauname varchar(max),
+    iauname varchar(100),
     n_summary bigint,
-    obsid varchar(max),
+    obsid varchar(100),
     srcnum bigint,
     uvw2_srcdist real,
     uvm2_srcdist real,
@@ -9397,9 +9397,9 @@ CREATE TABLE dbo.dr20_xmm_om_suss_5_0 (
     b_srcdist real,
     v_srcdist real,
     ra double precision,
-    "dec" double precision,
-    ra_hms varchar(max),
-    dec_dms varchar(max),
+    [dec] double precision,
+    ra_hms varchar(100),
+    dec_dms varchar(100),
     poserr real,
     lii double precision,
     bii double precision,
@@ -9482,24 +9482,24 @@ CREATE TABLE dbo.dr20_xmm_om_suss_5_0 (
     u_quality_flag integer,
     b_quality_flag integer,
     v_quality_flag integer,
-    uvw2_quality_flag_st varchar(max),
-    uvm2_quality_flag_st varchar(max),
-    uvw1_quality_flag_st varchar(max),
-    u_quality_flag_st varchar(max),
-    b_quality_flag_st varchar(max),
-    v_quality_flag_st varchar(max),
+    uvw2_quality_flag_st varchar(100),
+    uvm2_quality_flag_st varchar(100),
+    uvw1_quality_flag_st varchar(100),
+    u_quality_flag_st varchar(100),
+    b_quality_flag_st varchar(100),
+    v_quality_flag_st varchar(100),
     uvw2_extended_flag smallint,
     uvm2_extended_flag smallint,
     uvw1_extended_flag smallint,
     u_extended_flag smallint,
     b_extended_flag smallint,
     v_extended_flag smallint,
-    uvw2_sky_image varchar(max),
-    uvm2_sky_image varchar(max),
-    uvw1_sky_image varchar(max),
-    u_sky_image varchar(max),
-    b_sky_image varchar(max),
-    v_sky_image varchar(max),
+    uvw2_sky_image varchar(100),
+    uvm2_sky_image varchar(100),
+    uvw1_sky_image varchar(100),
+    u_sky_image varchar(100),
+    b_sky_image varchar(100),
+    v_sky_image varchar(100),
     pk bigint NOT NULL
 );
 
@@ -9507,7 +9507,7 @@ CREATE TABLE dbo.dr20_xmm_om_suss_5_0 (
 DROP TABLE IF EXISTS dbo.dr20_xpfeh_gaia_dr3
 CREATE TABLE dbo.dr20_xpfeh_gaia_dr3 (
     source_id bigint NOT NULL,
-    in_training_sample varchar(max),
+    in_training_sample varchar(100),
     mh_xgboost double precision,
     teff_xgboost double precision,
     logg_xgboost double precision
@@ -9517,9 +9517,9 @@ CREATE TABLE dbo.dr20_xpfeh_gaia_dr3 (
 DROP TABLE IF EXISTS dbo.dr20_yso_clustering
 CREATE TABLE dbo.dr20_yso_clustering (
     source_id bigint NOT NULL,
-    twomass varchar(max),
+    twomass varchar(100),
     ra double precision,
-    "dec" double precision,
+    [dec] double precision,
     parallax real,
     id integer,
     g double precision,
