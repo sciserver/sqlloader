@@ -3,11 +3,20 @@ Load VAC/astra tables from BESTTEST into BestDR20 via pymssql.
 
 Strategy per table:
   1. Check vac_loaded.json -- skip if already loaded (unless --force)
-  2. Query IndexMap for CI key column (skip if missing)
+  2. Query IndexMap for CI key column and compression (skip if no entry)
   3. Read schema from BESTTEST INFORMATION_SCHEMA.COLUMNS
   4. Refuse if the BESTTEST source is empty while the target holds rows
-  5. DROP > CREATE TABLE ON [SPEC] > CREATE CI (PAGE compression if >= 1M rows) > INSERT SELECT
+  5. DROP > CREATE TABLE ON [SPEC] > CREATE CI > INSERT SELECT
   6. Verify row count, record success in vac_loaded.json
+
+Compression comes from IndexMap where it specifies one, falling back to the
+>= 1M row rule only for tables IndexMap says nothing about. The two disagree
+often: IndexMap says PAGE for essentially every table with a filegroup
+assigned, including ones far below the threshold.
+
+Note that IndexMap's `filegroup` column is NOT used -- it is unreliable
+(it claims SPEC for mos_* tables that correctly live on MINIDB), so the
+target filegroup stays hardcoded below.
 
 Usage:
   python run_vac_load.py              # load only NEW tables (not in vac_loaded.json)
@@ -64,10 +73,21 @@ TABLES = [
     'qms_hg_h_hb_indices',
     'qms_hg_index_diagram',
     'yso_ob_kin',
+    # VACs (batch 3) -- present in the loading manifest and populated in
+    # BESTTEST, but never in this list, so they were never loaded. Found
+    # 2026-07-27 by diffing the manifest against BestDR20.
+    'DL1_eROSITA_eRASS3_allepoch',
+    'DL1_eROSITA_eRASS3_daily',
+    'efeds_spiders_agn_ctp_salvato',
+    'efeds_spiders_agn_hard_xray_cat',
+    'efeds_spiders_agn_host_decomp',
+    'efeds_spiders_agn_line_props',
+    'efeds_spiders_agn_main_xray_cat',
+    'efeds_spiders_agn_xray_props',
 ]
 
 FILEGROUP = 'SPEC'
-COMPRESSION_THRESHOLD = 1_000_000  # PAGE compression if >= this many rows
+COMPRESSION_THRESHOLD = 1_000_000  # fallback only, when IndexMap states nothing
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 LOADED_JSON = os.path.join(SCRIPT_DIR, 'vac_loaded.json')
@@ -111,17 +131,29 @@ def col_type(row):
         return dt
 
 
+# Compression values we are willing to put into DDL. IndexMap is free text and
+# inconsistently cased ('page' on SPEC rows, 'PAGE' on PHOTO rows), so anything
+# outside this set falls back to the row-count rule rather than being trusted.
+VALID_COMPRESSION = {'NONE', 'ROW', 'PAGE'}
+
+
 def get_indexmap_pks(conn, tables):
     """Query BestDR20.IndexMap for PK definitions.
-    Returns {tableName: fieldList}."""
+    Returns {tableName: (fieldList, compression)}, compression '' if unusable."""
     cur = conn.cursor(as_dict=True)
     placeholders = ', '.join(['%s'] * len(tables))
     cur.execute(
-        f"SELECT tableName, fieldList FROM dbo.IndexMap "
+        f"SELECT tableName, fieldList, compression FROM dbo.IndexMap "
         f"WHERE code = 'K' AND tableName IN ({placeholders})",
         tables,
     )
-    return {r['tableName']: r['fieldList'].strip() for r in cur.fetchall()}
+    result = {}
+    for r in cur.fetchall():
+        comp = (r['compression'] or '').strip().upper()
+        if comp not in VALID_COMPRESSION:
+            comp = ''
+        result[r['tableName']] = (r['fieldList'].strip(), comp)
+    return result
 
 
 def get_columns(conn, table):
@@ -165,9 +197,10 @@ def get_target_rows(conn, table):
     return r['rows'] if r and r['rows'] is not None else None
 
 
-def build_sql(table, pk_field_list, columns, source_rows):
+def build_sql(table, pk_field_list, columns, compress_flag):
     """Build the list of (description, sql) tuples for one table.
-    pk_field_list may be a single column or comma-separated for composite keys."""
+    pk_field_list may be a single column or comma-separated for composite keys.
+    compress_flag is a validated value from VALID_COMPRESSION."""
     col_defs = []
     col_names = []
     for c in columns:
@@ -192,8 +225,8 @@ def build_sql(table, pk_field_list, columns, source_rows):
     ci_name_suffix = '_'.join(pk_cols)
 
     compress = ''
-    if source_rows >= COMPRESSION_THRESHOLD:
-        compress = ' WITH (DATA_COMPRESSION = PAGE)'
+    if compress_flag and compress_flag != 'NONE':
+        compress = f' WITH (DATA_COMPRESSION = {compress_flag})'
     ci_sql = (
         f"CREATE CLUSTERED INDEX [ci_{table}_{ci_name_suffix}] ON dbo.[{table}] ({pk_col_sql})"
         f"{compress} ON [{FILEGROUP}];"
@@ -276,7 +309,7 @@ def main():
             results.append((table, 'ALREADY', prev['rows'], prev['rows'], 0, ''))
             continue
 
-        pk_field_list = pk_map[table]
+        pk_field_list, im_compression = pk_map[table]
         log(f"-- {table} (CI: {pk_field_list}) --")
 
         # Read schema
@@ -287,8 +320,19 @@ def main():
             continue
 
         source_rows = get_row_count(test, table)
-        compress_flag = 'PAGE' if source_rows >= COMPRESSION_THRESHOLD else 'NONE'
-        log(f"  {len(columns)} columns, ~{source_rows:,} rows in BESTTEST, compression: {compress_flag}")
+
+        # IndexMap is the authority on compression where it states one; the
+        # row-count rule is only a fallback for tables it says nothing about.
+        # These disagree often -- IndexMap says PAGE for essentially everything
+        # with a filegroup assigned, including tables well under the threshold.
+        if im_compression:
+            compress_flag = im_compression
+            compress_src = 'IndexMap'
+        else:
+            compress_flag = 'PAGE' if source_rows >= COMPRESSION_THRESHOLD else 'NONE'
+            compress_src = f'row count vs {COMPRESSION_THRESHOLD:,}'
+        log(f"  {len(columns)} columns, ~{source_rows:,} rows in BESTTEST, "
+            f"compression: {compress_flag} (from {compress_src})")
 
         # The load is DROP > CREATE > CI > INSERT, so an empty source silently
         # replaces the target with nothing -- and because an empty INSERT is not
@@ -310,7 +354,7 @@ def main():
             log(f"  source is empty and target is {'empty' if target_rows == 0 else 'absent'}"
                 f" -- creating empty table")
 
-        steps = build_sql(table, pk_field_list, columns, source_rows)
+        steps = build_sql(table, pk_field_list, columns, compress_flag)
 
         if args.dry_run:
             for desc, sql in steps:
