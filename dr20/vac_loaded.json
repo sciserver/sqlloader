@@ -1,0 +1,290 @@
+{
+  "boss_net_boss_star": {
+    "loaded_at": "2026-07-09 11:09:46",
+    "rows": 1803883,
+    "source_rows": 1803883,
+    "pk_col": "spectrum_PK",
+    "compression": "PAGE",
+    "elapsed_s": 76.8
+  },
+  "boss_net_boss_visit": {
+    "loaded_at": "2026-07-09 11:19:08",
+    "rows": 5357038,
+    "source_rows": 5357038,
+    "pk_col": "spectrum_PK",
+    "compression": "PAGE",
+    "elapsed_s": 561.9
+  },
+  "corv_boss_visit": {
+    "loaded_at": "2026-07-09 11:27:45",
+    "rows": 5328827,
+    "source_rows": 5328827,
+    "pk_col": "spectrum_PK",
+    "compression": "PAGE",
+    "elapsed_s": 516.9
+  },
+  "line_forest_boss_star": {
+    "loaded_at": "2026-07-09 11:37:11",
+    "rows": 1803883,
+    "source_rows": 1803883,
+    "pk_col": "spectrum_PK",
+    "compression": "PAGE",
+    "elapsed_s": 565.9
+  },
+  "line_forest_boss_visit": {
+    "loaded_at": "2026-07-09 12:07:32",
+    "rows": 5357038,
+    "source_rows": 5357038,
+    "pk_col": "spectrum_PK",
+    "compression": "PAGE",
+    "elapsed_s": 1820.8
+  },
+  "m_dwarf_type_boss_star": {
+    "loaded_at": "2026-07-09 12:09:53",
+    "rows": 1802746,
+    "source_rows": 1802746,
+    "pk_col": "spectrum_PK",
+    "compression": "PAGE",
+    "elapsed_s": 140.9
+  },
+  "m_dwarf_type_boss_visit": {
+    "loaded_at": "2026-07-09 12:19:05",
+    "rows": 5356640,
+    "source_rows": 5356640,
+    "pk_col": "spectrum_PK",
+    "compression": "PAGE",
+    "elapsed_s": 551.5
+  },
+  "slam_boss_star": {
+    "loaded_at": "2026-07-09 12:21:29",
+    "rows": 1803883,
+    "source_rows": 1803883,
+    "pk_col": "spectrum_PK",
+    "compression": "PAGE",
+    "elapsed_s": 144.4
+  },
+  "snow_white_boss_star": {
+    "loaded_at": "2026-07-09 12:24:11",
+    "rows": 1803883,
+    "source_rows": 1803883,
+    "pk_col": "spectrum_PK",
+    "compression": "PAGE",
+    "elapsed_s": 161.1
+  },
+  "mwm_boss_allstar": {
+    "loaded_at": "2026-07-09 12:25:56",
+    "rows": 1803883,
+    "source_rows": 1803883,
+    "pk_col": "spectrum_PK",
+    "compression": "PAGE",
+    "elapsed_s": 104.9
+  },
+  "mwm_boss_allvisit": {
+    "loaded_at": "2026-07-09 12:31:35",
+    "rows": 3364323,
+    "source_rows": 3364323,
+    "pk_col": "spectrum_PK",
+    "compression": "PAGE",
+    "elapsed_s": 338.2
+  },
+  "LVM_DAPall": {
+    "loaded_at": "2026-07-10 18:32:15",
+    "rows": 169,
+    "source_rows": 169,
+    "pk_col": "expnum",
+    "compression": "NONE",
+    "elapsed_s": 0.0
+  },
+  "LVM_DRPall": {
+    "loaded_at": "2026-07-10 18:32:15",
+    "rows": 169,
+    "source_rows": 169,
+    "pk_col": "expnum",
+    "compression": "NONE",
+    "elapsed_s": 0.0
+  },
+  "spAll_epoch": {
+    "loaded_at": "2026-07-10 18:47:08",
+    "rows": 4903154,
+    "source_rows": 4903154,
+    "pk_col": "specobjid",
+    "compression": "PAGE",
+    "elapsed_s": 659.6
+  },
+  "spAll_allepoch": {
+    "loaded_at": "2026-07-13 11:06:38",
+    "rows": 506550,
+    "source_rows": 506550,
+    "pk_col": "specobjid",
+    "compression": "NONE",
+    "elapsed_s": 18.0
+  },
+  "boss_clam_lite": {
+    "loaded_at": "2026-07-24 13:57:09",
+    "rows": 1708214,
+    "source_rows": 1708214,
+    "pk_col": "PK",
+    "compression": "PAGE",
+    "elapsed_s": 22.4
+  },
+  "boss_clam_params": {
+    "loaded_at": "2026-07-24 13:58:44",
+    "rows": 1708214,
+    "source_rows": 1708214,
+    "pk_col": "PK",
+    "compression": "PAGE",
+    "elapsed_s": 95.3
+  },
+  "boss_ISM_NaI_absorption": {
+    "loaded_at": "2026-07-24 13:58:49",
+    "rows": 1373392,
+    "source_rows": 1373392,
+    "pk_col": "PK",
+    "compression": "PAGE",
+    "elapsed_s": 4.5
+  },
+  "boss_occam_cluster": {
+    "loaded_at": "2026-07-24 13:58:49",
+    "rows": 111,
+    "source_rows": 111,
+    "pk_col": "name",
+    "compression": "NONE",
+    "elapsed_s": 0.0
+  },
+  "boss_occam_member": {
+    "loaded_at": "2026-07-24 13:58:49",
+    "rows": 3834,
+    "source_rows": 3834,
+    "pk_col": "sdss_id",
+    "compression": "NONE",
+    "elapsed_s": 0.1
+  },
+  "boss_vi_results": {
+    "loaded_at": "2026-07-24 13:58:50",
+    "rows": 506550,
+    "source_rows": 506550,
+    "pk_col": "sdss_id",
+    "compression": "NONE",
+    "elapsed_s": 0.8
+  },
+  "da_dwd_candidates": {
+    "loaded_at": "2026-07-24 13:58:50",
+    "rows": 5817,
+    "source_rows": 5817,
+    "pk_col": "sdss_id",
+    "compression": "NONE",
+    "elapsed_s": 0.1
+  },
+  "da_dwd_rvs": {
+    "loaded_at": "2026-07-24 13:58:50",
+    "rows": 42575,
+    "source_rows": 42575,
+    "pk_col": "exposure_num,sdss_id",
+    "compression": "NONE",
+    "elapsed_s": 0.1
+  },
+  "DR20Q_prop": {
+    "loaded_at": "2026-07-24 13:58:57",
+    "rows": 243257,
+    "source_rows": 243257,
+    "pk_col": "objid",
+    "compression": "NONE",
+    "elapsed_s": 6.8
+  },
+  "efeds_spiders_agn_fit_params": {
+    "loaded_at": "2026-07-24 13:58:57",
+    "rows": 13143,
+    "source_rows": 13143,
+    "pk_col": "PK_index",
+    "compression": "NONE",
+    "elapsed_s": 0.4
+  },
+  "eROSITA_CVs": {
+    "loaded_at": "2026-07-24 13:58:57",
+    "rows": 587,
+    "source_rows": 587,
+    "pk_col": "sdss_id",
+    "compression": "NONE",
+    "elapsed_s": 0.1
+  },
+  "fermi_blazar": {
+    "loaded_at": "2026-07-24 13:58:57",
+    "rows": 707,
+    "source_rows": 707,
+    "pk_col": "sdss_id",
+    "compression": "NONE",
+    "elapsed_s": 0.1
+  },
+  "grav_pot_16": {
+    "loaded_at": "2026-07-24 13:59:18",
+    "rows": 1515648,
+    "source_rows": 1515648,
+    "pk_col": "ids",
+    "compression": "PAGE",
+    "elapsed_s": 20.7
+  },
+  "gyro_age_dwarf": {
+    "loaded_at": "2026-07-24 13:59:18",
+    "rows": 7370,
+    "source_rows": 7370,
+    "pk_col": "sdss_id",
+    "compression": "NONE",
+    "elapsed_s": 0.1
+  },
+  "mdwarf_active_params": {
+    "loaded_at": "2026-07-24 13:59:19",
+    "rows": 212566,
+    "source_rows": 212566,
+    "pk_col": "sdssid",
+    "compression": "NONE",
+    "elapsed_s": 0.3
+  },
+  "mdwarf_contin_summary": {
+    "loaded_at": "2026-07-24 13:59:24",
+    "rows": 569271,
+    "source_rows": 569271,
+    "pk_col": "spectrum_pk",
+    "compression": "NONE",
+    "elapsed_s": 5.3
+  },
+  "minesweeper": {
+    "loaded_at": "2026-07-24 13:59:25",
+    "rows": 56104,
+    "source_rows": 56104,
+    "pk_col": "sdssid",
+    "compression": "NONE",
+    "elapsed_s": 0.6
+  },
+  "payne4GAIN_summary": {
+    "loaded_at": "2026-07-24 13:59:27",
+    "rows": 360451,
+    "source_rows": 360451,
+    "pk_col": "sdssid",
+    "compression": "NONE",
+    "elapsed_s": 2.0
+  },
+  "qms_hg_h_hb_indices": {
+    "loaded_at": "2026-07-24 13:59:27",
+    "rows": 6439,
+    "source_rows": 6439,
+    "pk_col": "catalogid",
+    "compression": "NONE",
+    "elapsed_s": 0.1
+  },
+  "qms_hg_index_diagram": {
+    "loaded_at": "2026-07-24 13:59:27",
+    "rows": 3082,
+    "source_rows": 3082,
+    "pk_col": "catalogid",
+    "compression": "NONE",
+    "elapsed_s": 0.1
+  },
+  "yso_ob_kin": {
+    "loaded_at": "2026-07-24 13:59:27",
+    "rows": 45264,
+    "source_rows": 45264,
+    "pk_col": "gaia_dr3_source_id",
+    "compression": "NONE",
+    "elapsed_s": 0.2
+  }
+}

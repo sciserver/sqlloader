@@ -1,0 +1,86 @@
+{
+  "allspec": {
+    "processed_at": "2026-07-23 11:51:46",
+    "rows": 27671504,
+    "ra_col": "ra",
+    "dec_col": "dec",
+    "elapsed_s": 973.2
+  },
+  "mastar_goodstars": {
+    "processed_at": "2026-07-23 11:51:47",
+    "rows": 24290,
+    "ra_col": "ra",
+    "dec_col": "dec",
+    "elapsed_s": 0.7
+  },
+  "boss_clam_lite": {
+    "processed_at": "2026-07-24 14:06:58",
+    "rows": 1708214,
+    "ra_col": "ra",
+    "dec_col": "dec",
+    "elapsed_s": 56.4
+  },
+  "boss_clam_params": {
+    "processed_at": "2026-07-24 14:09:00",
+    "rows": 1708214,
+    "ra_col": "ra",
+    "dec_col": "dec",
+    "elapsed_s": 121.9
+  },
+  "boss_ISM_NaI_absorption": {
+    "processed_at": "2026-07-24 14:09:25",
+    "rows": 1373392,
+    "ra_col": "ra",
+    "dec_col": "dec",
+    "elapsed_s": 24.8
+  },
+  "da_dwd_candidates": {
+    "processed_at": "2026-07-24 14:09:25",
+    "rows": 5817,
+    "ra_col": "ra",
+    "dec_col": "dec",
+    "elapsed_s": 0.3
+  },
+  "DR20Q_prop": {
+    "processed_at": "2026-07-24 14:09:29",
+    "rows": 243257,
+    "ra_col": "ra",
+    "dec_col": "dec",
+    "elapsed_s": 4.4
+  },
+  "mdwarf_contin_summary": {
+    "processed_at": "2026-07-24 14:09:35",
+    "rows": 569271,
+    "ra_col": "ra",
+    "dec_col": "dec",
+    "elapsed_s": 5.5
+  },
+  "minesweeper": {
+    "processed_at": "2026-07-24 14:09:36",
+    "rows": 56104,
+    "ra_col": "ra",
+    "dec_col": "dec",
+    "elapsed_s": 1.3
+  },
+  "qms_hg_h_hb_indices": {
+    "processed_at": "2026-07-24 14:09:37",
+    "rows": 6439,
+    "ra_col": "ra",
+    "dec_col": "dec",
+    "elapsed_s": 0.3
+  },
+  "qms_hg_index_diagram": {
+    "processed_at": "2026-07-24 14:09:37",
+    "rows": 3082,
+    "ra_col": "ra",
+    "dec_col": "dec",
+    "elapsed_s": 0.3
+  },
+  "yso_ob_kin": {
+    "processed_at": "2026-07-24 14:09:38",
+    "rows": 45264,
+    "ra_col": "ra",
+    "dec_col": "dec",
+    "elapsed_s": 1.2
+  }
+}
