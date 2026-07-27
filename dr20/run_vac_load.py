@@ -5,8 +5,9 @@ Strategy per table:
   1. Check vac_loaded.json -- skip if already loaded (unless --force)
   2. Query IndexMap for CI key column (skip if missing)
   3. Read schema from BESTTEST INFORMATION_SCHEMA.COLUMNS
-  4. DROP > CREATE TABLE ON [SPEC] > CREATE CI (PAGE compression if >= 1M rows) > INSERT SELECT
-  5. Verify row count, record success in vac_loaded.json
+  4. Refuse if the BESTTEST source is empty while the target holds rows
+  5. DROP > CREATE TABLE ON [SPEC] > CREATE CI (PAGE compression if >= 1M rows) > INSERT SELECT
+  6. Verify row count, record success in vac_loaded.json
 
 Usage:
   python run_vac_load.py              # load only NEW tables (not in vac_loaded.json)
@@ -144,6 +145,26 @@ def get_row_count(conn, table):
     return r['row_count'] if r and r['row_count'] else 0
 
 
+def get_target_rows(conn, table):
+    """Rows currently in the BestDR20 target table.
+
+    Returns None if the table does not exist, which is different from 0 -- an
+    empty target has nothing to lose, a missing one likewise, but a populated
+    one does.  Uses catalog metadata rather than COUNT(*) so this stays cheap
+    on large tables.
+    """
+    cur = conn.cursor(as_dict=True)
+    cur.execute("""
+        SELECT SUM(p.rows) AS rows
+        FROM sys.tables t
+        JOIN sys.indexes i ON t.object_id = i.object_id AND i.index_id IN (0, 1)
+        JOIN sys.partitions p ON i.object_id = p.object_id AND i.index_id = p.index_id
+        WHERE t.name = %s
+    """, (table,))
+    r = cur.fetchone()
+    return r['rows'] if r and r['rows'] is not None else None
+
+
 def build_sql(table, pk_field_list, columns, source_rows):
     """Build the list of (description, sql) tuples for one table.
     pk_field_list may be a single column or comma-separated for composite keys."""
@@ -269,6 +290,26 @@ def main():
         compress_flag = 'PAGE' if source_rows >= COMPRESSION_THRESHOLD else 'NONE'
         log(f"  {len(columns)} columns, ~{source_rows:,} rows in BESTTEST, compression: {compress_flag}")
 
+        # The load is DROP > CREATE > CI > INSERT, so an empty source silently
+        # replaces the target with nothing -- and because an empty INSERT is not
+        # an error, it would commit and be recorded as a success in the tracking
+        # file.  Refuse when the target actually holds rows.  A missing or empty
+        # target has nothing to lose, so creating the shell there is fine.
+        # --force deliberately does not override this: it exists to re-load
+        # already-loaded tables, not to permit destroying data.
+        if source_rows == 0:
+            target_rows = get_target_rows(best, table)
+            if target_rows:
+                log(f"  REFUSED: BESTTEST source is empty, but the target holds "
+                    f"{target_rows:,} rows -- loading would drop them and replace "
+                    f"with 0. Wait for the upstream load to finish.")
+                results.append((table, 'REFUSED', 0, target_rows, 0,
+                                f'empty source, target has {target_rows:,} rows'))
+                log('')
+                continue
+            log(f"  source is empty and target is {'empty' if target_rows == 0 else 'absent'}"
+                f" -- creating empty table")
+
         steps = build_sql(table, pk_field_list, columns, source_rows)
 
         if args.dry_run:
@@ -348,8 +389,13 @@ def main():
     ok = sum(1 for r in results if r[1] == 'OK')
     already = sum(1 for r in results if r[1] == 'ALREADY')
     skip = sum(1 for r in results if r[1] == 'SKIPPED')
+    refused = sum(1 for r in results if r[1] == 'REFUSED')
     fail = sum(1 for r in results if r[1] == 'ERROR')
-    log(f"OK: {ok}  Already loaded: {already}  Skipped: {skip}  Errors: {fail}")
+    log(f"OK: {ok}  Already loaded: {already}  Skipped: {skip}  "
+        f"Refused: {refused}  Errors: {fail}")
+    if refused:
+        log(f"{refused} table(s) refused because the BESTTEST source was empty "
+            f"while the target held data. Re-run once they are populated upstream.")
 
     # Close connections
     test.close()
