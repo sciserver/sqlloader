@@ -98,12 +98,14 @@ fails, there are orphaned metadata rows to clean up first. Note that ~29 other
 FKs across the DB are enabled but `is_not_trusted` — that is expected from bulk
 loads and does not affect correctness, only optimizer plan choices.
 
-### 4. `the_cannon_apogee_star` — decide whether it ships
+### 4. `the_cannon_apogee_star` — almost certainly not in DR20
 
-Has an IndexMap entry (`spectrum_PK`, PAGE, SPEC) but no table in BestDR20, and
-its BESTTEST source is empty. Since the APOGEE tables are not being reloaded
-from BESTTEST, either it is not part of DR20 and the IndexMap row should go, or
-it needs a source. Loose end, not a blocker.
+Has an IndexMap entry (`spectrum_PK`, PAGE, SPEC) but no table in BestDR20 and
+0 rows in BESTTEST. That is the same profile as the products struck out on the
+source spreadsheet, so it is very likely struck out too.
+
+- [ ] Confirm against the spreadsheet, then drop the stale IndexMap row so a
+      rebuild does not expect a table that will never exist.
 
 ### 5. multiplex NCIs
 
@@ -137,16 +139,14 @@ canonical**: `DL1_eROSITA_eRASS3_*`. That is what BESTTEST, IndexMap, the
 existing eRASS1 pair and BestDR20 all use, so nothing needs renaming. If the
 published list is regenerated, it should use the short form.
 
-**`efeds_spiders_agn_classification_props` — blocked upstream, still open.**
-On the published list but not loadable:
+**`efeds_spiders_agn_classification_props` — not in DR20, closed.** It is
+struck out on the source spreadsheet; the strikethrough was lost when the list
+was copied. Same for `efeds_spiders_agn_xray_spec_props`. Both have 0 rows in
+BESTTEST and no IndexMap entry, which is consistent — nothing to do.
 
-- BESTTEST has it as `efeds_spiders_agn_class_props` (`class`, not
-  `classification`) with **0 rows**
-- neither spelling has an IndexMap entry
-
-- [ ] Confirm whether it is meant to be in DR20 at all. Same question for
-      `efeds_spiders_agn_xray_spec_props`, also 0 rows in BESTTEST and not on
-      the published list.
+**Useful signal:** the struck-out products are exactly the ones with 0 rows in
+BESTTEST. An empty BESTTEST source reliably means "not shipping", which is what
+the empty-source guard in `run_vac_load.py` now enforces automatically.
 
 ---
 
