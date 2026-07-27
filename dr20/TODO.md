@@ -1,169 +1,89 @@
 # DR20 Loading - TODO List
 
-**Last Updated:** December 17, 2024
+**Last Updated:** June 4, 2026
 
 ---
 
-## Immediate Actions (Blocked - Waiting for Utah)
+## Current Status
 
-- [ ] **Send regeneration request email to Utah team**
-  - Use draft from session_summary_2024-12-17.md
-  - Request 4 files with pipe delimiters + NaN→NULL
-  - Get ETA for regenerated files
+✅ **Completed:**
+- All 171 tables loaded on E: drive (minidb_dr20) - heap tables
+- Database created on D: drive (minidb_dr20_v2) with MINIDB filegroup
+- Tables created with fixed varchar sizes (mssql_tables_0116.sql - no more varchar(max))
+- Primary keys created with ON [MINIDB] and PAGE compression on 16 tables
+- Data load E: → D: drive complete (load_from_heap_tables.sql)
+- Nonclustered indexes created (mssql_indexes_0112.sql)
+- Foreign keys created (mssql_fk_0112.sql)
+- HTM spatial library deployed
+- Spatial stored procedures deployed
+- HTM spatial indexes added
+- **BestDR20 load complete** (renamed from BestDR19):
+  - 171 mos_* tables created ON [MINIDB] filegroup
+  - PAGE compression on 73 tables >= 1M rows (up from 16 in minidb_dr20_v2)
+  - 14 WIP/staging tables dropped and removed from schema
+  - Data loaded via INSERT...SELECT WITH (TABLOCK), SIMPLE recovery
+  - PKs created (179 total, 73 with PAGE compression)
+  - Nonclustered indexes running (992 NCIs) — in progress as of 2026-06-04
 
-- [ ] **Wait for regenerated CSV files from Utah**
-  - dr20_field (28.4 MB)
-  - dr20_gaia_dr3_nss_two_body_orbit (329.3 MB)
-  - dr20_gaia_dr3_vari_rrlyrae (158.5 MB)
-  - dr20_sdss_apogeeallstarmerge_r13 (367.4 MB)
+🔄 **In Progress:**
+- BestDR20 nonclustered index creation (992 indexes, running)
+- Metadata loading (step 7) — see details below
 
 ---
 
-## After Receiving Regenerated Files
+## Immediate Next Steps
 
-### 1. Update bulk_loader.py for Pipe Delimiters
+### 1. Load Database Metadata
 
-- [ ] Add `--delimiter` parameter to bulk_loader.py
-  - Support comma (,) - default
-  - Support pipe (|) - for special files
-  - Auto-detect from first line? (optional enhancement)
+New workflow using `pg_schema_descriptions.sql` from Utah (2026-04-22):
 
-- [ ] Create file list of pipe-delimited tables
-  - dr20_allstar_dr17_synspec_rev1 (existing)
-  - dr20_field (regenerated)
-  - dr20_gaia_dr3_nss_two_body_orbit (regenerated)
-  - dr20_gaia_dr3_vari_rrlyrae (regenerated)
-  - dr20_sdss_apogeeallstarmerge_r13 (regenerated)
-
-### 2. Test Regenerated Files
-
-- [ ] Test 4 regenerated files in test mode (10 rows)
+- [x] Generated `create_minidb_descriptions_ms.sql` using `pg2mos_descriptions.py`
+  - 186 tables, `mos_` prefix, MSSQL types substituted from `mssql_tables_0116.sql`
+  - `plan` → `planname` rename applied
+- [ ] Waiting on Utah re: schema discrepancies (email sent 2026-04-22)
+  - `dr20_target_2025dec9` in pg schema but not in our MSSQL schema
+  - 14 tables with undocumented columns (partition/junction tables — probably fine)
+- [ ] Update `vbs/xschema.txt` to point to `dr20/create_minidb_descriptions_ms.sql`
+- [ ] Run `cscript parseSchema2sql.vbs` from `vbs/` directory
+- [ ] Load generated metadata into minidb_dr20_v2:
   ```bash
-  cd "H:\GitHub\sqlloader\dr20"
-
-  # Test with pipe delimiter
-  python bulk_loader.py "E:\DR20\minidb_dr20\casload" . \
-    --test-mode --delimiter "|" \
-    --files dr20_field,dr20_gaia_dr3_nss_two_body_orbit,dr20_gaia_dr3_vari_rrlyrae,dr20_sdss_apogeeallstarmerge_r13 \
-    --connection "Server=localhost;Database=minidb_dr20;Trusted_Connection=yes"
+  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\csv\loaddbobjects.sql
+  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\csv\loaddbcolumns.sql
   ```
 
-- [ ] Verify NaN values were replaced with NULL
-  - Check sample data in test_results
-  - Query loaded rows to confirm NULL instead of "NaN"
+---
 
-- [ ] Regenerate full bulk insert SQL
+## Database Objects Creation (DONE)
+
+### 2. Create Nonclustered Indexes ✅
+
+- [x] Execute mssql_indexes_0112.sql (992 indexes)
   ```bash
-  python bulk_loader.py "E:\DR20\minidb_dr20\casload" . \
-    --test-mode --generate-sql \
-    --connection "Server=localhost;Database=minidb_dr20;Trusted_Connection=yes" \
-    --date MMDD
-  ```
-
----
-
-## Full Data Load (After Testing Passes)
-
-### 3. Execute Production Data Load
-
-- [ ] **Backup database before loading** (if needed)
-
-- [ ] **Load comma-delimited files (157 files)**
-  - Option A: Execute mssql_bulk_insert_1217.sql in SSMS
-  - Option B: Run bulk_loader.py without --test-mode
-  - Estimated time: 2-4 hours for 782.8 GB
-
-- [ ] **Load pipe-delimited files (5 files)**
-  - Create separate bulk insert script with FIELDTERMINATOR='|'
-  - Load dr20_allstar_dr17_synspec_rev1 (5.5 GB)
-  - Load 4 regenerated files (~883.6 MB)
-  - Estimated time: 30-60 minutes
-
-- [ ] **Verify row counts**
-  ```sql
-  -- Compare row counts to source CSV files
-  SELECT
-    t.name AS table_name,
-    SUM(p.rows) AS row_count
-  FROM sys.tables t
-  INNER JOIN sys.partitions p ON t.object_id = p.object_id
-  WHERE t.name LIKE 'dr20_%' AND p.index_id IN (0,1)
-  GROUP BY t.name
-  ORDER BY row_count DESC;
-  ```
-
----
-
-## Database Objects Creation
-
-### 4. Create Primary Keys
-
-- [ ] Review mssql_pk_1217.sql for any issues
-
-- [ ] Execute primary key creation
-  ```sql
-  -- In SSMS, execute:
-  -- H:\GitHub\sqlloader\dr20\mssql_pk_1217.sql
-  ```
-
-- [ ] **Note:** 16 tables have PAGE compression on PKs
-  - Tier 1 (>20 GB): 12 tables
-  - Tier 2 (10-20 GB): 4 tables
-  - Expected space savings: 200-300 GB
-
-- [ ] Verify all PKs created successfully
-  ```sql
-  SELECT
-    t.name AS table_name,
-    i.name AS pk_name,
-    p.data_compression_desc
-  FROM sys.tables t
-  INNER JOIN sys.indexes i ON t.object_id = i.object_id
-  INNER JOIN sys.partitions p ON i.object_id = p.object_id AND i.index_id = p.index_id
-  WHERE i.is_primary_key = 1 AND t.name LIKE 'dr20_%'
-  ORDER BY t.name;
-  ```
-
-### 5. Create Indexes
-
-- [ ] Review mssql_indexes_1217.sql
-
-- [ ] **Note:** 53 tables missing q3c spatial indexes
-  - q3c_ang2ipix is PostgreSQL-specific
-  - Need HTM functions or SQL Server spatial indexes
-  - Document which tables need spatial indexes
-
-- [ ] Execute index creation (992 indexes)
-  ```sql
-  -- In SSMS, execute:
-  -- H:\GitHub\sqlloader\dr20\mssql_indexes_1217.sql
+  sqlcmd -S localhost -d minidb_dr20_v2 -E -i mssql_indexes_0112.sql -o index_results_0116.txt
   ```
 
 - [ ] **Note:** Some computed column indexes may fail
-  - E.g., parallax - parallax_error
-  - Create persisted computed columns first if needed
+  - E.g., indexes on expressions like (parallax - parallax_error)
+  - Will need to create persisted computed columns first
+  - Document any failures in issues.md
 
 - [ ] Monitor index creation progress
-  - This will take several hours for large tables
-  - Check for errors and document any failures
+  - Expected time: 2-4 hours for large tables
+  - Check for errors and document failures
 
-### 6. Create Foreign Keys
+### 3. Create Foreign Keys ✅
 
-- [ ] Review mssql_fk_1217.sql (102 foreign keys)
+- [x] Execute mssql_fk_0112.sql (102 foreign keys)
+  ```bash
+  sqlcmd -S localhost -d minidb_dr20_v2 -E -i mssql_fk_0112.sql -o fk_results_0116.txt
+  ```
 
 - [ ] **Known Issue:** Some FKs may fail due to orphaned records
-  - Document from DR19: Some catalog_to_* tables have orphaned references
   - Check for orphaned records before creating FK:
   ```sql
   SELECT target_id
   FROM dr20_catalog_to_[table_name]
   WHERE target_id NOT IN (SELECT pk FROM dr20_[table_name]);
-  ```
-
-- [ ] Execute foreign key creation
-  ```sql
-  -- In SSMS, execute:
-  -- H:\GitHub\sqlloader\dr20\mssql_fk_1217.sql
   ```
 
 - [ ] Document any FKs that fail
@@ -172,65 +92,106 @@
 
 ---
 
-## Spatial Indexes (Optional - Deferred)
+## Spatial Functions and HTM Indexes
 
-### 7. Add HTM Spatial Indexes
+### 4. Deploy Spherical Library (HTM CLR Functions) ✅
 
-- [ ] Review htm/ directory for CLR stored procedures
-
-- [ ] Identify tables with RA/DEC columns needing spatial indexes
-  - 53 tables from mssql_indexes_1217.sql have q3c indexes commented out
-  - Prioritize large catalog tables
-
-- [ ] Deploy HTM functions
+- [x] Deploy HTM CLR assembly to minidb_dr20_v2
   ```bash
   cd H:\GitHub\sqlloader\htm
-  # Run install.bat or spSphericalDeploy.sql
+  # Run install.bat or execute spSphericalDeploy.sql
+  sqlcmd -S localhost -d minidb_dr20_v2 -E -i spSphericalDeploy.sql
   ```
 
-- [ ] Add HTM indexes to key tables
+- [ ] Verify CLR functions installed
   ```sql
-  -- Example:
+  USE minidb_dr20_v2;
+  SELECT name, type_desc
+  FROM sys.objects
+  WHERE name LIKE 'fHtm%' OR name LIKE 'fCartesian%'
+  ORDER BY name;
+  ```
+
+### 5. Add Spatial Stored Procedures ✅
+
+- [x] Deploy spNearby.sql and related spatial functions
+  ```bash
+  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\spNearby.sql
+  ```
+
+- [ ] Verify spatial functions installed
+  ```sql
+  USE minidb_dr20_v2;
+  SELECT name, type_desc
+  FROM sys.objects
+  WHERE name LIKE 'sp%Nearby%' OR name LIKE 'fGet%'
+  ORDER BY name;
+  ```
+
+### 6. Add HTM Spatial Indexes ✅
+
+- [x] Identify tables with RA/DEC columns needing spatial indexes
+  - Review mssql_indexes_0112.sql for commented-out q3c indexes
+  - 53+ tables have q3c indexes in PostgreSQL source
+  - Prioritize large catalog tables (gaia, target, catalog, etc.)
+
+- [ ] Add HTM columns and indexes to key tables
+  ```sql
+  -- Example for dr20_catalog:
   ALTER TABLE dr20_catalog ADD htmid bigint;
   UPDATE dr20_catalog SET htmid = dbo.fHtmEq(ra, dec);
   CREATE INDEX dr20_catalog_htmid_idx ON dr20_catalog(htmid);
   ```
 
+- [ ] Add Cartesian coordinate columns where needed
+  ```sql
+  -- Example using fCartesianX, fCartesianY, fCartesianZ functions
+  ALTER TABLE dr20_target ADD cx real, cy real, cz real;
+  UPDATE dr20_target SET
+    cx = dbo.fCartesianX(ra, dec),
+    cy = dbo.fCartesianY(ra, dec),
+    cz = dbo.fCartesianZ(ra, dec);
+  ```
+
+- [ ] Document HTM index creation in issues.md
+  - Which tables got HTM indexes
+  - Performance characteristics
+
 ---
 
 ## Metadata Loading (Optional)
 
-### 8. Load Database Metadata
+### 7. Load Database Metadata — see step 1 above for current status
 
 - [ ] Load table/column descriptions
-  ```sql
-  -- H:\GitHub\sqlloader\schema\csv\loaddbobjects.sql
+  ```bash
+  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\csv\loaddbobjects.sql
   ```
 
 - [ ] Load algorithm documentation
-  ```sql
-  -- H:\GitHub\sqlloader\schema\csv\loadalgorithm.sql
+  ```bash
+  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\csv\loadalgorithm.sql
   ```
 
 - [ ] Load glossary
-  ```sql
-  -- H:\GitHub\sqlloader\schema\csv\loadglossary.sql
+  ```bash
+  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\csv\loadglossary.sql
   ```
 
 - [ ] Load extended table descriptions
-  ```sql
-  -- H:\GitHub\sqlloader\schema\csv\loadtabledesc.sql
+  ```bash
+  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\csv\loadtabledesc.sql
   ```
 
 ---
 
 ## Validation & Documentation
 
-### 9. Final Validation
+### 8. Final Validation
 
 - [ ] **Verify total row counts match expected**
-  - Compare to PostgreSQL source if available
-  - Compare to CSV line counts
+  - Compare to E: drive source (minidb_dr20)
+  - All 171 tables should match exactly
 
 - [ ] **Check data integrity**
   - Sample random rows from large tables
@@ -242,46 +203,56 @@
   - Common catalog joins
   - Performance benchmarks
 
-- [ ] **Check database size**
+- [ ] **Check database size and compression**
   ```sql
+  USE minidb_dr20_v2;
   EXEC sp_spaceused;
 
   -- Per-table sizes
   SELECT
     t.name AS table_name,
     SUM(p.rows) AS row_count,
-    SUM(a.total_pages) * 8 / 1024 / 1024 AS size_gb
+    SUM(a.total_pages) * 8 / 1024 AS size_mb,
+    SUM(a.total_pages) * 8 / 1024 / 1024 AS size_gb,
+    p.data_compression_desc
   FROM sys.tables t
   INNER JOIN sys.indexes i ON t.object_id = i.object_id
   INNER JOIN sys.partitions p ON i.object_id = p.object_id AND i.index_id = p.index_id
   INNER JOIN sys.allocation_units a ON p.partition_id = a.container_id
-  WHERE t.name LIKE 'dr20_%'
-  GROUP BY t.name
+  WHERE t.name LIKE 'dr20_%' AND i.index_id IN (0,1)
+  GROUP BY t.name, p.data_compression_desc
   ORDER BY size_gb DESC;
   ```
 
-### 10. Update Documentation
+- [ ] **Verify PAGE compression savings**
+  - 16 tables should show PAGE compression
+  - Expected savings: 50-70% on large tables (~517 GB → ~207 GB)
+
+### 9. Update Documentation
 
 - [ ] Update issues.md with final notes
   - Document any skipped indexes
   - Document any orphaned FK issues
   - Document any data quality issues found
+  - Document HTM index decisions
 
 - [ ] Create final session summary
-  - Total load time
+  - Total load time (E: → D: drive)
   - Final statistics (rows, size, objects)
   - Any remaining issues or warnings
+  - Performance metrics (load speed, compression ratios)
 
 - [ ] Update CLAUDE.md if needed
-  - Document any new lessons learned
-  - Update NaN handling guidance
-  - Update pipe delimiter guidance
+  - Document varchar(max) → varchar(n) conversion process
+  - Update sampling strategy for size determination
+  - Document MINIDB filegroup strategy
+  - Update HTM deployment notes
 
 ---
 
 ## Git Commit
 
-### 11. Commit DR20 Work
+### 10. Commit DR20 Work
 
 - [ ] Review all changes
   ```bash
@@ -292,9 +263,15 @@
 - [ ] Stage files for commit
   ```bash
   git add dr20/pg2mssql.py
-  git add dr20/mssql_*_1217.sql
-  git add dr20/test_results_1217.md
-  git add dr20/mssql_bulk_insert_1217.sql
+  git add dr20/mssql_tables_0116.sql
+  git add dr20/mssql_pk_0112.sql
+  git add dr20/mssql_indexes_0112.sql
+  git add dr20/mssql_fk_0112.sql
+  git add dr20/create_production_db.sql
+  git add dr20/load_from_heap_tables.sql
+  git add dr20/analyze_varchar_max_sample.sql
+  git add dr20/fix_varchar_max.py
+  git add dr20/fix_pk_file.py
   git add dr20/session_summary_*.md
   git add dr20/TODO.md
   git add dr20/issues.md
@@ -302,13 +279,14 @@
 
 - [ ] Create commit
   ```bash
-  git commit -m "DR20: Fix varchar conversion bug, validate 157/171 files
+  git commit -m "DR20: Production database build on D: drive with MINIDB filegroup
 
-  - Fixed pg2mssql.py varchar without size defaulting to varchar(1)
-  - Regenerated schema with proper varchar(500) defaults
-  - Validated 157 files (91.8% success rate)
-  - Identified 4 files needing pipe delimiter + NaN→NULL
-  - Documented issues and prepared Utah regeneration request
+  - Created minidb_dr20_v2 on D: drive with MINIDB filegroup (4x280GB files)
+  - Fixed varchar(max) columns: analyzed 497 columns, converted to appropriate sizes
+  - Fixed primary keys: added ON [MINIDB] to all 179 PKs
+  - Loaded 171 tables from E: drive heap → D: drive clustered tables
+  - PAGE compression on 16 large tables
+  - Ready for nonclustered indexes, FKs, and HTM spatial functions
 
   🤖 Generated with Claude Code
   Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
@@ -323,51 +301,104 @@
 
 ## Future Enhancements (DR21 Planning)
 
-### 12. Process Improvements for DR21
+### 11. Process Improvements for DR21
 
-- [ ] **Use pipe delimiters for ALL files from the start**
+- [ ] **Replace `parseSchema2sql.vbs` with Python** — the 2001-era VBScript takes 15+ minutes to process 8,000 columns due to per-line regex in an interpreted loop. A Python replacement would run in seconds and be easier to maintain. It just needs to parse `--/H`, `--/D`, `--/U` annotations from `CREATE TABLE` blocks and emit `INSERT DBObjects` / `INSERT DBColumns` statements.
+
+- [ ] **Metadata workflow** — `pg2mos_descriptions.py` is a good start but needs improvement:
+  - Utah should ideally provide `pg_schema_descriptions.sql` earlier so discrepancies can be caught before load
+  - Coordinate column renames (reserved words etc.) between `pg2mssql.py` and `pg2mos_descriptions.py` — currently `COLUMN_RENAMES` is maintained in two places
+  - Partition tables (`*_part1/part2`) have no column-level `--/D` annotations — ask Utah to add them
+  - Consider having Utah supply a pre-validated descriptions file rather than raw pg dump
+
+- [ ] **Avoid varchar(max) from the start**
+  - Update pg2mssql.py to convert text → varchar(500) by default
+  - Or analyze PostgreSQL source columns for actual max lengths
   - Document in export guidelines
-  - Avoids delimiter conflicts entirely
 
-- [ ] **Standardize NaN handling in export process**
-  - Add validation step in PostgreSQL export
-  - Convert NaN→NULL automatically
+- [ ] **MINIDB filegroup strategy**
+  - Document filegroup separation (PRIMARY for system, MINIDB for data)
+  - Include explicit ON [MINIDB] in all generated scripts
+  - Makes database portable to other servers (BestDR20)
 
-- [ ] **Automated testing pipeline**
-  - Script to detect delimiter mismatches
-  - Script to validate data types
-  - Script to check for NaN in numeric columns
+- [ ] **Automated varchar sizing**
+  - Integrate varchar(max) analysis into schema conversion
+  - Sample data before creating production tables
+  - Generate appropriately-sized varchar() columns automatically
 
-- [ ] **Enhanced bulk_loader.py**
-  - Auto-detect delimiter from file
-  - Better error reporting with row/column samples
-  - Parallel loading for independent tables
-  - Automatic retry with adjusted parameters
+- [ ] **HTM index automation**
+  - Script to automatically add HTM indexes to all tables with RA/DEC
+  - Standard naming conventions (htmid, cx, cy, cz)
+  - Document which tables need spatial indexes
 
-- [ ] **Schema validation tool**
-  - Compare PostgreSQL DDL to SQL Server DDL
-  - Flag potential conversion issues before load
-  - Validate data type mappings
+- [ ] **Parallel data loading**
+  - Identify independent tables that can load concurrently
+  - Use multiple sessions to maximize throughput
+  - Particularly useful for the INSERT...SELECT phase
+
+- [ ] **Pre-index heap tables before loading to clustered tables**
+  - **KEY INSIGHT:** Loading from heap → clustered table requires tempdb sort (very slow)
+  - Create nonclustered indexes on PK columns in heap tables BEFORE INSERT...SELECT
+  - Index scan delivers rows in sorted order → eliminates tempdb sort overhead
+  - Trade-off: Index creation time vs massive sort time savings on large tables
+  - Expected benefit: 2-3x faster loads for large unsorted tables
+  - Process:
+    1. Load CSV → heap tables (fast, no indexes)
+    2. Create nonclustered indexes on heap PK columns (30-60 min for large tables)
+    3. INSERT...SELECT from heap → clustered (fast, pre-sorted via index scan)
+    4. Drop heap tables when complete
+  - Observed performance: Without indexes: 30-40 MB/s (5+ hours for 650GB)
+  - Expected with indexes: 100-150 MB/s (1-2 hours for same data)
+
+---
+
+### 12. BestDR20 Columnstore Experiment
+
+- [ ] **Clustered Columnstore Index (CCI) version of BestDR20**
+  - Experiment already done on native DR20 tables (PhotoObjAll etc.) with excellent results
+  - PhotoObjAll: 1.23B rows, ~5 TB total (3.1 TB data + 1.87 TB indexes)
+  - CCI expected to reduce to ~600 GB - 1 TB total (5-8x compression on float-heavy data)
+  - Most NCIs become redundant with CCI — drop them
+  - **Cone search fix**: Add nonclustered rowstore index on `htmid` alongside CCI
+    - Optimizer uses rowstore for spatial range predicate, columnstore for everything else
+    - Tested and confirmed to work well
+  - Apply to largest tables first: PhotoObjAll, SpecObjAll, etc.
+  - Also worth proposing to Utah: denormalized mos_* schema designed for query performance
+    - Highly normalized minidb schema requires 50-table joins for common queries
+    - Read-only SkyServer use case calls for denormalized, analytics-friendly design
+    - CCI would compound the performance gains on a denormalized schema
 
 ---
 
 ## Notes
 
-**Key Dependencies:**
-- Utah team regeneration (blocking full load)
-- Testing passes on regenerated files
-- No blocking issues found during full load
+**Current Databases:**
+- **minidb_dr20_v2** (D: drive RAID-0): 171 dr20_* tables, ~999 GB data, PAGE compression on 16 tables
+- **BestDR20** (renamed from BestDR19): 171 mos_* tables, PAGE compression on 73 tables (>= 1M rows), NCIs in progress
 
-**Estimated Timeline:**
-- After receiving files: 1-2 days for testing and full load
-- Index creation: 4-8 hours (depends on data volume)
-- Total: 2-3 days for complete DR20 setup
+**Key Files (BestDR20):**
+- mssql_tables_0603.sql - Canonical schema with all varchar fixes, 171 tables (14 WIP tables removed)
+- fix_tables_schema.py - Generates mssql_tables_0603.sql from mssql_tables_0116.sql
+- gen_bestdr20.py - Generates all bestdr20_*.sql scripts from schema/pk/index files
+- bestdr20_tables.sql - CREATE TABLE with mos_ prefix, ON [MINIDB]
+- bestdr20_pk.sql - PKs with PAGE compression on 73 large tables
+- bestdr20_load.sql - INSERT...SELECT WITH (TABLOCK), includes TRUNCATE
+- bestdr20_indexes.sql - 992 NCIs (carton_csv indexes removed)
 
-**Critical Path:**
-1. Utah regenerates 4 files → 2. Test files → 3. Full data load → 4. Create PKs → 5. Create indexes → 6. Create FKs
+**Key Files (minidb_dr20_v2):**
+- mssql_tables_0116.sql - Fixed varchar(max) columns (superseded by mssql_tables_0603.sql)
+- mssql_pk_0112.sql - PKs with ON [MINIDB] and compression
+- mssql_indexes_0112_portable.sql - 992 nonclustered indexes with ON [MINIDB]
+- mssql_fk_0112.sql - 102 foreign keys
+- load_from_heap_tables.sql - Data load script (complete)
+
+**Performance Notes:**
+- RAID-0 throughput: Peak 1.8 GB/s during INSERT...SELECT
+- Expected load time: 30-60 minutes for ~999 GB
+- Index creation: 2-4 hours estimated
+- PAGE compression: Expected 50-70% savings on large tables
 
 **Reference Documents:**
-- session_summary_2024-12-16.md (previous session)
-- session_summary_2024-12-17.md (this session)
-- test_results_1217.md (detailed test results)
-- CLAUDE.md (repository guidance)
+- session_summary_20260115.md - Previous session (6 corrected files loaded)
+- session_summary_20260116.md - This session (production build on D: drive)
+- CLAUDE.md - Repository guidance and best practices
