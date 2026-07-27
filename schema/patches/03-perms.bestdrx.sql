@@ -2,7 +2,7 @@
 -- run in BestDRxxx dbs
 
 
-
+use bestdr20
 
 if (select COUNT(*) from sys.database_principals where name='logger') = 0
 begin
