@@ -1,0 +1,16 @@
+
+----------------------------- 
+--  DBObjects.sql 
+----------------------------- 
+SET NOCOUNT ON
+GO
+TRUNCATE TABLE DBObjects 
+GO
+
+INSERT DBObjects VALUES('LVM_DRPall','U','U','Summary table of observational, instrumental, and processing metadata for each LVM DR20 science exposure.','Summary table produced by the LVM Data Reduction Pipeline (DRP) that compiles observational, instrumental, and processing metadata for each science exposure included in DR20; each row corresponds to an individual exposure (identified by tileid, mjd, and expnum) and contains detailed information on telescope pointing, observing conditions, and instrument configuration for the science field (SCI) and associated sky fields (SKYE and SKYW), including astrometry, airmass, altitude, focus metrics, and angular separations from the Moon, as well as lunar and solar conditions at the time of observation; in addition, it records pipeline-related information such as reduction stage, processing status, quality flags, DRP version, calibration references, and file locations, thereby providing a comprehensive master catalog to track data provenance, assess data quality, and enable the selection and filtering of LVM DR20 observations for scientific analysis.','0');
+INSERT DBObjects VALUES('LVM_DAPall','U','U','Summary table of LVM DR20 DAP products and exposure-averaged spectral properties.','Summary of the dataproducts produced by the LVM DAP analysis for the delivered exposures included in SDSS-V DR20. It comprises a binary table in which each row corresponds to an individual exposure identified by `tileid`, `mjd`, and `expnum`, together with the corresponding DAP file, and contains observational and physical properties derived from stellar-continuum fitting and emission-line measurements of the observed spectra. Fluxes listed in this file are average values within the field of view of the science IFU and are reported in units of 10^-16 erg/s/cm^2 measured in one fiber area, where each fiber area corresponds to 0.2718 arcmin^2. The table combines basic observational metadata with stellar population parameters and flux measurements of key emission lines across the optical and near-infrared range, including Balmer lines, [O II], [O III], [N II], [S II], and [S III].','0');
+
+GO
+----------------------------- 
+PRINT '2 lines inserted into DBObjects '
+----------------------------- 
