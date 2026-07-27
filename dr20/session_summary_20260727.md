@@ -259,22 +259,77 @@ here and there, but the bulk load is done.
 
 ## TODO Next Session
 
-1. **Cherry-pick `89a9784` to master** — deferred, it is isolated and ready
-2. **Add the 6 allspec NCIs to IndexMap** (`code='I'`) — they exist on disk but
+1. **Rework the metadata load** — scoped upsert instead of whole-table
+   TRUNCATE, plus multi-row batched INSERTs. Highest priority; see the section
+   below and `TODO.md` item 0.
+2. **Cherry-pick `89a9784` to master** — deferred, it is isolated and ready
+3. **Add the 6 allspec NCIs to IndexMap** (`code='I'`) — they exist on disk but
    are undocumented, so a rebuild from IndexMap would silently drop them
-3. **Re-enable the 3 disabled DBObjects FKs** — `fk_DBColumns_tablename_DBObjects`,
+4. **Re-enable the 3 disabled DBObjects FKs** — `fk_DBColumns_tablename_DBObjects`,
    `fk_DBViewCols_viewname_DBObjects`, `fk_Inventory_name_DBObjects_name`
-4. **Sweep for missing indexes** — most likely remaining gap; compare
+5. **Sweep for missing indexes** — most likely remaining gap; compare
    `sys.indexes` against IndexMap per table. The allspec NCIs were found this way.
-5. **multiplex NCIs** — waiting on the column list from the tool owner
-6. **`the_cannon_apogee_star`** — IndexMap row with no table and no source.
+6. **multiplex NCIs** — waiting on the column list from the tool owner
+7. **`the_cannon_apogee_star`** — IndexMap row with no table and no source.
    Either it is not part of DR20 and the row should go, or it needs a source.
    Same question for `efeds_spiders_agn_classification_props` and
    `efeds_spiders_agn_xray_spec_props`, both 0 rows in BESTTEST.
-7. **Reclaim PRIMARY** — once nothing more will land there
-8. **DR21:** decide whether to fix IndexMap's filegroup column or stop reading
+8. **Reclaim PRIMARY** — once nothing more will land there
+9. **DR21:** decide whether to fix IndexMap's filegroup column or stop reading
    it, and consolidate the two VAC loaders (`run_vac_load.py --dry-run` already
    prints the SQL, so the SSMS path need not be a second implementation)
+
+---
+
+## The metadata process needs rework
+
+Raised at the end of the session. Recording it properly because one half is a
+correctness issue, not just ergonomics.
+
+### It silently loses edits
+
+`parseSchema2sql.py` is a **per-file** tool, but the SQL it emits opens with a
+**whole-table** `TRUNCATE TABLE DBColumns` / `DBObjects`. Regenerating one
+schema file forces a choice: wipe the metadata for every other file, or skip
+the TRUNCATE and accept stale rows.
+
+Skipping it is not benign. `pk_DBColumns_tableName_name` is on
+`(tablename, name)`:
+
+| Case | What happens |
+|---|---|
+| New column | INSERT succeeds |
+| **Changed description** | **PK violation, old text silently kept** |
+| Removed column | stale row persists indefinitely |
+
+Those failures are indistinguishable from the thousands of expected duplicate
+errors, so a swallowed edit cannot be spotted in the output.
+
+**Resolved for now** by re-running the *full* set (all 50 files in
+`xschema.txt`, which includes `VacTables.sql`, `LvmTables.sql` and
+`mosTables.sql`) rather than the VAC file alone — 901 objects, 31,306 columns,
+234 viewcols, 0 orphans, TRUNCATE correct. **Fix properly** by scoping the
+DELETE to the tables in the current run, children before parents, which also
+removes the need for the FK-disabling workaround used on 2026-07-24.
+
+### The load is far too slow
+
+31,306 separate INSERT statements, each its own autocommit transaction — so
+31,306 round trips and 31,306 synchronous log flushes for ~4 MB of data. The
+flushes dominate.
+
+Fix with multi-row `VALUES` (1,000 rows per statement, collapsing 31,306
+statements to ~32) plus explicit `BEGIN TRAN`/`COMMIT` per batch. Output stays
+a plain .sql file that can be inspected and pasted, so nothing about the
+workflow changes. Care needed on quote-doubling: descriptions contain
+apostrophes and HTML links, and one bad escape in a 1,000-row statement kills
+the whole batch rather than one row.
+
+Both changes live in the same statement-emitting code, so they should be done
+in one pass.
+
+The Python rewrite fixed the *parse* time (15 minutes to ~1 second) but
+inherited the VBScript's load model unchanged. That is the part still to do.
 
 ---
 

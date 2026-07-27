@@ -46,6 +46,84 @@ not a problem.
 
 ## Immediate Next Steps
 
+### 0. Fix the metadata load: scoped upsert instead of whole-table TRUNCATE
+
+**Highest priority — this one silently loses edits.**
+
+`parseSchema2sql.py` is a per-file tool, but the SQL it emits begins with a
+**whole-table** `TRUNCATE TABLE DBColumns` / `DBObjects`. Those two facts are
+incompatible: regenerating one schema file forces a choice between wiping the
+metadata for every other file, or skipping the TRUNCATE and living with stale
+rows.
+
+Skipping the TRUNCATE is not safe. `pk_DBColumns_tableName_name` is on
+`(tablename, name)`, so:
+
+| Case | What happens |
+|---|---|
+| New column | INSERT succeeds |
+| **Changed description** | **PK violation, old text silently kept** |
+| Removed column | stale row persists indefinitely |
+
+The failures are indistinguishable from the thousands of expected duplicate
+errors, so a swallowed edit is invisible in the output.
+
+**The fix** — replace the global truncate with a delete scoped to the tables in
+the current run:
+
+```sql
+DELETE FROM DBColumns WHERE tableName IN (<tables in this xschema file>);
+DELETE FROM DBObjects WHERE name       IN (<same list>);
+-- then the INSERTs as they are now
+```
+
+Re-running one file becomes idempotent and complete: edits land, removed
+columns disappear, other files are untouched. Because it deletes children
+before parents it also **never needs the FK-disabling workaround** used on
+2026-07-24 (`ALTER TABLE ... NOCHECK CONSTRAINT ALL` on DBColumns, DBViewCols,
+Inventory, IndexMap) — that workaround was a symptom of this same design.
+
+- [x] Re-ran the full metadata (all 50 files, `xschema.txt`) on 2026-07-27
+      rather than the VAC file alone, so the TRUNCATE is correct and nothing
+      is swallowed. 901 objects / 31,306 columns / 234 viewcols, 0 orphans.
+- [ ] Emit scoped DELETEs instead of TRUNCATE (~15 lines in the emitter)
+
+#### The load is also far too slow — same emitter, do it in one pass
+
+31,306 separate `INSERT` statements, each its own autocommit transaction.
+That is 31,306 round trips and, more importantly, 31,306 synchronous
+transaction-log flushes for about 4 MB of data. The flushes dominate.
+
+- [ ] **Multi-row `VALUES`** — T-SQL accepts up to 1,000 rows per INSERT, so
+      31,306 statements collapse to ~32. The output stays a plain .sql file
+      that can be read and pasted into SSMS, so the workflow is unchanged:
+
+      ```sql
+      INSERT DBColumns VALUES
+       ('spiders_quasar','xray_detection','','','','Flag indicating...','0'),
+       ('spiders_quasar','name','','','','Name of the X-ray detection...','0'),
+       ... up to 998 more
+      ```
+
+- [ ] **Wrap batches in explicit transactions** — `BEGIN TRAN` / `COMMIT` per
+      batch turns thousands of log flushes into a handful. With the above,
+      ~32 statements and ~32 commits instead of 31,306 of each. Expect minutes
+      to seconds.
+
+- [ ] **Watch the quoting.** Descriptions contain apostrophes and HTML links,
+      so quote-doubling has to be exact — and in a 1,000-row statement one bad
+      escape kills the whole batch rather than a single row. Generate once and
+      diff the emitted row count against the current output to confirm nothing
+      is lost in translation.
+
+- [ ] Optional, bigger change: a `--load` flag writing straight to SQL Server
+      via pymssql in one transaction, the way `run_vac_load.py` does. Fastest,
+      and drops the paste-into-SSMS step, but loses the inspectable artifact —
+      only worth it if the .sql file is no longer wanted.
+
+Doing the scoped DELETE and the batching together makes sense: both are in the
+statement-emitting code, and both change the shape of the generated file.
+
 ### 1. ~~APOGEE tables on PRIMARY as uncompressed heaps~~ — DONE 2026-07-27
 
 Ten tables carried over in the BestDR19 to BestDR20 rename had never been
