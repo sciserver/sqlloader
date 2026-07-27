@@ -104,12 +104,55 @@ def strip_block_comments(line, in_comment):
 
 # ── Main parser ──────────────────────────────────────────────────
 
+def read_lines(path):
+    """Read a text file, honouring whatever BOM it happens to carry.
+
+    Windows PowerShell 5.1 writes UTF-16 LE for '>' redirection and ANSI for
+    Set-Content, so schema lists and SQL files arrive in a mix of encodings
+    depending on how they were produced. Decoding blind as UTF-8 fails on the
+    UTF-16 ones with an unhelpful 'invalid start byte' at position 0.
+    """
+    with open(path, 'rb') as f:
+        data = f.read()
+
+    if data.startswith(b'\xff\xfe') or data.startswith(b'\xfe\xff'):
+        text = data.decode('utf-16')          # BOM selects the byte order
+    elif data.startswith(b'\xef\xbb\xbf'):
+        text = data.decode('utf-8-sig')
+    else:
+        try:
+            text = data.decode('utf-8')
+        except UnicodeDecodeError:
+            # Legacy files saved as ANSI - cp1252 decodes any byte, so this
+            # cannot fail and keeps the old errors='replace' behaviour honest.
+            text = data.decode('cp1252')
+
+    return text.splitlines(keepends=True)
+
+
+def resolve_sql_path(sql_dir, entry):
+    """Locate a schema-list entry, or None if it cannot be found.
+
+    Entries are normally bare filenames resolved against --sql-dir (see
+    xschema.txt), but some lists carry a relative path instead, in which case
+    joining it onto --sql-dir produces a path that does not exist. Try the
+    normal join first, then the entry as written, then its bare name under
+    sql_dir.
+    """
+    entry = entry.replace('\\', os.sep).replace('/', os.sep)
+    for candidate in (os.path.join(sql_dir, entry),
+                      entry,
+                      os.path.join(sql_dir, os.path.basename(entry))):
+        if os.path.exists(candidate):
+            return candidate
+    return None
+
+
 def parse_files(sql_dir, schema_list_path, out_dir):
     t0 = time.perf_counter()
 
     # Read schema list
-    with open(schema_list_path, 'r', encoding='utf-8') as f:
-        raw_lines = f.readlines()
+    raw_lines = read_lines(schema_list_path)
 
     sql_files = []
     for line in raw_lines:
@@ -129,13 +172,12 @@ def parse_files(sql_dir, schema_list_path, out_dir):
     total_lines = 0
 
     for sql_file in sql_files:
-        path = os.path.join(sql_dir, sql_file)
-        if not os.path.exists(path):
+        path = resolve_sql_path(sql_dir, sql_file)
+        if path is None:
             print(f"  WARNING: {sql_file} not found, skipping")
             continue
 
-        with open(path, 'r', encoding='utf-8', errors='replace') as f:
-            lines = f.readlines()
+        lines = read_lines(path)
 
         total_lines += len(lines)
 
