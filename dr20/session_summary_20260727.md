@@ -179,7 +179,26 @@ target stays until that column is fixed.
 
 These 8 are the first tables in BestDR20 built under the new rule.
 
-### 8. Recorded the filegroup sizing intent
+### 8. Verified the published VAC table list (41 entries)
+
+39 of 41 present in BestDR20, all on SPEC with clustered indexes and exact
+row counts.
+
+**DL1 naming — resolved, no action needed.** The published list used
+`DL1_spec_SDSSV_eROSITA_eRASS3_*` where BestDR20 has
+`DL1_eROSITA_eRASS3_*`. Investigated: BESTTEST, IndexMap (all 4 DL1 rows),
+the pre-existing eRASS1 pair and the loading manifest all use the short
+form; only the published list used the long one. **Decision: the loading
+manifest name is canonical**, so nothing is renamed. Had it gone the other
+way it would have been a 4-table change plus 4 IndexMap rows, not 2 —
+the whole DL1 family shares the convention.
+
+**`efeds_spiders_agn_classification_props` — blocked upstream.** BESTTEST
+has it as `efeds_spiders_agn_class_props` with 0 rows, and neither
+spelling has an IndexMap entry. Not a naming problem at our end. Same for
+`efeds_spiders_agn_xray_spec_props`, also 0 rows.
+
+### 9. Recorded the filegroup sizing intent
 
 This is a **write-once, read-only** database — once a DR is loaded it does not
 grow, so filegroups are meant to end up *full*. Allocated-but-unused space is
@@ -250,6 +269,8 @@ here and there, but the bulk load is done.
 5. **multiplex NCIs** — waiting on the column list from the tool owner
 6. **`the_cannon_apogee_star`** — IndexMap row with no table and no source.
    Either it is not part of DR20 and the row should go, or it needs a source.
+   Same question for `efeds_spiders_agn_classification_props` and
+   `efeds_spiders_agn_xray_spec_props`, both 0 rows in BESTTEST.
 7. **Reclaim PRIMARY** — once nothing more will land there
 8. **DR21:** decide whether to fix IndexMap's filegroup column or stop reading
    it, and consolidate the two VAC loaders (`run_vac_load.py --dry-run` already

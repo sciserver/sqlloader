@@ -125,6 +125,29 @@ fragmentation cost because nothing is modified afterwards.
 - [ ] Re-check every other filegroup for the same waste — SPEC is already at
       99.95%, which is correct; the others are worth a look
 
+### 7. VAC table list — verified 2026-07-27
+
+Checked the published VAC table list (41 entries) against BestDR20:
+**39 present**, all on SPEC with clustered indexes and row counts matching
+source exactly.
+
+**DL1 naming — resolved, no action.** The published list showed
+`DL1_spec_SDSSV_eROSITA_eRASS3_*`, but **the loading manifest name is
+canonical**: `DL1_eROSITA_eRASS3_*`. That is what BESTTEST, IndexMap, the
+existing eRASS1 pair and BestDR20 all use, so nothing needs renaming. If the
+published list is regenerated, it should use the short form.
+
+**`efeds_spiders_agn_classification_props` — blocked upstream, still open.**
+On the published list but not loadable:
+
+- BESTTEST has it as `efeds_spiders_agn_class_props` (`class`, not
+  `classification`) with **0 rows**
+- neither spelling has an IndexMap entry
+
+- [ ] Confirm whether it is meant to be in DR20 at all. Same question for
+      `efeds_spiders_agn_xray_spec_props`, also 0 rows in BESTTEST and not on
+      the published list.
+
 ---
 
 ## Repo / Git
