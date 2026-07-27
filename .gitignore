@@ -10,3 +10,29 @@ CLAUDE.md
 *.suo
 *.user
 dr20/tmpclaude-*
+
+# Python
+__pycache__/
+*.pyc
+
+# Crash dumps
+*.stackdump
+
+# Load run output - regenerable, do not commit
+# (logs from run_*.py, sqlcmd -o result dumps, query exports)
+*.log
+dr20/*_result*.txt
+dr20/*_results.txt
+dr20/*_count*.txt
+dr20/fk_*.txt
+dr20/existing_fks.txt
+dr20/index_results.txt
+dr20/load_results_*.txt
+dr20/blocking_info.txt
+dr20/check_assignment.txt
+dr20/column_sizes.txt
+dr20/actual_lengths.txt
+dr20/table_count.txt
+dr20/targetdb_*.txt
+dr20/varchar_max_analysis_results.txt
+dr20/*.tsv
