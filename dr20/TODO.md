@@ -1,404 +1,227 @@
 # DR20 Loading - TODO List
 
-**Last Updated:** June 4, 2026
+**Last Updated:** July 27, 2026
+
+State below was verified by querying BestDR20 directly on 2026-07-27, not
+carried forward from earlier notes.
 
 ---
 
 ## Current Status
 
-✅ **Completed:**
-- All 171 tables loaded on E: drive (minidb_dr20) - heap tables
-- Database created on D: drive (minidb_dr20_v2) with MINIDB filegroup
-- Tables created with fixed varchar sizes (mssql_tables_0116.sql - no more varchar(max))
-- Primary keys created with ON [MINIDB] and PAGE compression on 16 tables
-- Data load E: → D: drive complete (load_from_heap_tables.sql)
-- Nonclustered indexes created (mssql_indexes_0112.sql)
-- Foreign keys created (mssql_fk_0112.sql)
-- HTM spatial library deployed
-- Spatial stored procedures deployed
-- HTM spatial indexes added
-- **BestDR20 load complete** (renamed from BestDR19):
-  - 171 mos_* tables created ON [MINIDB] filegroup
-  - PAGE compression on 73 tables >= 1M rows (up from 16 in minidb_dr20_v2)
-  - 14 WIP/staging tables dropped and removed from schema
-  - Data loaded via INSERT...SELECT WITH (TABLOCK), SIMPLE recovery
-  - PKs created (179 total, 73 with PAGE compression)
-  - Nonclustered indexes running (992 NCIs) — in progress as of 2026-06-04
+**BestDR20 is substantially complete.** 392 user tables across 8 filegroups:
 
-🔄 **In Progress:**
-- BestDR20 nonclustered index creation (992 indexes, running)
-- Metadata loading (step 7) — see details below
+| Filegroup | Tables | Contents |
+|---|---|---|
+| MINIDB | 172 | `mos_*` tables — CI + PAGE compression + 992 NCIs |
+| SPEC | 100 | spAll, allspec, astra/VAC tables |
+| DATAFG | 69 | general data tables |
+| PRIMARY | 41 | metadata and system tables — **plus 10 that do not belong there, see below** |
+| PHOTO | 6 | photometric |
+| WISE | 2 | |
+| ATLAS, FRAME | 1 each | |
+
+Done:
+- 171 `mos_*` tables — CI, PAGE compression on the 73 tables at or above 1M rows, 992 NCIs
+- SPEC tables: spAll, allspec (27.7M), multiplex, mwm_targets
+- allspec NCIs — 6 created plus htmid
+- 36 VAC tables via `run_vac_load.py`; 7 eROSITA tables; 10 HTM indexes
+- spAll_epoch (4.9M), spAll_allepoch (507K), LVM_DAPall/DRPall, minesweeper (56K) — all on SPEC
+- Astra boss tables (boss_net, corv, line_forest, m_dwarf_type, slam, snow_white, mwm_boss_*) — all on SPEC
+- Metadata loaded: DBObjects 891, DBColumns 30,579, DBViewCols 234
+- Repo cleaned up and committed (2026-07-27)
 
 ---
 
 ## Immediate Next Steps
 
-### 1. Load Database Metadata
+### 1. Fix 10 APOGEE tables loaded onto the wrong filegroup as uncompressed heaps
 
-New workflow using `pg_schema_descriptions.sql` from Utah (2026-04-22):
+**This is the highest-value item.** These tables bypassed the `gen_vac_load.py`
+path and were loaded directly, so they got none of the standard treatment.
+IndexMap already says what they should be — CI on `spectrum_PK`, PAGE
+compression, filegroup SPEC — but on disk they are heaps, uncompressed, on
+PRIMARY, occupying ~25.6 GB:
 
-- [x] Generated `create_minidb_descriptions_ms.sql` using `pg2mos_descriptions.py`
-  - 186 tables, `mos_` prefix, MSSQL types substituted from `mssql_tables_0116.sql`
-  - `plan` → `planname` rename applied
-- [ ] Waiting on Utah re: schema discrepancies (email sent 2026-04-22)
-  - `dr20_target_2025dec9` in pg schema but not in our MSSQL schema
-  - 14 tables with undocumented columns (partition/junction tables — probably fine)
-- [ ] Update `vbs/xschema.txt` to point to `dr20/create_minidb_descriptions_ms.sql`
-- [ ] Run `cscript parseSchema2sql.vbs` from `vbs/` directory
-- [ ] Load generated metadata into minidb_dr20_v2:
-  ```bash
-  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\csv\loaddbobjects.sql
-  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\csv\loaddbcolumns.sql
-  ```
+| Table | Rows | Current size |
+|---|---|---|
+| aspcap_apogee_star | 1,095,480 | 4.18 GB |
+| astro_nn_apogee_star | 1,585,505 | 4.03 GB |
+| lite_all_star | 1,365,542 | 3.47 GB |
+| mwm_apogee_allvisit | 3,515,606 | 3.35 GB |
+| the_payne_apogee_star | 1,111,879 | 2.13 GB |
+| astro_nn_apogee_visit | 810,651 | 2.06 GB |
+| the_payne_apogee_visit | 793,385 | 2.02 GB |
+| apogee_net_apogee_star | 1,122,317 | 1.71 GB |
+| astro_nn_dist_apogee_star | 1,112,053 | 1.70 GB |
+| mwm_apogee_allstar | 1,122,272 | 1.00 GB |
 
----
+They are also bloating PRIMARY, which is meant to hold metadata only.
 
-## Database Objects Creation (DONE)
+- [ ] Re-run `gen_vac_load.py` for these 10 — it is IndexMap-driven, so it will
+      generate DROP > CREATE ON [SPEC] > CI WITH PAGE > INSERT WITH TABLOCK
+      with no hand-editing
+- [ ] Source is BESTTEST via INSERT...SELECT (same as the other astra tables)
+- [ ] Expect roughly 50-70% size reduction from PAGE compression
+- [ ] Verify row counts against the table above afterwards
+- [ ] Confirm PRIMARY shrinks back to metadata-only
 
-### 2. Create Nonclustered Indexes ✅
+Verification query:
+```sql
+USE BestDR20;
+SELECT t.name, i.type_desc, p.data_compression_desc, fg.name AS filegroup_name,
+       SUM(p.rows) AS rows
+FROM sys.tables t
+JOIN sys.indexes i ON t.object_id = i.object_id AND i.index_id IN (0,1)
+JOIN sys.partitions p ON i.object_id = p.object_id AND i.index_id = p.index_id
+JOIN sys.data_spaces fg ON i.data_space_id = fg.data_space_id
+WHERE t.name LIKE '%apogee%' OR t.name = 'lite_all_star'
+GROUP BY t.name, i.type_desc, p.data_compression_desc, fg.name
+ORDER BY t.name;
+```
 
-- [x] Execute mssql_indexes_0112.sql (992 indexes)
-  ```bash
-  sqlcmd -S localhost -d minidb_dr20_v2 -E -i mssql_indexes_0112.sql -o index_results_0116.txt
-  ```
+### 2. Add the 6 allspec NCIs to IndexMap
 
-- [ ] **Note:** Some computed column indexes may fail
-  - E.g., indexes on expressions like (parallax - parallax_error)
-  - Will need to create persisted computed columns first
-  - Document any failures in issues.md
+IndexMap has only the `code='K'` PK row for allspec. All 6 nonclustered indexes
+exist on disk but are undocumented, so a rebuild from IndexMap would silently
+drop them.
 
-- [ ] Monitor index creation progress
-  - Expected time: 2-4 hours for large tables
-  - Check for errors and document failures
+- [ ] Insert 6 rows with `code='I'`, `compression='page'`, `filegroup='SPEC'`:
+      `ix_allspec_apogee_id`, `ix_allspec_apstar_id`, `ix_allspec_mangaid`,
+      `ix_allspec_sdssid`, `ix_allspec_specobjid`, `ix_allspec_mjd_fiberid_plate`
+- [ ] Definitions are in `dr20/allspec_nci.sql`
+- [ ] `ix_allspec_htmid` also exists on disk — check whether it is in IndexMap
+      under a different tableName spelling before adding a duplicate
 
-### 3. Create Foreign Keys ✅
+### 3. Re-enable the three disabled FK constraints on DBObjects
 
-- [x] Execute mssql_fk_0112.sql (102 foreign keys)
-  ```bash
-  sqlcmd -S localhost -d minidb_dr20_v2 -E -i mssql_fk_0112.sql -o fk_results_0116.txt
-  ```
+Disabled during the metadata load and never turned back on:
 
-- [ ] **Known Issue:** Some FKs may fail due to orphaned records
-  - Check for orphaned records before creating FK:
-  ```sql
-  SELECT target_id
-  FROM dr20_catalog_to_[table_name]
-  WHERE target_id NOT IN (SELECT pk FROM dr20_[table_name]);
-  ```
+- `fk_DBColumns_tablename_DBObjects`
+- `fk_DBViewCols_viewname_DBObjects`
+- `fk_Inventory_name_DBObjects_name`
 
-- [ ] Document any FKs that fail
-  - Add to issues.md with details
-  - Decide whether to fix data or skip FK
+```sql
+USE BestDR20;
+ALTER TABLE DBColumns  WITH CHECK CHECK CONSTRAINT fk_DBColumns_tablename_DBObjects;
+ALTER TABLE DBViewCols WITH CHECK CHECK CONSTRAINT fk_DBViewCols_viewname_DBObjects;
+ALTER TABLE Inventory  WITH CHECK CHECK CONSTRAINT fk_Inventory_name_DBObjects_name;
+```
 
----
+`WITH CHECK CHECK` re-validates existing rows and clears `is_not_trusted`. If it
+fails, there are orphaned metadata rows to clean up first. Note that ~29 other
+FKs across the DB are enabled but `is_not_trusted` — that is expected from bulk
+loads and does not affect correctness, only optimizer plan choices.
 
-## Spatial Functions and HTM Indexes
+### 4. Load `the_cannon_apogee_star`
 
-### 4. Deploy Spherical Library (HTM CLR Functions) ✅
+Has an IndexMap entry (CI on `spectrum_PK`, PAGE, SPEC) but does not exist in
+BestDR20. Was still loading in BESTTEST as of June. Load it with the other 10
+in step 1 if it is ready.
 
-- [x] Deploy HTM CLR assembly to minidb_dr20_v2
-  ```bash
-  cd H:\GitHub\sqlloader\htm
-  # Run install.bat or execute spSphericalDeploy.sql
-  sqlcmd -S localhost -d minidb_dr20_v2 -E -i spSphericalDeploy.sql
-  ```
+### 5. multiplex NCIs
 
-- [ ] Verify CLR functions installed
-  ```sql
-  USE minidb_dr20_v2;
-  SELECT name, type_desc
-  FROM sys.objects
-  WHERE name LIKE 'fHtm%' OR name LIKE 'fCartesian%'
-  ORDER BY name;
-  ```
-
-### 5. Add Spatial Stored Procedures ✅
-
-- [x] Deploy spNearby.sql and related spatial functions
-  ```bash
-  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\spNearby.sql
-  ```
-
-- [ ] Verify spatial functions installed
-  ```sql
-  USE minidb_dr20_v2;
-  SELECT name, type_desc
-  FROM sys.objects
-  WHERE name LIKE 'sp%Nearby%' OR name LIKE 'fGet%'
-  ORDER BY name;
-  ```
-
-### 6. Add HTM Spatial Indexes ✅
-
-- [x] Identify tables with RA/DEC columns needing spatial indexes
-  - Review mssql_indexes_0112.sql for commented-out q3c indexes
-  - 53+ tables have q3c indexes in PostgreSQL source
-  - Prioritize large catalog tables (gaia, target, catalog, etc.)
-
-- [ ] Add HTM columns and indexes to key tables
-  ```sql
-  -- Example for dr20_catalog:
-  ALTER TABLE dr20_catalog ADD htmid bigint;
-  UPDATE dr20_catalog SET htmid = dbo.fHtmEq(ra, dec);
-  CREATE INDEX dr20_catalog_htmid_idx ON dr20_catalog(htmid);
-  ```
-
-- [ ] Add Cartesian coordinate columns where needed
-  ```sql
-  -- Example using fCartesianX, fCartesianY, fCartesianZ functions
-  ALTER TABLE dr20_target ADD cx real, cy real, cz real;
-  UPDATE dr20_target SET
-    cx = dbo.fCartesianX(ra, dec),
-    cy = dbo.fCartesianY(ra, dec),
-    cz = dbo.fCartesianZ(ra, dec);
-  ```
-
-- [ ] Document HTM index creation in issues.md
-  - Which tables got HTM indexes
-  - Performance characteristics
+Waiting on the column list from the tool owner. multiplex currently has only its
+CI on `multiplex_id`.
 
 ---
 
-## Metadata Loading (Optional)
+## Repo / Git
 
-### 7. Load Database Metadata — see step 1 above for current status
-
-- [ ] Load table/column descriptions
-  ```bash
-  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\csv\loaddbobjects.sql
-  ```
-
-- [ ] Load algorithm documentation
-  ```bash
-  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\csv\loadalgorithm.sql
-  ```
-
-- [ ] Load glossary
-  ```bash
-  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\csv\loadglossary.sql
-  ```
-
-- [ ] Load extended table descriptions
-  ```bash
-  sqlcmd -S localhost -d minidb_dr20_v2 -E -i H:\GitHub\sqlloader\schema\csv\loadtabledesc.sql
-  ```
+- [x] Clean up dr20 branch — archive superseded files, gitignore run output (2026-07-27)
+- [ ] Cherry-pick commit `89a9784` (parseSchema2sql.py + vbs/README.md +
+      xschema.txt) to master — it is deliberately isolated for this
+- [ ] Push dr20 branch to origin
+- [ ] Decide whether the rest of dr20 merges to master or stays on the branch
 
 ---
 
-## Validation & Documentation
+## Validation
 
-### 8. Final Validation
-
-- [ ] **Verify total row counts match expected**
-  - Compare to E: drive source (minidb_dr20)
-  - All 171 tables should match exactly
-
-- [ ] **Check data integrity**
-  - Sample random rows from large tables
-  - Verify numeric values (no NaN)
-  - Verify NULL handling is correct
-
-- [ ] **Test key queries**
-  - Cone searches (if HTM indexes added)
-  - Common catalog joins
-  - Performance benchmarks
-
-- [ ] **Check database size and compression**
-  ```sql
-  USE minidb_dr20_v2;
-  EXEC sp_spaceused;
-
-  -- Per-table sizes
-  SELECT
-    t.name AS table_name,
-    SUM(p.rows) AS row_count,
-    SUM(a.total_pages) * 8 / 1024 AS size_mb,
-    SUM(a.total_pages) * 8 / 1024 / 1024 AS size_gb,
-    p.data_compression_desc
-  FROM sys.tables t
-  INNER JOIN sys.indexes i ON t.object_id = i.object_id
-  INNER JOIN sys.partitions p ON i.object_id = p.object_id AND i.index_id = p.index_id
-  INNER JOIN sys.allocation_units a ON p.partition_id = a.container_id
-  WHERE t.name LIKE 'dr20_%' AND i.index_id IN (0,1)
-  GROUP BY t.name, p.data_compression_desc
-  ORDER BY size_gb DESC;
-  ```
-
-- [ ] **Verify PAGE compression savings**
-  - 16 tables should show PAGE compression
-  - Expected savings: 50-70% on large tables (~517 GB → ~207 GB)
-
-### 9. Update Documentation
-
-- [ ] Update issues.md with final notes
-  - Document any skipped indexes
-  - Document any orphaned FK issues
-  - Document any data quality issues found
-  - Document HTM index decisions
-
-- [ ] Create final session summary
-  - Total load time (E: → D: drive)
-  - Final statistics (rows, size, objects)
-  - Any remaining issues or warnings
-  - Performance metrics (load speed, compression ratios)
-
-- [ ] Update CLAUDE.md if needed
-  - Document varchar(max) → varchar(n) conversion process
-  - Update sampling strategy for size determination
-  - Document MINIDB filegroup strategy
-  - Update HTM deployment notes
-
----
-
-## Git Commit
-
-### 10. Commit DR20 Work
-
-- [ ] Review all changes
-  ```bash
-  git status
-  git diff
-  ```
-
-- [ ] Stage files for commit
-  ```bash
-  git add dr20/pg2mssql.py
-  git add dr20/mssql_tables_0116.sql
-  git add dr20/mssql_pk_0112.sql
-  git add dr20/mssql_indexes_0112.sql
-  git add dr20/mssql_fk_0112.sql
-  git add dr20/create_production_db.sql
-  git add dr20/load_from_heap_tables.sql
-  git add dr20/analyze_varchar_max_sample.sql
-  git add dr20/fix_varchar_max.py
-  git add dr20/fix_pk_file.py
-  git add dr20/session_summary_*.md
-  git add dr20/TODO.md
-  git add dr20/issues.md
-  ```
-
-- [ ] Create commit
-  ```bash
-  git commit -m "DR20: Production database build on D: drive with MINIDB filegroup
-
-  - Created minidb_dr20_v2 on D: drive with MINIDB filegroup (4x280GB files)
-  - Fixed varchar(max) columns: analyzed 497 columns, converted to appropriate sizes
-  - Fixed primary keys: added ON [MINIDB] to all 179 PKs
-  - Loaded 171 tables from E: drive heap → D: drive clustered tables
-  - PAGE compression on 16 large tables
-  - Ready for nonclustered indexes, FKs, and HTM spatial functions
-
-  🤖 Generated with Claude Code
-  Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
-  ```
-
-- [ ] Push to remote (if applicable)
-  ```bash
-  git push origin dr20
-  ```
+- [ ] Row count comparison against BESTTEST for the migrated tables
+- [ ] Spot-check data integrity on large tables (numeric values, NULL handling)
+- [ ] Test cone searches against the HTM-indexed tables
+- [ ] Final `sp_spaceused` and per-filegroup size report once step 1 is done
 
 ---
 
 ## Future Enhancements (DR21 Planning)
 
-### 11. Process Improvements for DR21
+### Process improvements
 
-- [ ] **Replace `parseSchema2sql.vbs` with Python** — the 2001-era VBScript takes 15+ minutes to process 8,000 columns due to per-line regex in an interpreted loop. A Python replacement would run in seconds and be easier to maintain. It just needs to parse `--/H`, `--/D`, `--/U` annotations from `CREATE TABLE` blocks and emit `INSERT DBObjects` / `INSERT DBColumns` statements.
+- [x] **Replace `parseSchema2sql.vbs` with Python** — done, `vbs/parseSchema2sql.py`,
+      ~1 second vs 15 minutes, validated against VBS output
 
-- [ ] **Metadata workflow** — `pg2mos_descriptions.py` is a good start but needs improvement:
-  - Utah should ideally provide `pg_schema_descriptions.sql` earlier so discrepancies can be caught before load
-  - Coordinate column renames (reserved words etc.) between `pg2mssql.py` and `pg2mos_descriptions.py` — currently `COLUMN_RENAMES` is maintained in two places
-  - Partition tables (`*_part1/part2`) have no column-level `--/D` annotations — ask Utah to add them
-  - Consider having Utah supply a pre-validated descriptions file rather than raw pg dump
+- [ ] **Everything goes through the IndexMap-driven loader.** The step 1 problem
+      above happened because 10 tables were loaded outside `gen_vac_load.py`.
+      IndexMap had the right answer the whole time. Make the IndexMap-driven
+      path the only path, and add a post-load check that fails loudly when a
+      table's actual filegroup, compression or index type disagrees with its
+      IndexMap row.
 
-- [ ] **Avoid varchar(max) from the start**
-  - Update pg2mssql.py to convert text → varchar(500) by default
-  - Or analyze PostgreSQL source columns for actual max lengths
-  - Document in export guidelines
+- [ ] **Metadata workflow** — `pg2mos_descriptions.py` needs:
+  - Utah to supply `pg_schema_descriptions.sql` earlier, so discrepancies are
+    caught before the load rather than after
+  - `COLUMN_RENAMES` is maintained in both `pg2mssql.py` and
+    `pg2mos_descriptions.py` — consolidate to one place
+  - Partition tables (`*_part1/part2`) have no column-level `--/D` annotations
 
-- [ ] **MINIDB filegroup strategy**
-  - Document filegroup separation (PRIMARY for system, MINIDB for data)
-  - Include explicit ON [MINIDB] in all generated scripts
-  - Makes database portable to other servers (BestDR20)
+- [ ] **Avoid varchar(max) from the start** — convert text to varchar(500) by
+      default in `pg2mssql.py`, or analyze PG source columns for real max lengths
 
-- [ ] **Automated varchar sizing**
-  - Integrate varchar(max) analysis into schema conversion
-  - Sample data before creating production tables
-  - Generate appropriately-sized varchar() columns automatically
+- [ ] **Automated varchar sizing** — fold the sampling analysis into schema
+      conversion instead of running it as a post-hoc repair
 
-- [ ] **HTM index automation**
-  - Script to automatically add HTM indexes to all tables with RA/DEC
-  - Standard naming conventions (htmid, cx, cy, cz)
-  - Document which tables need spatial indexes
+- [ ] **HTM index automation** — script to add htmid/cx/cy/cz and indexes to
+      every table with RA/DEC, with standard naming
 
-- [ ] **Parallel data loading**
-  - Identify independent tables that can load concurrently
-  - Use multiple sessions to maximize throughput
-  - Particularly useful for the INSERT...SELECT phase
+- [ ] **Parallel data loading** — identify independent tables and load them
+      concurrently, particularly during INSERT...SELECT
 
 - [ ] **Pre-index heap tables before loading to clustered tables**
-  - **KEY INSIGHT:** Loading from heap → clustered table requires tempdb sort (very slow)
-  - Create nonclustered indexes on PK columns in heap tables BEFORE INSERT...SELECT
-  - Index scan delivers rows in sorted order → eliminates tempdb sort overhead
-  - Trade-off: Index creation time vs massive sort time savings on large tables
-  - Expected benefit: 2-3x faster loads for large unsorted tables
-  - Process:
-    1. Load CSV → heap tables (fast, no indexes)
-    2. Create nonclustered indexes on heap PK columns (30-60 min for large tables)
-    3. INSERT...SELECT from heap → clustered (fast, pre-sorted via index scan)
-    4. Drop heap tables when complete
-  - Observed performance: Without indexes: 30-40 MB/s (5+ hours for 650GB)
-  - Expected with indexes: 100-150 MB/s (1-2 hours for same data)
+  - Loading heap to clustered requires a tempdb sort, which dominates the time
+  - Creating an NCI on the PK columns of the heap first lets the index scan
+    deliver rows already sorted
+  - Observed without: 30-40 MB/s. Expected with: 100-150 MB/s
 
----
+### BestDR20 columnstore experiment
 
-### 12. BestDR20 Columnstore Experiment
-
-- [ ] **Clustered Columnstore Index (CCI) version of BestDR20**
-  - Experiment already done on native DR20 tables (PhotoObjAll etc.) with excellent results
-  - PhotoObjAll: 1.23B rows, ~5 TB total (3.1 TB data + 1.87 TB indexes)
-  - CCI expected to reduce to ~600 GB - 1 TB total (5-8x compression on float-heavy data)
-  - Most NCIs become redundant with CCI — drop them
-  - **Cone search fix**: Add nonclustered rowstore index on `htmid` alongside CCI
-    - Optimizer uses rowstore for spatial range predicate, columnstore for everything else
-    - Tested and confirmed to work well
-  - Apply to largest tables first: PhotoObjAll, SpecObjAll, etc.
-  - Also worth proposing to Utah: denormalized mos_* schema designed for query performance
-    - Highly normalized minidb schema requires 50-table joins for common queries
-    - Read-only SkyServer use case calls for denormalized, analytics-friendly design
-    - CCI would compound the performance gains on a denormalized schema
+- [ ] **Clustered Columnstore Index version of BestDR20**
+  - Already tried on native DR20 tables with excellent results
+  - PhotoObjAll: 1.23B rows, ~5 TB (3.1 TB data + 1.87 TB indexes); CCI expected
+    to bring that to ~600 GB - 1 TB on float-heavy data
+  - Most NCIs become redundant under CCI — drop them
+  - **Cone search fix**: add a nonclustered rowstore index on `htmid` alongside
+    the CCI. The optimizer uses rowstore for the spatial range predicate and
+    columnstore for everything else. Tested, works well.
+  - Worth proposing to Utah: a denormalized `mos_*` schema. The highly
+    normalized minidb schema needs 50-table joins for common queries, and the
+    read-only SkyServer use case calls for an analytics-friendly design. CCI
+    would compound the gains.
 
 ---
 
 ## Notes
 
-**Current Databases:**
-- **minidb_dr20_v2** (D: drive RAID-0): 171 dr20_* tables, ~999 GB data, PAGE compression on 16 tables
-- **BestDR20** (renamed from BestDR19): 171 mos_* tables, PAGE compression on 73 tables (>= 1M rows), NCIs in progress
+**Databases:**
+- **BestDR20** — the production target. 392 tables across 8 filegroups.
+- **minidb_dr20_v2** (D: RAID-0) — 171 `dr20_*` tables, ~999 GB, superseded by
+  BestDR20 for `mos_*` content
+- **BESTTEST** — staging source for the migration
 
-**Key Files (BestDR20):**
-- mssql_tables_0603.sql - Canonical schema with all varchar fixes, 171 tables (14 WIP tables removed)
-- fix_tables_schema.py - Generates mssql_tables_0603.sql from mssql_tables_0116.sql
-- gen_bestdr20.py - Generates all bestdr20_*.sql scripts from schema/pk/index files
-- bestdr20_tables.sql - CREATE TABLE with mos_ prefix, ON [MINIDB]
-- bestdr20_pk.sql - PKs with PAGE compression on 73 large tables
-- bestdr20_load.sql - INSERT...SELECT WITH (TABLOCK), includes TRUNCATE
-- bestdr20_indexes.sql - 992 NCIs (carton_csv indexes removed)
+**Key files:**
+- `mssql_tables_0603.sql` — canonical schema, 171 tables, all varchar fixes
+- `gen_bestdr20.py` — generates the four `bestdr20_*.sql` scripts
+- `gen_vac_load.py` — IndexMap-driven loader generator; use this for step 1
+- `gen_spec_load.py` — the original DROP > CREATE > CI > INSERT pattern
+- `run_vac_load.py`, `run_htm_add.py`, `run_erosita_load.py` — unattended
+  executors, resumable via `*_loaded.json`
+- `pg2mos_descriptions.py` + `vbs/parseSchema2sql.py` — metadata pipeline
+- `dr20_loading_062406.csv` — master tracking spreadsheet
+- `dr20/archive/` — superseded files, see its README
 
-**Key Files (minidb_dr20_v2):**
-- mssql_tables_0116.sql - Fixed varchar(max) columns (superseded by mssql_tables_0603.sql)
-- mssql_pk_0112.sql - PKs with ON [MINIDB] and compression
-- mssql_indexes_0112_portable.sql - 992 nonclustered indexes with ON [MINIDB]
-- mssql_fk_0112.sql - 102 foreign keys
-- load_from_heap_tables.sql - Data load script (complete)
-
-**Performance Notes:**
-- RAID-0 throughput: Peak 1.8 GB/s during INSERT...SELECT
-- Expected load time: 30-60 minutes for ~999 GB
-- Index creation: 2-4 hours estimated
-- PAGE compression: Expected 50-70% savings on large tables
-
-**Reference Documents:**
-- session_summary_20260115.md - Previous session (6 corrected files loaded)
-- session_summary_20260116.md - This session (production build on D: drive)
-- CLAUDE.md - Repository guidance and best practices
+**Conventions:**
+- Create the CI with PAGE compression on the target filegroup *before* loading.
+  Never build a heap and rebuild it later — that bloats PRIMARY.
+- PAGE compression at 1M rows and above.
+- `GO` after every CREATE INDEX so one failure does not abort the batch.

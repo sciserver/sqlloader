@@ -1,8 +1,39 @@
 ---------
 -- run in BestDRxxx dbs
+--
+-- Run this once against each new BestDRnn database to create the logger
+-- user and (re)create fReplace, fReplaceMax, spExecuteSQL and spExecuteSQL2.
+-- Safe to re-run: everything is drop-and-recreate or guarded by an existence
+-- check.
+--
+-- This script deliberately does NOT issue its own USE.  It patches whichever
+-- database the connection is already in, so select the target DR in SSMS
+-- (or pass -d to sqlcmd) before running.  A hardcoded USE here would silently
+-- patch the wrong DR while looking like it had worked.
 
+SET NOEXEC OFF;   -- clear NOEXEC left over from an earlier guarded run
+GO
 
-use bestdr20
+DECLARE @db varchar(128) = CAST(DB_NAME() AS varchar(128));
+
+IF DB_NAME() NOT LIKE 'BestDR[0-9][0-9]'
+BEGIN
+	RAISERROR('03-perms.bestdrx.sql patches the CURRENT database, and "%s" is not a BestDRnn database. Select the target DR and re-run. Nothing was changed.', 16, 1, @db);
+	SET NOEXEC ON;
+END
+ELSE
+	PRINT 'Patching ' + @db + '...';
+GO
+
+-- The logger user is mapped to a server-level login of the same name; on a
+-- fresh server that login may not exist yet, and CREATE USER FOR LOGIN would
+-- fail several statements later with a much less obvious message.
+IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = 'logger')
+BEGIN
+	RAISERROR('Server login [logger] does not exist. Create it at the server level first (it is what spExecuteSQL impersonates to write to WebLog). Nothing was changed.', 16, 1);
+	SET NOEXEC ON;
+END
+GO
 
 if (select COUNT(*) from sys.database_principals where name='logger') = 0
 begin
@@ -528,3 +559,7 @@ GO
 
 
 print DB_NAME() + ' updated successfully!'
+GO
+
+SET NOEXEC OFF;   -- release the connection if a guard above tripped
+GO
