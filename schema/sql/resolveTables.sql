@@ -33,7 +33,8 @@ CREATE TABLE detectionIndex (
 -------------------------------------------------------------------------------
 thingId		bigint NOT NULL,	--/D thing ID number
 objId		bigint NOT NULL,	--/D object ID number (from run, camcol, field, id, rerun)
-loadVersion	int	NOT NULL	--/D Load Version --/K ID_VERSION --/F NOFITS
+loadVersion	int	NOT NULL,	--/D Load Version --/K ID_VERSION --/F NOFITS
+isPrimary	tinyint	NOT NULL	--/D Flag indicating this is the primary detection of the thing
 )
 GO
 --

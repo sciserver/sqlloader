@@ -505,6 +505,7 @@ AS BEGIN
     SET NOCOUNT ON
     --
     DECLARE @statement varchar(1000),
+	@err int,
 	@rows bigint,
 	@message varchar(1000)
 
@@ -524,16 +525,20 @@ AS BEGIN
 	    --
 	    EXEC (@statement) 
 	    SET @rows = rowcount_big();
+	    SET @err = ERROR_NUMBER();
 	    --
 	    INSERT PubHistory
 		VALUES(@table,@rows,current_timestamp,@taskid)
 	    --
 	COMMIT TRANSACTION
-	SET @message = ' published ' + cast(@rows as varchar) 
-		+ ' rows of table ' + @fromDB + '.dbo.' + @table 
-		+ ' to table ' + @toDB   + '.dbo.' + @table 
-	EXEC spNewPhase @taskID, @stepID, 'TableCopy', 'OK', @message;
-        RETURN(0);
+	IF (@err = 0)
+		BEGIN
+			SET @message = ' published ' + cast(@rows as varchar) 
+				+ ' rows of table ' + @fromDB + '.dbo.' + @table 
+				+ ' to table ' + @toDB   + '.dbo.' + @table 
+			EXEC spNewPhase @taskID, @stepID, 'TableCopy', 'OK', @message;
+		END
+    RETURN(@err);
 END 
 GO
 

@@ -103,6 +103,10 @@
 --*                 spValidateApogee. (DR19)
 --* 2025-06-12 Ani: Replaced StarFlow_summary PK with identity
 --*                 column. (DR19)
+--* 2026-06-29 Ani: Added spValidateDR20VACs. (DR20)
+--* 2026-07-06 Ani: Updated spValidateAstra to use spectrum_PK as
+--*                 primary key for all ASTRA tables. (DR20)
+--* 2026-07-23 Ani: Updated spValidateDR20VACs. (DR20)
 --====================================================================
 SET NOCOUNT ON;
 GO
@@ -2179,197 +2183,269 @@ AS BEGIN
 	---------------------
 	-- test unique keys
 	---------------------
-/*
-        exec dbo.spTestUniqueKey  @taskid , @stepid,  'apogee_net_apogee_star', 'PK', @error OUTPUT
+        exec dbo.spTestUniqueKey  @taskid , @stepid,  'apogee_net_apogee_star', 'spectrum_PK', @error OUTPUT
         set @summary = @summary + @error;
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'aspcap_apogee_star', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'aspcap_apogee_star', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'astro_nn_apogee_star', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'astro_nn_apogee_star', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'astro_nn_apogee_visit', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'astro_nn_apogee_visit', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'astro_nn_dist_apogee_star', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'astro_nn_dist_apogee_star', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_net_boss_star', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_net_boss_star', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_net_boss_visit', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_net_boss_visit', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'corv_boss_visit', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'corv_boss_visit', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'line_forest_boss_star', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'line_forest_boss_star', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'line_forest_boss_visit', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'line_forest_boss_visit', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'lite_all_star', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'lite_all_star', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'm_dwarf_type_boss_star', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'm_dwarf_type_boss_star', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'm_dwarf_type_boss_visit', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'm_dwarf_type_boss_visit', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'mwm_apogee_allstar', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'mwm_apogee_allstar', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'mwm_apogee_allvisit', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'mwm_apogee_allvisit', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'mwm_boss_allstar', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'mwm_boss_allstar', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'mwm_boss_allvisit', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'mwm_boss_allvisit', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'mwm_targets', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'mwm_targets', 'sdss_id', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'slam_boss_star', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'slam_boss_star', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'snow_white_boss_star', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'snow_white_boss_star', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'snow_white_boss_visit', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'snow_white_boss_visit', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'the_cannon_apogee_star', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'the_cannon_apogee_star', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'the_payne_apogee_star', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'the_payne_apogee_star', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
 
         IF @summary = 0
                 BEGIN
-                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'the_payne_apogee_visit', 'PK', @error OUTPUT
+                        exec dbo.spTestUniqueKey  @taskid , @stepid,  'the_payne_apogee_visit', 'spectrum_PK', @error OUTPUT
                         set @summary = @summary + @error;
                 END
-*/
+/*
 	-- Instead of unique key tests,  create the PKs for Astra tables here because they lack unique identifiers
-    ALTER TABLE apogee_net_apogee_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_apogee_net_apogee_star PRIMARY KEY CLUSTERED
-	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_apogee_net_apogee_star created' 
-    ALTER TABLE aspcap_apogee_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_aspcap_apogee_star PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_aspcap_apogee_star created'
-    ALTER TABLE astro_nn_apogee_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_astro_nn_apogee_star PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_astro_nn_apogee_star created'
-    ALTER TABLE astro_nn_apogee_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_astro_nn_apogee_visit PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_astro_nn_apogee_visit created'
-    ALTER TABLE astro_nn_dist_apogee_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_astro_nn_dist_apogee_star PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_astro_nn_dist_apogee_star created'
-    ALTER TABLE boss_net_boss_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_boss_net_boss_star PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_boss_net_boss_star created'
-    ALTER TABLE boss_net_boss_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_boss_net_boss_visit PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_boss_net_boss_visit created'
-    ALTER TABLE corv_boss_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_corv_boss_visit PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_corv_boss_visit created'
-    ALTER TABLE line_forest_boss_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_line_forest_boss_star PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_line_forest_boss_star created'
-    ALTER TABLE line_forest_boss_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_line_forest_boss_visit PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_line_forest_boss_visit created'
-    ALTER TABLE lite_all_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_lite_all_star PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_lite_all_star created'
-    ALTER TABLE m_dwarf_type_boss_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_m_dwarf_type_boss_star PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_m_dwarf_type_boss_star created'
-    ALTER TABLE m_dwarf_type_boss_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_m_dwarf_type_boss_visit PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_m_dwarf_type_boss_visit created'
-    ALTER TABLE mwm_apogee_allstar ADD PK INT IDENTITY(1,1) CONSTRAINT PK_mwm_apogee_allstar PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_mwm_apogee_allstar created'
-    ALTER TABLE mwm_apogee_allvisit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_mwm_apogee_allvisit PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_mwm_apogee_allvisit created'
-    ALTER TABLE mwm_boss_allstar ADD PK INT IDENTITY(1,1) CONSTRAINT PK_mwm_boss_allstar PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_mwm_boss_allstar created'
-    ALTER TABLE mwm_boss_allvisit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_mwm_boss_allvisit PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_mwm_boss_allvisit created'
-    ALTER TABLE mwm_targets ADD PK INT IDENTITY(1,1) CONSTRAINT PK_mwm_targets PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_mwm_targets created'
-    ALTER TABLE slam_boss_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_slam_boss_star PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_slam_boss_star created'
-    ALTER TABLE snow_white_boss_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_snow_white_boss_star PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_snow_white_boss_star created'
-    ALTER TABLE snow_white_boss_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_snow_white_boss_visit PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_snow_white_boss_visit created'
-    ALTER TABLE the_cannon_apogee_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_the_cannon_apogee_star PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_the_cannon_apogee_star created'
-    ALTER TABLE the_payne_apogee_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_the_payne_apogee_star PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_the_payne_apogee_star created'
-    ALTER TABLE the_payne_apogee_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_the_payne_apogee_visit PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_the_payne_apogee_visit created'
+    IF COL_LENGTH('dbo.apogee_net_apogee_star', 'PK') IS NULL
+	BEGIN
+		ALTER TABLE apogee_net_apogee_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_apogee_net_apogee_star PRIMARY KEY CLUSTERED
+		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_apogee_net_apogee_star created' 
+	END
+	IF COL_LENGTH('dbo.aspcap_apogee_star', 'PK') IS NULL
+	BEGIN
+		ALTER TABLE aspcap_apogee_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_aspcap_apogee_star PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_aspcap_apogee_star created'
+	END
+	IF COL_LENGTH('dbo.astro_nn_apogee_star', 'PK') IS NULL
+	BEGIN
+		ALTER TABLE astro_nn_apogee_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_astro_nn_apogee_star PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_astro_nn_apogee_star created'
+	END
+	IF COL_LENGTH('dbo.astro_nn_apogee_visit', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE astro_nn_apogee_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_astro_nn_apogee_visit PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_astro_nn_apogee_visit created'
+	END
+	IF COL_LENGTH('dbo.astro_nn_dist_apogee_star', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE astro_nn_dist_apogee_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_astro_nn_dist_apogee_star PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_astro_nn_dist_apogee_star created'
+	END
+	IF COL_LENGTH('dbo.boss_net_boss_star', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE boss_net_boss_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_boss_net_boss_star PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_boss_net_boss_star created'
+	END
+	IF COL_LENGTH('dbo.boss_net_boss_visit', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE boss_net_boss_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_boss_net_boss_visit PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_boss_net_boss_visit created'
+	END
+	IF COL_LENGTH('dbo.corv_boss_visit', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE corv_boss_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_corv_boss_visit PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_corv_boss_visit created'
+	END
+	IF COL_LENGTH('dbo.line_forest_boss_star', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE line_forest_boss_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_line_forest_boss_star PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_line_forest_boss_star created'
+	END
+	IF COL_LENGTH('dbo.line_forest_boss_visit', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE line_forest_boss_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_line_forest_boss_visit PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_line_forest_boss_visit created'
+	END
+	IF COL_LENGTH('dbo.lite_all_star', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE lite_all_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_lite_all_star PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_lite_all_star created'
+	END
+	IF COL_LENGTH('dbo.m_dwarf_type_boss_star', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE m_dwarf_type_boss_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_m_dwarf_type_boss_star PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_m_dwarf_type_boss_star created'
+	END
+	IF COL_LENGTH('dbo.m_dwarf_type_boss_visit', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE m_dwarf_type_boss_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_m_dwarf_type_boss_visit PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_m_dwarf_type_boss_visit created'
+	END
+	IF COL_LENGTH('dbo.mwm_apogee_allstar', 'PK') IS NULL
+	BEGIN
+		ALTER TABLE mwm_apogee_allstar ADD PK INT IDENTITY(1,1) CONSTRAINT PK_mwm_apogee_allstar PRIMARY KEY CLUSTERED
+	 	EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_mwm_apogee_allstar created'
+	END
+	IF COL_LENGTH('dbo.mwm_apogee_allvisit', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE mwm_apogee_allvisit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_mwm_apogee_allvisit PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_mwm_apogee_allvisit created'
+	END
+	IF COL_LENGTH('dbo.mwm_boss_allstar', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE mwm_boss_allstar ADD PK INT IDENTITY(1,1) CONSTRAINT PK_mwm_boss_allstar PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_mwm_boss_allstar created'
+	END
+	IF COL_LENGTH('dbo.mwm_boss_allvisit', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE mwm_boss_allvisit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_mwm_boss_allvisit PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_mwm_boss_allvisit created'
+	END
+	IF COL_LENGTH('dbo.mwm_targets', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE mwm_targets ADD PK INT IDENTITY(1,1) CONSTRAINT PK_mwm_targets PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_mwm_targets created'
+	END
+	IF COL_LENGTH('dbo.slam_boss_star', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE slam_boss_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_slam_boss_star PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_slam_boss_star created'
+	END
+	IF COL_LENGTH('dbo.snow_white_boss_star', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE snow_white_boss_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_snow_white_boss_star PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_snow_white_boss_star created'
+	END
+	IF COL_LENGTH('dbo.snow_white_boss_visit', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE snow_white_boss_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_snow_white_boss_visit PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_snow_white_boss_visit created'
+	END
+	IF COL_LENGTH('dbo.the_cannon_apogee_star', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE the_cannon_apogee_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_the_cannon_apogee_star PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_the_cannon_apogee_star created'
+	END
+	IF COL_LENGTH('dbo.the_payne_apogee_star', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE the_payne_apogee_star ADD PK INT IDENTITY(1,1) CONSTRAINT PK_the_payne_apogee_star PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_the_payne_apogee_star created'
+	END
+	IF COL_LENGTH('dbo.the_payne_apogee_visit', 'PK') IS NULL
+	BEGIN
+	    ALTER TABLE the_payne_apogee_visit ADD PK INT IDENTITY(1,1) CONSTRAINT PK_the_payne_apogee_visit PRIMARY KEY CLUSTERED
+ 		EXEC spNewPhase @taskid, @stepid, 'spValidateAstra', 'OK', 'PK_the_payne_apogee_visit created'
+	END
+*/
 
 	-- generate completion message.
 	IF @summary = 0 
@@ -2515,6 +2591,178 @@ AS BEGIN
 	
 	RETURN @summary
 END		-- End spValidateDR19VACs()
+--======================================
+go
+
+
+
+IF EXISTS (SELECT [name]FROM sysobjects 
+	WHERE [name]= N'spValidateDR20VACs' ) 
+	drop procedure spValidateDR20VACs
+GO
+--
+CREATE PROCEDURE spValidateDR20VACs (
+	@taskid int, 
+	@stepid int,
+	@destinationDB varchar(16)
+)
+-------------------------------------------------------------
+--/H  Validate DR20 VAC tables  
+--/A 
+--/T <p> parameters:   
+--/T <li> taskid int,   		-- Task identifier
+--/T <li> stepid int,   		-- Step identifier
+--/T <li> destinationDB int,   		-- Name of destination DB 
+--/T <li> returns  0 if OK, non zero if something wrong  
+--/T <br>
+--/T Sample call:<br>
+--/T <samp> 
+--/T <br> exec  spValidateDR20VACs @taskid , @stepid, 'targetDB'  
+--/T </samp> 
+--/T <br>  
+------------------------------------------------------------- 
+AS BEGIN
+    	--
+    	SET NOCOUNT ON
+
+    	--- Globals
+    	DECLARE	@start datetime,
+		@summary bigint,
+		@error bigint,
+		@errorMsg varchar(1000),
+		@verb varchar(16)
+
+    -- Put out step greeting
+    EXEC spNewPhase @taskid, @stepid, 'spValidateDR20VACs', 'OK', 'spValidateDR20VACs called'; 
+
+    -------------------------------------
+    SET @start  = current_timestamp
+    SET @summary = 0
+
+	---------------------
+	-- test unique keys
+	---------------------
+
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_clam_lite', 'sdss_id', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_clam_params', 'source', @error OUTPUT
+	set @summary = @summary + @error;
+
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_ISM_NaI_absorption', 'spectrum_PK', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+/*
+	ALTER TABLE boss_clam_lite ADD PK INT IDENTITY(1,1) CONSTRAINT PK_boss_clam_lite PRIMARY KEY CLUSTERED
+ 	EXEC spNewPhase @taskid, @stepid, 'spValidateDR20VACs', 'OK', 'PK_boss_clam_lite created'
+
+	ALTER TABLE boss_clam_params ADD PK INT IDENTITY(1,1) CONSTRAINT PK_boss_clam_params PRIMARY KEY CLUSTERED
+ 	EXEC spNewPhase @taskid, @stepid, 'spValidateDR20VACs', 'OK', 'PK_boss_clam_params created'
+
+	ALTER TABLE boss_ISM_NaI_absorption ADD PK INT IDENTITY(1,1) CONSTRAINT PK_boss_ISM_NaI_absorption PRIMARY KEY CLUSTERED
+ 	EXEC spNewPhase @taskid, @stepid, 'spValidateDR20VACs', 'OK', 'PK_boss_ISM_NaI_absorption created'
+
+*/
+
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_occam_cluster', 'name', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_occam_member', 'sdss_id', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_vi_results', 'sdss_id', @error OUTPUT
+	set @summary = @summary + @error;
+
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'da_dwd_candidates', 'sdss_id', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'da_dwd_rvs', 'sdss_id', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'DL1_eROSITA_eRASS3_allepoch', 'sdss_id,sdss_mjd', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'DL1_eROSITA_eRASS3_daily', 'sdss_id,sdss_mjd', @error OUTPUT
+	set @summary = @summary + @error;
+
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'DR20Q_prop', 'objid', @error OUTPUT
+	set @summary = @summary + @error;
+
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'efeds_spiders_agn_classification_props', 'PK_index', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'efeds_spiders_agn_ctp_salvato', 'PK_index', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'efeds_spiders_agn_fit_params', 'PK_index', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'efeds_spiders_agn_hard_xray_cat', 'PK_index', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'efeds_spiders_agn_host_decomp', 'PK_index', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'efeds_spiders_agn_line_props', 'PK_index', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'efeds_spiders_agn_main_xray_cat', 'PK_Index', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'efeds_spiders_agn_xray_props', 'PK_index', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'eROSITA_CVs', 'sdss_id', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'fermi_blazar', 'sdss_id', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'grav_pot_16', 'ids', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'gyro_age_dwarf', 'sdss_id', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+	exec dbo.spTestUniqueKey  @taskid , @stepid,  'mdwarf_active_params', 'sdssid', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'mdwarf_contin_summary', 'spectrum_pk', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'minesweeper', 'sdssid', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'payne4GAIN_summary', 'sdssid', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'qms_hg_index_diagram', 'catalogid', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'qms_hg_h_hb_indices', 'catalogid', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'yso_ob_kin', 'gaia_dr3_source_id', @error OUTPUT
+	set @summary = @summary + @error;
+ 
+	-- generate completion message.
+	IF @summary = 0 
+	    BEGIN
+		SET @errorMsg =   'DR20 VAC tables validated in '  
+			+ cast(dbo.fDatediffSec(@start, current_timestamp) as varchar(30))+ ' seconds'
+		SET @verb = 'OK'
+	    END
+	ELSE 	
+	    BEGIN
+		SET @errorMsg =   'DR20 tables validation found ' +str(@summary) + ' errors in ' 
+			+ cast(dbo.fDatediffSec(@start, current_timestamp) as varchar(30)) + ' seconds'
+		SET @verb = 'ERROR'
+	    END
+
+	EXEC spNewPhase @taskid, @stepid, 'spValidateDR20VACs', @verb, @errorMsg ;
+	
+	RETURN @summary
+END		-- End spValidateDR20VACs()
 --======================================
 go
 
@@ -2955,6 +3203,23 @@ BEGIN
 		    BEGIN
 		   		SET @stepMsg = 'Failed to validate DR19 VACs ' + @id
 				SET @phaseMsg = 'Failed to validate DR19 VACs ' + @id
+			END
+		GOTO commonExit
+	    END
+
+
+	IF @type = 'dr20vacs'
+	    BEGIN
+		EXEC @err = spValidateDR20VACs @taskID, @stepID, @destinationDBbname 
+	        IF @err = 0
+		    BEGIN 
+	   			set @stepMsg = 'Validated DR20 VACs ' + @id
+				set @phaseMsg = 'Validated DR20 VACs ' + @id
+		    END
+		ELSE
+		    BEGIN
+		   		SET @stepMsg = 'Failed to validate DR20 VACs ' + @id
+				SET @phaseMsg = 'Failed to validate DR20 VACs ' + @id
 			END
 		GOTO commonExit
 	    END
