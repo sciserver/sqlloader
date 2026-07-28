@@ -59,6 +59,7 @@ MarvelsTables.sql
 Views.sql
 VacTables.sql
 mosTables.sql
+LvmTables.sql
 --------------------------
 -- spatial functions
 --------------------------
