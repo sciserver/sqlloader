@@ -20,13 +20,10 @@ copies.
 
 ## How to replay on sdss5a / sdss5b
 
-Run in this order, from `dr20/`:
-
-```
-sqlcmd -S <server> -b -i fix_spall_htm.sql
-sqlcmd -S <server> -b -i fix_nearby_distance.sql
-sqlcmd -S <server> -b -i verify_spatial_fixes.sql
-```
+> **For the actual replay, use [`post_backup_runbook.md`](post_backup_runbook.md)** —
+> the ordered command list, with the metadata reload, verification and log
+> reclaim at the end. **This file is the reasoning and the evidence**; the
+> runbook is the punchlist. Keep both in step when a new fix is added.
 
 Two things to get right:
 
