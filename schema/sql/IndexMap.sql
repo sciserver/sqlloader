@@ -561,7 +561,9 @@ INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'occam_cluster', '[name]'
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'occam_member', 'sdss_id','', 'SPECTRO', 'page', 'SPEC', 0)
 -- DR20 VAC PKs
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'boss_clam_lite','PK', '', 'SPECTRO', 'page', 'SPEC', 0)
-INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'boss_clam_params','PK', '', 'SPECTRO', 'page', 'SPEC', 0)
+-- boss_clam_params retired 2026-07-29: the VAC owner confirmed it is not
+-- shipping in DR20. Table and metadata removed by dr20/drop_boss_clam_params.sql.
+--INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'boss_clam_params','PK', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'boss_ISM_NaI_absorption','PK', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'boss_occam_cluster','name', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'boss_occam_member','sdss_id', '', 'SPECTRO', 'page', 'SPEC', 0)
@@ -599,6 +601,18 @@ INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'yso_ob_kin','gaia_dr3_so
 -- end DR20 VAC PKs
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'multiplex', 'multiplex_id', '', 'SPECTRO', 'page', 'SPEC', 0)
 INSERT [dbo].[IndexMap]	  VALUES ( 'K', 'primary key', 'allspec', 'allspec_id', '', 'SPECTRO', 'page', 'SPEC', 0)
+-- allspec nonclustered indexes, added 2026-07-29 (TODO item 2). All 7 existed on
+-- disk but were undocumented, so a rebuild from IndexMap would have dropped them.
+-- fieldList is the live index key list; note that two of the index NAMES do not
+-- follow from it (ix_allspec_sdssid keys sdss_id, ix_allspec_mjd_fiberid_plate
+-- keys plate_or_fps_field). See dr20/add_indexmap_allspec_nci.sql.
+INSERT [dbo].[IndexMap]	  VALUES ( 'I', 'index', 'allspec', 'specobjid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'I', 'index', 'allspec', 'htmid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'I', 'index', 'allspec', 'apogee_id', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'I', 'index', 'allspec', 'apstar_id', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'I', 'index', 'allspec', 'mangaid', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'I', 'index', 'allspec', 'sdss_id', '', 'SPECTRO', 'page', 'SPEC', 0)
+INSERT [dbo].[IndexMap]	  VALUES ( 'I', 'index', 'allspec', 'mjd,fiberid,plate_or_fps_field', '', 'SPECTRO', 'page', 'SPEC', 0)
 -- /* Uncomment before running runAll.bat to generate metadata ingest scipts, then comment back again
 INSERT [dbo].[IndexMap]   VALUES ( 'K', 'primary key', 'StarFlow_summary', 'PK', '', 'SPECTRO', 'page', 'SPEC', 0)
 -- begin ASTRA tables

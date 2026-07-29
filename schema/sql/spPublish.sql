@@ -89,6 +89,9 @@
 --*                 spPublishDR19VACs. (DR19)
 --* 2025-06-11 Ani: Added apogee_drp_all[star|visit] to
 --*                 spPublishApogee. (DR19)
+--* 2026-07-23 Ani: Added spPublishDR20VACs. (DR20)
+--* 2026-07-23 Ani: Updated spCopyATable to pre-delete table
+--*                 when @firsttime = 1. 
 ----------------------------------------------------------------------
 -- We are not copying 
 -- DBcolumns, DBObjects, DBViewCols, DataConstants, Globe,Glossary, 
@@ -520,7 +523,7 @@ AS BEGIN
                                 + ' with (tablock) select * from ' + @fromDB + '.dbo.' + @table 
 	    end 
 
-	--print @statement
+	-- print @statement
 	BEGIN TRANSACTION
 	    --
 	    EXEC (@statement) 
@@ -1623,7 +1626,7 @@ CREATE PROCEDURE spPublishDR19VACs(
 	@toDB varchar(100), 
 	@firstTime int) 
 ---------------------------------------------------------------
---/H Publishes the Mastar tables of one DB to another 
+--/H Publishes the VAC tables of one DB to another 
 --/A
 --/T <p> parameters:   
 --/T <li> taskid int,   		-- Task identifier
@@ -1632,7 +1635,7 @@ CREATE PROCEDURE spPublishDR19VACs(
 --/T <li> toDB varchar(100),   		-- destination DB (e.g. dr1.best)
 --/T <li> firstTime int 		-- if 1, creates target table.
 --/T <li> returns  0 if OK, non zero if something wrong  
---/T <samp> spPublishMastar 1,1,'SkyServerV4','tempDB', 1 </samp>
+--/T <samp> spPublishDR19VACs 1,1,'SkyServerV4','tempDB', 1 </samp>
 ---------------------------------------------------------------
 AS BEGIN
 	set nocount on
@@ -1693,6 +1696,142 @@ AS BEGIN
 	--
 	return @summary
 END   -- END spPublishDR19VACs
+GO
+
+
+--=============================================================
+IF EXISTS (SELECT name FROM   sysobjects 
+    WHERE  name = N'spPublishDR20VACs' AND  type = 'P')
+    DROP PROCEDURE spPublishDR20VACs
+GO
+--
+CREATE PROCEDURE spPublishDR20VACs(
+	@taskID int, 
+	@stepID int,
+	@fromDB varchar(100), 
+	@toDB varchar(100), 
+	@firstTime int) 
+---------------------------------------------------------------
+--/H Publishes the DR20 VAC tables of one DB to another 
+--/A
+--/T <p> parameters:   
+--/T <li> taskid int,   		-- Task identifier
+--/T <li> stepid int,   		-- Step identifier
+--/T <li> fromDB varchar(100),   	-- source DB (e.g. verify.photo)
+--/T <li> toDB varchar(100),   		-- destination DB (e.g. dr1.best)
+--/T <li> firstTime int 		-- if 1, creates target table.
+--/T <li> returns  0 if OK, non zero if something wrong  
+--/T <samp> spPublishDR20VACs 1,1,'SkyServerV4','tempDB', 1 </samp>
+---------------------------------------------------------------
+AS BEGIN
+	set nocount on
+	declare @err int, @summary int 
+	declare @message varchar(1000) 
+	declare @status  varchar(16) 
+	set @summary = 0 
+
+	set @message = 'Starting spPublishDR20VACs';
+	exec spNewPhase @taskID, @stepID, 'spPublishDR20VACs', 'OK', @message;
+
+	-- Special cases for these VACs since we created new identity PKs in spValidate
+	exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'boss_clam_lite',  1
+	set @summary = @summary + @err
+
+-- boss_clam_params retired 2026-07-29: the VAC owner confirmed it is not
+-- shipping in DR20. Table and metadata removed by dr20/drop_boss_clam_params.sql.
+--	exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'boss_clam_params',  1
+--	set @summary = @summary + @err
+
+	exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'boss_ISM_NaI_absorption',  1
+	set @summary = @summary + @err
+
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'boss_occam_cluster', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'boss_occam_member', @firstTime
+	set @summary = @summary + @err;
+ 
+	exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'boss_vi_results', @firstTime
+	set @summary = @summary + @err;
+
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'da_dwd_candidates', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'da_dwd_rvs', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'DL1_eROSITA_eRASS3_allepoch', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'DL1_eROSITA_eRASS3_daily', @firstTime
+	set @summary = @summary + @err;
+
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'DR20Q_prop', @firstTime
+	set @summary = @summary + @err;
+
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'efeds_spiders_agn_ctp_salvato', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'efeds_spiders_agn_fit_params', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'efeds_spiders_agn_hard_xray_cat', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'efeds_spiders_agn_host_decomp', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'efeds_spiders_agn_line_props', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'efeds_spiders_agn_main_xray_cat', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'efeds_spiders_agn_xray_props', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'eROSITA_CVs', @firstTime
+	set @summary = @summary + @err;
+ 
+	exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'fermi_blazar', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'grav_pot_16', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'gyro_age_dwarf', @firstTime
+	set @summary = @summary + @err;
+ 
+	exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'mdwarf_active_params', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'mdwarf_contin_summary', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'minesweeper', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'payne4GAIN_summary', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'qms_hg_index_diagram', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'qms_hg_h_hb_indices', @firstTime
+	set @summary = @summary + @err;
+ 
+    exec spCopyATable @taskid, @stepID, @fromDB, @toDB,  'yso_ob_kin', @firstTime
+	set @summary = @summary + @err;
+ 
+
+	--------------------------------------------------
+	set @message = 'Publish of database ' + @fromDB + ' to database ' + @toDB + ' found ' + str(@summary) + ' errors.' 
+	if  @summary = 0 set @status = 'OK' else set @status = 'ABORTING' 
+	--
+	exec spNewPhase @taskID, @stepID, 'spPublishDR20VACs', @status, 'Published DR20 VAC Tables';
+	--
+	return @summary
+END   -- END spPublishDR20VACs
 GO
 
 
@@ -2222,7 +2361,7 @@ BEGIN
 
 
     --------------------------------------------------------------------------------------------- 
-    -- Handle DR19VACs databases 
+    -- Handle DR19 VACs 
     IF @type in ('dr19Vacs') 
         begin 
         exec @err = spPublishDR19VACs @taskID, @stepID, @DBname, @publishDB, @firstTime 
@@ -2235,6 +2374,24 @@ BEGIN
                 begin 
                 set @stepMsg =  'Failed to publish DR19 VACs ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
                 set @phaseMsg = 'Failed to publish DR19 VACs ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        goto commonExit 
+        end 
+
+    --------------------------------------------------------------------------------------------- 
+    -- Handle DR20 VACs  
+    IF @type in ('dr20Vacs') 
+        begin 
+        exec @err = spPublishDR20VACs @taskID, @stepID, @DBname, @publishDB, @firstTime 
+        if @err = 0 
+                begin 
+                set @stepMsg =  'Published DR20 VACs ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Published DR20 VACs ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                end 
+        else 
+                begin 
+                set @stepMsg =  'Failed to publish DR20 VACs ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
+                set @phaseMsg = 'Failed to publish DR20 VACs ' + @type + ' from: ' + @fromDB + ' to: ' + @toDB 
                 end 
         goto commonExit 
         end 
