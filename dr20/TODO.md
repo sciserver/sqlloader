@@ -46,6 +46,87 @@ not a problem.
 
 ## Immediate Next Steps
 
+### 00. spAll htmid/cx/cy/cz are computed from a null sentinel — FIX FIRST
+
+**Found 2026-07-28. This is the top item; DR20 goes live Thursday.**
+
+`spAll.cx/cy/cz` and `htmid` were computed from **`plug_ra`/`plug_dec`**, which is
+**-9999** for **4,905,907 of 5,357,037 rows (91.6%)**. `plug_*` is the old
+plugmap column, superseded in SDSS-V by `fiber_ra`/`fiber_dec`; it now holds the
+null sentinel. -9999 is a valid float, so nothing errored.
+
+Consequences:
+
+- All 4.9M bad rows share **one** htmid, `16776973019819`. Next most common
+  value: 64 rows.
+- Those rows are **invisible to cone search** — found by probing
+  `fGetNearbySpAllEq` with coordinates taken straight out of spAll and getting
+  zero rows back.
+- cos/sin of -9999 degrees does not wrap somewhere harmless. It lands at
+  **ra = 81.000, dec = 81.000**, an ordinary point in the northern sky, so a
+  cone search near there returns **4.9M spurious rows at zero separation**.
+
+**Use `fiber_ra`/`fiber_dec`.** It is the direct successor to `plug_*`, so it
+preserves the original intent (where the fibre was = where the light came
+from), and it is clean: **0 suspicious values, versus 3 in `racat` and 18 in
+`deccat`**. The two agree within 1 arcsec for 99.4% of rows anyway.
+
+- [ ] `UPDATE spAll SET htmid = dbo.fHtmEq(fiber_ra, fiber_dec), cx = ..., cy = ..., cz = ...`
+      following the pattern in `run_htm_add.py` (5.4M rows, minutes)
+- [ ] Rebuild `ix_spAll_htmid`
+- [ ] Re-verify: probe `fGetNearbySpAllEq` with a known spAll position and
+      confirm it returns the object; confirm no htmid has a large pile
+- [ ] Fix the source: spAll is **not** in `run_htm_add.py`'s `HTM_TABLES`, so
+      this came from the spAll load path — check `gen_spec_load.py` /
+      `load_spec_tables.sql`
+- [ ] **Re-backup after fixing** (the 2026-07-28 backup contains the bad data)
+
+#### Related, lower priority
+
+Six tables have `htmid = 0` on every row — never populated:
+`mos_sdss_dr17_specobj` (5.8M), `mos_sdss_dr16_specobj` (5.3M),
+`sdssTiledTargetAll` (1.06M), `mos_mangadapall` (43k), `mos_mangadrpall` (11k),
+`sdssTileAll` (1.9k). The last two have no `cx/cy/cz` at all. **No
+`fGetNearby*` function reads any of them**, so nothing returns wrong answers —
+an inert gap, not a live bug.
+
+The other 29 tables with `htmid` are clean (largest pile 338 rows), including
+PhotoObjAll 1.23B, mos_target 186.8M, Mask 35.5M, allspec 27.7M.
+
+#### Also found: 4 of 9 `fGetNearby*XYZ` compute the returned distance wrong
+
+`fGetNearbyAllspecXYZ`, `fGetNearbyApogeeDrpAllstarXYZ`, `fGetNearbyMosTargetXYZ`
+and `fGetNearbySpAllXYZ` recompute distance from ra/dec **without converting
+degrees to radians**, while `@nx/@ny/@nz` were built with the conversion. The
+other 5 use the precomputed `cx/cy/cz` and are correct. The row *filter* uses
+`cx/cy/cz` either way, so the right rows come back in the right order — only
+the reported `distance` value is wrong.
+
+- [ ] Change those 4 to use `cx/cy/cz` like the correct ones
+
+#### And: generalise the fGetNearby family
+
+22 `fGetNearby*` functions, ~95% boilerplate — only the table name and the
+returned column list vary. T-SQL functions cannot take a table name or use
+dynamic SQL, so a single generic TVF is impossible, but:
+
+- **Generate them** from a table list, exactly like `run_htm_add.py`'s
+  `HTM_TABLES`. Adding a table becomes a one-line dict entry.
+- **Or document the generic join** — it already works on any table with
+  htmid/cx/cy/cz and needs no new objects:
+
+```sql
+SELECT t.*, 2*DEGREES(ASIN(SQRT(POWER(@nx-t.cx,2)+POWER(@ny-t.cy,2)+POWER(@nz-t.cz,2))/2))*60 AS distance
+FROM dbo.fHtmCoverCircleEq(@ra,@dec,@r) H
+JOIN <any_table> t ON t.htmid BETWEEN H.HtmIDStart AND H.HtmIDEnd
+WHERE POWER(@nx-t.cx,2)+POWER(@ny-t.cy,2)+POWER(@nz-t.cz,2) < POWER(2*SIN(RADIANS(@r/120)),2)
+```
+
+Generating them would have caught the spAll bug: the generator must be told
+which ra/dec columns each table uses, making `plug_ra` a reviewable line of
+data instead of something buried in a hand-written function.
+
+
 ### 0. Fix the metadata load: scoped upsert instead of whole-table TRUNCATE
 
 **Highest priority — this one silently loses edits.**
