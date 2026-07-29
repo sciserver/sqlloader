@@ -119,6 +119,14 @@
 --                  ra,dec column names.
 --* 2025-07-03 Sue: Adding fGetNearby and Nearest functions for Allspec, ApogeeDRPAllstar, spAll tables
 --* 2026-02-17 Ani: Removed "USE BestDRxx" statements.
+--* 2026-07-29 Sue: Fixed the distance expression in fGetNearby[Allspec|
+--*                 ApogeeDrpAllstar|MosTarget|SpAll]XYZ, which recomputed it
+--*                 from ra/dec without converting degrees to radians and so
+--*                 reported 9825 arcmin for a zero-separation match; they now
+--*                 use the precomputed cx/cy/cz like the other five. Added the
+--*                 missing ORDER BY distance to fGetNearest[Allspec|
+--*                 ApogeeDrpAllstar|SpAll]Eq, which took TOP 1 without it and
+--*                 so returned an arbitrary object rather than the nearest.
 --=====================================================================
 SET NOCOUNT ON;
 GO
