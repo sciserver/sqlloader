@@ -49,9 +49,14 @@ DECLARE @probeArcmin float = 0.1; -- cone radius for the self-match probe
 --  check B fails. Naming the wrong columns here would hide the bug it exists
 --  to catch.
 --
---  expected: 'PASS' normally, or 'KNOWN-GAP' for a documented unpopulated
---  spatial index. A KNOWN-GAP that starts passing is also reported, so the
---  list cannot rot silently.
+--  expected values:
+--    PASS       the normal case
+--    KNOWN-GAP  a documented unpopulated or wrongly-sourced spatial index
+--    DEAD       the function itself does not work and we have decided to leave
+--               it that way; the check is expected to ERROR
+--    SKIP       not applicable to this table
+--  A KNOWN-GAP or DEAD entry that starts passing is ALSO reported, so a stale
+--  exemption cannot sit here unnoticed.
 -------------------------------------------------------------------------------
 DECLARE @driver TABLE (
     seq          int IDENTITY(1,1),
@@ -78,8 +83,8 @@ INSERT @driver (tableName, raCol, decCol, hasXyz, callTemplate, expHtmid, expXyz
  ('Frame',              'ra',    '[dec]',  1, 'dbo.fGetNearbyFrameEq(%RA%,%DEC%,%R%,0)',          'PASS','PASS','PASS', 'takes a 4th @zoom argument'),
  ('mangaDRPall',        'objra', 'objdec', 0, 'dbo.fGetNearbyMangaObjEq(%RA%,%DEC%,%R%)',         'KNOWN-GAP','SKIP','PASS',
     'htmid is built from ifura/ifudec but the function returns objra/objdec; 483 of 11,273 rows differ. No cx/cy/cz.'),
- ('sdssTiledTargetAll', 'ra',    '[dec]',  1, 'dbo.fGetNearbyTiledTargetsEq(%RA%,%DEC%,%R%)',     'KNOWN-GAP','PASS','KNOWN-GAP',
-    'htmid=0 on all 1,056,872 rows - never populated. cx/cy/cz ARE correct.');
+ ('sdssTiledTargetAll', 'ra',    '[dec]',  1, 'dbo.fGetNearbyTiledTargetsEq(%RA%,%DEC%,%R%)',     'KNOWN-GAP','PASS','DEAD',
+    'fGetNearbyTiledTargetsEq joins TiledTarget, a view deliberately dropped in 2010; dead ever since. htmid=0 on all rows, left alone 2026-07-29. cx/cy/cz are correct.');
 
 -------------------------------------------------------------------------------
 CREATE TABLE #r (
@@ -301,9 +306,11 @@ END
 PRINT '';
 PRINT '--- detail -------------------------------------------------------------';
 SELECT part, check_name, subject, result, expected,
-       CASE WHEN result = expected
-              OR (expected = 'KNOWN-GAP' AND result = 'FAIL') THEN 'OK'
-            WHEN expected = 'KNOWN-GAP' AND result = 'PASS'   THEN '>> NOW PASSES - update the driver'
+       CASE WHEN result = expected                             THEN 'OK'
+            WHEN expected = 'KNOWN-GAP' AND result = 'FAIL'    THEN 'OK'
+            WHEN expected = 'DEAD'      AND result = 'ERROR'   THEN 'OK'
+            WHEN expected IN ('KNOWN-GAP','DEAD') AND result = 'PASS'
+                 THEN '>> NOW PASSES - update the driver'
             ELSE '>> UNEXPECTED' END AS verdict,
        detail
 FROM #r ORDER BY part, check_name, subject;
@@ -311,16 +318,19 @@ FROM #r ORDER BY part, check_name, subject;
 PRINT '';
 PRINT '--- summary ------------------------------------------------------------';
 SELECT
-    SUM(CASE WHEN result = expected OR (expected='KNOWN-GAP' AND result='FAIL') THEN 1 ELSE 0 END) AS ok,
-    SUM(CASE WHEN expected = 'KNOWN-GAP' AND result = 'PASS' THEN 1 ELSE 0 END) AS gap_now_fixed,
-    SUM(CASE WHEN result = 'ERROR' THEN 1 ELSE 0 END) AS errors,
-    SUM(CASE WHEN expected = 'PASS' AND result IN ('FAIL') THEN 1 ELSE 0 END) AS regressions,
+    SUM(CASE WHEN result = expected
+               OR (expected = 'KNOWN-GAP' AND result = 'FAIL')
+               OR (expected = 'DEAD'      AND result = 'ERROR') THEN 1 ELSE 0 END) AS ok,
+    SUM(CASE WHEN expected IN ('KNOWN-GAP','DEAD') AND result = 'PASS' THEN 1 ELSE 0 END) AS exemption_now_passes,
+    SUM(CASE WHEN result = 'ERROR' AND expected <> 'DEAD' THEN 1 ELSE 0 END) AS errors,
+    SUM(CASE WHEN expected = 'PASS' AND result = 'FAIL' THEN 1 ELSE 0 END) AS regressions,
     COUNT(*) AS total
 FROM #r;
 
 DECLARE @bad int = (SELECT COUNT(*) FROM #r
-                    WHERE (expected = 'PASS' AND result <> 'PASS' AND result <> 'SKIP')
-                       OR result = 'ERROR');
+                    WHERE (expected = 'PASS' AND result NOT IN ('PASS','SKIP'))
+                       OR (result = 'ERROR' AND expected <> 'DEAD')
+                       OR (expected IN ('KNOWN-GAP','DEAD') AND result = 'PASS'));
 IF @bad > 0
     RAISERROR('verify_spatial: %d unexpected result(s) - see the detail above', 16, 1, @bad);
 ELSE

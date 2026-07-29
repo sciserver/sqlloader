@@ -307,7 +307,49 @@ All 7 allspec NCIs and the clustered index are now PAGE.
   from `schema/sql/IndexMap.sql` (TODO 4a). A rebuild from the file would lose
   them. Not touched today.
 
-## 6. (2026-07-29 session — append below as we go)
+## 6. Three `fGetNearest*Eq` functions ordered by distance
+
+**Script:** `dr20/fix_nearest_orderby.sql`
+**Applied on sdss4c:** 2026-07-29, 3 functions altered
+**Found by:** `dr20/verify_spatial.sql` check A2
+
+`fGetNearestAllspecEq`, `fGetNearestApogeeDrpAllstarEq` and
+`fGetNearestSpAllEq` did `SELECT TOP 1` over their Nearby XYZ function with
+**no `ORDER BY distance`** — so they returned an arbitrary object from the cone
+rather than the nearest one. Their XYZ counterparts all had it.
+
+It is not enough that the inner function populates its table variable in
+distance order: **inserting into a table variable in a given order does not
+guarantee reading it back in that order.** The engine is free to return any
+qualifying row, and is more likely to under parallelism or after an index
+change. A real defect, not a theoretical one.
+
+Same three families as the radians bug fixed 2026-07-28.
+
+The script rebuilds each function from its own live definition with one targeted
+substitution, rather than retyping three long `RETURNS TABLE` clauses where a
+transcription slip would silently change a column type. It refuses unless the
+substitution matches exactly once, and verifies afterwards that no
+`fGetNearest*` still takes `TOP 1` unordered. Idempotent.
+
+### Also changed outside the database
+
+- `C:\sqlloader\schema\sql\spNearby.sql` — same three lines.
+  **Shared with Ani — tell him.** This is the second change to this file
+  (the first was the 2026-07-28 distance expressions, entry 2).
+
+### Not done, deliberately: `fGetNearbyTiledTargetsEq`
+
+The same test run showed this function fails on every call — it joins a table
+named `TiledTarget`, which does not exist. The `sdssTiledTarget` view was
+**deliberately commented out in 2010** (`Views.sql` line 47, "broken, no
+unTiled col"), so it has been dead roughly 15 years.
+
+**Decision 2026-07-29: leave it alone**, and do not populate
+`sdssTiledTargetAll.htmid` either, since nothing can query it. Reviving a view
+removed on purpose is not a go-live-eve change.
+
+## 7. (2026-07-29 session — append below as we go)
 
 <!--
 Template for each entry:

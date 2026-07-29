@@ -3093,7 +3093,7 @@ BEGIN
 	set @ny  = COS(@dec*@d2r)*SIN(@ra*@d2r)
 	set @nz  = SIN(@dec*@d2r)
 	INSERT @proxtab	
-	SELECT top 1 * FROM dbo.fGetNearbyAllspecXYZ(@nx,@ny,@nz,@r) 
+	SELECT top 1 * FROM dbo.fGetNearbyAllspecXYZ(@nx,@ny,@nz,@r) ORDER BY distance ASC 
   RETURN
   END
 GO
@@ -3293,7 +3293,7 @@ BEGIN
 	set @ny  = COS(@dec*@d2r)*SIN(@ra*@d2r)
 	set @nz  = SIN(@dec*@d2r)
 	INSERT @proxtab	
-	SELECT top 1 * FROM dbo.fGetNearbyApogeeDrpAllstarXYZ(@nx,@ny,@nz,@r) 
+	SELECT top 1 * FROM dbo.fGetNearbyApogeeDrpAllstarXYZ(@nx,@ny,@nz,@r) ORDER BY distance ASC 
   RETURN
   END
 GO
@@ -3478,7 +3478,7 @@ CREATE FUNCTION [dbo].[fGetNearestSpAllEq] (@ra float, @dec float, @r float)
 	set @ny  = COS(@dec*@d2r)*SIN(@ra*@d2r)
 	set @nz  = SIN(@dec*@d2r)
 	INSERT @proxtab	
-	SELECT top 1 * FROM dbo.fGetNearbySpAllXYZ(@nx,@ny,@nz,@r) 
+	SELECT top 1 * FROM dbo.fGetNearbySpAllXYZ(@nx,@ny,@nz,@r) ORDER BY distance ASC 
   RETURN
   END
 GO
