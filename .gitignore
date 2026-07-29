@@ -36,3 +36,4 @@ dr20/table_count.txt
 dr20/targetdb_*.txt
 dr20/varchar_max_analysis_results.txt
 dr20/*.tsv
+*.out

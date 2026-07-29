@@ -50,7 +50,8 @@ Expect **no rows**. If any appear, run `drop_metadata_fks.sql` first.
 | 7 | Document allspec's 7 NCIs in IndexMap | `add_indexmap_allspec_nci.sql` | seconds |
 | 8 | Regenerate and reload the metadata | see below | 1 min |
 | 9 | **Verify everything** | `verify_spatial.sql` | 1 min |
-| 10 | Checkpoint and reclaim the transaction logs | see below | minutes |
+| 10 | Build the statistics | `run_update_stats.py` | ~50 min |
+| 11 | Checkpoint and reclaim the transaction logs | see below | minutes |
 
 ---
 
@@ -192,9 +193,56 @@ The two remaining exemptions are expected and declared in the script:
 `mangaDRPall` (htmid built from `ifura`/`ifudec`) and `sdssTiledTargetAll`
 (`fGetNearbyTiledTargetsEq` has been dead since 2010 — deliberately left alone).
 
-## 10. Checkpoint and reclaim the transaction logs
+## 10. Build the statistics
 
-**Do this last**, after everything above has succeeded and verified.
+**The restore carries this problem with it** — statistics live inside the
+database, so a restored copy has exactly the same missing histograms the backup
+had. This is not something the restore fixes.
+
+The loaders create the clustered index *before* inserting rows (right for
+storage: rows land in key order, already compressed). But that means the
+statistics object is created against an **empty** table, and bulk loading with
+`TABLOCK` never builds a histogram. Measured on sdss4c 2026-07-29:
+
+| group | stats | never built | rows behind them |
+|---|---:|---:|---:|
+| `mos_*` | 397 | 96 | 1,886,070,000 |
+| VAC / astra / spectro | 2,309 | 27 | 74,055,504 |
+| legacy (PhotoObjAll, SpecObjAll…) | 494 | **0** | 0 |
+
+**Missing histograms are worse than stale ones.** `auto_update_statistics` is ON
+but **async is OFF** (the SQL Server default), so the first query touching one of
+these tables blocks while the statistic builds — and until then the optimizer
+guesses tiny row counts, which on a 279M-row table can produce a plan that runs
+for hours. Both are avoided by building them before anyone connects.
+
+```powershell
+cd H:\GitHub\sqlloader\dr20
+python run_update_stats.py --server <server> --scope dr20 --dry-run
+python run_update_stats.py --server <server> --scope dr20
+```
+
+- **`--scope dr20`** (~236 tables, ~693 GB, **~50 min**) covers every table
+  loaded for DR20. **`--scope unbuilt`** (~121 tables, ~234 GB, **~17 min**)
+  fixes only the actual defect if time is short.
+- **The legacy carried-over tables are excluded deliberately** — they have 0
+  missing histograms, and PhotoObjAll alone would take this from under an hour
+  to most of a day for no benefit.
+- FULLSCAN is the default and is the right call: write-once data that will serve
+  for a year deserves exact histograms, and sampling is weakest exactly on the
+  hundred-million-row tables where it matters most. `--sample` is the fast,
+  weaker alternative.
+- **Resumable.** Each table is recorded in `stats_updated.json` as it finishes,
+  keyed by server, so an interrupted run resumes and each of 4c / 5a / 5b is
+  tracked separately. Smallest tables run first, so a kill has already banked
+  the quick wins.
+- The script reports, at the end, how many statistics still lack a histogram.
+  **That number must be 0.**
+
+## 11. Checkpoint and reclaim the transaction logs
+
+**Do this last**, after everything above has succeeded and verified. Step 10
+rewrites nothing but reads a great deal; steps 2–4 are what grow the log.
 
 BestDR20 is in **SIMPLE** recovery, so a `CHECKPOINT` truncates the log; the
 files then need shrinking to actually return the space. Steps 2, 3 and 4 each
