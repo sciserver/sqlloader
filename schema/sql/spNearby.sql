@@ -118,6 +118,7 @@
 --* 2023-02-20 Ani: Added back fGetNear[by|est]MastarEq functions (DR18) with change to
 --                  ra,dec column names.
 --* 2025-07-03 Sue: Adding fGetNearby and Nearest functions for Allspec, ApogeeDRPAllstar, spAll tables
+--* 2026-02-17 Ani: Removed "USE BestDRxx" statements.
 --=====================================================================
 SET NOCOUNT ON;
 GO
@@ -1909,7 +1910,7 @@ BEGIN
 	    epoch,
 		parallax,
 	    htmID,
-	    2*DEGREES(ASIN(sqrt(power(@nx-( COS([dec]) * COS(ra) ),2)+power(@ny-( COS([dec]) * SIN(ra) ),2)+power(@nz-( SIN([dec]) ),2))/2))*60 
+	    2*DEGREES(ASIN(sqrt(power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2))/2))*60 
 	    FROM @htmTemp H  inner loop join mos_target P
 	             ON  (P.HtmID BETWEEN H.HtmIDstart AND H.HtmIDend )
 	   AND power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2) < @lim
@@ -2919,9 +2920,10 @@ END
 GO
 
 
+
 drop function if exists fGetNearbyAllspecEq
 GO
-
+--
 CREATE FUNCTION [dbo].[fGetNearbyAllspecEq] (@ra float, @dec float, @r float)
 -------------------------------------------------------------
 --/H Returns table of Allspec objects within @r arcmins of an equatorial point (@ra, @dec).
@@ -2968,19 +2970,11 @@ CREATE FUNCTION [dbo].[fGetNearbyAllspecEq] (@ra float, @dec float, @r float)
   END
 GO
 
-USE [BestDR19]
-GO
-
-/****** Object:  UserDefinedFunction [dbo].[fGetNearbyMosTargetXYZ]    Script Date: 6/30/2025 11:52:06 AM ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
 
 
 drop function if exists fGetNearbyAllspecXYZ
 go
+--
  CREATE FUNCTION [dbo].[fGetNearbyAllspecXYZ] (@nx float, @ny float, @nz float, @r float)
 
 -------------------------------------------------------------
@@ -3042,7 +3036,7 @@ BEGIN
 	    [dec],
 
 	    htmID,
-	    2*DEGREES(ASIN(sqrt(power(@nx-( COS([dec]) * COS(ra) ),2)+power(@ny-( COS([dec]) * SIN(ra) ),2)+power(@nz-( SIN([dec]) ),2))/2))*60 
+	    2*DEGREES(ASIN(sqrt(power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2))/2))*60 
 	    FROM @htmTemp H  inner loop join Allspec P
 	             ON  (P.HtmID BETWEEN H.HtmIDstart AND H.HtmIDend )
 	   AND power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2) < @lim
@@ -3099,7 +3093,7 @@ BEGIN
 	set @ny  = COS(@dec*@d2r)*SIN(@ra*@d2r)
 	set @nz  = SIN(@dec*@d2r)
 	INSERT @proxtab	
-	SELECT top 1 * FROM dbo.fGetNearbyAllspecXYZ(@nx,@ny,@nz,@r) 
+	SELECT top 1 * FROM dbo.fGetNearbyAllspecXYZ(@nx,@ny,@nz,@r) ORDER BY distance ASC 
   RETURN
   END
 GO
@@ -3193,16 +3187,6 @@ CREATE FUNCTION [dbo].[fGetNearbyApogeeDrpAllstarEq] (@ra float, @dec float, @r 
   END
 GO
 
-USE [BestDR19]
-GO
-
-/****** Object:  UserDefinedFunction [dbo].[fGetNearbyMosTargetXYZ]    Script Date: 6/30/2025 11:52:06 AM ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 
 drop function if exists fGetNearbyApogeeDrpAllstarXYZ
 go
@@ -3258,7 +3242,7 @@ BEGIN
 		[dec],
 		htmid,
 
-	    2*DEGREES(ASIN(sqrt(power(@nx-( COS([dec]) * COS(ra) ),2)+power(@ny-( COS([dec]) * SIN(ra) ),2)+power(@nz-( SIN([dec]) ),2))/2))*60 
+	    2*DEGREES(ASIN(sqrt(power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2))/2))*60 
 	    FROM @htmTemp H  inner loop join apogee_drp_allstar P
 	             ON  (P.HtmID BETWEEN H.HtmIDstart AND H.HtmIDend )
 	   AND power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2) < @lim
@@ -3309,7 +3293,7 @@ BEGIN
 	set @ny  = COS(@dec*@d2r)*SIN(@ra*@d2r)
 	set @nz  = SIN(@dec*@d2r)
 	INSERT @proxtab	
-	SELECT top 1 * FROM dbo.fGetNearbyApogeeDrpAllstarXYZ(@nx,@ny,@nz,@r) 
+	SELECT top 1 * FROM dbo.fGetNearbyApogeeDrpAllstarXYZ(@nx,@ny,@nz,@r) ORDER BY distance ASC 
   RETURN
   END
 GO
@@ -3397,16 +3381,6 @@ CREATE FUNCTION [dbo].[fGetNearbySpAllEq] (@ra float, @dec float, @r float)
   END
 GO
 
-USE [BestDR19]
-GO
-
-/****** Object:  UserDefinedFunction [dbo].[fGetNearbyMosTargetXYZ]    Script Date: 6/30/2025 11:52:06 AM ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 
 drop function if exists fGetNearbySpAllXYZ
 go
@@ -3457,7 +3431,7 @@ BEGIN
 	    [deccat],
 
 	    htmID,
-	    2*DEGREES(ASIN(sqrt(power(@nx-( COS([deccat]) * COS(racat) ),2)+power(@ny-( COS([deccat]) * SIN(racat) ),2)+power(@nz-( SIN([deccat]) ),2))/2))*60 
+	    2*DEGREES(ASIN(sqrt(power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2))/2))*60 
 	    FROM @htmTemp H  inner loop join SpAll P
 	             ON  (P.HtmID BETWEEN H.HtmIDstart AND H.HtmIDend )
 	   AND power(@nx-cx,2)+power(@ny-cy,2)+power(@nz-cz,2) < @lim
@@ -3504,7 +3478,7 @@ CREATE FUNCTION [dbo].[fGetNearestSpAllEq] (@ra float, @dec float, @r float)
 	set @ny  = COS(@dec*@d2r)*SIN(@ra*@d2r)
 	set @nz  = SIN(@dec*@d2r)
 	INSERT @proxtab	
-	SELECT top 1 * FROM dbo.fGetNearbySpAllXYZ(@nx,@ny,@nz,@r) 
+	SELECT top 1 * FROM dbo.fGetNearbySpAllXYZ(@nx,@ny,@nz,@r) ORDER BY distance ASC 
   RETURN
   END
 GO

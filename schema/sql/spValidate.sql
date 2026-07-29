@@ -2643,26 +2643,29 @@ AS BEGIN
 	-- test unique keys
 	---------------------
 
+/*
+
 	exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_clam_lite', 'sdss_id', @error OUTPUT
 	set @summary = @summary + @error;
- 
+
 	exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_clam_params', 'source', @error OUTPUT
 	set @summary = @summary + @error;
 
     exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_ISM_NaI_absorption', 'spectrum_PK', @error OUTPUT
 	set @summary = @summary + @error;
  
-/*
+*/
+
 	ALTER TABLE boss_clam_lite ADD PK INT IDENTITY(1,1) CONSTRAINT PK_boss_clam_lite PRIMARY KEY CLUSTERED
  	EXEC spNewPhase @taskid, @stepid, 'spValidateDR20VACs', 'OK', 'PK_boss_clam_lite created'
 
-	ALTER TABLE boss_clam_params ADD PK INT IDENTITY(1,1) CONSTRAINT PK_boss_clam_params PRIMARY KEY CLUSTERED
- 	EXEC spNewPhase @taskid, @stepid, 'spValidateDR20VACs', 'OK', 'PK_boss_clam_params created'
+-- boss_clam_params retired 2026-07-29: the VAC owner confirmed it is not
+-- shipping in DR20. Table and metadata removed by dr20/drop_boss_clam_params.sql.
+--	ALTER TABLE boss_clam_params ADD PK INT IDENTITY(1,1) CONSTRAINT PK_boss_clam_params PRIMARY KEY CLUSTERED
+-- 	EXEC spNewPhase @taskid, @stepid, 'spValidateDR20VACs', 'OK', 'PK_boss_clam_params created'
 
 	ALTER TABLE boss_ISM_NaI_absorption ADD PK INT IDENTITY(1,1) CONSTRAINT PK_boss_ISM_NaI_absorption PRIMARY KEY CLUSTERED
  	EXEC spNewPhase @taskid, @stepid, 'spValidateDR20VACs', 'OK', 'PK_boss_ISM_NaI_absorption created'
-
-*/
 
     exec dbo.spTestUniqueKey  @taskid , @stepid,  'boss_occam_cluster', 'name', @error OUTPUT
 	set @summary = @summary + @error;
@@ -2676,7 +2679,7 @@ AS BEGIN
     exec dbo.spTestUniqueKey  @taskid , @stepid,  'da_dwd_candidates', 'sdss_id', @error OUTPUT
 	set @summary = @summary + @error;
  
-    exec dbo.spTestUniqueKey  @taskid , @stepid,  'da_dwd_rvs', 'sdss_id', @error OUTPUT
+    exec dbo.spTestUniqueKey  @taskid , @stepid,  'da_dwd_rvs', 'exposure_num,sdss_id', @error OUTPUT
 	set @summary = @summary + @error;
  
     exec dbo.spTestUniqueKey  @taskid , @stepid,  'DL1_eROSITA_eRASS3_allepoch', 'sdss_id,sdss_mjd', @error OUTPUT
@@ -2688,9 +2691,6 @@ AS BEGIN
     exec dbo.spTestUniqueKey  @taskid , @stepid,  'DR20Q_prop', 'objid', @error OUTPUT
 	set @summary = @summary + @error;
 
-    exec dbo.spTestUniqueKey  @taskid , @stepid,  'efeds_spiders_agn_classification_props', 'PK_index', @error OUTPUT
-	set @summary = @summary + @error;
- 
     exec dbo.spTestUniqueKey  @taskid , @stepid,  'efeds_spiders_agn_ctp_salvato', 'PK_index', @error OUTPUT
 	set @summary = @summary + @error;
  

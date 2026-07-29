@@ -3064,7 +3064,7 @@ CREATE TABLE allspec (
     has_mwmstar bigint NOT NULL, --/U  --/D Has MWM Star 
     astra_versions varchar(11) NOT NULL, --/U  --/D list of v_astra values if sdss_id has MWM Star 
     mangaid varchar(9) NOT NULL, --/U  --/D MaNGA ID 
-    specobjid varchar(29) NULL, --/U  --/D spectroscopic object id 
+    specobjid numeric(30) NULL, --/U  --/D spectroscopic object id
     htmid bigint, --/D 20 deep Hierarchical Triangular Mesh ID --/K CODE_HTM
     cx float, --/D x of the J2000 unit vector for ra+dec --/K POS_EQ_CART_X
     cy float, --/D y of the J2000 unit vector for ra+dec --/K POS_EQ_CART_Y

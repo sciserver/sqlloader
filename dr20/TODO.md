@@ -46,6 +46,221 @@ not a problem.
 
 ## Immediate Next Steps
 
+### 0a. ~~`allspec.specobjid` is varchar, should be numeric~~ — FIXED 2026-07-29
+
+**Fixed 2026-07-29** via `dr20/fix_allspec_specobjid.sql`: converted in place to
+`numeric(30,0)` NULL, 27,671,504 rows, value fingerprint unchanged, all 8
+indexes intact. `SpectroTables.sql` corrected in the same pass.
+
+**Not `numeric(20)`.** Matching `SpecObjAll` would have overflowed 10,766,741
+rows — allspec carries a union of legacy 18–20 digit ids and SDSS-V 25–29 digit
+ids, so `numeric(30,0)` (matching `spAll`) is the only type that holds them all.
+
+Route was ALTER in place, not the drop-and-reload originally favoured: BESTTEST's
+own `allspec.specobjid` is *also* `varchar(29)`, so a reload fixes nothing on its
+own, and allspec's NCIs are missing from IndexMap so a reload risks losing them.
+
+- [ ] **Still to do:** Ani re-runs the CasJobs piece
+- [ ] **Still to do:** apply to the restored copies on sdss5a/sdss5b — see
+      `dr20/post_backup_fixes.md`
+- [ ] BESTTEST still has `varchar(29)`; out of scope for go-live
+
+The original analysis follows, for the record.
+
+| | |
+|---|---|
+| Current | `varchar(29)`, nullable |
+| Should be | `numeric(30,0)` — matches `spAll`, `spAll_epoch`, `spAll_allepoch` |
+| Values | 18-29 digits, max `13772942901091276070601060201` |
+| Convertibility | **27,671,504 rows, 0 failures**, 0 empty strings, 0 leading zeros |
+
+`bigint` will not do — 29 digits far exceeds its 19-digit range.
+
+**Why it matters:** joins from allspec to spAll/SpecObjAll on `specobjid` force
+an implicit varchar->numeric conversion, which can defeat an index seek on the
+numeric side, and `specobjid = 1234...` unquoted behaves unexpectedly.
+`fGetNearbyAllspecXYZ` already declares `specobjid numeric(30)` in its RETURNS
+clause, so it is doing that conversion on every row today.
+
+**Two routes — the user leaned toward the second:**
+
+1. **ALTER in place.** Drop `ix_allspec_specobjid` -> `ALTER COLUMN` ->
+   recreate index. ~10-20 min on 15.10 GB / 27.7M rows. Then `SpectroTables.sql`
+   must be corrected *separately* or the next load regresses it.
+2. **Drop and reload from BESTTEST** with the correct type in the CREATE TABLE.
+   Fixes the table and the schema source in one pass, and the load path is
+   already exercised. Likely the better option, and worth checking what
+   BESTTEST's own `allspec.specobjid` type is before deciding.
+
+Either way:
+- [ ] Correct `specobjid` in `C:\sqlloader\schema\sql\SpectroTables.sql`
+- [ ] Ani re-runs the CasJobs piece afterwards
+- [ ] allspec's HTM columns and its 6 NCIs must survive or be recreated —
+      note `ix_allspec_*` indexes are still absent from IndexMap (TODO item 2),
+      so a reload driven from IndexMap would silently drop them
+- [ ] SPEC has only ~1.5 GB free; either route will autogrow the filegroup
+
+### 00. ~~spAll htmid/cx/cy/cz computed from a null sentinel~~ — FIXED 2026-07-28
+
+**Found and fixed 2026-07-28**, via `dr20/fix_spall_htm.sql`. Rebuilt from
+`racat`/`deccat`; 5,357,037 rows updated in 8.8 min, `ix_spAll_htmid` rebuilt.
+
+| | before | after |
+|---|---:|---:|
+| biggest htmid pile | 4,905,907 | **172** |
+| cone search finds a known spAll object | 0 rows | **1 row** |
+| cone search at the bogus ra=81/dec=81 | 4.9M spurious | **0** |
+| distinct htmid | 1 + tail | 3,223,326 |
+
+The 4 wrong-distance functions were fixed at the same time (see below), and
+verified: reported distances now match true great-circle separation to 1e-6.
+
+- [ ] **Still to do:** apply both fixes to the restored production copies on
+      sdss5a and sdss5b — the 2026-07-28 backup predates them.
+- [ ] **Still to do:** fix the source. spAll is not in `run_htm_add.py`'s
+      `HTM_TABLES`, so the `plug_ra` choice came from the spAll load path —
+      `gen_spec_load.py` / `load_spec_tables.sql`. Otherwise DR21 repeats it.
+
+The original diagnosis follows, for the record.
+
+`spAll.cx/cy/cz` and `htmid` were computed from **`plug_ra`/`plug_dec`**, which is
+**-9999** for **4,905,907 of 5,357,037 rows (91.6%)**. `plug_*` is the old
+plugmap column, superseded in SDSS-V by `fiber_ra`/`fiber_dec`; it now holds the
+null sentinel. -9999 is a valid float, so nothing errored.
+
+Consequences:
+
+- All 4.9M bad rows share **one** htmid, `16776973019819`. Next most common
+  value: 64 rows.
+- Those rows are **invisible to cone search** — found by probing
+  `fGetNearbySpAllEq` with coordinates taken straight out of spAll and getting
+  zero rows back.
+- cos/sin of -9999 degrees does not wrap somewhere harmless. It lands at
+  **ra = 81.000, dec = 81.000**, an ordinary point in the northern sky, so a
+  cone search near there returns **4.9M spurious rows at zero separation**.
+
+**Use `racat`/`deccat`** (confirm with Ani, but the data question is settled):
+
+- **Consistently ICRS** at `coord_epoch`. `fiber_ra`/`fiber_dec` is documented
+  as *"J2000 for plate; at exp for FPS"* — a **mixed reference frame**, which
+  would index high-proper-motion FPS-era targets at their observed epoch rather
+  than a common frame.
+- **`fGetNearbySpAllXYZ` already returns `racat`/`deccat`** as its `ra`/`dec`
+  output columns. Indexing on them makes search and results agree; today the
+  function indexes on `plug_*` and reports `racat`, and that inconsistency is
+  how this survived unnoticed.
+- **Zero invalid values** across all 5,357,037 rows — no nulls, no -9999, none
+  out of range. Same for `fiber_*`. Only `plug_*` is broken. So no fallback or
+  special-casing is needed.
+
+(An earlier draft of this item recommended `fiber_ra`/`fiber_dec` on the basis
+of "3 bad racat / 18 bad deccat values". That was a bad check — it treated
+`0` as a sentinel, but RA=0 and Dec=0 are valid positions and those 21 rows are
+simply objects on the celestial equator and at the RA origin.)
+
+- [ ] `UPDATE spAll SET htmid = dbo.fHtmEq(racat, deccat), cx = ..., cy = ..., cz = ...`
+      following the pattern in `run_htm_add.py` (5.4M rows, minutes)
+- [ ] Rebuild `ix_spAll_htmid`
+- [ ] Re-verify: probe `fGetNearbySpAllEq` with a known spAll position and
+      confirm it returns the object; confirm no htmid has a large pile
+- [ ] Fix the source: spAll is **not** in `run_htm_add.py`'s `HTM_TABLES`, so
+      this came from the spAll load path — check `gen_spec_load.py` /
+      `load_spec_tables.sql`
+- [ ] Apply the same fix to the restored production copies. The 2026-07-28
+      backup contains the bad spAll data, so sdss5a and sdss5b will each need
+      it. No re-backup required — spAll is 7 GB of an 11.5 TB database, and
+      pre-launch fixes are being applied in situ to the live copies.
+
+#### Found 2026-07-29 by `dr20/verify_spatial.sql` — 4 open defects
+
+The generalized spatial test suite (see below) found four things. None blocks
+go-live; all are real.
+
+- [x] ~~3 `fGetNearest*Eq` return an arbitrary object, not the nearest~~ —
+      **FIXED 2026-07-29** via `dr20/fix_nearest_orderby.sql`.
+      `fGetNearestAllspecEq`, `fGetNearestApogeeDrpAllstarEq` and
+      `fGetNearestSpAllEq` did `SELECT TOP 1` over the Nearby XYZ function with
+      **no `ORDER BY distance`**. Inserting into a table variable in order does
+      not guarantee reading it back in that order, so these were genuinely
+      unreliable, not theoretically so. Same three families as the radians bug.
+      `ORDER BY distance ASC` added to all three in the database and in
+      `schema/sql/spNearby.sql`. All 22 `fGetNearest*` now verify clean.
+- [x] **`fGetNearbyTiledTargetsEq` has never worked — LEAVING IT ALONE.**
+      It joins a table called `TiledTarget`, which does not exist. The
+      `sdssTiledTarget` view was **deliberately commented out in 2010** by Ani
+      (`Views.sql` line 47: "broken, no unTiled col"), so the function has been
+      dead for roughly 15 years and every call fails with "Invalid object name
+      'TiledTarget'". **Decision 2026-07-29: do not revive it**, and do not
+      populate `sdssTiledTargetAll.htmid` either, since nothing can query it.
+      Recorded in `verify_spatial.sql` as `expProbe='DEAD'` so the suite
+      documents it rather than reporting it. If that function ever starts
+      working, the suite says so.
+- [ ] **`mangaDRPall.htmid` is built from `ifura`/`ifudec`, but
+      `fGetNearbyMangaObjEq` returns `objra`/`objdec`.** A mild version of the
+      spAll bug: **483 of 11,273 rows (4.3%)** have an htmid that does not match
+      their own reported position, so a cone search at the object position can
+      miss them. The rest agree only because the IFU centre and the object
+      usually fall in the same HTM triangle.
+- [x] `sdssTiledTargetAll.htmid` is 0 on all 1,056,872 rows. **Its `cx/cy/cz`
+      are correct**, so only htmid was never populated. Left alone — see the
+      TiledTargets decision above. If it is ever populated, note the NCI
+      `i_sdssTiledTargetAll_htmID_ra_de` has **htmID as its leading key** and
+      also carries cx/cy/cz, so every index entry moves: disable it, update,
+      then rebuild. (That index name is itself truncated at 32 characters — a
+      live example of the `fIndexName` limit in
+      `spcheckdbindexes_analysis.md`.)
+
+**Corrections to the 2026-07-28 sweep:** it recorded `mos_mangadapall` and
+`mos_mangadrpall` as "htmid = 0 on every row, no cx/cy/cz". For `mangaDRPall`
+that is wrong — htmid is fully populated (0 zeros), just from the wrong columns.
+Worth re-checking the other four tables in that list the same way.
+
+#### Related, lower priority
+
+Six tables have `htmid = 0` on every row — never populated:
+`mos_sdss_dr17_specobj` (5.8M), `mos_sdss_dr16_specobj` (5.3M),
+`sdssTiledTargetAll` (1.06M), `mos_mangadapall` (43k), `mos_mangadrpall` (11k),
+`sdssTileAll` (1.9k). The last two have no `cx/cy/cz` at all. **No
+`fGetNearby*` function reads any of them**, so nothing returns wrong answers —
+an inert gap, not a live bug.
+
+The other 29 tables with `htmid` are clean (largest pile 338 rows), including
+PhotoObjAll 1.23B, mos_target 186.8M, Mask 35.5M, allspec 27.7M.
+
+#### Also found: 4 of 9 `fGetNearby*XYZ` compute the returned distance wrong
+
+`fGetNearbyAllspecXYZ`, `fGetNearbyApogeeDrpAllstarXYZ`, `fGetNearbyMosTargetXYZ`
+and `fGetNearbySpAllXYZ` recompute distance from ra/dec **without converting
+degrees to radians**, while `@nx/@ny/@nz` were built with the conversion. The
+other 5 use the precomputed `cx/cy/cz` and are correct. The row *filter* uses
+`cx/cy/cz` either way, so the right rows come back in the right order — only
+the reported `distance` value is wrong.
+
+- [ ] Change those 4 to use `cx/cy/cz` like the correct ones
+
+#### And: generalise the fGetNearby family
+
+22 `fGetNearby*` functions, ~95% boilerplate — only the table name and the
+returned column list vary. T-SQL functions cannot take a table name or use
+dynamic SQL, so a single generic TVF is impossible, but:
+
+- **Generate them** from a table list, exactly like `run_htm_add.py`'s
+  `HTM_TABLES`. Adding a table becomes a one-line dict entry.
+- **Or document the generic join** — it already works on any table with
+  htmid/cx/cy/cz and needs no new objects:
+
+```sql
+SELECT t.*, 2*DEGREES(ASIN(SQRT(POWER(@nx-t.cx,2)+POWER(@ny-t.cy,2)+POWER(@nz-t.cz,2))/2))*60 AS distance
+FROM dbo.fHtmCoverCircleEq(@ra,@dec,@r) H
+JOIN <any_table> t ON t.htmid BETWEEN H.HtmIDStart AND H.HtmIDEnd
+WHERE POWER(@nx-t.cx,2)+POWER(@ny-t.cy,2)+POWER(@nz-t.cz,2) < POWER(2*SIN(RADIANS(@r/120)),2)
+```
+
+Generating them would have caught the spAll bug: the generator must be told
+which ra/dec columns each table uses, making `plug_ra` a reviewable line of
+data instead of something buried in a hand-written function.
+
+
 ### 0. Fix the metadata load: scoped upsert instead of whole-table TRUNCATE
 
 **Highest priority — this one silently loses edits.**
@@ -165,18 +380,24 @@ newer BESTTEST schema drops — the move was deliberately faithful to the
 existing schema. If that column should not ship, dropping it is a separate
 decision.
 
-### 2. Add the 6 allspec NCIs to IndexMap
+### 2. ~~Add the allspec NCIs to IndexMap~~ — DONE 2026-07-29
 
-IndexMap has only the `code='K'` PK row for allspec. All 6 nonclustered indexes
-exist on disk but are undocumented, so a rebuild from IndexMap would silently
-drop them.
+All **7** (the 6 plus `ix_allspec_htmid`, which was not in IndexMap under any
+spelling) added to the live table via `dr20/add_indexmap_allspec_nci.sql` and to
+`schema/sql/IndexMap.sql`. Recorded `code='I'`, `compression='page'`,
+`filegroup='SPEC'`, `indexgroup='SPECTRO'`.
 
-- [ ] Insert 6 rows with `code='I'`, `compression='page'`, `filegroup='SPEC'`:
-      `ix_allspec_apogee_id`, `ix_allspec_apstar_id`, `ix_allspec_mangaid`,
-      `ix_allspec_sdssid`, `ix_allspec_specobjid`, `ix_allspec_mjd_fiberid_plate`
-- [ ] Definitions are in `dr20/allspec_nci.sql`
-- [ ] `ix_allspec_htmid` also exists on disk — check whether it is in IndexMap
-      under a different tableName spelling before adding a duplicate
+- [x] 7 rows inserted; allspec now has 1 `K` + 7 `I` rows and every index on
+      disk is accounted for
+- [x] Added to `schema/sql/IndexMap.sql`
+- [x] `ix_allspec_htmid` PAGE-compressed 2026-07-29 — it was the only allspec
+      NCI still uncompressed. 2,599.74 MB -> 1,807.80 MB, 791.94 MB saved
+      (30.5%). All 7 NCIs and the CI are now PAGE.
+
+Two index names do not follow from their field lists — `ix_allspec_sdssid` keys
+`sdss_id`, `ix_allspec_mjd_fiberid_plate` keys `plate_or_fps_field`. `fieldList`
+records the real key list, so this adds a few `spCheckDBIndexes` discrepancies
+of the known `fIndexName` class (see item 4b and the 2026-07-28 summary).
 
 ### 3. ~~Re-enable the three disabled FK constraints on DBObjects~~ — DROPPED 2026-07-28
 

@@ -61,8 +61,8 @@ WHERE code = 'K'
     'fermi_blazar',
     -- VAC 35 MWM MDwarf active
     'mdwarf_active_params',
-    -- VAC 36 BOSS CLAM
-    'boss_clam_lite', 'boss_clam_params',
+    -- VAC 36 BOSS CLAM (boss_clam_params retired 2026-07-29, not shipping in DR20)
+    'boss_clam_lite',
     -- VAC 37 BHM Visual Inspection
     'boss_vi_results',
     -- Astra tables (already in BestDR20 as heaps)
