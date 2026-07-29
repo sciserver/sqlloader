@@ -171,6 +171,37 @@ simply objects on the celestial equator and at the RA origin.)
       it. No re-backup required — spAll is 7 GB of an 11.5 TB database, and
       pre-launch fixes are being applied in situ to the live copies.
 
+#### Found 2026-07-29 by `dr20/verify_spatial.sql` — 4 open defects
+
+The generalized spatial test suite (see below) found four things. None blocks
+go-live; all are real.
+
+- [ ] **3 `fGetNearest*Eq` return an arbitrary object, not the nearest.**
+      `fGetNearestAllspecEq`, `fGetNearestApogeeDrpAllstarEq` and
+      `fGetNearestSpAllEq` do `SELECT TOP 1` over the Nearby XYZ function with
+      **no `ORDER BY distance`**. Their XYZ counterparts all have it. Inserting
+      into a table variable in order does not guarantee reading it back in that
+      order, so these are genuinely unreliable. Same three families as the
+      radians bug fixed 2026-07-28. One-line fix each.
+- [ ] **`fGetNearbyTiledTargetsEq` has never worked.** It joins a table called
+      `TiledTarget`, which does not exist in BestDR20 — the real table is
+      `sdssTiledTargetAll`. Deferred name resolution let it be created; every
+      call fails with "Invalid object name 'TiledTarget'". This also makes
+      `sdssTiledTargetAll`'s empty htmid moot — nothing can query it.
+- [ ] **`mangaDRPall.htmid` is built from `ifura`/`ifudec`, but
+      `fGetNearbyMangaObjEq` returns `objra`/`objdec`.** A mild version of the
+      spAll bug: **483 of 11,273 rows (4.3%)** have an htmid that does not match
+      their own reported position, so a cone search at the object position can
+      miss them. The rest agree only because the IFU centre and the object
+      usually fall in the same HTM triangle.
+- [ ] `sdssTiledTargetAll.htmid` is 0 on all 1,056,872 rows. **Its `cx/cy/cz`
+      are correct**, so only htmid was never populated.
+
+**Corrections to the 2026-07-28 sweep:** it recorded `mos_mangadapall` and
+`mos_mangadrpall` as "htmid = 0 on every row, no cx/cy/cz". For `mangaDRPall`
+that is wrong — htmid is fully populated (0 zeros), just from the wrong columns.
+Worth re-checking the other four tables in that list the same way.
+
 #### Related, lower priority
 
 Six tables have `htmid = 0` on every row — never populated:
