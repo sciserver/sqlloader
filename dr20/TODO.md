@@ -66,12 +66,26 @@ Consequences:
   **ra = 81.000, dec = 81.000**, an ordinary point in the northern sky, so a
   cone search near there returns **4.9M spurious rows at zero separation**.
 
-**Use `fiber_ra`/`fiber_dec`.** It is the direct successor to `plug_*`, so it
-preserves the original intent (where the fibre was = where the light came
-from), and it is clean: **0 suspicious values, versus 3 in `racat` and 18 in
-`deccat`**. The two agree within 1 arcsec for 99.4% of rows anyway.
+**Use `racat`/`deccat`** (confirm with Ani, but the data question is settled):
 
-- [ ] `UPDATE spAll SET htmid = dbo.fHtmEq(fiber_ra, fiber_dec), cx = ..., cy = ..., cz = ...`
+- **Consistently ICRS** at `coord_epoch`. `fiber_ra`/`fiber_dec` is documented
+  as *"J2000 for plate; at exp for FPS"* — a **mixed reference frame**, which
+  would index high-proper-motion FPS-era targets at their observed epoch rather
+  than a common frame.
+- **`fGetNearbySpAllXYZ` already returns `racat`/`deccat`** as its `ra`/`dec`
+  output columns. Indexing on them makes search and results agree; today the
+  function indexes on `plug_*` and reports `racat`, and that inconsistency is
+  how this survived unnoticed.
+- **Zero invalid values** across all 5,357,037 rows — no nulls, no -9999, none
+  out of range. Same for `fiber_*`. Only `plug_*` is broken. So no fallback or
+  special-casing is needed.
+
+(An earlier draft of this item recommended `fiber_ra`/`fiber_dec` on the basis
+of "3 bad racat / 18 bad deccat values". That was a bad check — it treated
+`0` as a sentinel, but RA=0 and Dec=0 are valid positions and those 21 rows are
+simply objects on the celestial equator and at the RA origin.)
+
+- [ ] `UPDATE spAll SET htmid = dbo.fHtmEq(racat, deccat), cx = ..., cy = ..., cz = ...`
       following the pattern in `run_htm_add.py` (5.4M rows, minutes)
 - [ ] Rebuild `ix_spAll_htmid`
 - [ ] Re-verify: probe `fGetNearbySpAllEq` with a known spAll position and
