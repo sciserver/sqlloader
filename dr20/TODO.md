@@ -93,7 +93,10 @@ simply objects on the celestial equator and at the RA origin.)
 - [ ] Fix the source: spAll is **not** in `run_htm_add.py`'s `HTM_TABLES`, so
       this came from the spAll load path — check `gen_spec_load.py` /
       `load_spec_tables.sql`
-- [ ] **Re-backup after fixing** (the 2026-07-28 backup contains the bad data)
+- [ ] Apply the same fix to the restored production copies. The 2026-07-28
+      backup contains the bad spAll data, so sdss5a and sdss5b will each need
+      it. No re-backup required — spAll is 7 GB of an 11.5 TB database, and
+      pre-launch fixes are being applied in situ to the live copies.
 
 #### Related, lower priority
 
