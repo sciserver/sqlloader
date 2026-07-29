@@ -129,21 +129,33 @@ EXCLUDE = {
 }
 
 
+def tracking_path(server):
+    """One tracking file PER SERVER.
+
+    A single shared file cannot be used: this script writes tracking after every
+    statistic, and save_tracking is a read-modify-write of the whole file. Two
+    runs against different servers at the same time -- which is the normal way to
+    do sdss5a and sdss5b -- would silently clobber each other's progress.
+    """
+    return os.path.join(SCRIPT_DIR, f'stats_updated_{server.lower()}.json')
+
+
 def load_tracking(server):
-    if not os.path.exists(TRACKING_JSON):
-        return {}
-    with open(TRACKING_JSON) as fh:
-        return json.load(fh).get(server.lower(), {})
+    path = tracking_path(server)
+    if os.path.exists(path):
+        with open(path) as fh:
+            return json.load(fh)
+    # Fall back to the older single shared file, so a run started before the
+    # split can still resume.
+    if os.path.exists(TRACKING_JSON):
+        with open(TRACKING_JSON) as fh:
+            return json.load(fh).get(server.lower(), {})
+    return {}
 
 
 def save_tracking(server, done):
-    all_data = {}
-    if os.path.exists(TRACKING_JSON):
-        with open(TRACKING_JSON) as fh:
-            all_data = json.load(fh)
-    all_data[server.lower()] = done
-    with open(TRACKING_JSON, 'w') as fh:
-        json.dump(all_data, fh, indent=2)
+    with open(tracking_path(server), 'w') as fh:
+        json.dump(done, fh, indent=2)
 
 
 def get_targets(conn, scope):
