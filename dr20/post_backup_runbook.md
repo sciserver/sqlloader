@@ -50,13 +50,14 @@ Expect **no rows**. If any appear, run `drop_metadata_fks.sql` first.
 | 7 | Document allspec's 7 NCIs in IndexMap | `add_indexmap_allspec_nci.sql` | seconds |
 | 8 | Regenerate and reload the metadata | see below | 1 min |
 | 9 | **Verify everything** | `verify_spatial.sql` | 1 min |
-| 10 | Build the statistics | `run_update_stats.py` | ~41 min |
+| 10 | Build the statistics | `run_update_stats.py` | 11–18 min |
 | 11 | Checkpoint and reclaim the transaction logs | see below | minutes |
 
-> **Step 11 must follow step 10.** Building statistics generates log activity,
-> so shrinking the log before it just means growing it again. On sdss5a the log
-> shrink was run before step 10 existed, so 5a needs step 11 repeated after its
-> statistics pass.
+> **Step 10 and step 11 are independent.** `UPDATE STATISTICS` is essentially a
+> read: it writes only small statistics blobs, not bulk log records. Verified on
+> sdss5a 2026-07-29 — its logs were shrunk to 2.50 GB, then a 122-statistic /
+> 252.5 GB pass ran, and they were still 2.50 GB afterwards. The log growth
+> comes from steps 2–4, so step 11 only has to follow those.
 
 ---
 
@@ -233,8 +234,14 @@ sounds: **FULLSCAN scans the table once per statistic.**
 
 | scope | statistics | scan volume | time |
 |---|---:|---:|---:|
-| `unbuilt` (default) | 122 | 252.5 GB | **~41 min** |
-| `dr20` | 585 | 3,109.5 GB | **~8.5 hours** |
+| `unbuilt` (default) | 122 | 252.5 GB | **11–18 min** on the prod boxes |
+| `dr20` | 585 | 3,109.5 GB | hours |
+
+Measured 2026-07-29: sdss5b 11.1 min, sdss5a 17.6 min. The script's own estimate
+is derived from a 104 MB/s rate observed on **sdss4c**, which is markedly slower
+than the production machines (sdss5b sustained 387 MB/s), so expect it to
+over-predict by 2–4x. Conservative in the right direction, but do not plan a
+maintenance window from it.
 
 `mos_allwise` is the clearest case: 60.4 GB with 9 statistics, of which exactly
 1 is missing. Whole-table FULLSCAN reads ~540 GB; targeting the one statistic

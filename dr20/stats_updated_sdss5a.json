@@ -1,0 +1,1222 @@
+{
+  "mos_observatory.mos_observatory_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_observatory",
+    "statistic": "mos_observatory_pkey",
+    "rows": 2,
+    "mb": 0.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_obsmode.mos_obsmode_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_obsmode",
+    "statistic": "mos_obsmode_pkey",
+    "rows": 14,
+    "mb": 0.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_apo_camera.mos_opsdb_apo_camera_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_opsdb_apo_camera",
+    "statistic": "mos_opsdb_apo_camera_pkey",
+    "rows": 3,
+    "mb": 0.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_apo_exposure_flavor.mos_opsdb_apo_exposure_flavor_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_opsdb_apo_exposure_flavor",
+    "statistic": "mos_opsdb_apo_exposure_flavor_pkey",
+    "rows": 14,
+    "mb": 0.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_lco_camera.mos_opsdb_lco_camera_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_opsdb_lco_camera",
+    "statistic": "mos_opsdb_lco_camera_pkey",
+    "rows": 5,
+    "mb": 0.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_lco_completion_status.mos_opsdb_lco_completion_status_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_opsdb_lco_completion_status",
+    "statistic": "mos_opsdb_lco_completion_status_pkey",
+    "rows": 4,
+    "mb": 0.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_lco_exposure_flavor.mos_opsdb_lco_exposure_flavor_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_opsdb_lco_exposure_flavor",
+    "statistic": "mos_opsdb_lco_exposure_flavor_pkey",
+    "rows": 14,
+    "mb": 0.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_positioner_status.mos_positioner_status_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_positioner_status",
+    "statistic": "mos_positioner_status_pkey",
+    "rows": 2,
+    "mb": 0.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "LVM_DAPall.ci_LVM_DAPall_expnum": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "LVM_DAPall",
+    "statistic": "ci_LVM_DAPall_expnum",
+    "rows": 169,
+    "mb": 0.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "occam_cluster.pk_occam_cluster_name": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "occam_cluster",
+    "statistic": "pk_occam_cluster_name",
+    "rows": 158,
+    "mb": 0.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_targeting_generation.mos_targeting_generation_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_targeting_generation",
+    "statistic": "mos_targeting_generation_pkey",
+    "rows": 11,
+    "mb": 0.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_targeting_generation_to_version.mos_targeting_generation_to_version_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_targeting_generation_to_version",
+    "statistic": "mos_targeting_generation_to_version_pkey",
+    "rows": 14,
+    "mb": 0.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "boss_occam_cluster.ci_boss_occam_cluster_name": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "boss_occam_cluster",
+    "statistic": "ci_boss_occam_cluster_name",
+    "rows": 111,
+    "mb": 0.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_mwm_tess_ob.mos_mwm_tess_ob_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_mwm_tess_ob",
+    "statistic": "mos_mwm_tess_ob_pkey",
+    "rows": 364,
+    "mb": 0.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "LVM_DRPall.ci_LVM_DRPall_expnum": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "LVM_DRPall",
+    "statistic": "ci_LVM_DRPall_expnum",
+    "rows": 169,
+    "mb": 0.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_targeting_generation_to_carton.mos_targeting_generation_to_carton_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_targeting_generation_to_carton",
+    "statistic": "mos_targeting_generation_to_carton_pkey",
+    "rows": 1702,
+    "mb": 0.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "occam_member.pk_occam_member_sdss_id": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "occam_member",
+    "statistic": "pk_occam_member_sdss_id",
+    "rows": 1191,
+    "mb": 0.3,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_sdssv_boss_conflist.mos_sdssv_boss_conflist_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_sdssv_boss_conflist",
+    "statistic": "mos_sdssv_boss_conflist_pkey",
+    "rows": 393,
+    "mb": 0.4,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "apogeeDesign.pk_apogeeDesign_designid": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "apogeeDesign",
+    "statistic": "pk_apogeeDesign_designid",
+    "rows": 4149,
+    "mb": 0.5,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_catalog_to_marvels_dr11_star.mos_catalog_to_marvels_dr11_star_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_catalog_to_marvels_dr11_star",
+    "statistic": "mos_catalog_to_marvels_dr11_star_pkey",
+    "rows": 7066,
+    "mb": 0.6,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_lco_configuration.mos_opsdb_lco_configuration_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_opsdb_lco_configuration",
+    "statistic": "mos_opsdb_lco_configuration_pkey",
+    "rows": 11975,
+    "mb": 0.7,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_catalog_to_marvels_dr12_star.mos_catalog_to_marvels_dr12_star_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_catalog_to_marvels_dr12_star",
+    "statistic": "mos_catalog_to_marvels_dr12_star_pkey",
+    "rows": 11040,
+    "mb": 0.7,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "boss_occam_member.ci_boss_occam_member_sdss_id": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "boss_occam_member",
+    "statistic": "ci_boss_occam_member_sdss_id",
+    "rows": 3834,
+    "mb": 0.7,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_lco_exposure.mos_opsdb_lco_exposure_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_opsdb_lco_exposure",
+    "statistic": "mos_opsdb_lco_exposure_pkey",
+    "rows": 15969,
+    "mb": 0.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mangaHIall.pk_mangaHIall_plateIFU_session": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mangaHIall",
+    "statistic": "pk_mangaHIall_plateIFU_session",
+    "rows": 6632,
+    "mb": 0.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_apo_configuration.mos_opsdb_apo_configuration_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_opsdb_apo_configuration",
+    "statistic": "mos_opsdb_apo_configuration_pkey",
+    "rows": 17462,
+    "mb": 1.0,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_sdssv_plateholes_meta.mos_sdssv_plateholes_meta_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_sdssv_plateholes_meta",
+    "statistic": "mos_sdssv_plateholes_meta_pkey",
+    "rows": 374,
+    "mb": 1.0,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_bhm_efeds_veto.mos_bhm_efeds_veto_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_bhm_efeds_veto",
+    "statistic": "mos_bhm_efeds_veto_pkey",
+    "rows": 6300,
+    "mb": 1.4,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_catalog_to_mastar_goodstars.mos_catalog_to_mastar_goodstars_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_catalog_to_mastar_goodstars",
+    "statistic": "mos_catalog_to_mastar_goodstars_pkey",
+    "rows": 25474,
+    "mb": 1.4,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_lco_camera_frame.mos_opsdb_lco_camera_frame_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_opsdb_lco_camera_frame",
+    "statistic": "mos_opsdb_lco_camera_frame_pkey",
+    "rows": 31544,
+    "mb": 1.8,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mangaFirefly_mastar.pk_mangaFirefly_mastar_plateIFU": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mangaFirefly_mastar",
+    "statistic": "pk_mangaFirefly_mastar_plateIFU",
+    "rows": 10735,
+    "mb": 2.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mangaFirefly_miles.pk_mangaFirefly_miles_plateIFU": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mangaFirefly_miles",
+    "statistic": "pk_mangaFirefly_miles_plateIFU",
+    "rows": 10735,
+    "mb": 2.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_catalog_to_mangatarget.mos_catalog_to_mangatarget_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_catalog_to_mangatarget",
+    "statistic": "mos_catalog_to_mangatarget_pkey",
+    "rows": 43068,
+    "mb": 2.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_catalog_to_bhm_efeds_veto.mos_catalog_to_bhm_efeds_veto_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_catalog_to_bhm_efeds_veto",
+    "statistic": "mos_catalog_to_bhm_efeds_veto_pkey",
+    "rows": 10326,
+    "mb": 2.3,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_apo_camera_frame.mos_opsdb_apo_camera_frame_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_opsdb_apo_camera_frame",
+    "statistic": "mos_opsdb_apo_camera_frame_pkey",
+    "rows": 48440,
+    "mb": 2.4,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_bhm_rm_tweaks.mos_bhm_rm_tweaks_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_bhm_rm_tweaks",
+    "statistic": "mos_bhm_rm_tweaks_pkey",
+    "rows": 1914,
+    "mb": 2.7,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_cataclysmic_variables.mos_cataclysmic_variables_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_cataclysmic_variables",
+    "statistic": "mos_cataclysmic_variables_pkey",
+    "rows": 5167,
+    "mb": 3.8,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_bhm_spiders_clusters_superset.mos_bhm_spiders_clusters_superset_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_bhm_spiders_clusters_superset",
+    "statistic": "mos_bhm_spiders_clusters_superset_pkey",
+    "rows": 11576,
+    "mb": 4.7,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_zari18pms.mos_zari18pms_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_zari18pms",
+    "statistic": "mos_zari18pms_pkey",
+    "rows": 43595,
+    "mb": 4.7,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "manga_GZ2.pk_manga_GZ2_plateIFU": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "manga_GZ2",
+    "statistic": "pk_manga_GZ2_plateIFU",
+    "rows": 9622,
+    "mb": 4.8,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_bhm_rm_v1.mos_bhm_rm_v1_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_bhm_rm_v1",
+    "statistic": "mos_bhm_rm_v1_pkey",
+    "rows": 5470,
+    "mb": 5.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_bhm_rm_v1_1.mos_bhm_rm_v1_1_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_bhm_rm_v1_1",
+    "statistic": "mos_bhm_rm_v1_1_pkey",
+    "rows": 5987,
+    "mb": 5.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_bhm_rm_v1_3.mos_bhm_rm_v1_3_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_bhm_rm_v1_3",
+    "statistic": "mos_bhm_rm_v1_3_pkey",
+    "rows": 5987,
+    "mb": 5.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_bhm_spiders_agn_superset.mos_bhm_spiders_agn_superset_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_bhm_spiders_agn_superset",
+    "statistic": "mos_bhm_spiders_agn_superset_pkey",
+    "rows": 18319,
+    "mb": 6.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_tess_toi.mos_tess_toi_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_tess_toi",
+    "statistic": "mos_tess_toi_pkey",
+    "rows": 221808,
+    "mb": 8.3,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_sagitta.mos_sagitta_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_sagitta",
+    "statistic": "mos_sagitta_pkey",
+    "rows": 175349,
+    "mb": 9.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mastar_goodstars_xmatch_gaiadr2.pk_mastar_goodstars_xmatch_gaiad": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mastar_goodstars_xmatch_gaiadr2",
+    "statistic": "pk_mastar_goodstars_xmatch_gaiad",
+    "rows": 24290,
+    "mb": 12.0,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_sagitta_edr3.mos_sagitta_edr3_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_sagitta_edr3",
+    "statistic": "mos_sagitta_edr3_pkey",
+    "rows": 214949,
+    "mb": 14.8,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_opsdb_lco_design_to_status.mos_opsdb_lco_design_to_status_pkey": {
+    "updated_at": "2026-07-29 14:01:33",
+    "table": "mos_opsdb_lco_design_to_status",
+    "statistic": "mos_opsdb_lco_design_to_status_pkey",
+    "rows": 763589,
+    "mb": 17.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_bhm_csc.mos_bhm_csc_pkey": {
+    "updated_at": "2026-07-29 14:01:34",
+    "table": "mos_bhm_csc",
+    "statistic": "mos_bhm_csc_pkey",
+    "rows": 86050,
+    "mb": 22.6,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_catalog_to_milliquas_7_7.mos_catalog_to_milliquas_7_7_pkey": {
+    "updated_at": "2026-07-29 14:01:34",
+    "table": "mos_catalog_to_milliquas_7_7",
+    "statistic": "mos_catalog_to_milliquas_7_7_pkey",
+    "rows": 1310382,
+    "mb": 27.4,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.6
+  },
+  "mos_tess_toi_v05.mos_tess_toi_v05_pkey": {
+    "updated_at": "2026-07-29 14:01:34",
+    "table": "mos_tess_toi_v05",
+    "statistic": "mos_tess_toi_v05_pkey",
+    "rows": 280151,
+    "mb": 31.5,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "manga_GZD_auto.pk_manga_GZD_auto_plateIFU": {
+    "updated_at": "2026-07-29 14:01:34",
+    "table": "manga_GZD_auto",
+    "statistic": "pk_manga_GZD_auto_plateIFU",
+    "rows": 3620,
+    "mb": 33.7,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_apo_design_to_status.mos_opsdb_apo_design_to_status_pkey": {
+    "updated_at": "2026-07-29 14:01:34",
+    "table": "mos_opsdb_apo_design_to_status",
+    "statistic": "mos_opsdb_apo_design_to_status_pkey",
+    "rows": 763589,
+    "mb": 34.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_rave_dr6_gauguin_madera.mos_rave_dr6_gauguin_madera_pkey": {
+    "updated_at": "2026-07-29 14:01:35",
+    "table": "mos_rave_dr6_gauguin_madera",
+    "statistic": "mos_rave_dr6_gauguin_madera_pkey",
+    "rows": 453490,
+    "mb": 40.6,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_tess_toi_v1.mos_tess_toi_v1_pkey": {
+    "updated_at": "2026-07-29 14:01:35",
+    "table": "mos_tess_toi_v1",
+    "statistic": "mos_tess_toi_v1_pkey",
+    "rows": 426023,
+    "mb": 47.8,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_catalog_to_bhm_csc.mos_catalog_to_bhm_csc_pkey": {
+    "updated_at": "2026-07-29 14:01:35",
+    "table": "mos_catalog_to_bhm_csc",
+    "statistic": "mos_catalog_to_bhm_csc_pkey",
+    "rows": 187499,
+    "mb": 50.7,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_bhm_csc_v2.mos_bhm_csc_v2_pkey": {
+    "updated_at": "2026-07-29 14:01:35",
+    "table": "mos_bhm_csc_v2",
+    "statistic": "mos_bhm_csc_v2_pkey",
+    "rows": 148443,
+    "mb": 65.0,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_rave_dr6_xgaiae3.mos_rave_dr6_xgaiae3_pkey": {
+    "updated_at": "2026-07-29 14:01:35",
+    "table": "mos_rave_dr6_xgaiae3",
+    "statistic": "mos_rave_dr6_xgaiae3_pkey",
+    "rows": 517357,
+    "mb": 78.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "mos_bhm_csc_v3.mos_bhm_csc_v3_pkey": {
+    "updated_at": "2026-07-29 14:01:35",
+    "table": "mos_bhm_csc_v3",
+    "statistic": "mos_bhm_csc_v3_pkey",
+    "rows": 188647,
+    "mb": 82.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_skymapper_gaia.mos_skymapper_gaia_pkey": {
+    "updated_at": "2026-07-29 14:01:35",
+    "table": "mos_skymapper_gaia",
+    "statistic": "mos_skymapper_gaia_pkey",
+    "rows": 3339040,
+    "mb": 95.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.0
+  },
+  "mos_yso_clustering.mos_yso_clustering_pkey": {
+    "updated_at": "2026-07-29 14:01:36",
+    "table": "mos_yso_clustering",
+    "statistic": "mos_yso_clustering_pkey",
+    "rows": 814380,
+    "mb": 118.3,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.4
+  },
+  "mos_catalog_to_glimpse.mos_catalog_to_glimpse_pkey": {
+    "updated_at": "2026-07-29 14:01:37",
+    "table": "mos_catalog_to_glimpse",
+    "statistic": "mos_catalog_to_glimpse_pkey",
+    "rows": 9522652,
+    "mb": 134.0,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 4.5
+  },
+  "mos_catalog_to_sdss_dr17_specobj.mos_catalog_to_sdss_dr17_specobj_pkey": {
+    "updated_at": "2026-07-29 14:01:41",
+    "table": "mos_catalog_to_sdss_dr17_specobj",
+    "statistic": "mos_catalog_to_sdss_dr17_specobj_pkey",
+    "rows": 5809366,
+    "mb": 135.5,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 4.1
+  },
+  "StarFlow_summary.PK__StarFlow__32150787A7183D13": {
+    "updated_at": "2026-07-29 14:01:45",
+    "table": "StarFlow_summary",
+    "statistic": "PK__StarFlow__32150787A7183D13",
+    "rows": 1059521,
+    "mb": 139.8,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.4
+  },
+  "mos_sdssv_boss_spall.mos_sdssv_boss_spall_pkey": {
+    "updated_at": "2026-07-29 14:01:46",
+    "table": "mos_sdssv_boss_spall",
+    "statistic": "mos_sdssv_boss_spall_pkey",
+    "rows": 195500,
+    "mb": 152.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "mos_best_brightest.mos_best_brightest_pkey": {
+    "updated_at": "2026-07-29 14:01:46",
+    "table": "mos_best_brightest",
+    "statistic": "mos_best_brightest_pkey",
+    "rows": 646940,
+    "mb": 173.3,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_sdss_dr17_apogee_allstarmerge.mos_sdss_dr17_apogee_allstarmerge_pkey": {
+    "updated_at": "2026-07-29 14:01:46",
+    "table": "mos_sdss_dr17_apogee_allstarmerge",
+    "statistic": "mos_sdss_dr17_apogee_allstarmerge_pkey",
+    "rows": 648515,
+    "mb": 230.6,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.4
+  },
+  "mos_catalog_to_sdss_dr16_specobj.mos_catalog_to_sdss_dr16_specobj_pkey": {
+    "updated_at": "2026-07-29 14:01:47",
+    "table": "mos_catalog_to_sdss_dr16_specobj",
+    "statistic": "mos_catalog_to_sdss_dr16_specobj_pkey",
+    "rows": 10459312,
+    "mb": 232.8,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 6.3
+  },
+  "mos_xmm_om_suss_5_0.mos_xmm_om_suss_5_0_pkey": {
+    "updated_at": "2026-07-29 14:01:53",
+    "table": "mos_xmm_om_suss_5_0",
+    "statistic": "mos_xmm_om_suss_5_0_pkey",
+    "rows": 1006136,
+    "mb": 236.0,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.1
+  },
+  "mos_sdssv_plateholes.mos_sdssv_plateholes_pkey": {
+    "updated_at": "2026-07-29 14:01:54",
+    "table": "mos_sdssv_plateholes",
+    "statistic": "mos_sdssv_plateholes_pkey",
+    "rows": 312384,
+    "mb": 271.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.4
+  },
+  "mos_bhm_rm_v0_2.mos_bhm_rm_v0_2_pkey": {
+    "updated_at": "2026-07-29 14:01:54",
+    "table": "mos_bhm_rm_v0_2",
+    "statistic": "mos_bhm_rm_v0_2_pkey",
+    "rows": 135653,
+    "mb": 300.8,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_sdss_apogeeallstarmerge_r13.mos_sdss_apogeeallstarmerge_r13_pkey": {
+    "updated_at": "2026-07-29 14:01:55",
+    "table": "mos_sdss_apogeeallstarmerge_r13",
+    "statistic": "mos_sdss_apogeeallstarmerge_r13_pkey",
+    "rows": 617583,
+    "mb": 301.0,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.5
+  },
+  "mos_bhm_rm_v0.mos_bhm_rm_v0_pkey": {
+    "updated_at": "2026-07-29 14:01:55",
+    "table": "mos_bhm_rm_v0",
+    "statistic": "mos_bhm_rm_v0_pkey",
+    "rows": 135653,
+    "mb": 304.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.4
+  },
+  "mos_catalog_to_skies_v1.mos_catalog_to_skies_v1_pkey": {
+    "updated_at": "2026-07-29 14:01:56",
+    "table": "mos_catalog_to_skies_v1",
+    "statistic": "mos_catalog_to_skies_v1_pkey",
+    "rows": 23876823,
+    "mb": 310.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 9.4
+  },
+  "mos_catalog_to_skies_v2.mos_catalog_to_skies_v2_pkey": {
+    "updated_at": "2026-07-29 14:02:05",
+    "table": "mos_catalog_to_skies_v2",
+    "statistic": "mos_catalog_to_skies_v2_pkey",
+    "rows": 25197586,
+    "mb": 334.6,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 11.9
+  },
+  "mos_tycho2.mos_tycho2_pkey": {
+    "updated_at": "2026-07-29 14:02:17",
+    "table": "mos_tycho2",
+    "statistic": "mos_tycho2_pkey",
+    "rows": 2542994,
+    "mb": 413.6,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 2.3
+  },
+  "mos_uvotssc1.mos_uvotssc1_pkey": {
+    "updated_at": "2026-07-29 14:02:19",
+    "table": "mos_uvotssc1",
+    "statistic": "mos_uvotssc1_pkey",
+    "rows": 2101401,
+    "mb": 458.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.8
+  },
+  "mos_mipsgal.mos_mipsgal_pkey": {
+    "updated_at": "2026-07-29 14:02:20",
+    "table": "mos_mipsgal",
+    "statistic": "mos_mipsgal_pkey",
+    "rows": 855305,
+    "mb": 479.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.9
+  },
+  "mos_catalog_to_skymapper_dr2.mos_catalog_to_skymapper_dr2_pkey": {
+    "updated_at": "2026-07-29 14:02:21",
+    "table": "mos_catalog_to_skymapper_dr2",
+    "statistic": "mos_catalog_to_skymapper_dr2_pkey",
+    "rows": 36738727,
+    "mb": 483.3,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 12.8
+  },
+  "mos_wd_gaia_dr3.mos_wd_gaia_dr3_pkey": {
+    "updated_at": "2026-07-29 14:02:34",
+    "table": "mos_wd_gaia_dr3",
+    "statistic": "mos_wd_gaia_dr3_pkey",
+    "rows": 314731,
+    "mb": 489.0,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "mos_sdss_dr13_photoobj_primary.mos_sdss_dr13_photoobj_primary_pkey": {
+    "updated_at": "2026-07-29 14:02:34",
+    "table": "mos_sdss_dr13_photoobj_primary",
+    "statistic": "mos_sdss_dr13_photoobj_primary_pkey",
+    "rows": 20007080,
+    "mb": 499.7,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 4.7
+  },
+  "mos_sdss_dr19p_speclite.mos_sdss_dr19p_speclite_pkey": {
+    "updated_at": "2026-07-29 14:02:39",
+    "table": "mos_sdss_dr19p_speclite",
+    "statistic": "mos_sdss_dr19p_speclite_pkey",
+    "rows": 6103248,
+    "mb": 510.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.7
+  },
+  "mos_xmm_om_suss_4_1.mos_xmm_om_suss_4_1_pkey": {
+    "updated_at": "2026-07-29 14:02:40",
+    "table": "mos_xmm_om_suss_4_1",
+    "statistic": "mos_xmm_om_suss_4_1_pkey",
+    "rows": 928973,
+    "mb": 512.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.5
+  },
+  "mos_catalog_to_legacy_survey_dr10.mos_catalog_to_legacy_survey_dr10_pkey": {
+    "updated_at": "2026-07-29 14:02:41",
+    "table": "mos_catalog_to_legacy_survey_dr10",
+    "statistic": "mos_catalog_to_legacy_survey_dr10_pkey",
+    "rows": 37735461,
+    "mb": 564.4,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 12.6
+  },
+  "mos_catalog_to_guvcat.mos_catalog_to_guvcat_pkey": {
+    "updated_at": "2026-07-29 14:02:54",
+    "table": "mos_catalog_to_guvcat",
+    "statistic": "mos_catalog_to_guvcat_pkey",
+    "rows": 40108740,
+    "mb": 883.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 13.2
+  },
+  "mwm_boss_allstar.ci_mwm_boss_allstar_spectrum_PK": {
+    "updated_at": "2026-07-29 14:03:07",
+    "table": "mwm_boss_allstar",
+    "statistic": "ci_mwm_boss_allstar_spectrum_PK",
+    "rows": 1803883,
+    "mb": 968.0,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.1
+  },
+  "m_dwarf_type_boss_star.ci_m_dwarf_type_boss_star_spectrum_PK": {
+    "updated_at": "2026-07-29 14:03:08",
+    "table": "m_dwarf_type_boss_star",
+    "statistic": "ci_m_dwarf_type_boss_star_spectrum_PK",
+    "rows": 1802746,
+    "mb": 1008.6,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.2
+  },
+  "snow_white_boss_star.ci_snow_white_boss_star_spectrum_PK": {
+    "updated_at": "2026-07-29 14:03:09",
+    "table": "snow_white_boss_star",
+    "statistic": "ci_snow_white_boss_star_spectrum_PK",
+    "rows": 1803883,
+    "mb": 1052.8,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.1
+  },
+  "boss_net_boss_star.ci_boss_net_boss_star_spectrum_PK": {
+    "updated_at": "2026-07-29 14:03:10",
+    "table": "boss_net_boss_star",
+    "statistic": "ci_boss_net_boss_star_spectrum_PK",
+    "rows": 1803883,
+    "mb": 1078.5,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.1
+  },
+  "slam_boss_star.ci_slam_boss_star_spectrum_PK": {
+    "updated_at": "2026-07-29 14:03:11",
+    "table": "slam_boss_star",
+    "statistic": "ci_slam_boss_star_spectrum_PK",
+    "rows": 1803883,
+    "mb": 1083.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.2
+  },
+  "mos_catalog_to_sdss_dr13_photoobj_primary.mos_catalog_to_sdss_dr13_photoobj_primary_pkey": {
+    "updated_at": "2026-07-29 14:03:12",
+    "table": "mos_catalog_to_sdss_dr13_photoobj_primary",
+    "statistic": "mos_catalog_to_sdss_dr13_photoobj_primary_pkey",
+    "rows": 61411894,
+    "mb": 1104.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 22.1
+  },
+  "mos_catalog_to_gaia_dr3_source.mos_catalog_to_gaia_dr3_source_pkey": {
+    "updated_at": "2026-07-29 14:03:35",
+    "table": "mos_catalog_to_gaia_dr3_source",
+    "statistic": "mos_catalog_to_gaia_dr3_source_pkey",
+    "rows": 67281150,
+    "mb": 1108.6,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 39.5
+  },
+  "mos_xpfeh_gaia_dr3.mos_xpfeh_gaia_dr3_pkey": {
+    "updated_at": "2026-07-29 14:04:14",
+    "table": "mos_xpfeh_gaia_dr3",
+    "statistic": "mos_xpfeh_gaia_dr3_pkey",
+    "rows": 30434520,
+    "mb": 1139.7,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 19.6
+  },
+  "aspcapStarCovar.pk_aspcapStarCovar_aspcap_covar_": {
+    "updated_at": "2026-07-29 14:04:34",
+    "table": "aspcapStarCovar",
+    "statistic": "pk_aspcapStarCovar_aspcap_covar_",
+    "rows": 35961149,
+    "mb": 1154.6,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 45.1
+  },
+  "mos_sdss_dr16_qso.mos_sdss_dr16_qso_pkey": {
+    "updated_at": "2026-07-29 14:05:19",
+    "table": "mos_sdss_dr16_qso",
+    "statistic": "mos_sdss_dr16_qso_pkey",
+    "rows": 750255,
+    "mb": 1168.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.2
+  },
+  "mos_catalog_to_legacy_survey_dr8.mos_catalog_to_legacy_survey_dr8_pkey": {
+    "updated_at": "2026-07-29 14:05:20",
+    "table": "mos_catalog_to_legacy_survey_dr8",
+    "statistic": "mos_catalog_to_legacy_survey_dr8_pkey",
+    "rows": 81777039,
+    "mb": 1250.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 44.7
+  },
+  "mos_skies_v1.mos_skies_v1_pkey": {
+    "updated_at": "2026-07-29 14:06:05",
+    "table": "mos_skies_v1",
+    "statistic": "mos_skies_v1_pkey",
+    "rows": 23876823,
+    "mb": 1397.8,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 7.4
+  },
+  "mos_catalog_to_supercosmos.mos_catalog_to_supercosmos_pkey": {
+    "updated_at": "2026-07-29 14:06:12",
+    "table": "mos_catalog_to_supercosmos",
+    "statistic": "mos_catalog_to_supercosmos_pkey",
+    "rows": 68293540,
+    "mb": 1488.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 29.2
+  },
+  "mos_skies_v2.mos_skies_v2_pkey": {
+    "updated_at": "2026-07-29 14:06:41",
+    "table": "mos_skies_v2",
+    "statistic": "mos_skies_v2_pkey",
+    "rows": 25197586,
+    "mb": 1654.3,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 9.6
+  },
+  "mos_catalog_to_panstarrs1.mos_catalog_to_panstarrs1_pkey": {
+    "updated_at": "2026-07-29 14:06:51",
+    "table": "mos_catalog_to_panstarrs1",
+    "statistic": "mos_catalog_to_panstarrs1_pkey",
+    "rows": 92585030,
+    "mb": 1742.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 82.3
+  },
+  "mos_visual_binary_gaia_dr3.mos_visual_binary_gaia_dr3_pkey": {
+    "updated_at": "2026-07-29 14:08:13",
+    "table": "mos_visual_binary_gaia_dr3",
+    "statistic": "mos_visual_binary_gaia_dr3_pkey",
+    "rows": 1771306,
+    "mb": 1934.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 7.4
+  },
+  "mwm_boss_allvisit.ci_mwm_boss_allvisit_spectrum_PK": {
+    "updated_at": "2026-07-29 14:08:21",
+    "table": "mwm_boss_allvisit",
+    "statistic": "ci_mwm_boss_allvisit_spectrum_PK",
+    "rows": 3364323,
+    "mb": 1938.4,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 7.2
+  },
+  "mos_catalog_to_twomass_psc.mos_catalog_to_twomass_psc_pkey1": {
+    "updated_at": "2026-07-29 14:08:28",
+    "table": "mos_catalog_to_twomass_psc",
+    "statistic": "mos_catalog_to_twomass_psc_pkey1",
+    "rows": 168117282,
+    "mb": 2246.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 89.7
+  },
+  "mos_revised_magnitude.mos_revised_magnitude_pkey": {
+    "updated_at": "2026-07-29 14:09:58",
+    "table": "mos_revised_magnitude",
+    "statistic": "mos_revised_magnitude_pkey",
+    "rows": 50320585,
+    "mb": 2551.4,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 21.0
+  },
+  "mos_sdss_dr16_specobj.mos_sdss_dr16_specobj_pkey": {
+    "updated_at": "2026-07-29 14:10:19",
+    "table": "mos_sdss_dr16_specobj",
+    "statistic": "mos_sdss_dr16_specobj_pkey",
+    "rows": 5299600,
+    "mb": 2620.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 7.6
+  },
+  "corv_boss_visit.ci_corv_boss_visit_spectrum_PK": {
+    "updated_at": "2026-07-29 14:10:26",
+    "table": "corv_boss_visit",
+    "statistic": "ci_corv_boss_visit_spectrum_PK",
+    "rows": 5328827,
+    "mb": 2783.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 5.2
+  },
+  "m_dwarf_type_boss_visit.ci_m_dwarf_type_boss_visit_spectrum_PK": {
+    "updated_at": "2026-07-29 14:10:31",
+    "table": "m_dwarf_type_boss_visit",
+    "statistic": "ci_m_dwarf_type_boss_visit_spectrum_PK",
+    "rows": 5356640,
+    "mb": 2815.5,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 3.6
+  },
+  "mos_sdss_dr17_specobj.mos_sdss_dr17_specobj_pkey": {
+    "updated_at": "2026-07-29 14:10:35",
+    "table": "mos_sdss_dr17_specobj",
+    "statistic": "mos_sdss_dr17_specobj_pkey",
+    "rows": 5801200,
+    "mb": 2923.5,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 4.9
+  },
+  "boss_net_boss_visit.ci_boss_net_boss_visit_spectrum_PK": {
+    "updated_at": "2026-07-29 14:10:40",
+    "table": "boss_net_boss_visit",
+    "statistic": "ci_boss_net_boss_visit_spectrum_PK",
+    "rows": 5357038,
+    "mb": 2981.6,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 3.8
+  },
+  "line_forest_boss_star.ci_line_forest_boss_star_spectrum_PK": {
+    "updated_at": "2026-07-29 14:10:44",
+    "table": "line_forest_boss_star",
+    "statistic": "ci_line_forest_boss_star_spectrum_PK",
+    "rows": 1803883,
+    "mb": 3038.0,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 3.1
+  },
+  "mos_allstar_dr17_synspec_rev1.mos_allstar_dr17_synspec_rev1_pkey": {
+    "updated_at": "2026-07-29 14:10:47",
+    "table": "mos_allstar_dr17_synspec_rev1",
+    "statistic": "mos_allstar_dr17_synspec_rev1_pkey",
+    "rows": 733901,
+    "mb": 5918.0,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 9.6
+  },
+  "line_forest_boss_visit.ci_line_forest_boss_visit_spectrum_PK": {
+    "updated_at": "2026-07-29 14:10:57",
+    "table": "line_forest_boss_visit",
+    "statistic": "ci_line_forest_boss_visit_spectrum_PK",
+    "rows": 5357038,
+    "mb": 7479.5,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 7.0
+  },
+  "mos_skymapper_dr2.mos_skymapper_dr2_pkey": {
+    "updated_at": "2026-07-29 14:11:04",
+    "table": "mos_skymapper_dr2",
+    "statistic": "mos_skymapper_dr2_pkey",
+    "rows": 36733293,
+    "mb": 9987.6,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 17.5
+  },
+  "mos_twomass_psc.mos_twomass_psc_pkey": {
+    "updated_at": "2026-07-29 14:11:21",
+    "table": "mos_twomass_psc",
+    "statistic": "mos_twomass_psc_pkey",
+    "rows": 56915690,
+    "mb": 10545.7,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 41.9
+  },
+  "mos_bailer_jones_edr3.mos_bailer_jones_edr3_pkey": {
+    "updated_at": "2026-07-29 14:12:03",
+    "table": "mos_bailer_jones_edr3",
+    "statistic": "mos_bailer_jones_edr3_pkey",
+    "rows": 60465191,
+    "mb": 12770.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 15.8
+  },
+  "mos_sdss_id_flat.mos_sdss_id_flat_pkey": {
+    "updated_at": "2026-07-29 14:12:19",
+    "table": "mos_sdss_id_flat",
+    "statistic": "mos_sdss_id_flat_pkey",
+    "rows": 278732646,
+    "mb": 13394.9,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 95.6
+  },
+  "mos_unwise.mos_unwise_pkey": {
+    "updated_at": "2026-07-29 14:13:54",
+    "table": "mos_unwise",
+    "statistic": "mos_unwise_pkey",
+    "rows": 78130918,
+    "mb": 16358.6,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 67.6
+  },
+  "mos_supercosmos.mos_supercosmos_pkey": {
+    "updated_at": "2026-07-29 14:15:02",
+    "table": "mos_supercosmos",
+    "statistic": "mos_supercosmos_pkey",
+    "rows": 67911712,
+    "mb": 17426.2,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 32.7
+  },
+  "mos_sdss_id_to_catalog.mos_sdss_id_to_catalog_pkey": {
+    "updated_at": "2026-07-29 14:15:35",
+    "table": "mos_sdss_id_to_catalog",
+    "statistic": "mos_sdss_id_to_catalog_pkey",
+    "rows": 279429626,
+    "mb": 20988.7,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 119.6
+  },
+  "mos_panstarrs1.mos_panstarrs1_pkey": {
+    "updated_at": "2026-07-29 14:17:34",
+    "table": "mos_panstarrs1",
+    "statistic": "mos_panstarrs1_pkey",
+    "rows": 46404799,
+    "mb": 29689.5,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 37.0
+  },
+  "mos_allwise.mos_allwise_pkey": {
+    "updated_at": "2026-07-29 14:18:11",
+    "table": "mos_allwise",
+    "statistic": "mos_allwise_pkey",
+    "rows": 61473310,
+    "mb": 60394.1,
+    "unbuilt_before": true,
+    "mode": "FULLSCAN",
+    "elapsed_s": 56.3
+  }
+}
