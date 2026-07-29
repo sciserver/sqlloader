@@ -1,0 +1,2126 @@
+{
+  "boss_occam_cluster": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 111,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "LVM_DAPall": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 169,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_catalogdb_version": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 2,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_category": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 12,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_design_mode": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 16,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_instrument": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 2,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_mapper": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 2,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_observatory": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 2,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_obsmode": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 14,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_apo_camera": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 3,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_apo_completion_status": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 3,
+    "mb": 0.1,
+    "stats": 2,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_apo_exposure_flavor": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 14,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_lco_camera": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 5,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_lco_completion_status": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 4,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_lco_exposure_flavor": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 14,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_positioner_status": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 2,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_targetdb_version": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 86,
+    "mb": 0.1,
+    "stats": 2,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_targeting_generation": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 11,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_targeting_generation_to_version": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 14,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "occam_cluster": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 158,
+    "mb": 0.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "LVM_DRPall": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 169,
+    "mb": 0.2,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_carton": {
+    "updated_at": "2026-07-29 13:22:27",
+    "rows": 530,
+    "mb": 0.2,
+    "stats": 2,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_hole": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 1094,
+    "mb": 0.2,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_mwm_tess_ob": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 364,
+    "mb": 0.2,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_targeting_generation_to_carton": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 1702,
+    "mb": 0.2,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "eROSITA_CVs": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 587,
+    "mb": 0.3,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "fermi_blazar": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 707,
+    "mb": 0.3,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "occam_member": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 1191,
+    "mb": 0.3,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "efeds_c001_hard_pointsources_ctp_redshift_v17": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 246,
+    "mb": 0.4,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "efeds_spiders_agn_hard_xray_cat": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 277,
+    "mb": 0.4,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_sdssv_boss_conflist": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 393,
+    "mb": 0.4,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "apogeeDesign": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 4149,
+    "mb": 0.5,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "efeds_c001_hard_v7_5": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 246,
+    "mb": 0.5,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_catalog_to_marvels_dr11_star": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 7066,
+    "mb": 0.6,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "boss_occam_member": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 3834,
+    "mb": 0.7,
+    "stats": 4,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_catalog_to_marvels_dr12_star": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 11040,
+    "mb": 0.7,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_lco_configuration": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 11975,
+    "mb": 0.7,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_cadence": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 7163,
+    "mb": 0.8,
+    "stats": 3,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "da_dwd_candidates": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 5817,
+    "mb": 0.9,
+    "stats": 4,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "gyro_age_dwarf": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 7370,
+    "mb": 0.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mangaHIall": {
+    "updated_at": "2026-07-29 13:22:28",
+    "rows": 6632,
+    "mb": 0.9,
+    "stats": 3,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_opsdb_lco_exposure": {
+    "updated_at": "2026-07-29 13:22:29",
+    "rows": 15969,
+    "mb": 0.9,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_apo_configuration": {
+    "updated_at": "2026-07-29 13:22:29",
+    "rows": 17462,
+    "mb": 1.0,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_sdssv_plateholes_meta": {
+    "updated_at": "2026-07-29 13:22:29",
+    "rows": 374,
+    "mb": 1.0,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "qms_hg_h_hb_indices": {
+    "updated_at": "2026-07-29 13:22:29",
+    "rows": 6439,
+    "mb": 1.3,
+    "stats": 4,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_bhm_efeds_veto": {
+    "updated_at": "2026-07-29 13:22:29",
+    "rows": 6300,
+    "mb": 1.4,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_catalog_to_mastar_goodstars": {
+    "updated_at": "2026-07-29 13:22:29",
+    "rows": 25474,
+    "mb": 1.4,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_gaia_assas_sn_cepheids": {
+    "updated_at": "2026-07-29 13:22:29",
+    "rows": 2357,
+    "mb": 1.6,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_opsdb_lco_camera_frame": {
+    "updated_at": "2026-07-29 13:22:29",
+    "rows": 31544,
+    "mb": 1.8,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "qms_hg_index_diagram": {
+    "updated_at": "2026-07-29 13:22:29",
+    "rows": 3082,
+    "mb": 1.9,
+    "stats": 4,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mangaFirefly_mastar": {
+    "updated_at": "2026-07-29 13:22:29",
+    "rows": 10735,
+    "mb": 2.1,
+    "stats": 8,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mangaFirefly_miles": {
+    "updated_at": "2026-07-29 13:22:29",
+    "rows": 10735,
+    "mb": 2.1,
+    "stats": 11,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "mos_catalog_to_mangatarget": {
+    "updated_at": "2026-07-29 13:22:30",
+    "rows": 43068,
+    "mb": 2.2,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "da_dwd_rvs": {
+    "updated_at": "2026-07-29 13:22:30",
+    "rows": 42575,
+    "mb": 2.3,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "efeds_spiders_agn_host_decomp": {
+    "updated_at": "2026-07-29 13:22:30",
+    "rows": 13143,
+    "mb": 2.3,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_catalog_to_bhm_efeds_veto": {
+    "updated_at": "2026-07-29 13:22:30",
+    "rows": 10326,
+    "mb": 2.3,
+    "stats": 6,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_opsdb_apo_camera_frame": {
+    "updated_at": "2026-07-29 13:22:30",
+    "rows": 48440,
+    "mb": 2.4,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_bhm_rm_tweaks": {
+    "updated_at": "2026-07-29 13:22:30",
+    "rows": 1914,
+    "mb": 2.7,
+    "stats": 11,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_marvels_dr11_star": {
+    "updated_at": "2026-07-29 13:22:30",
+    "rows": 7066,
+    "mb": 2.7,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "erass1_hard_v1_0": {
+    "updated_at": "2026-07-29 13:22:30",
+    "rows": 5466,
+    "mb": 2.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_erosita_superset_v1_compactobjects": {
+    "updated_at": "2026-07-29 13:22:30",
+    "rows": 11113,
+    "mb": 2.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_mastar_goodstars": {
+    "updated_at": "2026-07-29 13:22:30",
+    "rows": 24290,
+    "mb": 3.3,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_cataclysmic_variables": {
+    "updated_at": "2026-07-29 13:22:31",
+    "rows": 5167,
+    "mb": 3.8,
+    "stats": 2,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "efeds_spiders_agn_xray_props": {
+    "updated_at": "2026-07-29 13:22:31",
+    "rows": 13143,
+    "mb": 4.1,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_marvels_dr12_star": {
+    "updated_at": "2026-07-29 13:22:31",
+    "rows": 11040,
+    "mb": 4.3,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_bhm_spiders_clusters_superset": {
+    "updated_at": "2026-07-29 13:22:31",
+    "rows": 11576,
+    "mb": 4.7,
+    "stats": 4,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_zari18pms": {
+    "updated_at": "2026-07-29 13:22:31",
+    "rows": 43595,
+    "mb": 4.7,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "manga_GZ2": {
+    "updated_at": "2026-07-29 13:22:31",
+    "rows": 9622,
+    "mb": 4.8,
+    "stats": 20,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.6
+  },
+  "mos_bhm_rm_v1": {
+    "updated_at": "2026-07-29 13:22:32",
+    "rows": 5470,
+    "mb": 5.9,
+    "stats": 18,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "mos_bhm_rm_v1_1": {
+    "updated_at": "2026-07-29 13:22:32",
+    "rows": 5987,
+    "mb": 5.9,
+    "stats": 18,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.4
+  },
+  "mos_bhm_rm_v1_3": {
+    "updated_at": "2026-07-29 13:22:32",
+    "rows": 5987,
+    "mb": 5.9,
+    "stats": 18,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "multiplex": {
+    "updated_at": "2026-07-29 13:22:33",
+    "rows": 54297,
+    "mb": 6.0,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_bhm_spiders_agn_superset": {
+    "updated_at": "2026-07-29 13:22:33",
+    "rows": 18319,
+    "mb": 6.9,
+    "stats": 4,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_tess_toi": {
+    "updated_at": "2026-07-29 13:22:33",
+    "rows": 221808,
+    "mb": 8.3,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_sagitta": {
+    "updated_at": "2026-07-29 13:22:33",
+    "rows": 175349,
+    "mb": 9.2,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "efeds_spiders_agn_ctp_salvato": {
+    "updated_at": "2026-07-29 13:22:33",
+    "rows": 13143,
+    "mb": 9.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mos_mangadrpall": {
+    "updated_at": "2026-07-29 13:22:33",
+    "rows": 11273,
+    "mb": 10.4,
+    "stats": 2,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_mastar_goodvisits": {
+    "updated_at": "2026-07-29 13:22:33",
+    "rows": 59266,
+    "mb": 11.6,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mastar_goodstars_xmatch_gaiadr2": {
+    "updated_at": "2026-07-29 13:22:33",
+    "rows": 24290,
+    "mb": 12.0,
+    "stats": 4,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "efeds_spiders_agn_main_xray_cat": {
+    "updated_at": "2026-07-29 13:22:34",
+    "rows": 12866,
+    "mb": 12.4,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.0
+  },
+  "mdwarf_active_params": {
+    "updated_at": "2026-07-29 13:22:34",
+    "rows": 212566,
+    "mb": 14.6,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_sagitta_edr3": {
+    "updated_at": "2026-07-29 13:22:34",
+    "rows": 214949,
+    "mb": 14.8,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_opsdb_lco_design_to_status": {
+    "updated_at": "2026-07-29 13:22:34",
+    "rows": 763589,
+    "mb": 17.9,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "efeds_c001_main_pointsources_ctp_redshift_v17": {
+    "updated_at": "2026-07-29 13:22:34",
+    "rows": 27369,
+    "mb": 20.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_catalog_to_xmm_om_suss_5_0": {
+    "updated_at": "2026-07-29 13:22:34",
+    "rows": 1058123,
+    "mb": 21.6,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.7
+  },
+  "yso_ob_kin": {
+    "updated_at": "2026-07-29 13:22:35",
+    "rows": 45264,
+    "mb": 22.1,
+    "stats": 5,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "mos_bhm_csc": {
+    "updated_at": "2026-07-29 13:22:35",
+    "rows": 86050,
+    "mb": 22.6,
+    "stats": 6,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.4
+  },
+  "mos_field": {
+    "updated_at": "2026-07-29 13:22:36",
+    "rows": 138116,
+    "mb": 27.1,
+    "stats": 4,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "mos_catalog_to_milliquas_7_7": {
+    "updated_at": "2026-07-29 13:22:36",
+    "rows": 1310382,
+    "mb": 27.4,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.8
+  },
+  "mos_design_to_field": {
+    "updated_at": "2026-07-29 13:22:37",
+    "rows": 781197,
+    "mb": 28.1,
+    "stats": 3,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.6
+  },
+  "boss_vi_results": {
+    "updated_at": "2026-07-29 13:22:37",
+    "rows": 506550,
+    "mb": 29.9,
+    "stats": 3,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.6
+  },
+  "mos_erosita_superset_compactobjects": {
+    "updated_at": "2026-07-29 13:22:38",
+    "rows": 94782,
+    "mb": 31.1,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_tess_toi_v05": {
+    "updated_at": "2026-07-29 13:22:38",
+    "rows": 280151,
+    "mb": 31.5,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "manga_GZD_auto": {
+    "updated_at": "2026-07-29 13:22:38",
+    "rows": 3620,
+    "mb": 33.7,
+    "stats": 3,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_mangatarget": {
+    "updated_at": "2026-07-29 13:22:38",
+    "rows": 43068,
+    "mb": 33.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_opsdb_apo_design_to_status": {
+    "updated_at": "2026-07-29 13:22:39",
+    "rows": 763589,
+    "mb": 34.2,
+    "stats": 5,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.7
+  },
+  "snow_white_boss_visit": {
+    "updated_at": "2026-07-29 13:22:40",
+    "rows": 37795,
+    "mb": 35.6,
+    "stats": 3,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_design": {
+    "updated_at": "2026-07-29 13:22:40",
+    "rows": 678415,
+    "mb": 37.8,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "efeds_c001_main_v7_4": {
+    "updated_at": "2026-07-29 13:22:41",
+    "rows": 27910,
+    "mb": 37.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_catalog_to_xmm_om_suss_4_1": {
+    "updated_at": "2026-07-29 13:22:41",
+    "rows": 1985388,
+    "mb": 39.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.2
+  },
+  "mos_rave_dr6_gauguin_madera": {
+    "updated_at": "2026-07-29 13:22:42",
+    "rows": 453490,
+    "mb": 40.6,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.4
+  },
+  "efeds_spiders_agn_line_props": {
+    "updated_at": "2026-07-29 13:22:43",
+    "rows": 13143,
+    "mb": 41.4,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_design_mode_check_results": {
+    "updated_at": "2026-07-29 13:22:43",
+    "rows": 634712,
+    "mb": 45.7,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_tess_toi_v1": {
+    "updated_at": "2026-07-29 13:22:43",
+    "rows": 426023,
+    "mb": 47.8,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "mos_cadence_epoch": {
+    "updated_at": "2026-07-29 13:22:43",
+    "rows": 235519,
+    "mb": 48.2,
+    "stats": 3,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.5
+  },
+  "DL1_eROSITA_eRASS3_allepoch": {
+    "updated_at": "2026-07-29 13:22:44",
+    "rows": 263310,
+    "mb": 49.6,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_catalog_to_bhm_csc": {
+    "updated_at": "2026-07-29 13:22:44",
+    "rows": 187499,
+    "mb": 50.7,
+    "stats": 10,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.1
+  },
+  "efeds_spiders_agn_fit_params": {
+    "updated_at": "2026-07-29 13:22:45",
+    "rows": 13143,
+    "mb": 51.5,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_erosita_superset_stars": {
+    "updated_at": "2026-07-29 13:22:45",
+    "rows": 183101,
+    "mb": 59.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "mos_bhm_csc_v2": {
+    "updated_at": "2026-07-29 13:22:45",
+    "rows": 148443,
+    "mb": 65.0,
+    "stats": 9,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.9
+  },
+  "mos_catalog_to_bhm_rm_v0": {
+    "updated_at": "2026-07-29 13:22:46",
+    "rows": 280387,
+    "mb": 75.4,
+    "stats": 10,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.3
+  },
+  "mos_catalog_to_bhm_rm_v0_2": {
+    "updated_at": "2026-07-29 13:22:48",
+    "rows": 280387,
+    "mb": 75.4,
+    "stats": 10,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.3
+  },
+  "mos_rave_dr6_xgaiae3": {
+    "updated_at": "2026-07-29 13:22:49",
+    "rows": 517357,
+    "mb": 78.2,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.5
+  },
+  "mos_erosita_superset_clusters": {
+    "updated_at": "2026-07-29 13:22:50",
+    "rows": 240763,
+    "mb": 78.6,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.1
+  },
+  "DL1_eROSITA_eRASS3_daily": {
+    "updated_at": "2026-07-29 13:22:50",
+    "rows": 478255,
+    "mb": 78.7,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.4
+  },
+  "mos_bhm_csc_v3": {
+    "updated_at": "2026-07-29 13:22:50",
+    "rows": 188647,
+    "mb": 82.2,
+    "stats": 9,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.1
+  },
+  "mos_erosita_superset_v1_stars": {
+    "updated_at": "2026-07-29 13:22:51",
+    "rows": 351188,
+    "mb": 88.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "minesweeper": {
+    "updated_at": "2026-07-29 13:22:51",
+    "rows": 56104,
+    "mb": 91.7,
+    "stats": 4,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "mos_skymapper_gaia": {
+    "updated_at": "2026-07-29 13:22:52",
+    "rows": 3339040,
+    "mb": 95.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.9
+  },
+  "mos_gaia_dr2_wd": {
+    "updated_at": "2026-07-29 13:22:54",
+    "rows": 270553,
+    "mb": 96.4,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_hecate_1_1": {
+    "updated_at": "2026-07-29 13:22:54",
+    "rows": 204733,
+    "mb": 104.2,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_milliquas_7_7": {
+    "updated_at": "2026-07-29 13:22:54",
+    "rows": 1275449,
+    "mb": 109.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.6
+  },
+  "mos_erosita_superset_v1_clusters": {
+    "updated_at": "2026-07-29 13:22:55",
+    "rows": 512657,
+    "mb": 111.6,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_yso_clustering": {
+    "updated_at": "2026-07-29 13:22:55",
+    "rows": 814380,
+    "mb": 118.3,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.4
+  },
+  "mos_catalog_to_uvotssc1": {
+    "updated_at": "2026-07-29 13:22:55",
+    "rows": 6585473,
+    "mb": 127.8,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 4.0
+  },
+  "mos_catalog_to_glimpse": {
+    "updated_at": "2026-07-29 13:22:59",
+    "rows": 9522652,
+    "mb": 134.0,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 6.2
+  },
+  "mos_gaia_dr3_vari_rrlyrae": {
+    "updated_at": "2026-07-29 13:23:06",
+    "rows": 135896,
+    "mb": 135.3,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_catalog_to_sdss_dr17_specobj": {
+    "updated_at": "2026-07-29 13:23:06",
+    "rows": 5809366,
+    "mb": 135.5,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 5.0
+  },
+  "StarFlow_summary": {
+    "updated_at": "2026-07-29 13:23:11",
+    "rows": 1059521,
+    "mb": 139.8,
+    "stats": 2,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.0
+  },
+  "mos_sdssv_boss_spall": {
+    "updated_at": "2026-07-29 13:23:12",
+    "rows": 195500,
+    "mb": 152.9,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_catalog_to_tycho2": {
+    "updated_at": "2026-07-29 13:23:12",
+    "rows": 7621635,
+    "mb": 156.3,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 4.9
+  },
+  "mos_mangadapall": {
+    "updated_at": "2026-07-29 13:23:17",
+    "rows": 43128,
+    "mb": 170.0,
+    "stats": 2,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.2
+  },
+  "mos_best_brightest": {
+    "updated_at": "2026-07-29 13:23:17",
+    "rows": 646940,
+    "mb": 173.3,
+    "stats": 3,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.9
+  },
+  "mos_catalog_to_allstar_dr17_synspec_rev1": {
+    "updated_at": "2026-07-29 13:23:18",
+    "rows": 733915,
+    "mb": 210.4,
+    "stats": 4,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.8
+  },
+  "boss_ISM_NaI_absorption": {
+    "updated_at": "2026-07-29 13:23:20",
+    "rows": 1373392,
+    "mb": 226.1,
+    "stats": 4,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 2.0
+  },
+  "mos_sdss_dr17_apogee_allstarmerge": {
+    "updated_at": "2026-07-29 13:23:22",
+    "rows": 648515,
+    "mb": 230.6,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.6
+  },
+  "mos_catalog_to_sdss_dr16_specobj": {
+    "updated_at": "2026-07-29 13:23:23",
+    "rows": 10459312,
+    "mb": 232.8,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 8.2
+  },
+  "payne4GAIN_summary": {
+    "updated_at": "2026-07-29 13:23:31",
+    "rows": 360451,
+    "mb": 235.3,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "mos_xmm_om_suss_5_0": {
+    "updated_at": "2026-07-29 13:23:31",
+    "rows": 1006136,
+    "mb": 236.0,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.6
+  },
+  "mos_erosita_superset_agn": {
+    "updated_at": "2026-07-29 13:23:32",
+    "rows": 2139926,
+    "mb": 246.7,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.1
+  },
+  "mos_sdssv_plateholes": {
+    "updated_at": "2026-07-29 13:23:33",
+    "rows": 312384,
+    "mb": 271.9,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.3
+  },
+  "mos_bhm_rm_v0_2": {
+    "updated_at": "2026-07-29 13:23:33",
+    "rows": 135653,
+    "mb": 300.8,
+    "stats": 8,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.9
+  },
+  "mos_sdss_apogeeallstarmerge_r13": {
+    "updated_at": "2026-07-29 13:23:34",
+    "rows": 617583,
+    "mb": 301.0,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.6
+  },
+  "mos_bhm_rm_v0": {
+    "updated_at": "2026-07-29 13:23:35",
+    "rows": 135653,
+    "mb": 304.2,
+    "stats": 10,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.0
+  },
+  "mos_catalog_to_skies_v1": {
+    "updated_at": "2026-07-29 13:23:36",
+    "rows": 23876823,
+    "mb": 310.2,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 15.8
+  },
+  "grav_pot_16": {
+    "updated_at": "2026-07-29 13:23:52",
+    "rows": 1515648,
+    "mb": 320.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.9
+  },
+  "mos_catalog_to_skies_v2": {
+    "updated_at": "2026-07-29 13:23:53",
+    "rows": 25197586,
+    "mb": 334.6,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 16.0
+  },
+  "mos_gaia_dr3_nss_two_body_orbit": {
+    "updated_at": "2026-07-29 13:24:09",
+    "rows": 385828,
+    "mb": 373.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.4
+  },
+  "mos_tycho2": {
+    "updated_at": "2026-07-29 13:24:09",
+    "rows": 2542994,
+    "mb": 413.6,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.9
+  },
+  "mos_uvotssc1": {
+    "updated_at": "2026-07-29 13:24:11",
+    "rows": 2101401,
+    "mb": 458.9,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.3
+  },
+  "mos_mipsgal": {
+    "updated_at": "2026-07-29 13:24:13",
+    "rows": 855305,
+    "mb": 479.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.9
+  },
+  "mos_catalog_to_skymapper_dr2": {
+    "updated_at": "2026-07-29 13:24:13",
+    "rows": 36738727,
+    "mb": 483.3,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 22.2
+  },
+  "mos_wd_gaia_dr3": {
+    "updated_at": "2026-07-29 13:24:36",
+    "rows": 314731,
+    "mb": 489.0,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.4
+  },
+  "mos_sdss_dr13_photoobj_primary": {
+    "updated_at": "2026-07-29 13:24:36",
+    "rows": 20007080,
+    "mb": 499.7,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 8.9
+  },
+  "mos_sdss_dr19p_speclite": {
+    "updated_at": "2026-07-29 13:24:45",
+    "rows": 6103248,
+    "mb": 510.9,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 3.1
+  },
+  "mos_xmm_om_suss_4_1": {
+    "updated_at": "2026-07-29 13:24:48",
+    "rows": 928973,
+    "mb": 512.9,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.7
+  },
+  "mos_catalog_to_legacy_survey_dr10": {
+    "updated_at": "2026-07-29 13:24:49",
+    "rows": 37735461,
+    "mb": 564.4,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 24.0
+  },
+  "mos_erosita_superset_v1_agn": {
+    "updated_at": "2026-07-29 13:25:13",
+    "rows": 5766468,
+    "mb": 575.6,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 2.7
+  },
+  "mos_gaia_unwise_agn": {
+    "updated_at": "2026-07-29 13:25:16",
+    "rows": 2561693,
+    "mb": 610.4,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.3
+  },
+  "mdwarf_contin_summary": {
+    "updated_at": "2026-07-29 13:25:17",
+    "rows": 569271,
+    "mb": 663.5,
+    "stats": 4,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.3
+  },
+  "mos_catalog_from_sdss_dr19p_speclite": {
+    "updated_at": "2026-07-29 13:25:19",
+    "rows": 6147091,
+    "mb": 686.5,
+    "stats": 4,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 7.9
+  },
+  "mos_galah_dr3": {
+    "updated_at": "2026-07-29 13:25:26",
+    "rows": 458238,
+    "mb": 717.6,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 0.7
+  },
+  "mos_galex_gr7_gaia_dr3": {
+    "updated_at": "2026-07-29 13:25:27",
+    "rows": 16415167,
+    "mb": 736.1,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 7.2
+  },
+  "mos_ebosstarget_v5": {
+    "updated_at": "2026-07-29 13:25:34",
+    "rows": 2348261,
+    "mb": 771.6,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.3
+  },
+  "salvato_etal2025_dr1_ls10": {
+    "updated_at": "2026-07-29 13:25:36",
+    "rows": 966194,
+    "mb": 799.8,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.0
+  },
+  "mwm_targets": {
+    "updated_at": "2026-07-29 13:25:37",
+    "rows": 2086349,
+    "mb": 878.8,
+    "stats": 2,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 2.6
+  },
+  "mos_catalog_to_guvcat": {
+    "updated_at": "2026-07-29 13:25:39",
+    "rows": 40108740,
+    "mb": 883.9,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 25.7
+  },
+  "mos_glimpse": {
+    "updated_at": "2026-07-29 13:26:05",
+    "rows": 3163667,
+    "mb": 909.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 2.0
+  },
+  "erass1_main_v1_2": {
+    "updated_at": "2026-07-29 13:26:07",
+    "rows": 930203,
+    "mb": 952.3,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.1
+  },
+  "mos_gaia_dr2_ruwe": {
+    "updated_at": "2026-07-29 13:26:08",
+    "rows": 62928957,
+    "mb": 961.4,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 27.8
+  },
+  "mwm_boss_allstar": {
+    "updated_at": "2026-07-29 13:26:36",
+    "rows": 1803883,
+    "mb": 968.0,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.5
+  },
+  "DR20Q_prop": {
+    "updated_at": "2026-07-29 13:26:38",
+    "rows": 243257,
+    "mb": 972.9,
+    "stats": 4,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.3
+  },
+  "m_dwarf_type_boss_star": {
+    "updated_at": "2026-07-29 13:26:39",
+    "rows": 1802746,
+    "mb": 1008.6,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.5
+  },
+  "snow_white_boss_star": {
+    "updated_at": "2026-07-29 13:26:41",
+    "rows": 1803883,
+    "mb": 1052.8,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.5
+  },
+  "boss_net_boss_star": {
+    "updated_at": "2026-07-29 13:26:42",
+    "rows": 1803883,
+    "mb": 1078.5,
+    "stats": 2,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 3.1
+  },
+  "slam_boss_star": {
+    "updated_at": "2026-07-29 13:26:45",
+    "rows": 1803883,
+    "mb": 1083.2,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.6
+  },
+  "mos_catalog_to_sdss_dr13_photoobj_primary": {
+    "updated_at": "2026-07-29 13:26:47",
+    "rows": 61411894,
+    "mb": 1104.9,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 38.7
+  },
+  "mos_catalog_to_gaia_dr3_source": {
+    "updated_at": "2026-07-29 13:27:26",
+    "rows": 67281150,
+    "mb": 1108.6,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 43.7
+  },
+  "mos_xpfeh_gaia_dr3": {
+    "updated_at": "2026-07-29 13:28:10",
+    "rows": 30434520,
+    "mb": 1139.7,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 13.9
+  },
+  "aspcapStarCovar": {
+    "updated_at": "2026-07-29 13:28:23",
+    "rows": 35961149,
+    "mb": 1154.6,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 40.0
+  },
+  "spAll_allepoch": {
+    "updated_at": "2026-07-29 13:29:03",
+    "rows": 506550,
+    "mb": 1155.1,
+    "stats": 16,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 6.2
+  },
+  "mos_sdss_dr16_qso": {
+    "updated_at": "2026-07-29 13:29:10",
+    "rows": 750255,
+    "mb": 1168.2,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.2
+  },
+  "boss_clam_lite": {
+    "updated_at": "2026-07-29 13:29:11",
+    "rows": 1708214,
+    "mb": 1235.5,
+    "stats": 5,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 3.4
+  },
+  "mos_catalog_to_legacy_survey_dr8": {
+    "updated_at": "2026-07-29 13:29:14",
+    "rows": 81777039,
+    "mb": 1250.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 51.0
+  },
+  "mos_skies_v1": {
+    "updated_at": "2026-07-29 13:30:05",
+    "rows": 23876823,
+    "mb": 1397.8,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 10.4
+  },
+  "mos_catalog_to_supercosmos": {
+    "updated_at": "2026-07-29 13:30:16",
+    "rows": 68293540,
+    "mb": 1488.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 45.1
+  },
+  "mos_skies_v2": {
+    "updated_at": "2026-07-29 13:31:01",
+    "rows": 25197586,
+    "mb": 1654.3,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 11.7
+  },
+  "mos_lamost_dr6": {
+    "updated_at": "2026-07-29 13:31:13",
+    "rows": 9771381,
+    "mb": 1690.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 6.3
+  },
+  "mos_catalog_to_panstarrs1": {
+    "updated_at": "2026-07-29 13:31:19",
+    "rows": 92585030,
+    "mb": 1742.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 58.8
+  },
+  "mos_geometric_distances_gaia_dr2": {
+    "updated_at": "2026-07-29 13:32:18",
+    "rows": 58885466,
+    "mb": 1766.3,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 26.8
+  },
+  "mos_gedr3spur_main": {
+    "updated_at": "2026-07-29 13:32:45",
+    "rows": 60465191,
+    "mb": 1874.2,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 27.1
+  },
+  "mos_visual_binary_gaia_dr3": {
+    "updated_at": "2026-07-29 13:33:12",
+    "rows": 1771306,
+    "mb": 1934.1,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 1.9
+  },
+  "mwm_boss_allvisit": {
+    "updated_at": "2026-07-29 13:33:14",
+    "rows": 3364323,
+    "mb": 1938.4,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 2.9
+  },
+  "mos_catalog_to_unwise": {
+    "updated_at": "2026-07-29 13:33:17",
+    "rows": 83596999,
+    "mb": 2147.8,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 54.2
+  },
+  "mos_catalog_to_twomass_psc": {
+    "updated_at": "2026-07-29 13:34:11",
+    "rows": 168117282,
+    "mb": 2246.9,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 103.7
+  },
+  "mos_revised_magnitude": {
+    "updated_at": "2026-07-29 13:35:55",
+    "rows": 50320585,
+    "mb": 2551.4,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 22.5
+  },
+  "mos_gaiadr2_tmass_best_neighbour": {
+    "updated_at": "2026-07-29 13:36:17",
+    "rows": 53057138,
+    "mb": 2567.4,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 23.8
+  },
+  "mos_sdss_dr16_specobj": {
+    "updated_at": "2026-07-29 13:36:41",
+    "rows": 5299600,
+    "mb": 2620.9,
+    "stats": 2,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 6.3
+  },
+  "mos_catalog_to_tic_v8": {
+    "updated_at": "2026-07-29 13:36:47",
+    "rows": 200180323,
+    "mb": 2703.4,
+    "stats": 3,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 252.7
+  },
+  "corv_boss_visit": {
+    "updated_at": "2026-07-29 13:41:00",
+    "rows": 5328827,
+    "mb": 2783.2,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 4.1
+  },
+  "m_dwarf_type_boss_visit": {
+    "updated_at": "2026-07-29 13:41:04",
+    "rows": 5356640,
+    "mb": 2815.5,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 4.2
+  },
+  "mos_sdss_dr17_specobj": {
+    "updated_at": "2026-07-29 13:41:09",
+    "rows": 5801200,
+    "mb": 2923.5,
+    "stats": 2,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 7.1
+  },
+  "boss_net_boss_visit": {
+    "updated_at": "2026-07-29 13:41:16",
+    "rows": 5357038,
+    "mb": 2981.6,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 4.8
+  },
+  "line_forest_boss_star": {
+    "updated_at": "2026-07-29 13:41:21",
+    "rows": 1803883,
+    "mb": 3038.0,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 3.4
+  },
+  "mos_guvcat": {
+    "updated_at": "2026-07-29 13:41:24",
+    "rows": 12868822,
+    "mb": 3432.2,
+    "stats": 2,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 11.3
+  },
+  "mos_sdss_id_stacked": {
+    "updated_at": "2026-07-29 13:41:35",
+    "rows": 126948826,
+    "mb": 3875.7,
+    "stats": 2,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 111.8
+  },
+  "spAll_epoch": {
+    "updated_at": "2026-07-29 13:43:27",
+    "rows": 4903154,
+    "mb": 4804.4,
+    "stats": 15,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 37.4
+  },
+  "mos_allstar_dr17_synspec_rev1": {
+    "updated_at": "2026-07-29 13:44:05",
+    "rows": 733901,
+    "mb": 5918.0,
+    "stats": 3,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 6.1
+  },
+  "spAll": {
+    "updated_at": "2026-07-29 13:44:11",
+    "rows": 5357037,
+    "mb": 7178.9,
+    "stats": 25,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 61.3
+  },
+  "mos_gaia_dr3_synthetic_photometry_gspc": {
+    "updated_at": "2026-07-29 13:45:12",
+    "rows": 39738599,
+    "mb": 7420.7,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 18.9
+  },
+  "line_forest_boss_visit": {
+    "updated_at": "2026-07-29 13:45:31",
+    "rows": 5357038,
+    "mb": 7479.5,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 7.3
+  },
+  "mos_catalog": {
+    "updated_at": "2026-07-29 13:45:38",
+    "rows": 272695124,
+    "mb": 9296.1,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 118.2
+  },
+  "mos_skymapper_dr2": {
+    "updated_at": "2026-07-29 13:47:37",
+    "rows": 36733293,
+    "mb": 9987.6,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 21.4
+  },
+  "mos_twomass_psc": {
+    "updated_at": "2026-07-29 13:47:58",
+    "rows": 56915690,
+    "mb": 10545.7,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 31.0
+  },
+  "mos_legacy_survey_dr8": {
+    "updated_at": "2026-07-29 13:48:29",
+    "rows": 27829140,
+    "mb": 11384.6,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 17.8
+  },
+  "mos_magnitude": {
+    "updated_at": "2026-07-29 13:48:47",
+    "rows": 250403070,
+    "mb": 11513.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 112.8
+  },
+  "mos_bailer_jones_edr3": {
+    "updated_at": "2026-07-29 13:50:40",
+    "rows": 60465191,
+    "mb": 12770.1,
+    "stats": 8,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 186.5
+  },
+  "mos_sdss_id_flat": {
+    "updated_at": "2026-07-29 13:53:46",
+    "rows": 278732646,
+    "mb": 13394.9,
+    "stats": 3,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 350.3
+  },
+  "allspec": {
+    "updated_at": "2026-07-29 13:59:37",
+    "rows": 27671504,
+    "mb": 14447.0,
+    "stats": 34,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 594.2
+  },
+  "mos_catalog_to_gaia_dr2_source": {
+    "updated_at": "2026-07-29 14:09:31",
+    "rows": 185031960,
+    "mb": 16198.7,
+    "stats": 5,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 392.9
+  },
+  "mos_unwise": {
+    "updated_at": "2026-07-29 14:16:04",
+    "rows": 78130918,
+    "mb": 16358.6,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 58.5
+  },
+  "mos_legacy_survey_dr10": {
+    "updated_at": "2026-07-29 14:17:02",
+    "rows": 37732159,
+    "mb": 16833.9,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 23.9
+  },
+  "mos_supercosmos": {
+    "updated_at": "2026-07-29 14:17:26",
+    "rows": 67911712,
+    "mb": 17426.2,
+    "stats": 2,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 62.0
+  },
+  "mos_target": {
+    "updated_at": "2026-07-29 14:18:28",
+    "rows": 186811538,
+    "mb": 20200.4,
+    "stats": 6,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 478.2
+  },
+  "mos_sdss_id_to_catalog": {
+    "updated_at": "2026-07-29 14:26:27",
+    "rows": 279429626,
+    "mb": 20988.7,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 131.5
+  },
+  "mos_assignment": {
+    "updated_at": "2026-07-29 14:28:38",
+    "rows": 308876160,
+    "mb": 22757.7,
+    "stats": 5,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 540.1
+  },
+  "mos_catalog_to_catwise2020": {
+    "updated_at": "2026-07-29 14:37:38",
+    "rows": 71348021,
+    "mb": 25824.3,
+    "stats": 10,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 388.9
+  },
+  "mos_gaia_dr3_astrophysical_parameters": {
+    "updated_at": "2026-07-29 14:44:07",
+    "rows": 66721874,
+    "mb": 26586.6,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 38.6
+  },
+  "mos_tic_v8": {
+    "updated_at": "2026-07-29 14:44:46",
+    "rows": 67135331,
+    "mb": 28234.8,
+    "stats": 2,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 76.2
+  },
+  "mos_gaia_dr2_source": {
+    "updated_at": "2026-07-29 14:46:02",
+    "rows": 62928957,
+    "mb": 29432.0,
+    "stats": 2,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 62.8
+  },
+  "mos_panstarrs1": {
+    "updated_at": "2026-07-29 14:47:05",
+    "rows": 46404799,
+    "mb": 29689.5,
+    "stats": 1,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 34.6
+  },
+  "mos_carton_to_target": {
+    "updated_at": "2026-07-29 14:47:40",
+    "rows": 395566629,
+    "mb": 35045.7,
+    "stats": 6,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 801.2
+  },
+  "mos_gaia_dr3_source": {
+    "updated_at": "2026-07-29 15:01:01",
+    "rows": 67281150,
+    "mb": 39837.6,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 48.9
+  },
+  "mos_catalog_to_allwise": {
+    "updated_at": "2026-07-29 15:01:50",
+    "rows": 176329430,
+    "mb": 40118.1,
+    "stats": 10,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 791.6
+  },
+  "mos_catwise2020": {
+    "updated_at": "2026-07-29 15:15:01",
+    "rows": 70162958,
+    "mb": 47153.5,
+    "stats": 1,
+    "unbuilt_before": 0,
+    "mode": "FULLSCAN",
+    "elapsed_s": 74.8
+  },
+  "mos_allwise": {
+    "updated_at": "2026-07-29 15:16:16",
+    "rows": 61473310,
+    "mb": 60394.1,
+    "stats": 9,
+    "unbuilt_before": 1,
+    "mode": "FULLSCAN",
+    "elapsed_s": 235.8
+  }
+}
