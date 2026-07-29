@@ -27,13 +27,6 @@
     "dec_col": "dec",
     "elapsed_s": 121.9
   },
-  "boss_ISM_NaI_absorption": {
-    "processed_at": "2026-07-24 14:09:25",
-    "rows": 1373392,
-    "ra_col": "ra",
-    "dec_col": "dec",
-    "elapsed_s": 24.8
-  },
   "da_dwd_candidates": {
     "processed_at": "2026-07-24 14:09:25",
     "rows": 5817,
@@ -82,5 +75,12 @@
     "ra_col": "ra",
     "dec_col": "dec",
     "elapsed_s": 1.2
+  },
+  "boss_ISM_NaI_absorption": {
+    "processed_at": "2026-07-29 12:28:40",
+    "rows": 1373392,
+    "ra_col": "ra",
+    "dec_col": "dec",
+    "elapsed_s": 23.4
   }
 }

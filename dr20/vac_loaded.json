@@ -135,14 +135,6 @@
     "compression": "PAGE",
     "elapsed_s": 95.3
   },
-  "boss_ISM_NaI_absorption": {
-    "loaded_at": "2026-07-24 13:58:49",
-    "rows": 1373392,
-    "source_rows": 1373392,
-    "pk_col": "PK",
-    "compression": "PAGE",
-    "elapsed_s": 4.5
-  },
   "boss_occam_cluster": {
     "loaded_at": "2026-07-24 13:58:49",
     "rows": 111,
@@ -350,5 +342,13 @@
     "pk_col": "PK_index",
     "compression": "PAGE",
     "elapsed_s": 0.3
+  },
+  "boss_ISM_NaI_absorption": {
+    "loaded_at": "2026-07-29 12:28:12",
+    "rows": 1373392,
+    "source_rows": 1373392,
+    "pk_col": "PK",
+    "compression": "PAGE",
+    "elapsed_s": 4.7
   }
 }
