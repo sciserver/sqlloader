@@ -28,16 +28,34 @@ tables blocks while the statistic is built. Worse, until it is built the
 optimizer guesses tiny row counts, which on a 279M-row table can produce a plan
 that runs for hours. Building them ahead of go-live avoids both.
 
+ONE STATISTIC AT A TIME, NOT ONE TABLE
+--------------------------------------
+FULLSCAN scans the table once PER STATISTIC. `UPDATE STATISTICS mos_allwise
+WITH FULLSCAN` therefore reads its 60.4 GB nine times -- roughly 540 GB -- when
+only ONE of those nine statistics is actually missing a histogram.
+
+So the work unit here is the statistic, not the table:
+
+    UPDATE STATISTICS [mos_allwise] ([mos_allwise_pkey]) WITH FULLSCAN;
+
+Every one of the missing histograms is a single statistic on its table, so
+--scope unbuilt costs one scan per affected table instead of one per statistic
+on it. On the DR20 set that is about an order of magnitude less I/O.
+
 TIMING, measured on sdss4c
 --------------------------
-    mos_skies_v1     1.4 GB, 1 stat    default sample <1s   FULLSCAN 11s
-    mos_supercosmos 14.1 GB, 2 stats   default sample  1s   FULLSCAN 63s
+The first version of this script estimated from mos_supercosmos (14.1 GB, 2
+stats, 63s = 229 MB/s). That table was NOT representative and the estimate was
+more than 2x optimistic. Across 215 real tables the observed rate was
 
-so roughly 230 MB/s with FULLSCAN:
+    104 MB/s
 
-    --scope unbuilt (default)  ~253 GB   ~20 min
-    --scope dr20               ~660 GB   ~50 min
-    --sample                   any scope  a few minutes, weaker histograms
+with wide tables such as mos_catalog (272M rows, 9.3 GB) running at 79 MB/s.
+Estimates below use 104 MB/s and count I/O as (table size x statistics scanned).
+
+    --scope unbuilt (default)  one scan per affected table
+    --scope dr20               every statistic on every DR20 table -- hours
+    --sample                   any scope, minutes, weaker histograms
 
 FULLSCAN is the right default here: this is a write-once, read-only database
 that will serve the same data for a year, so exact histograms are worth the
@@ -69,6 +87,11 @@ import pymssql
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 TRACKING_JSON = os.path.join(SCRIPT_DIR, 'stats_updated.json')
 DATABASE = 'BestDR20'
+
+# Measured across 215 real tables on sdss4c, 2026-07-29. Do not raise this on
+# the basis of one fast table: calibrating on mos_supercosmos alone gave
+# 229 MB/s and an estimate that was more than 2x optimistic.
+OBSERVED_MB_PER_SEC = 104
 
 # VAC / astra / spectro tables loaded for DR20. Taken from run_vac_load.py's
 # TABLES list -- keep the two in step when a release adds or drops a VAC.
@@ -124,14 +147,18 @@ def save_tracking(server, done):
 
 
 def get_targets(conn, scope):
-    """Return [(table, rows, mb, total_stats, unbuilt_stats)] for the scope."""
+    """Return [(table, stat_name, rows, mb, is_unbuilt)] -- one row per STATISTIC.
+
+    The statistic is the unit of work because FULLSCAN scans the table once per
+    statistic, so updating a whole 9-statistic table to fix 1 missing histogram
+    costs 9x more I/O than needed.
+    """
     cur = conn.cursor()
     cur.execute("""
-        SELECT t.name,
-               MAX(p.rows) AS rows,
-               CAST(MAX(a.mb) AS decimal(12,1)) AS mb,
-               COUNT(*) AS stats_total,
-               SUM(CASE WHEN sp.last_updated IS NULL THEN 1 ELSE 0 END) AS unbuilt
+        SELECT t.name, s.name AS stat_name,
+               p.rows,
+               CAST(a.mb AS decimal(12,1)) AS mb,
+               CASE WHEN sp.last_updated IS NULL THEN 1 ELSE 0 END AS unbuilt
         FROM sys.stats s
         JOIN sys.tables t ON t.object_id = s.object_id
         OUTER APPLY sys.dm_db_stats_properties(s.object_id, s.stats_id) sp
@@ -143,25 +170,24 @@ def get_targets(conn, scope):
               JOIN sys.allocation_units au ON au.container_id = p2.partition_id
               GROUP BY p2.object_id) a ON a.object_id = t.object_id
         WHERE p.rows > 0
-        GROUP BY t.name
     """)
     rows = cur.fetchall()
 
     dr20 = {n.lower() for n in DR20_TABLES}
     out = []
-    for name, nrows, mb, stats_total, unbuilt in rows:
-        if name in EXCLUDE:
+    for tname, sname, nrows, mb, unbuilt in rows:
+        if tname in EXCLUDE:
             continue
-        is_mos = name.lower().startswith('mos_')
-        in_dr20 = name.lower() in dr20
+        is_mos = tname.lower().startswith('mos_')
+        in_dr20 = tname.lower() in dr20
         if scope == 'unbuilt':
-            keep = unbuilt > 0
+            keep = bool(unbuilt)
         else:  # dr20
-            keep = unbuilt > 0 or is_mos or in_dr20
+            keep = bool(unbuilt) or is_mos or in_dr20
         if keep:
-            out.append((name, int(nrows), float(mb), int(stats_total), int(unbuilt)))
-    # biggest last, so an interrupted run has already banked the quick wins
-    out.sort(key=lambda r: r[2])
+            out.append((tname, sname, int(nrows), float(mb), bool(unbuilt)))
+    # cheapest first, so an interrupted run has already banked the quick wins
+    out.sort(key=lambda r: r[3])
     return out
 
 
@@ -198,22 +224,29 @@ def main():
     targets = get_targets(conn, args.scope)
     tracking = {} if args.force else load_tracking(args.server)
 
-    todo = [t for t in targets if t[0] not in tracking]
+    todo = [t for t in targets if f"{t[0]}.{t[1]}" not in tracking]
     skipped = len(targets) - len(todo)
-    total_mb = sum(t[2] for t in todo)
+    # Each statistic costs one full scan of its table, so scan volume is the
+    # sum of the table size per statistic -- not the distinct table size.
+    scan_mb = sum(t[3] for t in todo)
+    tables = len({t[0] for t in todo})
 
-    log(f"Tables in scope: {len(targets)}"
+    log(f"Statistics in scope: {len(targets)}"
         + (f"   already done: {skipped}" if skipped else ""))
-    log(f"To process: {len(todo)} tables, {total_mb/1024:.1f} GB, "
-        f"{sum(t[4] for t in todo)} missing histogram(s)")
-    if not args.sample and total_mb:
-        log(f"Estimated FULLSCAN time at ~230 MB/s: {total_mb/230/60:.0f} min")
+    log(f"To process: {len(todo)} statistics across {tables} tables, "
+        f"{sum(1 for t in todo if t[4])} missing histogram(s)")
+    log(f"Scan volume: {scan_mb/1024:.1f} GB "
+        f"(one full scan of the table per statistic)")
+    if not args.sample and scan_mb:
+        log(f"Estimated FULLSCAN time at ~{OBSERVED_MB_PER_SEC} MB/s: "
+            f"{scan_mb/OBSERVED_MB_PER_SEC/60:.0f} min")
     log('')
 
     if args.dry_run:
-        log(f"{'table':<48}{'rows':>14}{'MB':>10}{'stats':>7}{'unbuilt':>8}")
-        for name, nrows, mb, st, un in todo:
-            log(f"{name:<48}{nrows:>14,}{mb:>10,.0f}{st:>7}{un:>8}")
+        log(f"{'table':<40}{'statistic':<40}{'rows':>14}{'MB':>9}{'unbuilt':>8}")
+        for tname, sname, nrows, mb, un in todo:
+            log(f"{tname:<40}{sname:<40}{nrows:>14,}{mb:>9,.0f}"
+                f"{('yes' if un else ''):>8}")
         log('')
         log("DRY RUN -- nothing changed")
         return 0
@@ -222,26 +255,30 @@ def main():
     failures = []
     run_start = datetime.now()
 
-    for i, (name, nrows, mb, st, un) in enumerate(todo, 1):
+    for i, (tname, sname, nrows, mb, un) in enumerate(todo, 1):
         opt = '' if args.sample else ' WITH FULLSCAN'
-        sql = f"UPDATE STATISTICS [{name}]{opt};"
+        # Target the single statistic, not the whole table -- see the module
+        # docstring. One scan instead of one per statistic on the table.
+        sql = f"UPDATE STATISTICS [{tname}] ([{sname}]){opt};"
+        key = f"{tname}.{sname}"
         t0 = datetime.now()
         try:
             cur = conn.cursor()
             cur.execute(sql)
             elapsed = (datetime.now() - t0).total_seconds()
-            log(f"[{i:>3}/{len(todo)}] {name:<46} {nrows:>13,} rows "
-                f"{mb:>9,.0f} MB  {un} unbuilt  {elapsed:>7.1f}s")
-            done[name] = {
+            log(f"[{i:>4}/{len(todo)}] {tname:<38} {sname:<38} "
+                f"{mb:>8,.0f} MB {'unbuilt' if un else '       '} {elapsed:>7.1f}s")
+            done[key] = {
                 'updated_at': t0.strftime('%Y-%m-%d %H:%M:%S'),
-                'rows': nrows, 'mb': mb, 'stats': st, 'unbuilt_before': un,
+                'table': tname, 'statistic': sname,
+                'rows': nrows, 'mb': mb, 'unbuilt_before': un,
                 'mode': mode, 'elapsed_s': round(elapsed, 1),
             }
-            save_tracking(args.server, done)   # after each table, so a kill is safe
+            save_tracking(args.server, done)   # after each stat, so a kill is safe
         except Exception as exc:
             elapsed = (datetime.now() - t0).total_seconds()
-            log(f"[{i:>3}/{len(todo)}] {name:<46} FAILED after {elapsed:.1f}s: {exc}")
-            failures.append((name, str(exc)))
+            log(f"[{i:>4}/{len(todo)}] {tname}.{sname} FAILED after {elapsed:.1f}s: {exc}")
+            failures.append((key, str(exc)))
 
     total_elapsed = (datetime.now() - run_start).total_seconds()
     log('')

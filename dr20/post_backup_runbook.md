@@ -50,8 +50,13 @@ Expect **no rows**. If any appear, run `drop_metadata_fks.sql` first.
 | 7 | Document allspec's 7 NCIs in IndexMap | `add_indexmap_allspec_nci.sql` | seconds |
 | 8 | Regenerate and reload the metadata | see below | 1 min |
 | 9 | **Verify everything** | `verify_spatial.sql` | 1 min |
-| 10 | Build the statistics | `run_update_stats.py` | ~50 min |
+| 10 | Build the statistics | `run_update_stats.py` | ~41 min |
 | 11 | Checkpoint and reclaim the transaction logs | see below | minutes |
+
+> **Step 11 must follow step 10.** Building statistics generates log activity,
+> so shrinking the log before it just means growing it again. On sdss5a the log
+> shrink was run before step 10 existed, so 5a needs step 11 repeated after its
+> statistics pass.
 
 ---
 
@@ -218,13 +223,23 @@ for hours. Both are avoided by building them before anyone connects.
 
 ```powershell
 cd H:\GitHub\sqlloader\dr20
-python run_update_stats.py --server <server> --scope dr20 --dry-run
-python run_update_stats.py --server <server> --scope dr20
+python run_update_stats.py --server <server> --dry-run
+python run_update_stats.py --server <server>
 ```
 
-- **`--scope dr20`** (~236 tables, ~693 GB, **~50 min**) covers every table
-  loaded for DR20. **`--scope unbuilt`** (~121 tables, ~234 GB, **~17 min**)
-  fixes only the actual defect if time is short.
+**Use the default `--scope unbuilt`.** It targets each missing statistic
+individually rather than rebuilding whole tables, which matters far more than it
+sounds: **FULLSCAN scans the table once per statistic.**
+
+| scope | statistics | scan volume | time |
+|---|---:|---:|---:|
+| `unbuilt` (default) | 122 | 252.5 GB | **~41 min** |
+| `dr20` | 585 | 3,109.5 GB | **~8.5 hours** |
+
+`mos_allwise` is the clearest case: 60.4 GB with 9 statistics, of which exactly
+1 is missing. Whole-table FULLSCAN reads ~540 GB; targeting the one statistic
+reads 60 GB. `--scope dr20` refreshes statistics that were already built
+correctly at load time and is not worth 8 hours on a production box.
 - **The legacy carried-over tables are excluded deliberately** — they have 0
   missing histograms, and PhotoObjAll alone would take this from under an hour
   to most of a day for no benefit.
