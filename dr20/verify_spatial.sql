@@ -106,12 +106,22 @@ CREATE TABLE #r (
 --     @nx/@ny/@nz were built with the conversion, so the reported distance was
 --     garbage (9825 arcmin for a zero-separation self-match). Fixed 2026-07-28
 --     to use the precomputed cx/cy/cz like the correct five.
+--     Detection note: an earlier version of this check tested
+--       definition LIKE '%COS([%' AND definition NOT LIKE '%@nx-cx%'
+--     which CANNOT WORK. The broken functions still contain '@nx-cx' in their
+--     WHERE and ORDER BY clauses - only the returned distance expression was
+--     wrong - so the second clause never held and the check silently returned
+--     0 on a fully broken database. Verified 2026-07-29 against sdss5a, which
+--     had all four broken and was reported clean.
+--     The reliable signal is '@nx-(': the broken form opens a subexpression
+--     there, as in power(@nx-( COS([deccat]) * COS(racat) ),2), while the
+--     correct form reads power(@nx-cx,2).
 INSERT #r (part, check_name, subject, result, expected, detail)
 SELECT 'A', 'distance uses cx/cy/cz, not raw ra/dec', o.name,
        'FAIL', 'PASS', 'recomputes distance from ra/dec without RADIANS()'
 FROM sys.sql_modules m JOIN sys.objects o ON o.object_id = m.object_id
 WHERE o.name LIKE 'fGetNearby%XYZ'
-  AND m.definition LIKE '%COS([%' AND m.definition NOT LIKE '%@nx-cx%';
+  AND m.definition LIKE '%@nx-(%';
 
 INSERT #r (part, check_name, subject, result, expected, detail)
 SELECT 'A', 'distance uses cx/cy/cz, not raw ra/dec', '(all fGetNearby*XYZ)',

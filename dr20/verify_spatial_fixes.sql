@@ -46,5 +46,6 @@ SELECT '5. no broken distance expressions' AS check_name,
        CAST(COUNT(*) AS varchar(10)) + ' function(s) still broken' AS detail
 FROM sys.sql_modules m JOIN sys.objects o ON o.object_id = m.object_id
 WHERE o.name LIKE 'fGetNearby%XYZ'
-  AND m.definition LIKE '%COS([%' AND m.definition NOT LIKE '%@nx-cx%';
+  AND m.definition LIKE '%@nx-(%';   -- see the note in fix_nearby_distance.sql;
+                                     -- the old COS([ / NOT @nx-cx test never fired
 GO
