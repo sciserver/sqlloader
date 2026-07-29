@@ -229,13 +229,150 @@ replace would have added `isPrimary` to the wrong table.
 
 ---
 
+---
+
+# LATE SESSION — the spAll htmid bug (found and fixed after the above)
+
+Everything below happened after the summary above was first written. It started
+from an offhand question about generalising the `fGetNearby*` functions.
+
+## 10. spAll's spatial index was built from a null sentinel — FIXED
+
+**The single most serious thing found today**, two days before go-live.
+
+`spAll.cx/cy/cz` and `htmid` were computed from **`plug_ra`/`plug_dec`**, the
+old plugmap columns. In SDSS-V those hold the null sentinel **−9999** for
+**4,905,907 of 5,357,037 rows (91.6%)**. −9999 is a valid float, so nothing ever
+errored.
+
+What that meant:
+
+- All 4.9M bad rows shared **one** htmid, `16776973019819`. Next most common
+  value: 64 rows.
+- Those rows were **invisible to cone search**. Found by probing
+  `fGetNearbySpAllEq` with coordinates taken straight out of spAll and getting
+  **zero rows** back.
+- cos/sin of −9999 degrees does not wrap somewhere harmless. It lands at
+  **ra = 81.000, dec = 81.000**, an ordinary point in the northern sky, so a
+  cone search there returned **4.9M spurious rows at zero separation**.
+
+**Fixed** with `dr20/fix_spall_htm.sql` — rebuilt from `racat`/`deccat`,
+5,357,037 rows in 8.8 min, `ix_spAll_htmid` rebuilt.
+
+| | before | after |
+|---|---:|---:|
+| biggest htmid pile | 4,905,907 | **172** |
+| cone search finds a known spAll object | 0 rows | **1 row** |
+| cone search at the bogus ra=81/dec=81 | 4.9M spurious | **0** |
+| distinct htmid | 1 + tail | 3,223,326 |
+
+### Why `racat`/`deccat` and not `fiber_ra`/`fiber_dec`
+
+I recommended `fiber_*` twice and was wrong both times; the reasoning that
+actually holds:
+
+- `racat`/`deccat` is **consistently ICRS at `coord_epoch`**.
+  `fiber_ra`/`fiber_dec` is documented *"J2000 for plate; at exp for FPS"* — a
+  **mixed reference frame**, which would index high-proper-motion FPS-era
+  targets at their observed epoch rather than a common frame.
+- **`fGetNearbySpAllXYZ` already returned `racat`/`deccat`** as its `ra`/`dec`
+  output. It indexed on `plug_*` and reported `racat`; that inconsistency is
+  precisely how the bug survived. Indexing on `racat` makes search and output
+  agree.
+- **Both pairs have zero invalid values** across all 5,357,037 rows, so no
+  fallback logic is needed.
+
+**A trap worth remembering:** an earlier check "found" 3 bad `racat` and 18 bad
+`deccat` values. That was wrong — it treated `= 0` as a sentinel, but **RA=0 and
+Dec=0 are valid positions**. Those 21 rows are simply objects on the celestial
+equator and at the RA origin. When validating coordinates, check for NULL,
+−9999 and out-of-range only.
+
+## 11. Four `fGetNearby*XYZ` reported a wrong distance — FIXED
+
+`fGetNearbyMosTargetXYZ`, `fGetNearbyAllspecXYZ`,
+`fGetNearbyApogeeDrpAllstarXYZ` and `fGetNearbySpAllXYZ` recomputed the returned
+distance from ra/dec using `COS()`/`SIN()` **without converting degrees to
+radians**, while `@nx/@ny/@nz` were built *with* the conversion. The other five
+use the precomputed `cx/cy/cz` and were correct.
+
+The row *filter* uses `cx/cy/cz`, so correct rows came back in correct order —
+only the reported `distance` was garbage. It became glaring once spAll started
+returning rows at all: a self-match reported **9825.39 arcmin** instead of 0.
+
+Replaced with the `cx/cy/cz` form the correct five already use, applied by the
+same regex to both `C:\sqlloader\schema\sql\spNearby.sql` (4 replacements) and
+the live definitions via `ALTER FUNCTION`. Verified: reported distances now
+match true great-circle separation to 1e-6.
+
+## 12. Sweep of every table with an htmid column
+
+Six tables have **`htmid = 0` on every row** — never populated:
+`mos_sdss_dr17_specobj` (5.8M), `mos_sdss_dr16_specobj` (5.3M),
+`sdssTiledTargetAll` (1.06M), `mos_mangadapall` (43k), `mos_mangadrpall` (11k),
+`sdssTileAll` (1.9k). The last two have no `cx/cy/cz` at all. **No
+`fGetNearby*` function reads any of them**, so this is an inert gap rather than
+a live bug. Not fixed.
+
+The other 29 tables are clean — largest pile 338 rows — including PhotoObjAll
+(1.23B), mos_target (186.8M), Mask (35.5M), allspec (27.7M).
+
+**Generic test for this class of bug:** group by `htmid` and look for a large
+pile. A sentinel-derived spatial index collapses every affected row onto one
+value.
+
+## 13. Generalising the fGetNearby family (discussed, not done)
+
+22 functions, ~95% boilerplate — only the table name and returned column list
+vary. T-SQL functions cannot take a table name or use dynamic SQL, so one
+generic TVF is impossible. Two viable routes:
+
+- **Generate them** from a table list, like `run_htm_add.py`'s `HTM_TABLES`.
+  Adding a table becomes a one-line entry.
+- **Or document the generic join**, which needs no new objects and works on any
+  table with htmid/cx/cy/cz:
+
+```sql
+SELECT t.*, 2*DEGREES(ASIN(SQRT(POWER(@nx-t.cx,2)+POWER(@ny-t.cy,2)+POWER(@nz-t.cz,2))/2))*60 AS distance
+FROM dbo.fHtmCoverCircleEq(@ra,@dec,@r) H
+JOIN <any_table> t ON t.htmid BETWEEN H.HtmIDStart AND H.HtmIDEnd
+WHERE POWER(@nx-t.cx,2)+POWER(@ny-t.cy,2)+POWER(@nz-t.cz,2) < POWER(2*SIN(RADIANS(@r/120)),2)
+```
+
+Generating them would have caught the spAll bug: a generator must be told which
+ra/dec columns each table uses, making `plug_ra` a reviewable line of data
+rather than something buried in a hand-written function.
+
+---
+
 ## Current State
 
 - Metadata: **908 objects / 32,635 columns / 234 viewcols**
 - `spCheckDBColumns` 0/0, `spCheckDBObjects` 0
-- SPEC: 447.50 GB allocated, 1.56 GB free
+- **spAll spatial index rebuilt from racat/deccat and verified**
+- **4 fGetNearby distance expressions fixed and verified**
+- SPEC: 447.50 GB allocated, ~1.5 GB free
 - Three FKs on DBObjects dropped; recreate script ready but **must not run until
   the metadata is final**
+- Backup `\\dss007.pha.jhu.edu\sql_backups_tmp\BestDR20_20260728\` — 64 stripes,
+  6,580.9 GB compressed, verified complete. **It predates the spAll fix.**
+
+## ⚠ UNCOMMITTED STATE — read this first
+
+The user explicitly said **do not commit** at the end of the session. Nothing
+after `59ac00f` has been committed. Do not commit without asking.
+
+**Uncommitted in the repo** (`HEAD` = `59ac00f`):
+- `dr20/TODO.md` — modified, item 00 marked fixed
+- `dr20/fix_spall_htm.sql` — new, untracked
+
+**Modified on `C:\sqlloader\` and not in the repo:**
+- `schema/sql/spNearby.sql` — the 4 distance expressions.
+  Backup: `<scratchpad>\spNearby.sql.bak`
+
+**Applied to BestDR20 and NOT revertible by git:**
+- `spAll.htmid/cx/cy/cz` rebuilt; `ix_spAll_htmid` rebuilt
+- 4 `fGetNearby*XYZ` functions altered in place
 
 ## Files Created
 
@@ -243,30 +380,63 @@ replace would have added `isPrimary` to the wrong table.
 - `dr20/cleanup_indexmap_stale.sql`
 - `dr20/add_indexmap_erosita.sql`
 - `dr20/fix_clustered_keys.sql`
+- `dr20/fix_spall_htm.sql` — **uncommitted**
 - `dr20/session_summary_20260728.md` — this file
 
 ## Files Modified
 
 - `vbs/parseSchema2sql.py` — batched emitter (mirrored to C:\sqlloader\vbs)
-- `dr20/TODO.md`
+- `dr20/TODO.md` — **uncommitted changes on top of committed ones**
 - On `C:\sqlloader\schema\sql\`: `VacTables.sql`, `AstraTables.sql`,
   `SpectroTables.sql`, `mosTables.sql`, `MastarTables.sql`, `resolveTables.sql`,
-  `IndexMap.sql` — snapshotted into the repo as commit `308df88`
+  `IndexMap.sql` — snapshotted into the repo as commit `308df88`;
+  **`spNearby.sql` changed afterwards and is NOT in that snapshot**
 
 ## Commits
 
 `cbe33e4` batched emitter, `b6e094e` FK drop/recreate, `30541c9` IndexMap and
-clustered key fixes, `32c8532` TODO, `308df88` schema snapshot. Pushed except
-the snapshot.
+clustered key fixes, `32c8532` TODO, `308df88` schema snapshot, `18eb357`
+session summary, `6736264` + `6938fea` + `59ac00f` spAll TODO entries.
+
+**3 commits unpushed** (`6736264`, `6938fea`, `59ac00f`), plus the uncommitted
+work above.
 
 ---
 
-## Next Session
+## Next Session — in priority order
 
-1. **Small fixes**
-2. **spCheckDBIndexes** — discuss with Ani, then the three-step fix above
-3. **Thursday: DR20 goes live**
+1. **Apply both fixes to the restored production copies** on sdss5a and sdss5b.
+   The 2026-07-28 backup predates them, so a restore brings back the broken
+   spAll index and the wrong distance expressions. The DBA (in India, starting
+   the restore in his morning) needs to know. Pre-launch fixes are being applied
+   **in situ** to the live copies — no re-backup planned.
+2. **Fix the source of the spAll bug.** spAll is *not* in `run_htm_add.py`'s
+   `HTM_TABLES`, so the `plug_ra` choice came from the spAll load path —
+   `gen_spec_load.py` / `load_spec_tables.sql`. Without this, DR21 repeats it.
+3. **Decide what to commit** from the uncommitted state above, and push.
+4. **spCheckDBIndexes** — discuss with Ani before changing anything. Its ~211
+   discrepancies are mostly `fIndexName` truncating to 32 chars plus 45 `ci_*`
+   indexes the check never looks at; roughly 25 are real. Details in the
+   section above.
+5. **Thursday 2026-07-30: DR20 goes live.**
 
 Still open from before: scoped DELETE for the metadata load (TODO item 0), the
 2 spAll rows missing from `IndexMap.sql`, 42 `mos_*` tables with a clustered
-index but no IndexMap row, PRIMARY reclaim, cherry-pick `89a9784` to master.
+index but no IndexMap row, `mwm_targets` PK question (**now resolved** — see
+item 5), PRIMARY reclaim, cherry-pick `89a9784` to master, generalising the
+fGetNearby family (item 13).
+
+## Context worth carrying
+
+- **`C:\sqlloader` is shared with Ani** and is authoritative for `schema/`,
+  `vbs/`, `htm/`. The repo is source of truth only for `dr20/`. Tell him which
+  files were touched so an open editor doesn't revert them.
+- **Schema files hide commented-out `/* */` copies of live tables.** This bit
+  twice today — once inserting into a dead copy, once as a silent
+  "already present, skipped" false negative. Any tool grepping for
+  `CREATE TABLE` must skip comment regions.
+- **The metadata load is now ~12 seconds**, so regenerating is cheap. Always run
+  the **full** `xschema.txt`; the emitted `TRUNCATE` is still whole-table.
+- **DR20 mos_ vs DR19:** 171 vs 132 tables — 43 new (11 Gaia DR3, 7 LCO
+  operations, 4 eROSITA supersets, 4 BHM, 4 crossmatches, ~10 external
+  catalogs), 4 dropped (the ones Ani flagged, all empty everywhere).
