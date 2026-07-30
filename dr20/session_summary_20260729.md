@@ -298,27 +298,63 @@ rejected that way. `Ctrl+`` focuses the terminal from the keyboard instead.
 
 ---
 
+---
+
+## Late session — after the summary above was first written
+
+**sdss4c statistics finished:** 236/236 in 117.8 min, 0 left without a
+histogram. All three databases are now complete. The contrast is the
+per-statistic fix in one line — the prod boxes did the *actual defect* in 11 and
+18 minutes on `--scope unbuilt`, while sdss4c spent two hours on the
+whole-table version of the same job.
+
+Its tracking was renamed `stats_updated.json` -> `stats_updated_localhost.json`
+to match the per-server convention. **Its keys are table names, not
+`table.statistic`**, because that run started before the work unit changed — so
+a future run against sdss4c would not resume from it and would redo the set.
+Harmless, but do not be surprised by it.
+
+**sdss4c's transaction logs shrunk: 543.52 GB -> 2.50 GB, 541 GB reclaimed.**
+This had been missed — step 11 was only ever run on the two production boxes,
+because the runbook is written for *restored copies*. Log1 and Log2 were already
+small; Log3 and Log4 were still 272.60 and 269.67 GB against 0.03% in use.
+**Worth remembering if sdss4c is reloaded for DR21** — the runbook will not
+prompt for it.
+
+**`spNearby.sql` change history entry added.** The file had received two
+separate fixes today with no `--*` line recording either. Collapsed into a
+single 2026-07-29 entry in the file's existing format. Comment-only, in the
+header outside any function body, so no redeployment was needed on any server —
+verified the diff against `dr20` HEAD was those 8 lines and nothing else.
+
+A nice thing surfaced while editing that header: an entry from
+**2003-12-03 Jim: "fixed select * and Top 1 orderby problems"**. The same class
+of bug we fixed today, 23 years apart — and his fix was never undone. The three
+functions we corrected were added in 2025, long after him. The defect returned
+because new code was written the same way, not because anything of his broke.
+
+---
+
 ## Current state
 
 - **sdss5a, sdss5b: signed off as ready for production and for a fresh backup.**
-- **sdss4c**: statistics still running at 226/236, the last handful being the
-  largest tables. Loading machine only. `dr20/stats_updated.json` is left
-  untracked until it lands.
+- **sdss4c**: statistics complete, 236/236 in 117.8 min, 0 missing. Nothing is
+  left running on any server.
 - Metadata: **907 objects / 32,466 columns / 234 viewcols** on both prod boxes,
   `spCheckDBObjects` and `spCheckDBColumns` both 0.
+- Transaction logs at **2.50 GB on all three servers**.
 
 ## Next session
 
 1. **Thursday 2026-07-30: DR20 goes live.**
 2. Fresh backup of sdss5a/5b now that they are signed off.
-3. Commit `stats_updated.json` once sdss4c finishes.
-4. Ani commits his working copy to `dr20`, not master.
-5. Re-run the two stored procedures so the compiled copies drop
+3. Ani commits his working copy to `dr20`, not master.
+4. Re-run the two stored procedures so the compiled copies drop
    `boss_clam_params`.
-6. Post-launch: **~325 GB of uncompressed htmid indexes** — `run_htm_add.py`
+5. Post-launch: **~325 GB of uncompressed htmid indexes** — `run_htm_add.py`
    creates every one without compression (24 of them, PhotoObjAll's three
    accounting for ~314 GB). One clause in the script fixes the source.
-7. Post-launch: `mangaDRPall` htmid source; `spCheckDBIndexes` with Ani;
+6. Post-launch: `mangaDRPall` htmid source; `spCheckDBIndexes` with Ani;
    the `fIndexName` widening.
 
 Still open from before: scoped DELETE for the metadata load, 42 `mos_*` tables
