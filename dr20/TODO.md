@@ -635,6 +635,7 @@ the empty-source guard in `run_vac_load.py` now enforces automatically.
     deliver rows already sorted
   - Observed without: 30-40 MB/s. Expected with: 100-150 MB/s
 
+
 ### BestDR20 columnstore experiment
 
 - [ ] **Clustered Columnstore Index version of BestDR20**
@@ -649,6 +650,174 @@ the empty-source guard in `run_vac_load.py` now enforces automatically.
     normalized minidb schema needs 50-table joins for common queries, and the
     read-only SkyServer use case calls for an analytics-friendly design. CCI
     would compound the gains.
+
+---
+
+## CasJobs / SkyServer Query Linting
+
+**Status: committed project, started 2026-08-02.** Not DR20 load work — a
+SkyServer/CasJobs feature. Needs Ani and probably the astronomers for the
+domain-rules layer.
+
+### The enabling insight
+
+We had assumed that letting users write free-form SQL meant accepting whatever
+they submit. It doesn't. **Getting an estimated plan is a compile, not an
+execution** — `SET SHOWPLAN_XML ON` returns the optimizer's own cardinality and
+cost estimates for an arbitrary query without touching a single data page. So we
+can keep free-form SQL *and* judge cost before anything runs. That is the whole
+basis of this project and it is what we didn't know we could do.
+
+### ⚠ What an estimated plan can and cannot tell us
+
+Established 2026-08-02, and it reorders the signal priority below.
+
+An estimated plan carries both **shape** and **numbers**, but they are not
+equally trustworthy:
+
+- **Shape is reliable.** Scan vs. seek, whether a seek predicate exists, join
+  algorithm, four-part names, spools, sorts, the projection list. None of this
+  depends on statistics.
+- **Numbers are conditional.** `EstimateRows` / `EstimatedTotalSubtreeCost` come
+  from statistics histograms and degrade badly on: **multi-statement TVFs**,
+  scalar UDFs, table variables, unknown parameter values, remote references, and
+  missing histograms (a known BestDR20 issue — CI-before-load leaves stats with
+  no histogram).
+
+**The MSTVF problem is fatal for the naive version of this project.**
+`fGetNearbyObjEq` is a multi-statement TVF (`spNearby.sql:237-260` —
+`RETURNS @proxtab TABLE (...) AS BEGIN ... END`), as is essentially the whole
+SkyServer spatial API. The optimizer does not look inside one; it assigns a
+**fixed guess of 100 rows** (1 under the legacy CE). So the estimated plan for
+the specimen query below reports 100 rows out of the function whether the radius
+is 30 arcsec or 30 arcmin — the parameter value is never reasoned about.
+SQL Server's interleaved execution repairs this, but only at *runtime*, which is
+exactly what a pre-submit check does not have.
+
+**A cardinality-threshold gate would have passed the specimen query.** Structural
+signals must be primary; cardinality is corroboration only.
+
+### ✅ The workaround: estimate the spatial API ourselves
+
+The optimizer is blind here, but *we* know the semantics. `spNearby.sql:214`
+documents the sky density:
+
+> There is no limit on the number of objects returned, but there are about
+> **40 per sq arcmin**.
+
+So for `fGetNearby*(ra, dec, r)` with `r` in arcmin, expected rows per call is
+roughly **π·r²·40**:
+
+| radius | interpretation | est. objects per source row |
+|---:|---|---:|
+| 0.017 arcmin | 1 arcsec | ~0.04 |
+| 0.5 arcmin | 30 arcsec (probably intended) | ~31 |
+| **30 arcmin** | **half a degree (what was submitted)** | **~113,000** |
+
+A factor of 3,600 between the last two. This is arithmetic on the parsed call —
+it needs no compile at all, and it beats the optimizer precisely where the
+optimizer has nothing. Multiply by the estimated cardinality of the driving
+table to get the real fan-out.
+
+Verify the 40/sq-arcmin constant against DR20 before relying on it; the comment
+is old and density varies with the footprint.
+
+### The discriminator is not cost
+
+`SELECT * FROM PhotoObjAll` is a bad query because it is *pointless*, not because
+it is expensive. A `GROUP BY` aggregate over the same 1.23B rows costs the same
+and is perfectly legitimate. What separates them is **cost per unit of delivered
+information**. Any rule built on raw cost alone will block good science and miss
+the bad queries that look small.
+
+### Detection tiers
+
+| tier | needs | catches |
+|---|---|---|
+| syntactic | nothing | `SELECT *`, no `TOP`, no `WHERE` |
+| estimated plan | compile only | output cardinality, scan-where-a-seek-exists, join fan-out, memory grant, DOP |
+| domain-aware | SDSS knowledge | arcmin/arcsec confusion, magnitude ranges, missing `mode`/`type` filters |
+| intent | not automatable | query is valid and cheap; the user misunderstands the data |
+
+Tier 3 is where most of the value is, and it's the tier that needs the
+astronomers.
+
+### Signals worth implementing, best first
+
+Reordered 2026-08-02 to put the statistics-independent signals first, per the
+MSTVF finding above.
+
+1. **Spatial-API cardinality, computed by us.** π·r²·40 per call, times the
+   driving table's cardinality. Parse-only, no compile, and it is the one signal
+   that would unambiguously have caught the specimen. Needs a table of
+   function-name → radius parameter → unit.
+2. **Non-sargable spatial predicate.** Probably the largest real category. Users
+   write the distance formula inline —
+   `WHERE sqrt(power(ra-185,2)+power(dec-0,2)) < 0.01` — which no index can
+   serve, so it is a 3 TB scan of PhotoObjAll to return four rows.
+   `fGetNearbyObjEq` would have made it an htmID range seek. The query *looks*
+   modest: small output, simple text. Cost per unit of information is
+   catastrophic. Detectable from plan **shape** — full scan of a huge table with
+   no seek predicate — so it survives bad statistics.
+3. **Projection not justified by the predicate.** Ratio of projected columns to
+   columns referenced in `WHERE`/`JOIN`/`GROUP BY`. Catches `SELECT *` on a
+   509-column table without needing to special-case `SELECT *`. Parse-only.
+4. **Join fan-out.** Nested loops with no seek predicate. The *shape* is the
+   signal; the row estimate attached to it may be worthless.
+5. **Four-part names inside a `CROSS APPLY`** (`[mydbsql].mydb_NNN...`), making
+   every iteration a remote round trip. Parse-only, and remote cardinality
+   estimates are guesses anyway.
+6. **Output cardinality vs. destination.** Estimated rows at the plan root. A
+   large result written to mydb by a batch job is legitimate; the same result
+   streamed to a browser is not. **Demoted** — trustworthy only when the query
+   touches no MSTVF, no scalar UDF, no table variable and no remote reference.
+   Worth computing, but never as the sole gate.
+
+### First step — measure, don't guess
+
+**Mine Query Store on sdss5a/5b for what users actually submit.** DR20 has been
+live since 2026-07-30 and the PerformanceMonitor MCP (`sql-monitor`) exposes it.
+Rank real queries by total cost and see which of the signals above would have
+caught them, and what the false-positive rate looks like. That turns the rule set
+from a guess into a measurement, and it uses the same tooling as the NVMe
+layout work.
+
+### Open design questions
+
+- Warn, or refuse? Probably warn-with-override for quick queries, hard limits for
+  batch. Needs a policy decision, not a technical one.
+- Where does it hook in — CasJobs submit path, SkyServer SQL form, or both?
+- What do we do about already-running offenders? (See specimen below: nothing
+  currently reaps them.)
+- Thresholds per tier, and whether they differ by data release.
+
+### Motivating specimen
+
+Found on **sdss5b**, 2026-08-02, ~02:15. Session 80, `webuser` from
+JOBSSERVICEPROD, against **BestDR19**, running at least 24.9 days —
+`total_elapsed_time` was pegged at int32 max (2147483647 ms), so the true
+duration is unknowable from that column.
+
+```sql
+SELECT g.ra, g.dec, po.objID, po.ra, po.dec, pz.z, pz.zErr, sz.z, sz.zErr
+FROM [mydbsql].mydb_2076303911.webuser.spirals AS g
+CROSS APPLY dbo.fGetNearbyObjEq(g.ra, g.dec, 30) AS nb
+JOIN      PhotoObj AS po ON nb.objID = po.objID
+LEFT JOIN Photoz   AS pz ON po.objID  = pz.objID
+LEFT JOIN SpecObj  AS sz ON po.objID  = sz.bestObjID
+```
+
+159,047,256 logical reads, 1,314,781 physical reads, 239,561 writes, but only
+165 s of CPU — it spent the entire 25 days parked on `ASYNC_NETWORK_IO` because
+the client stopped consuming rows and never disconnected. It was the sole cause
+of that server's dominant wait type. Radius 30 is a half-degree cone per source
+row; the user almost certainly meant 30 arcsec.
+
+Signals 1 (well, 4), 2, 3 and 6 above would all have fired on it.
+
+**Related:** this attacks the same problem as the TestXmatch / `photoMain`
+subset work, from the opposite end. "SDSS queries are slow" is very often "this
+query asked for 10^6x more than the user intended."
 
 ---
 
