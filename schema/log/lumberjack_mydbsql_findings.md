@@ -1,6 +1,6 @@
 # LUMBERJACK and MYDBSQL: findings and recommendations
 
-**Date:** 2026-10-09
+**Date:** 2026-10-09, updated 2026-10-13
 **Started from:** step 5 of the SQL Agent job `Hourly Weblog Update2` on LUMBERJACK
 failing with deadlocks, and the job "slamming the server".
 **Scope:** server-wide observations on both machines, the specific issues found,
@@ -23,10 +23,12 @@ migration).
 4. **Every database file on LUMBERJACK is on one volume, tempdb included.** Heavy
    weblog writes slow down `turblog`'s log flushes, which produces the blocking
    alerts there.
-5. **MYDBSQL is deadlocking about once a minute on its own workload**
-   (parallelism defaults, no RCSI).
-6. A replacement for step 5, `spCopyLocalCasJobsSqlLogs2`, is **deployed but not
-   yet switched on.** It is insert-only, copies each job exactly once, reads only
+5. **MYDBSQL was deadlocking up to once a minute on its own workload.** Almost
+   all of these were CasJobs' scheduler query running at 40-way parallelism. **A
+   plan guide forcing that one query serial went in on 2026-10-13**: 190 ms →
+   1 ms per run, 536 ms → 1 ms CPU.
+6. **Step 5 now runs the replacement, `spCopyLocalCasJobsSqlLogs2`** (switched
+   2026-10-13). It is insert-only, copies each job exactly once, reads only
    recent rows, and fixes the time-zone bug. It cuts the daily write volume by
    about 20×.
 
@@ -193,7 +195,8 @@ logging outage or lost data. Other days in those years were not checked.
 | Version | SQL Server 2019 Enterprise CU29-GDR (October 2024) |
 | Parallelism | **MAXDOP 0** (unlimited), **cost threshold for parallelism 5**. Both are factory defaults |
 | `BatchAdmin` | RCSI **off**, snapshot isolation off, compatibility level 130 |
-| Deadlocks | **About 456 in the ~9 hours system_health retained** (08:00–17:15 UTC on 2026-10-09), roughly one a minute. Most are **parallel exchange deadlocks**. The most common participant (2,815 appearances) is CasJobs' own "ordered list of waiting jobs" query |
+| Deadlocks | **About 456 in the ~9 hours system_health retained** (08:00–17:15 UTC on 2026-10-09), roughly one a minute. Most are **parallel exchange deadlocks**. The most common participant (2,815 appearances) is CasJobs' own "ordered list of waiting jobs" query. See *The scheduler query and its plan guide* below |
+| AG | `is_hadr_enabled` is on, but **no database is in an AG yet**; migration to an AG is planned |
 | Monitoring | **Added to sql-monitor on the afternoon of 2026-10-09.** There's no history before that, and system_health only holds about 9 hours here, so earlier deadlock history is gone. Trends need a few days to build up |
 
 ### `batch.jobs`
@@ -218,6 +221,61 @@ LUMBERJACK's own system_health has no deadlocks, because they are detected and
 recorded on MYDBSQL. The 1205 message in the job history doesn't say which
 server raised it.
 
+### The scheduler query and its plan guide (2026-10-13)
+
+**Deadlock trend** (sql-monitor, UTC days): about 290 on Sat 10-10, 120 Sun,
+60 Mon, 24 on Tue through 14:49. That fall came *before* any change here, so it
+reflects CasJobs workload (Fri 10-09 had a burst of ~92k jobs in 12 h, against
+a normal ~22k/day). Of 174 deadlocks examined, **171 had the same victim**: the
+scheduler's "ordered list of waiting jobs" batch, sent every ~10 s from
+**JOBSSERVICEPROD** on one long-lived connection. Step 5's linked-server read
+was the victim 3 times (Sat 06:13–06:15 UTC).
+
+**Deadlock graph (2026-10-13 14:49 UTC):**
+
+| | Scheduler (victim) | Web app |
+|---|---|---|
+| Host | JOBSSERVICEPROD | IDIESWWW01 |
+| Statement | `select j.* from (... jobs where status = 0) a, jobs j where a.idt not in (...)` | `update jobs set status = @Status, timeend = @TimeEnd, ... where jobid = @JobId` |
+| Isolation | read committed, **40 parallel threads** | repeatable read |
+| Holds | page S locks on `batch.Jobs` | key X lock on the job row |
+| Waits for | that key (one thread); the other threads, via exchange | IX on one of the scheduler's locked pages |
+
+The exchange waits between the scheduler's own threads close the cycle. Run
+serially, the same collision is a few milliseconds of blocking, not a deadlock.
+
+**Cost of the parallel plan** (plan cache, before the change): DOP 40,
+**93 logical reads**, 190 ms elapsed, **536 ms CPU**, every ~10 s. 93 pages is an
+index seek; the time and CPU were thread start-up and coordination. The plan
+probably goes parallel because the optimizer misestimates the `NOT IN` over
+string concatenations (`webservicesid + '_' + target`), and cost threshold 5
+lets it.
+
+**Change made:** a plan guide in `BatchAdmin`,
+`PG_CasJobsScheduler_WaitingJobs_MAXDOP1`, adding `OPTION (MAXDOP 1)` to that
+statement only. SQL 2019 has no Query Store hints, so a plan guide is the tool.
+
+| | Before | After |
+|---|---|---|
+| DOP | 40 | 1 |
+| Elapsed / run | 190 ms | **1 ms** |
+| CPU / run | 536 ms | **1 ms** |
+| Logical reads | 93 | 78 |
+
+Notes for the CasJobs team:
+- **The guide matches on exact text.** If the app's batch text changes at all,
+  the guide silently stops applying. Check `last_dop` with section 1 of the
+  script after any CasJobs release.
+- `sys.fn_validate_plan_guide` reports "Invalid object name 'servers'" when run
+  as dbo. That's a false alarm: the batch uses unqualified names that resolve
+  through the **`batch` user's default schema**. Validate under
+  `EXECUTE AS USER` for that user to get a clean result.
+- The guide lives in the database, so it moves with `BatchAdmin` in the
+  AG migration.
+- Rollback: `EXEC sp_control_plan_guide N'DROP', N'PG_CasJobsScheduler_WaitingJobs_MAXDOP1'`.
+
+Script: `schema/log/mydbsql_scheduler_plan_guide.sql`.
+
 ### `batch.Servers` (queue configuration)
 
 - `Queue` is the job time limit **in minutes**: 1 = quick queue (~214
@@ -231,17 +289,42 @@ server raised it.
 
 ---
 
-## What has been done so far (2026-10-09)
+## What has been done so far
 
 | Where | Change | Status |
 |---|---|---|
 | sql-monitor | LUMBERJACK added to PerformanceMonitor | Done (from ~12:00 local) |
 | sql-monitor | MYDBSQL added to PerformanceMonitor | Done (afternoon of 2026-10-09) |
 | LUMBERJACK `turblog` | `ALTER DATABASE turblog SET READ_COMMITTED_SNAPSHOT ON WITH ROLLBACK AFTER 5 SECONDS` | **Done.** Readers no longer block behind the counter updates. Any in-flight transactions at that moment were rolled back |
-| LUMBERJACK `weblog` | New proc `dbo.spCopyLocalCasJobsSqlLogs2` and tables `dbo.CasJobsSqlLogStage`, `dbo.CasJobsCopyState` | **Deployed, not in use.** Live proc and job unchanged |
-| MYDBSQL | Nothing | Read-only investigation only |
+| LUMBERJACK `weblog` | New proc `dbo.spCopyLocalCasJobsSqlLogs2` and tables `dbo.CasJobsSqlLogStage`, `dbo.CasJobsCopyState` | Deployed 2026-10-09; cut-over range widened (`@initJobIDs`) and redeployed 2026-10-13 |
+| LUMBERJACK job | Step 5 of `Hourly Weblog Update2` → `EXEC dbo.spCopyLocalCasJobsSqlLogs2` | **Done 2026-10-13** after two dry runs and a row-by-row reconciliation (below). Rollback in `switch_step5_to_v2.sql` section 3 |
+| MYDBSQL `BatchAdmin` | Plan guide `PG_CasJobsScheduler_WaitingJobs_MAXDOP1` | **Done 2026-10-13 ~12:07 EDT**, verified DOP 1 |
 
-Source: `schema/log/spCopyLocalCasJobsSqlLogs2.sql`.
+Scripts in `schema/log/`:
+
+| File | Purpose |
+|---|---|
+| `spCopyLocalCasJobsSqlLogs2.sql` | The new proc and its tables |
+| `cutover_checks.sql` | Reconciles a dry run's staged rows against `SqlLogAll` |
+| `switch_step5_to_v2.sql` | Switches step 5 (and rolls back) |
+| `verify_step5_v2.sql` | Checks after the switch: job history, watermark, rows per hour |
+| `mydbsql_scheduler_plan_guide.sql` | The MYDBSQL plan guide: find, create, verify, drop |
+
+### Cut-over checks (2026-10-09 and 2026-10-13)
+
+| Dry run | Window (local) | Read | To delete | To insert |
+|---|---|---|---|---|
+| Fri 10-09 | 03:30–15:30 | 93,498 | 89,964 | 92,283 |
+| Tue 10-13 | Mon 23:27 – Tue 11:27 | 3,401 | 3,176 | 3,373 |
+
+- **The cut-over JobID range was too tight.** It used `MAX(JobID) − 100000`,
+  assumed to be "2–4 days". At Friday's burst rate (~7.5k jobs/h) that was only
+  ~13 hours, barely covering a 12-hour window. Now a parameter, `@initJobIDs`,
+  default 500,000 (~3 weeks normal, ~2.5 days at burst rate).
+- **Reconciliation on 10-13:** every old-proc row the cut-over deletes has a
+  matching new row (zero unmatched). The 197 extra new rows were **169 from
+  Mon 23:xx**, the time-zone bug, seen directly, plus **28** that finished after
+  the old proc's last hourly run.
 
 ### How `spCopyLocalCasJobsSqlLogs2` works
 
@@ -275,17 +358,13 @@ Source: `schema/log/spCopyLocalCasJobsSqlLogs2.sql`.
 
 ## Recommendations
 
-### Now: finish the step 5 change
+### Now: follow up on the step 5 change
 
-1. **Dry run from a session on LUMBERJACK itself** (RDP and SSMS, or Agent).
-   Remote sessions can't pass Windows credentials through the linked server
-   (double hop).
-   ```sql
-   EXEC weblog.dbo.spCopyLocalCasJobsSqlLogs2 @dryRun = 1
-   ```
-   Expected: `isCutOver = 1`, roughly 85–90k `rowsToDelete` and a similar
-   `rowsToInsert` (the last 12 hours).
-2. **Switch step 5** to `EXEC spCopyLocalCasJobsSqlLogs2`.
+1. ~~Dry run~~ and ~~switch step 5~~: done 2026-10-13. (Dry runs must be run
+   from a session on LUMBERJACK itself: remote sessions can't pass Windows
+   credentials through the linked server.)
+2. **Verify** with `verify_step5_v2.sql` after the first run and the next
+   morning. Hours 20–23 local should now have rows.
 3. **Add retries** to step 5:
    ```sql
    EXEC msdb.dbo.sp_update_jobstep @job_name = N'Hourly Weblog Update2',
@@ -341,9 +420,14 @@ along with the rest of the estate.
 
 ### MYDBSQL / CasJobs (for the CasJobs owners)
 
-- **Parallelism:** set **MAXDOP** to the cores per NUMA node, no more than 8,
-  and **cost threshold for parallelism** to around 50. This should remove most
-  of the about one-a-minute parallel deadlocks.
+- **Plan guide on the scheduler query:** in place since 2026-10-13 (see
+  above). Please keep it in mind for CasJobs releases, and consider rewriting the
+  query with `NOT EXISTS` (its comment notes SQL 2000 lacked `EXCEPT`), which
+  should let the optimizer estimate it properly and make the guide unnecessary.
+- **Parallelism:** set **MAXDOP** to the cores per NUMA node, no more than 8
+  (MYDBSQL has 2 × 12 cores with hyperthreading, so 8), and **cost threshold for
+  parallelism** to around 50. The plan guide fixes one query; these fix the
+  same pattern for every small query that goes parallel needlessly.
 - **RCSI on `BatchAdmin`:** stops read-committed readers (including step 5 and
   the job-list queries) taking shared locks. It needs testing with the CasJobs
   app; its repeatable-read transactions keep their behaviour.
@@ -359,8 +443,13 @@ along with the rest of the estate.
 
 ### Migration to the new servers (latest SQL Server, Always On AGs)
 
-- **RCSI settings move with the databases** (backup/restore or AG seeding), so
-  `turblog`'s RCSI comes along.
+- **RCSI settings and plan guides move with the databases** (backup/restore or
+  AG seeding), so `turblog`'s RCSI and `BatchAdmin`'s plan guide come along.
+- **Instance settings do not:** MAXDOP, cost threshold, logins. Set them on
+  every replica.
+- **CasJobs depends on the `batch` user's default schema** to resolve its
+  unqualified table names. Re-map the login to that user with the same default
+  schema, or the app breaks.
 - **Synchronous-commit AGs make commits slower:** each commit also waits for the
   secondary to harden the log (`HADR_SYNC_COMMIT`). Hot-row workloads like
   `turblog.particlecount` will hold locks longer.
@@ -388,7 +477,7 @@ along with the rest of the estate.
 ## Open questions
 
 - Who owns CasJobs/MYDBSQL configuration, and can they look at MAXDOP, cost
-  threshold and RCSI?
+  threshold and RCSI? (They should also be told about the plan guide.)
 - Are the Stripe82 / DR8loc / DR10collab / ApogeeFire queue limits intentional?
 - Does anyone know about the 2014 and 2017 whole-day gaps?
 - Is losing a fraction of a second of `turblog` counts on failover acceptable

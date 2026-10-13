@@ -92,6 +92,7 @@ CREATE OR ALTER PROCEDURE dbo.spCopyLocalCasJobsSqlLogs2
 	@maxJobDays  int = 4,		-- unfinished jobs older than this are treated as stuck
 	@jobIdMargin int = 1000,	-- extra JobIDs re-read below the low-water mark
 	@initHours   int = 12,		-- cut-over window, first run only
+	@initJobIDs  int = 500000,	-- cut-over: JobIDs read back from the newest
 	@batchSize   int = 2000,	-- rows per DELETE/INSERT batch
 	@dryRun      bit = 0		-- 1 = stage and report only
 AS
@@ -141,7 +142,10 @@ BEGIN
 			SET @lastEnd = @from
 			SET @cmd = N'SELECT @maxJobID = MAX(JobID) FROM ' + @pathname
 			EXEC sp_executesql @cmd, N'@maxJobID bigint OUTPUT', @maxJobID = @maxJobID OUTPUT
-			SET @lowJobID = @maxJobID - 100000	-- ~2-4 days of jobs
+			-- Must reach back past the start of the window, plus queue time.
+			-- 100000 was ~13 hours on 2026-10-09 (~7.5k jobs/hour), too tight
+			-- for a 12-hour window.  Extra rows are dropped by the filters below.
+			SET @lowJobID = @maxJobID - @initJobIDs
 		END
 
 		------------------------------------------------------
