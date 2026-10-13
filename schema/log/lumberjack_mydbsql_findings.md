@@ -276,6 +276,23 @@ Notes for the CasJobs team:
 
 Script: `schema/log/mydbsql_scheduler_plan_guide.sql`.
 
+**Source** ([sciserver/CasJobs](https://github.com/sciserver/CasJobs), same on
+`master` and `develop`, last changed 2019): `RUN_JOBS_QUERY` in
+`JobsService/RunJobsThread.cs` (lines 31–75), with the `@quickQueueNames`
+prefix from `QuickQueueNamesQuery` in `JobsService/CJobsDBThread.cs`. The
+Run Jobs Service sends it every 10 s (`CYCLE_DELAY_SECONDS = 10`). The proper
+fix belongs there: add `OPTION (MAXDOP 1)` after `order by j.timesubmit asc`,
+or rewrite the `NOT IN` as `NOT EXISTS`, and then drop the plan guide.
+- **Plan-guide trap on rebuild:** the query is a C# verbatim string, so its
+  line endings are whatever the source file had on the build machine (CRLF in
+  the current checkout; `core.autocrlf` decides). A rebuild from a checkout with
+  different line endings changes the batch text, and the guide silently stops
+  matching.
+- `Run()` has `Console.WriteLine("PASS"); Console.ReadLine();` after the query
+  (lines 126–127). It looks like leftover debug code. Under a service with no
+  console, `ReadLine` returns at once, so it's probably harmless, but it should
+  come out.
+
 ### `batch.Servers` (queue configuration)
 
 - `Queue` is the job time limit **in minutes**: 1 = quick queue (~214
