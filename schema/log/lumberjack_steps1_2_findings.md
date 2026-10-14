@@ -64,9 +64,16 @@ So yes, step 1 rewrites the whole day every hour.
 - **15 live sources** load ~50k-125k rows/day each: 4, 14, 15, 16, 17, 23, 31, 32, 33, 1001,
   2009, 2011, 2019, 2021, 2029.
   (W3SVC1, W3SVC463916812, W3SVC713567506 and W3SVC1858982642 on dsa001/003/005.)
-- **`BcpWeblogNew.exe` is not built from the repo's `bcpWeblog.cs`.** The repo version takes 2 arguments
-  and matches `^ex.*\.log$`. The deployed exe takes 3 arguments (path, output directory, date), and the
-  files are named `ex*_x.log`. Its internals, and so the fixed 570 s, are unknown.
+- **`BcpWeblogNew.exe` is not built from any source in this repo.** `schema/log` has five candidates
+  (`bcpWeblog.cs`, `bcpWeblogIIS5.cs`, `bcpWeblog.js`, `bcpWeblogIIS6.js`, `bcpCopy.js`), all from
+  the 2015 initial commit. All five take `<folder> <minDate> [flag]`, and in all of them a third
+  argument turns bcp OFF. The deployed call passes `<folder> <output dir> <date>`. With the old code,
+  the output folder would be read as the date and bcp would be disabled, yet rows do get loaded.
+  So the exe was rewritten (it now has an output-directory argument). Its internals, and so the fixed
+  570 s, are unknown. Note: the old `^ex.*\.log$` pattern does match `ex*_x.log`, so the file naming
+  is not evidence either way. "BcpWeblogNew" doesn't appear anywhere in `C:\sqlloader` either.
+  The source is probably beside the exe in `c:\ClusterStorage\Volume1\WebLogImport` on lumberjack,
+  or with the job owner (`SDSS\victor`).
 - In the step log (1-minute resolution), dead sources finish within the same minute and live ones take
   about 1 minute each. **The step log in `sysjobhistory` is truncated** at ~4000 characters (about 6
   minutes into the step), so no full per-source breakdown is available.
@@ -153,7 +160,7 @@ None of these have been applied.
 | 3 | **Mark the 4 dead linked-server sources INACTIVE** (2081, 2082, 2170, 2178) | ~60-80 s/hour; stops `ErrorLog` noise | Very low; reversible |
 | 4 | **Mark the 21 dead XCOPY sources INACTIVE** (list above) | Probably under a minute, but less noise | Very low; reversible. Confirm with the web team that these sites are retired |
 | 5 | **Retire the duplicate LogSource rows** (2181/2182 or 2179/2180) | Ends the double-logging | Decide which ID to keep, and whether to delete the ~160M duplicate rows already stored (large DELETE; plan it separately) |
-| 6 | **Find the source code for `BcpWeblogNew.exe`** (job owner `SDSS\victor`?) | Needed to fix step 1's fixed cost | The repo's `bcpWeblog.cs` is not the deployed version |
+| 6 | **Find the source code for `BcpWeblogNew.exe`** (check `WebLogImport` on lumberjack; job owner `SDSS\victor`?) | Needed to fix step 1's fixed cost | None of the 5 bcp sources in `schema/log` is the deployed version |
 | 7 | **Review step 6** `spUpdateTrafficStats` (~200 s flat) | Unknown | Not started |
 
 ### Reproducing the checks
