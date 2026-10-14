@@ -74,6 +74,37 @@ So yes, step 1 rewrites the whole day every hour.
   is not evidence either way. "BcpWeblogNew" doesn't appear anywhere in `C:\sqlloader` either.
   The source is probably beside the exe in `c:\ClusterStorage\Volume1\WebLogImport` on lumberjack,
   or with the job owner (`SDSS\victor`).
+- **Update (same day): the deployed exe was disassembled.** `bcpWeblogNew.exe` (14 Aug 2017, 20 KB) was
+  copied from `C:\ClusterStorage\Volume1\WebLogImport` and read with `ildasm`; it was not executed.
+  It is a .NET 2.0 build of a **modified `bcpWeblog.cs`** (assembly `bcpWeblog.exe`, version
+  1.0.6435.31112). Usage: `bcpWeblog <data-directory> <temp-directory> MinAge [-SuppressBcp]`.
+  The folder also holds earlier builds (`bcpWeblogNewMar07.exe` 2007, `Old` 2009, `Keep`/`Prev` 2016),
+  but no source code. For each source, the exe does the following:
+  1. `ScanFolder`: `GetFiles()` on the UNC folder **and every subfolder**. For each `^ex.*\.log$` file it
+     opens the file and reads the first 5 lines.
+  2. **Date logic:** it takes the timestamp of the first data line, **adds 1 day**, and uses that date for
+     **every row** in the file. Files whose date is earlier than MinAge are skipped. This assumes each IIS file
+     starts with a buffered line from 23:59 the previous evening. If a file ever started after midnight,
+     its whole day would be stamped as the next day. Checked: there are no future-dated rows, and logID 2009
+     has complete, normal daily counts for 2026-09-15 .. 10-14. So it holds in practice, but it's a latent
+     bug for a quiet site.
+  3. Copies the whole log file to `<tempDir>\weblog.txt`, parses it, and writes `<tempDir>\bcp.tmp`
+     **as UTF-8 with a BOM**, then runs `bcp.exe weblog.dbo.weblogTemp in ... -c`. Because the file is
+     on the CSV volume, every hour each live day-file goes through a full copy, a rewrite, and a bcp.
+  4. **The BOM makes bcp reject row 1 of every file**: `rejectedBcpRecords.txt` shows
+     `Row 1, Column 1: Invalid character value for cast specification` on `ï»¿2026 10 14 0 23:59:54 ...`.
+     That costs one row per file per day (the 23:59 straggler), and the step reports success regardless.
+     Easy to fix if the exe is ever rebuilt (`new UTF8Encoding(false)`).
+- **Step 1 also double-loads three folders.** Each is registered under two ACTIVE logIDs:
+
+  | Folder | logIDs | Rows on 2026-10-13 (each) |
+  |---|---|---|
+  | `\\dsa001\LogFiles\W3SVC1858982642\` | 4 (V15), 15 (V2) | 79,707 |
+  | `\\dsa003\LogFiles\W3SVC1858982642\` | 16 (V12), 23 (V10) | 80,191 |
+  | `\\dsa005\LogFiles\W3SVC1858982642\` | 14 (V8), 17 (V13) | 81,088 |
+
+  The counts are identical, so every hour 3 of the 15 live sources are processed a second time for
+  nothing, and ~240k duplicate rows/day land in `weblogAll`. This is the same pattern as SDSS4J/4K in step 2.
 - In the step log (1-minute resolution), dead sources finish within the same minute and live ones take
   about 1 minute each. **The step log in `sysjobhistory` is truncated** at ~4000 characters (about 6
   minutes into the step), so no full per-source breakdown is available.
@@ -160,7 +191,8 @@ None of these have been applied.
 | 3 | **Mark the 4 dead linked-server sources INACTIVE** (2081, 2082, 2170, 2178) | ~60-80 s/hour; stops `ErrorLog` noise | Very low; reversible |
 | 4 | **Mark the 21 dead XCOPY sources INACTIVE** (list above) | Probably under a minute, but less noise | Very low; reversible. Confirm with the web team that these sites are retired |
 | 5 | **Retire the duplicate LogSource rows** (2181/2182 or 2179/2180) | Ends the double-logging | Decide which ID to keep, and whether to delete the ~160M duplicate rows already stored (large DELETE; plan it separately) |
-| 6 | **Find the source code for `BcpWeblogNew.exe`** (check `WebLogImport` on lumberjack; job owner `SDSS\victor`?) | Needed to fix step 1's fixed cost | None of the 5 bcp sources in `schema/log` is the deployed version |
+| 5b | **Retire one logID of each step 1 duplicate pair** (4/15, 16/23, 14/17) | ~20% of step 1's live-source work; ends ~240k dup rows/day | Same decision as #5 (which ID to keep; historical cleanup separate) |
+| 6 | ~~Find the source for `BcpWeblogNew.exe`~~ **Done.** It's disassembled (see step 1). If it is rebuilt: write UTF-8 without a BOM, take the date from the file name or `#Date:` instead of first line + 1 day, and stop opening every file in the folder | Removes the row-1 rejects and the latent date bug | Needs a rebuild and redeploy; a separate decision |
 | 7 | **Review step 6** `spUpdateTrafficStats` (~200 s flat) | Unknown | Not started |
 
 ### Reproducing the checks
