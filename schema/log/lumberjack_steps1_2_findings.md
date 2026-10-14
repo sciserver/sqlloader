@@ -95,6 +95,24 @@ So yes, step 1 rewrites the whole day every hour.
      `Row 1, Column 1: Invalid character value for cast specification` on `ï»¿2026 10 14 0 23:59:54 ...`.
      That costs one row per file per day (the 23:59 straggler), and the step reports success regardless.
      Easy to fix if the exe is ever rebuilt (`new UTF8Encoding(false)`).
+- **The fixed ~570 s is (very probably) the exe opening every old log file.** File counts in the 12 live
+  folders (gathered on lumberjack, 2026-10-14):
+
+  | Server | W3SVC1 | W3SVC463916812 | W3SVC713567506 | W3SVC1858982642 | Oldest |
+  |---|---|---|---|---|---|
+  | dsa001 | 1578 (31.8 GB) | 1577 (13.0 GB) | 1577 (16.5 GB) | 1577 (8.5 GB) | 2022-05-22 |
+  | dsa003 | 1300 (6.9 GB) | 1608 (12.3 GB) | 1608 (17.4 GB) | 1608 (9.2 GB) | 2022-05-21 |
+  | dsa005 | 1104 (6.9 GB) | 1608 (12.4 GB) | 1610 (17.3 GB) | 1610 (9.1 GB) | 2015-01-27 |
+
+  Folder listing takes under 1 s. But `ScanFolder` opens **every** file to read 5 lines, before checking
+  the date. 18,365 files in distinct folders plus 4,795 from the duplicate-registered W3SVC1858982642
+  folders makes **~23,160 SMB file opens per hour**. 570 s / 23,160 ≈ 25 ms per open, which is normal for
+  SMB. It also fits the step log (about 1 min per live source).
+  Not yet proven by a direct timing; see "Proving it" below.
+  **The fix needs no code change:** move the already-loaded old logs out of the scanned tree. `ScanFolder`
+  recurses, so an `old\` subfolder would still be scanned; use a sibling folder, e.g.
+  `\\dsaNNN\LogFiles\archive\W3SVCxxx`. Keeping ~7 days would cut ~23k opens to ~100.
+  That's ~210 GB on the web servers; retention is the web team's call.
 - **Step 1 also double-loads three folders.** Each is registered under two ACTIVE logIDs:
 
   | Folder | logIDs | Rows on 2026-10-13 (each) |
@@ -191,6 +209,7 @@ None of these have been applied.
 | 3 | **Mark the 4 dead linked-server sources INACTIVE** (2081, 2082, 2170, 2178) | ~60-80 s/hour; stops `ErrorLog` noise | Very low; reversible |
 | 4 | **Mark the 21 dead XCOPY sources INACTIVE** (list above) | Probably under a minute, but less noise | Very low; reversible. Confirm with the web team that these sites are retired |
 | 5 | **Retire the duplicate LogSource rows** (2181/2182 or 2179/2180) | Ends the double-logging | Decide which ID to keep, and whether to delete the ~160M duplicate rows already stored (large DELETE; plan it separately) |
+| 4b | **Move IIS logs older than ~7 days out of the 12 live folders** to a sibling `archive\` tree (not a subfolder) | Most of step 1's fixed ~570 s (~23k file opens/hour down to ~100) | Low for the load (old days are already in `weblogAll`). The web team decides retention and where the archive lives |
 | 5b | **Retire one logID of each step 1 duplicate pair** (4/15, 16/23, 14/17) | ~20% of step 1's live-source work; ends ~240k dup rows/day | Same decision as #5 (which ID to keep; historical cleanup separate) |
 | 6 | ~~Find the source for `BcpWeblogNew.exe`~~ **Done.** It's disassembled (see step 1). If it is rebuilt: write UTF-8 without a BOM, take the date from the file name or `#Date:` instead of first line + 1 day, and stop opening every file in the folder | Removes the row-1 rejects and the latent date bug | Needs a rebuild and redeploy; a separate decision |
 | 7 | **Review step 6** `spUpdateTrafficStats` (~200 s flat) | Unknown | Not started |
