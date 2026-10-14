@@ -343,6 +343,40 @@ Scripts in `schema/log/`:
   Mon 23:xx**, the time-zone bug, seen directly, plus **28** that finished after
   the old proc's last hourly run.
 
+### First day after the switch (2026-10-14)
+
+- **Every run succeeded:** step 5 succeeded 23 of 23 times (10-13 12:13 to
+  10-14 10:18), taking at most 13 s. Step 6 ran after each one. Staging is left
+  empty, and the watermark moves forward each hour.
+- **The time-zone fix shows in the data.** Evening rows per local hour, compared
+  with the same Tuesday a week earlier:
+
+  | Hour | Tue 10-06 (old proc) | Tue 10-13 (new proc) |
+  |---|---|---|
+  | 20 | 69 (partial) | 142 |
+  | 21 | **0** | 107 |
+  | 22 | **0** | 132 |
+  | 23 | **0** | 123 |
+
+- **No duplicates from the cut-over.** 10-13 hours 00–11 (deleted and reloaded
+  at the cut-over) have about 2–3× the row counts of 10-06. The ratio of rows to
+  distinct `(theTime, clientIP)` is the same on both days, though (a few percent
+  of jobs share a second and an IP). So that morning really was busier. It
+  wasn't a double copy.
+- **No step 5 deadlocks on MYDBSQL.** Every MYDBSQL deadlock since the switch had
+  the scheduler query as its victim. LUMBERJACK had no deadlocks, and the hourly
+  blocking clusters at :13–:20 are gone.
+- **MYDBSQL after the plan guide:** 4 deadlocks in about 21 h (07:40–10:47 UTC),
+  against ~1.8/h the morning before, roughly a 90% drop. They are now **serial
+  two-party key-lookup deadlocks**:
+  - The scheduler holds a page S lock on a nonclustered index of `batch.Jobs`
+    and waits for a key S lock on `PK_Jobs`.
+  - The web app (REPEATABLE READ) holds that key X lock and waits for IX on the
+    page.
+
+  MAXDOP can't remove this pattern. RCSI on `BatchAdmin` would, because readers
+  then take no S locks. The victim only loses one 10-second poll.
+
 ### How `spCopyLocalCasJobsSqlLogs2` works
 
 - **Insert-only.** Every finished job (status 3, 4 or 5) has a `TimeEnd` and
@@ -380,8 +414,7 @@ Scripts in `schema/log/`:
 1. ~~Dry run~~ and ~~switch step 5~~: done 2026-10-13. (Dry runs must be run
    from a session on LUMBERJACK itself: remote sessions can't pass Windows
    credentials through the linked server.)
-2. **Verify** with `verify_step5_v2.sql` after the first run and the next
-   morning. Hours 20–23 local should now have rows.
+2. ~~Verify~~: done 2026-10-14; see *First day after the switch*.
 3. **Add retries** to step 5:
    ```sql
    EXEC msdb.dbo.sp_update_jobstep @job_name = N'Hourly Weblog Update2',
@@ -390,7 +423,7 @@ Scripts in `schema/log/`:
 4. **Consider letting step 6 run even if step 5 fails** (step 5's on-failure
    action → "go to next step"), so traffic stats aren't skipped.
 5. **Remove the empty steps 3 and 4.**
-6. **Watch for remaining deadlocks** after the switch. If short reads still
+6. **Watch for remaining deadlocks** after the switch (none on day one). If short reads still
    collide with the web app, read `batch.jobs` with `NOLOCK`. The risk is
    copying a job whose finishing update later rolls back, which is acceptable for
    usage logs.
