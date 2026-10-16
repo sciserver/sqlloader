@@ -1,6 +1,7 @@
-# lumberjack "Hourly Weblog Update2": steps 1, 2 (and 6) review
+# lumberjack "Hourly Weblog Update2": steps 1, 2 and 6 review
 
-Date: 2026-10-14. This was a read-only review; nothing on lumberjack was changed.
+Dates: 2026-10-14 (steps 1, 2) and 2026-10-16 (step 6, plus the turblog blocking). This was a
+read-only review; nothing on lumberjack was changed.
 Follows on from `lumberjack_mydbsql_findings.md` (the step 5 rework).
 
 ## Job layout and timings
@@ -12,10 +13,11 @@ Follows on from `lumberjack_mydbsql_findings.md` (the step 5 rework).
 | 3 | `-- EXEC spCopyRemoteWeblogs` | commented out |
 | 4 | `-- EXEC spCopyRemoteSqlLogs` | commented out |
 | 5 | `EXEC dbo.spCopyLocalCasJobsSqlLogs2` | ~1 s (after the 2026-10-13 switch) |
-| 6 | `EXEC spUpdateTrafficStats` | ~200 s, flat (not reviewed yet) |
+| 6 | `EXEC spUpdateTrafficStats` | ~200 s, flat (reviewed 2026-10-16; see below) |
 
-The job starts on the hour. Steps 1+2 finish around :16, which explains the blocking
-clusters at :13-:20.
+The job starts on the hour. Step 1 ends ~:11, step 2 runs ~:11-:13:45, and step 6 runs
+~:13:45-:17. **The blocking clusters at :13-:17 line up with step 6** (see the step 6 section;
+corrected 2026-10-16, this section originally blamed steps 1+2).
 
 ---
 
@@ -198,12 +200,73 @@ This is incremental (only rows since the last run), not a whole-day rewrite.
 
 ---
 
+## Step 6: `spUpdateTrafficStats` (reviewed 2026-10-16)
+
+### What it does
+
+1. Takes the day of `min(tstamp)` for the `service='TRAFFIC'` LogSource row (logID 9001), which is
+   today (UTC).
+2. `DELETE trafficBase` from that day onward, then `INSERT trafficBase` with hourly hit counts
+   aggregated from `weblogAll` (joined to LogSource).
+3. `UPDATE trafficBase SET sql = ...` from an hourly `count(*)` over `SqlLogAll`.
+4. Sets `tstamp = getutcdate()`.
+
+All of these use the same `(yy > @minYY) or (yy = @minYY and mm > @minMM) or (...)` predicate on
+local variables. So, like step 1, **it rebuilds the whole UTC day every hour.**
+
+### Findings
+
+- **The `weblogAll` aggregate is fine.** The estimated plan is a Clustered Index Seek on the
+  `(yy, mm, dd, ...)` key.
+- **The `SqlLogAll` aggregate is a full index scan.** The estimated plan is
+  `Index Scan(I_SQLlogAll_LogID) WHERE: yy > @MinYY OR ...`. With the values unknown at compile time,
+  the optimizer picks a scan of the narrowest index instead of a seek on the clustered key.
+
+  | Index | Pages | Size |
+  |---|---|---|
+  | `PK__SQLlogAllNew__6CC31A31` (clustered) | 125,465,258 | 957 GB |
+  | `i_SqlLogAll_dbname_theTime_logID_clientIP_access` | 21,014,080 | 160 GB |
+  | `I_SQLlogAll_LogID` | 15,690,091 | **120 GB (scanned every hour)** |
+
+  That's **~120 GB read per hour (~2.9 TB/day)** to count about 230k rows for today.
+- **Measured fix** (read-only, `@minYY/@minMM/@minDD` = 2026/10/16, the same `SELECT ... GROUP BY`
+  with `OPTION (RECOMPILE)`): **37,271 logical reads (~290 MB), 330 ms CPU, 675 ms elapsed**, with the
+  correct 15 hourly rows. Compare 15.7M pages for the scan.
+
+### It is the trigger for the turblog blocking
+
+From sql-monitor's blocked process reports, 2026-10-09 .. 10-16:
+
+- **All lumberjack blocking is in `turblog`.** `weblog` had 0 blocking events all week.
+- Daily blocking events: 36, 60, 35, **339** (10-12), 33, **270** (10-14), **654** (10-15, health
+  Critical), 165 (10-16 to ~14:00 UTC).
+- Every report is the turbulence web app (`turbweb` from DSA003/DSA005) running
+  `UPDATE [turblog].[dbo].[particlecount] SET records = records + @records WHERE (uid = @uid)`.
+  All waiters are on **one key** (`KEY: 19:72057594044874752 (38061a45d5a8)`), so it's a single hot
+  counter row, with waits up to ~12 s.
+- **The clusters always fall at :13-:17**, which is step 6's run window (msdb: step 6 starts
+  :13:37-:14:07 and runs 189-233 s; for example, on 10-15 13:15 and 14:15 UTC, 103 and 106 events).
+- The head blocker is itself `suspended` (not running). The likely mechanism is that step 6's 120 GB
+  scan saturates the single CSV volume that holds every file, the holder of the hot row stalls on I/O,
+  and every update behind it queues.
+  **Not proven:** the head blocker's own wait type wasn't captured, and sql-monitor's file I/O and wait
+  collectors have no lumberjack samples for these windows. The timing match is exact.
+  For context, cumulative latencies since the 2025-07-14 restart: weblog data reads ~150 ms,
+  tempdb data writes ~470 ms, and turblog log writes ~19 ms.
+- **This is not a regression from the step 5 switch.** Step 6 has run at ~200 s flat all week, and
+  10-12 (before the switch) already had 339 events. Daily swings follow turbweb's load.
+- RCSI on turblog (ON since 2026-10-09) can't help. This is writer-vs-writer contention on one row,
+  and only a faster lock holder (that is, less I/O pressure) helps.
+
+---
+
 ## Recommended steps
 
 None of these have been applied.
 
 | # | Step | Expected gain | Risk / notes |
 |---|---|---|---|
+| 0 | **Step 6:** add `OPTION (RECOMPILE)` to the `SqlLogAll` aggregate in `spUpdateTrafficStats` (and to the `weblogAll` one, to be safe) | ~120 GB/hour of reads goes away (measured 0.7 s vs ~200 s); very likely ends the hourly turblog pile-ups | Low. Same rows. **Highest priority**, because it is the only fix that affects another app. Do it in the same script as #1 |
 | 1 | **Step 2 DELETE:** add the `yy/mm/dd` OR predicate on `@tStamp` and `OPTION (RECOMPILE)` | Most of step 2 (measured ~2000x fewer reads per source) | Low. Same rows, now a seek. Script with rollback to be drafted, like `switch_step5_to_v2.sql` |
 | 2 | **Set an output file on job step 1** (Advanced, then Output file) | Full per-source timing from the existing `print`s | Logging only. Needed to find the 570 s |
 | 3 | **Mark the 4 dead linked-server sources INACTIVE** (2081, 2082, 2170, 2178) | ~60-80 s/hour; stops `ErrorLog` noise | Very low; reversible |
@@ -212,7 +275,8 @@ None of these have been applied.
 | 4b | **Move IIS logs older than ~7 days out of the 12 live folders** to a sibling `archive\` tree (not a subfolder) | Most of step 1's fixed ~570 s (~23k file opens/hour down to ~100) | Low for the load (old days are already in `weblogAll`). The web team decides retention and where the archive lives |
 | 5b | **Retire one logID of each step 1 duplicate pair** (4/15, 16/23, 14/17) | ~20% of step 1's live-source work; ends ~240k dup rows/day | Same decision as #5 (which ID to keep; historical cleanup separate) |
 | 6 | ~~Find the source for `BcpWeblogNew.exe`~~ **Done.** It's disassembled (see step 1). If it is rebuilt: write UTF-8 without a BOM, take the date from the file name or `#Date:` instead of first line + 1 day, and stop opening every file in the folder | Removes the row-1 rejects and the latent date bug | Needs a rebuild and redeploy; a separate decision |
-| 7 | **Review step 6** `spUpdateTrafficStats` (~200 s flat) | Unknown | Not started |
+| 7 | ~~Review step 6~~ **Done 2026-10-16** (see the step 6 section; the fix is #0) | | |
+| 8 | Later: make steps 1 and 6 **incremental** (only reprocess the current hour), not a whole-day rebuild | The growing part of steps 1 and 6 | Larger change; only worth it after #0, #1 and #4b |
 
 ### Reproducing the checks
 
