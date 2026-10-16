@@ -262,12 +262,32 @@ From sql-monitor's blocked process reports, 2026-10-09 .. 10-16:
 
 ## Recommended steps
 
-None of these have been applied.
+#0 and #1 were **applied 2026-10-16 at 11:27 local** (`fix_steps2_6_recompile.sql`); the others have not been applied.
+
+### Applied and verified: #0 and #1 (2026-10-16)
+
+The first run with the fix was the 12:00 local run (16:00 UTC), checked with section 3 of the script:
+
+| Step | 11:00 run (before) | 12:00 run (after) |
+|---|---|---|
+| 1 `spCopyWeblogs` (unchanged) | 644 s | 696 s |
+| 2 `spCopySqlLogs` | 429 s | **32 s** (~15 s of it is the 4 dead linked servers timing out) |
+| 6 `spUpdateTrafficStats` | 220 s | **10 s** |
+| Whole job | 1,293 s (21.5 min) | **739 s (12.3 min)** |
+
+- 3b: `trafficBase.sql` matches a fresh `SqlLogAll` count for every hour of the day (`diff = 0` for hours 0-16 UTC).
+- 3c: `ErrorLog` has only the 4 known dead servers, with no new errors.
+- New checksums: `spCopySqlLogs` -1509259397, `spUpdateTrafficStats` 701890037. Section 4's rollback still
+  restores the originals (238352324 / 2029706600).
+- **turblog blocking is not judged yet.** sql-monitor's blocking collector ran only twice in the first
+  4 hours, and it also recorded nothing for the 11:00 run (before the fix), so it simply missed those
+  hours. Re-check the :13-:17 windows after a day or two with PerformanceMonitor running.
+- Step 1 is now ~95% of the job. The next big win is #4b (archive the old IIS logs).
 
 | # | Step | Expected gain | Risk / notes |
 |---|---|---|---|
-| 0 | **Step 6:** add `OPTION (RECOMPILE)` to the `SqlLogAll` aggregate in `spUpdateTrafficStats` (and to the `weblogAll` one, to be safe) | ~120 GB/hour of reads goes away (measured 0.7 s vs ~200 s); very likely ends the hourly turblog pile-ups | Low. Same rows. **Highest priority**, because it is the only fix that affects another app. Script: `fix_steps2_6_recompile.sql` (with #1) |
-| 1 | **Step 2 DELETE:** add the `yy/mm/dd` OR predicate on `@tStamp` and `OPTION (RECOMPILE)` | Most of step 2 (measured ~2000x fewer reads per source) | Low. Same rows, now a seek. Script: `fix_steps2_6_recompile.sql` (sections: look, deploy, verify, rollback) |
+| 0 | **APPLIED 2026-10-16.** **Step 6:** add `OPTION (RECOMPILE)` to the `SqlLogAll` aggregate in `spUpdateTrafficStats` (the `weblogAll` one already seeks, so it was left alone) | ~120 GB/hour of reads goes away (measured 0.7 s vs ~200 s); very likely ends the hourly turblog pile-ups | Low. Same rows. **Highest priority**, because it is the only fix that affects another app. Script: `fix_steps2_6_recompile.sql` (with #1) |
+| 1 | **APPLIED 2026-10-16.** **Step 2 DELETE:** add the `yy/mm/dd` OR predicate on `@tStamp` and `OPTION (RECOMPILE)` | Most of step 2 (measured ~2000x fewer reads per source) | Low. Same rows, now a seek. Script: `fix_steps2_6_recompile.sql` (sections: look, deploy, verify, rollback) |
 | 2 | **Set an output file on job step 1** (Advanced, then Output file) | Full per-source timing from the existing `print`s | Logging only. Needed to find the 570 s |
 | 3 | **Mark the 4 dead linked-server sources INACTIVE** (2081, 2082, 2170, 2178) | ~60-80 s/hour; stops `ErrorLog` noise | Very low; reversible |
 | 4 | **Mark the 21 dead XCOPY sources INACTIVE** (list above) | Probably under a minute, but less noise | Very low; reversible. Confirm with the web team that these sites are retired |
