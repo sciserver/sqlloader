@@ -266,8 +266,8 @@ None of these have been applied.
 
 | # | Step | Expected gain | Risk / notes |
 |---|---|---|---|
-| 0 | **Step 6:** add `OPTION (RECOMPILE)` to the `SqlLogAll` aggregate in `spUpdateTrafficStats` (and to the `weblogAll` one, to be safe) | ~120 GB/hour of reads goes away (measured 0.7 s vs ~200 s); very likely ends the hourly turblog pile-ups | Low. Same rows. **Highest priority**, because it is the only fix that affects another app. Do it in the same script as #1 |
-| 1 | **Step 2 DELETE:** add the `yy/mm/dd` OR predicate on `@tStamp` and `OPTION (RECOMPILE)` | Most of step 2 (measured ~2000x fewer reads per source) | Low. Same rows, now a seek. Script with rollback to be drafted, like `switch_step5_to_v2.sql` |
+| 0 | **Step 6:** add `OPTION (RECOMPILE)` to the `SqlLogAll` aggregate in `spUpdateTrafficStats` (and to the `weblogAll` one, to be safe) | ~120 GB/hour of reads goes away (measured 0.7 s vs ~200 s); very likely ends the hourly turblog pile-ups | Low. Same rows. **Highest priority**, because it is the only fix that affects another app. Script: `fix_steps2_6_recompile.sql` (with #1) |
+| 1 | **Step 2 DELETE:** add the `yy/mm/dd` OR predicate on `@tStamp` and `OPTION (RECOMPILE)` | Most of step 2 (measured ~2000x fewer reads per source) | Low. Same rows, now a seek. Script: `fix_steps2_6_recompile.sql` (sections: look, deploy, verify, rollback) |
 | 2 | **Set an output file on job step 1** (Advanced, then Output file) | Full per-source timing from the existing `print`s | Logging only. Needed to find the 570 s |
 | 3 | **Mark the 4 dead linked-server sources INACTIVE** (2081, 2082, 2170, 2178) | ~60-80 s/hour; stops `ErrorLog` noise | Very low; reversible |
 | 4 | **Mark the 21 dead XCOPY sources INACTIVE** (list above) | Probably under a minute, but less noise | Very low; reversible. Confirm with the web team that these sites are retired |
