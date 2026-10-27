@@ -1,7 +1,7 @@
 # Handoff: schema/log cleanup and the bcpWeblog Python rewrite
 
-Written 2026-10-27 at the end of the lumberjack weblog-job session. Read this first in the next
-session, then `lumberjack_steps1_2_findings.md` (step 1 section) for the details behind it.
+Written 2026-10-27 at the end of the lumberjack weblog-job session. Updated the same day after
+checking the branch state. Read this first in the next session, then `lumberjack_steps1_2_findings.md` (step 1 section) for the details behind it.
 
 ## Where things stand
 
@@ -18,10 +18,28 @@ session, then `lumberjack_steps1_2_findings.md` (step 1 section) for the details
 
 ## Plan agreed so far (order matters)
 
-1. **Clean up `schema/log`.**
-2. **Get the needed files onto master.** Don't merge all of dr20.
-3. **New branch off master** for the rewrite. No code before steps 1-3.
+0. **Deal with the 33 uncommitted files in `C:\sqlloader` first** (see below). This one needs the boss.
+1. **Clean up `schema/log`** (on dr20).
+2. **Merge dr20 into master**, as a PR so the boss sees it. This is the never-done DR20 release
+   step, not only a weblog thing.
+3. **New branch off master** for the rewrite. No code before steps 0-3.
 4. Write the **spec** from the disassembly, then `bcpweblog.py`, then the comparison and validation.
+
+### 0. Uncommitted work in `C:\sqlloader` (checked 2026-10-27, read-only)
+
+- `C:\sqlloader` is the shared checkout (the user and the boss), on **master** at `8d328b9`, with
+  **33 modified, uncommitted files**: `schema/sql/ApogeeTables.sql`, `AstraTables.sql`,
+  `IndexMap.sql`, `MastarTables.sql`, `SpectroTables.sql`, `schema/csv/load*.sql`,
+  `schema/etc/loadMetadata.sql`, `setVersion.sql`, `loadadmin/loadsupport-sp.sql`,
+  `admin/connection.js`, and more (`git -C C:\sqlloader status --short`).
+- They're on no branch on GitHub, so this is the one place work can actually be lost.
+- Not yet checked: how many of them already match what's on dr20 (the boss's July "DR20" commits
+  `0a08ae7`, `cdbe5e6` and their merges). Compare with line endings normalised (C: is CRLF, the
+  repo is LF; see memory `project-repo-scope`) before concluding anything differs.
+- It also blocks step 2: once master moves on GitHub, a pull in `C:\sqlloader` refuses to
+  overwrite those files. So the boss commits them (to dr20 or their own branch) or confirms they're
+  obsolete **before** the merge. **Don't touch `C:\sqlloader` without the boss**; they may have
+  files open in an editor.
 
 ### 1. Cleanup: what is in `schema/log` now (20 files)
 
@@ -34,16 +52,19 @@ session, then `lumberjack_steps1_2_findings.md` (step 1 section) for the details
 Decide: folder layout (`legacy/`, `scripts/`, `docs/`?) and where the Python code lives (for
 example `schema/log/bcpweblog/`).
 
-### 2. Getting onto master: facts that matter
+### 2. Merging dr20 into master: facts that matter
 
-- `dr20` is **68 commits ahead of master and 0 behind**. Master's newest commit is
-  "DR19 final state". A full merge would bring all the DR20 data-release work, so don't do it.
-- All the 2026-10 weblog/MYDBSQL work is in **9 files under `schema/log`**, all new on dr20
-  (`git diff --stat origin/master...dr20 -- schema/log`).
-- Simplest clean route: `git switch -c weblog-cleanup origin/master`, then
-  `git checkout dr20 -- schema/log/<files>` (or the whole folder after cleanup), commit, and open
-  a PR to master. Cherry-picking the 15 or so schema/log commits also works, but some commits on
-  dr20 may touch other paths, so check with `git show --stat` first.
+- Nothing is lost: local dr20 == `origin/dr20` (pushed through `fe4e334`).
+- `dr20` is **69 commits ahead of master and 0 behind** (65 the user's, 4 the boss's). Master's
+  newest commit is "DR19 final state" (2025-12-16). The convention looks like **master = latest
+  released DR**, and DR20 went live 2026-07-30, so the full dr20 -> master merge is the
+  outstanding release step. It's a fast-forward unless master moves first.
+  (An earlier draft of this note said "don't merge all of dr20". That was only about not pulling
+  in all of DR20 just for the weblog files. Superseded.)
+- The 2026-10 weblog/MYDBSQL work is **9 new files plus this handoff under `schema/log`**
+  (`git diff --stat origin/master...dr20 -- schema/log`). It comes along with the merge.
+- Other remote branches exist (`DR14`, `DR18`, `DRx`, `develop-sue`, `release`, `xmatch`,
+  `apogee_fire`). Leave them alone.
 - **Repo scope caveat** (memory `project-repo-scope`): the repo is the source of truth only for
   `dr20/`; `schema/` normally lives at `C:\sqlloader` and the boss commits from there.
   `C:\sqlloader\schema\log` has only the 11 legacy files, none of the 2026-10 work. Agree with the
