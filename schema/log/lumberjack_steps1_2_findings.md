@@ -327,9 +327,13 @@ the shared volume and turblog's hot row shows it first. **Anyone querying `SqlLo
 | 10-26 | **832 s** | 30 s | 10 s | **873 s** |
 
 - Steps 2 and 6 are holding at the post-fix figures.
-- **Step 1 grew ~170 s in five days (~30-40 s/day).** BcpWeblogNew.exe opens every `ex*.log`
-  in every live folder each run, and the folders gain files every day. At this rate the job passes
-  an hour in roughly 2-3 months, if growth stays linear. This moves #4b up.
+- **Step 1 got ~140 s slower in one step between 10-23 and 10-24, not gradually.** Fastest run of
+  the day: 588 / 583 / 586 s (10-21 to 10-23), then 731 / 723 / 717 / 723 s (10-24 to 10-27).
+  Corrected 10-27: an earlier version of this note called it daily growth from files accumulating.
+  That cannot be it: the 12 live folders gain ~15 files a day, ~0.4 s/day at 25 ms per open.
+  Not the cause either: the source count (36 ACTIVE XCOPY, unchanged) and the row volume
+  (1.55-1.94M rows/day, flat to falling). **Cause not found yet**; something on the
+  web-server/SMB side or the CSV volume is the next place to look.
 
 **sdss5a "blocking" is intra-query parallelism, not blocking.** sdss5a showed blocking on 10-23,
 10-24 and 10-26 (430 events, up to 65 s, rated Critical). Every event in the 7-day window has
@@ -346,7 +350,7 @@ and was not classified.) sdss5b and sdss4c were Healthy all week.
 | 3 | **Mark the 4 dead linked-server sources INACTIVE** (2081, 2082, 2170, 2178) | ~60-80 s/hour; stops `ErrorLog` noise | Very low; reversible |
 | 4 | **Mark the 21 dead XCOPY sources INACTIVE** (list above) | Probably under a minute, but less noise | Very low; reversible. Confirm with the web team that these sites are retired |
 | 5 | **Retire the duplicate LogSource rows** (2181/2182 or 2179/2180) | Ends the double-logging | Decide which ID to keep, and whether to delete the ~160M duplicate rows already stored (large DELETE; plan it separately) |
-| 4b | **Move IIS logs older than ~7 days out of the 12 live folders** to a sibling `archive\` tree (not a subfolder) | Most of step 1's fixed ~570 s (~23k file opens/hour down to ~100). **Growing ~30-40 s/day as of 10-27**, so this is now the top open item | Low for the load (old days are already in `weblogAll`). The web team decides retention and where the archive lives |
+| 4b | **Move IIS logs older than ~7 days out of the 12 live folders** to a sibling `archive\` tree (not a subfolder) | Most of step 1's fixed ~570 s (~23k file opens/hour down to ~100) | Low for the load (old days are already in `weblogAll`). The web team decides retention and where the archive lives |
 | 5b | **Retire one logID of each step 1 duplicate pair** (4/15, 16/23, 14/17) | ~20% of step 1's live-source work; ends ~240k dup rows/day | Same decision as #5 (which ID to keep; historical cleanup separate) |
 | 6 | ~~Find the source for `BcpWeblogNew.exe`~~ **Done.** It's disassembled (see step 1). If it is rebuilt: write UTF-8 without a BOM, take the date from the file name or `#Date:` instead of first line + 1 day, and stop opening every file in the folder | Removes the row-1 rejects and the latent date bug | Needs a rebuild and redeploy; a separate decision |
 | 7 | ~~Review step 6~~ **Done 2026-10-16** (see the step 6 section; the fix is #0) | | |
