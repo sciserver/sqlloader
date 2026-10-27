@@ -94,6 +94,27 @@ The table below is the inventory as it was before the move.
 - **Later (v2):** only load the lines added since the last run (recommendation #8); maybe
   SqlBulkCopy-style loading.
 
+#### REVISED 2026-10-27: the premise changed (see `weblog_collection_findings_20261027.md`)
+
+The decisions above assumed the job reads the right servers. It doesn't: all active XCOPY sources are
+the old dsa servers (mostly health checks); the real SkyServer traffic is `W3SVC2` on idieswww01-03 and
+isn't collected. The rewrite has to be able to read those logs, so for v1:
+
+- **Match `u_ex*.log` too** (every idieswww log; the exe's `^ex.*\.log$` matches none).
+- **Parse `#Fields:` and map columns by name**, re-reading it at every `#Fields` line. The field lists
+  differ between servers (idieswww01 `W3SVC2` has no `sc-bytes`/`cs-bytes`; 02 has them) and include
+  the custom field `XForwardedFor`. Missing fields load as the column default.
+- **clientIP = first `XForwardedFor` entry** (strip any `:port`), falling back to `c-ip`, which is always the load balancer.
+- **Incremental reading is v1, not v2:** keep a byte offset per file. idieswww01's `W3SVC2` rolls over
+  monthly (17.7 GB file); idieswww02's daily file is 1.29 GB. Re-reading whole files hourly is out.
+- **Write `bytesIn` correctly** (pending the boss's OK).
+- **Not a drop-in for the current `LogSource` rows any more.** The source list changes (that's a
+  `LogSource` decision for its owner), and volume goes from ~1.5 M to perhaps 10-15 M rows/day, which
+  affects `weblogAll` size and steps 3/6. Keeping the same command line and `weblogTemp` load is still a
+  good v1 shape.
+- Validation changes too: there is no old output for the idieswww logs to compare against. Validate
+  against the raw files (line counts per file/hour) instead of against the exe.
+
 ### 4. Spec inputs (outside the repo, durable)
 
 - `H:\bcpweblog_reference\bcpWeblogNew.il` + `.res`: ildasm disassembly of the deployed exe.
@@ -106,6 +127,49 @@ The table below is the inventory as it was before the move.
 - `H:\bcpweblog_inspect\bcpWeblogNew.exe` (copy, 2017-08-14, 20 KB) and
   `rejectedBcpRecords.txt` (the BOM rejects).
 - `schema/log/bcpWeblog.cs`: the 2015 source the deployed exe was modified from.
+- `H:\bcpweblog_reference\from_boss\bcpWeblog\` (from the boss's Google Drive, 2026-10-27; original zip
+  `H:\bcpWeblog-20261027T161114Z-1-001.zip`): the VS project, 2004-2009. Never execute its exes.
+  Findings, checked against `bcpWeblogNew.il`:
+  - **Lineage:** `Backup/bcpWeblog.cs` (2005) -> `bcpWeblog.cs` (2009-05-04) -> deployed exe (2017).
+    The deployed exe has the 2009 code (`-SuppressBcp`, the same messages) plus the
+    `<temp-directory>` arg, `"yyyy-MM-dd"` and the `"C:\Temp"` default, which the 2009 source lacks. **The 2017
+    source is still missing** (asked the boss 10-27, not hopeful). Not a blocker: the 2017 changes are small and
+    all visible in the IL. Same 6 methods and signatures; new field `tempDir`; `Main` args become
+    `<data> <temp> <minAge> [-SuppressBcp]`; `MakeLoadFile` adds the +1 day rule (IL 389-397:
+    `ToDateTime` -> `AddDays` -> `"yyyy-MM-dd"`); temp files go to `tempDir`. **Spec approach:** use the 2009 C#
+    as the readable base and check each 2017 change against the IL.
+    The repo's 2015 `schema/log/bcpWeblog.cs` is a separate branch (`-nobcp`).
+  - **BOM cause:** 2009 changed `fo.CreateText()` to `new StreamWriter(fo.Create(), Encoding.UTF8)`;
+    deployed IL 447-450 has the same call.
+  - **bytesIn bug:** `remap()` appends `bytesOut` twice and never writes `bytesIn` (2009 source
+    lines 215-216; deployed IL_0327/IL_0335 both `ldloc.s V_8`). So weblogAll's bytesIn = bytesOut for
+    every row this exe loaded. The repo's 2015 source is correct. **v1 decision needed:** fix it
+    (recommended; write it into the spec and the validation diff as an expected difference) or keep it. Ask
+    the boss.
+    **Confirmed in data 2026-10-27** (lumberjack `weblog`, 2026-10-26, read-only, NOLOCK): 1,550,569 rows in 15
+    sources, `bytesIn <> bytesOut` = **0** everywhere; ~1.31 M are equal and non-zero. SKYSERVICE sources
+    (1001/2011/2021) have bytesOut ~ 0 (no byte fields in those logs, so both columns are the default "0").
+    (`spCopyWeblogs`'s `InsertFNALWeblog` call is commented out, so every weblogAll row comes from the exe.)
+
+## Found 2026-10-27: duplicate LogSource rows (separate from the rewrite)
+
+Three pairs of ACTIVE, visible `LogSource` rows point at the **same folder**, so each folder is scanned
+and loaded twice every hour under two logIDs:
+
+| Folder | logIDs | rows on 10-26 (each) |
+|---|---|---|
+| `\\dsa001\LogFiles\W3SVC1858982642\` | 4 (V15), 15 (V2) | 75,476 |
+| `\\dsa003\LogFiles\W3SVC1858982642\` | 16 (V12), 23 (V10) | 78,904 |
+| `\\dsa005\LogFiles\W3SVC1858982642\` | 14 (V8), 17 (V13) | 78,771 |
+
+- About 233k duplicate weblogAll rows/day. `trafficBase.hits` = count(*) of weblogAll, so published hits
+  are ~18% too high (2026-10-26), for at least the full year weblogAll keeps; `trafficBase` (back to 2001) keeps it.
+- Step 1: 36 active XCOPY sources / 33 distinct folders (only 15 had rows on 10-26), so 3 of 36 scans are
+  repeats; time cost not measured (depends on file count in those folders). An earlier "3 of 12, ~1/4" note was wrong.
+- Write-up for the boss: `weblog_collection_findings_20261027.md`; checks: `verify_duplicate_logsources.sql`.
+  Fix is a `LogSource` status change, but which logID to keep (and whether to recompute trafficBase) is the
+  boss's call. Nothing changed yet.
+- The `W3SVC1\\` rows (2009/2019/2029) are a different IIS site on the same servers, not duplicates.
 
 What the spec must pin down: every argument; the folder recursion (`ScanFolder` recurses, so an
 `old\` subfolder is still scanned); the MinAge/date rule; the IIS field -> `weblogTemp` column
