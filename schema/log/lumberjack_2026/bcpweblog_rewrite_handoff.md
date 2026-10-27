@@ -27,6 +27,10 @@ checking the branch state. Read this first in the next session, then `lumberjack
 
 ### 0. Uncommitted work in `C:\sqlloader` (checked 2026-10-27, read-only)
 
+**Status 2026-10-27:** the boss has been asked to commit them or confirm they're obsolete. They're
+the boss's (the user works only in the H: checkout). Waiting on the answer; step 2 is blocked
+until then.
+
 - `C:\sqlloader` is the shared checkout (the user and the boss), on **master** at `8d328b9`, with
   **33 modified, uncommitted files**: `schema/sql/ApogeeTables.sql`, `AstraTables.sql`,
   `IndexMap.sql`, `MastarTables.sql`, `SpectroTables.sql`, `schema/csv/load*.sql`,
@@ -41,7 +45,12 @@ checking the branch state. Read this first in the next session, then `lumberjack
   obsolete **before** the merge. **Don't touch `C:\sqlloader` without the boss**; they may have
   files open in an editor.
 
-### 1. Cleanup: what is in `schema/log` now (20 files)
+### 1. Cleanup: DONE 2026-10-27
+
+Layout chosen: the 11 legacy files stay at the top of `schema/log` (same paths as
+`C:\sqlloader\schema\log`, so the merge moves nothing in the boss's tree); the 2026-10 docs and
+scripts are in `schema/log/lumberjack_2026/`; the Python code will go in `schema/log/bcpweblog/`.
+The table below is the inventory as it was before the move.
 
 | Group | Files | Proposal |
 |---|---|---|
@@ -49,8 +58,6 @@ checking the branch state. Read this first in the next session, then `lumberjack
 | Findings docs (2026-10) | `lumberjack_mydbsql_findings.md`, `lumberjack_steps1_2_findings.md`, this file | Keep. They're the record of what changed on prod |
 | Deployed change scripts (2026-10) | `fix_steps2_6_recompile.sql`, `spCopyLocalCasJobsSqlLogs2.sql`, `switch_step5_to_v2.sql`, `verify_step5_v2.sql`, `cutover_checks.sql`, `mydbsql_scheduler_plan_guide.sql`, `mydbsql_batchadmin_rcsi.sql` | Keep (each has verify and rollback sections). RCSI is NOT deployed yet; the others are |
 
-Decide: folder layout (`legacy/`, `scripts/`, `docs/`?) and where the Python code lives (for
-example `schema/log/bcpweblog/`).
 
 ### 2. Merging dr20 into master: facts that matter
 
@@ -61,7 +68,7 @@ example `schema/log/bcpweblog/`).
   outstanding release step. It's a fast-forward unless master moves first.
   (An earlier draft of this note said "don't merge all of dr20". That was only about not pulling
   in all of DR20 just for the weblog files. Superseded.)
-- The 2026-10 weblog/MYDBSQL work is **9 new files plus this handoff under `schema/log`**
+- The 2026-10 weblog/MYDBSQL work is **9 new files plus this handoff under `schema/log/lumberjack_2026`**
   (`git diff --stat origin/master...dr20 -- schema/log`). It comes along with the merge.
 - Other remote branches exist (`DR14`, `DR18`, `DRx`, `develop-sue`, `release`, `xmatch`,
   `apogee_fire`). Leave them alone.

@@ -274,7 +274,7 @@ Notes for the CasJobs team:
   AG migration.
 - Rollback: `EXEC sp_control_plan_guide N'DROP', N'PG_CasJobsScheduler_WaitingJobs_MAXDOP1'`.
 
-Script: `schema/log/mydbsql_scheduler_plan_guide.sql`.
+Script: `schema/log/lumberjack_2026/mydbsql_scheduler_plan_guide.sql`.
 
 **Source** ([sciserver/CasJobs](https://github.com/sciserver/CasJobs), same on
 `master` and `develop`, last changed 2019): `RUN_JOBS_QUERY` in
@@ -317,7 +317,7 @@ or rewrite the `NOT IN` as `NOT EXISTS`, and then drop the plan guide.
 | LUMBERJACK job | Step 5 of `Hourly Weblog Update2` → `EXEC dbo.spCopyLocalCasJobsSqlLogs2` | **Done 2026-10-13** after two dry runs and a row-by-row reconciliation (below). Rollback in `switch_step5_to_v2.sql` section 3 |
 | MYDBSQL `BatchAdmin` | Plan guide `PG_CasJobsScheduler_WaitingJobs_MAXDOP1` | **Done 2026-10-13 ~12:07 EDT**, verified DOP 1 |
 
-Scripts in `schema/log/`:
+Scripts in `schema/log/lumberjack_2026/`:
 
 | File | Purpose |
 |---|---|
