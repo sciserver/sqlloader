@@ -91,6 +91,18 @@ duplicates. Every month checked back to 2025-11-01 shows the same pattern.
 for 2026-10-26 (SDSS5A: 2,841). Either 5B gets no query traffic by design, or its query logging isn't
 working.
 
+**Checked in sql-monitor (2026-10-27):** 5B gets no query traffic, so the logging is accurate. Over 48 h,
+sdss5b ran a flat ~0.4 batch requests/sec (background: monitoring and Agent), against 4-95/sec on sdss5a
+following the day's pattern (peak 310). 5B's only connections were SSMS sessions, with no
+SkyServer/web-service connections and no cached query stats in 24 h. So the question is whether all query
+traffic going to 5A is intended (5B as standby) or a connection-string / load-balancing gap.
+
+**CasJobs routing (`batchadmin.batch.servers` on MYDBSQL):** sdss5b is the host for only 2 of 426 contexts,
+both long queue (500): `DR20Collab_long` and `DR19_long`. Every quick queue and `DR20_long`,
+`DR19collab_long` and `minidb_dr19_long` go to sdss5a. Long jobs in those two contexts are rare, which fits
+5B being nearly idle. SkyServer's own pages and web services don't go through `batch.servers`; they use
+their own connection strings, which evidently point at 5A.
+
 ## 4. `bytesIn` has never been loaded correctly
 
 `BcpWeblogNew.exe` writes `bytesOut` (`sc-bytes`) into both `bytesOut` and `bytesIn`. This is visible in the
@@ -112,7 +124,9 @@ working.
 6. Should `trafficBase` history be recomputed or annotated? `weblogAll` only goes back to 2025-10-21, so earlier
    web numbers can't be corrected from row data.
 7. Duplicates: which logID in each pair stays active?
-8. SDSS5B: is zero query traffic expected?
+8. SDSS5B is up but receives almost no query traffic (sql-monitor). In CasJobs it only takes the
+   `DR20Collab_long` and `DR19_long` queues. Is that split intended (and should `DR20_long`, the busiest long
+   queue, be on 5B?), and should SkyServer / the web services send any queries to 5B?
 
 **bcpWeblog rewrite** (in progress; see `bcpweblog_rewrite_handoff.md`):
 9. The rewrite will handle `u_ex*` names, parse `#Fields` by name, take the client IP from `XForwardedFor`,
