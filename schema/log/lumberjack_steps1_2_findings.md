@@ -279,10 +279,64 @@ The first run with the fix was the 12:00 local run (16:00 UTC), checked with sec
 - 3c: `ErrorLog` has only the 4 known dead servers, with no new errors.
 - New checksums: `spCopySqlLogs` -1509259397, `spUpdateTrafficStats` 701890037. Section 4's rollback still
   restores the originals (238352324 / 2029706600).
-- **turblog blocking is not judged yet.** sql-monitor's blocking collector ran only twice in the first
-  4 hours, and it also recorded nothing for the 11:00 run (before the fix), so it simply missed those
-  hours. Re-check the :13-:17 windows after a day or two with PerformanceMonitor running.
+- ~~turblog blocking is not judged yet.~~ Judged on 10-19 and 10-27: the hourly blocking is gone (see
+  "Follow-up checks" below).
 - Step 1 is now ~95% of the job. The next big win is #4b (archive the old IIS logs).
+
+### Follow-up checks (2026-10-19 and 2026-10-27)
+
+sql-monitor has collected every minute since 2026-10-16 17:08 UTC (mydbsql was removed from
+PerformanceMonitor that day, which ended the ~2.5 h stalls), so the counts below have no gaps.
+
+**turblog blocking.** The hourly pile-up in the :13-:16 UTC window (step 6) has not come back once.
+The last one was 2026-10-16 11:14 UTC, before the fix.
+
+| Day (UTC) | Blocking events | Notes |
+|---|---|---|
+| 10-12 / 10-14 / 10-15 | 339 / 270 / 654 | before the fix |
+| 10-17 | 2,004 | one ad hoc burst, not the job (below) |
+| 10-18 | 67 | one 6-minute burst at 19:00 UTC, cause not found (not a backup) |
+| 10-19, 10-20 | 0, 1 | |
+| 10-21 | 27 | two small particlecount bursts (09:10 and 19:17 UTC), not chased |
+| 10-22 to 10-27 | 0 every day | |
+
+**10-17 burst (07:57-08:44 UTC).** Ad hoc queries from IDIESWWW01 through IIS (login `weblog`)
+against the `SqlLog` view, filtered only on `theTime`, for example
+`SELECT TOP 3 theTime, error FROM SqlLog ORDER BY theTime DESC` (47 minutes at DOP 40).
+`theTime` is near the end of the clustered key, so every one of them scanned `SqlLogAll`:
+
+| | Normal | During the burst |
+|---|---|---|
+| weblog data reads | ~0 per 10 min | 5-7 million per 10 min (~28M total) |
+| weblog read latency | ~3 ms | ~200 ms |
+| turblog log write latency | 8 ms | ~750 ms (peaks 1.3 s) |
+
+The particlecount head blockers were waiting on `WRITELOG`, so each UPDATE held its lock about a
+second instead of milliseconds. It is the same mechanism as step 6 before the fix: a big scan fills
+the shared volume and turblog's hot row shows it first. **Anyone querying `SqlLog` should add
+`yy`/`mm`/`dd` to the filter.** DOP 40 also suggests lumberjack's MAXDOP is 0 (not checked yet).
+
+**Job step times (daily averages from msdb; history only goes back to 10-21).** No failures.
+
+| Day | Step 1 | Step 2 | Step 6 | Whole job |
+|---|---|---|---|---|
+| 10-22 | 662 s | 27 s | 9 s | 700 s |
+| 10-23 | 737 s | 29 s | 8 s | 776 s |
+| 10-24 | 795 s | 26 s | 8 s | 830 s |
+| 10-25 | 807 s | 47 s | 8 s | 865 s |
+| 10-26 | **832 s** | 30 s | 10 s | **873 s** |
+
+- Steps 2 and 6 are holding at the post-fix figures.
+- **Step 1 grew ~170 s in five days (~30-40 s/day).** BcpWeblogNew.exe opens every `ex*.log`
+  in every live folder each run, and the folders gain files every day. At this rate the job passes
+  an hour in roughly 2-3 months, if growth stays linear. This moves #4b up.
+
+**sdss5a "blocking" is intra-query parallelism, not blocking.** sdss5a showed blocking on 10-23,
+10-24 and 10-26 (430 events, up to 65 s, rated Critical). Every event in the 7-day window has
+`blocked_spid = blocking_spid` with different `ecid`s: one parallel query's threads waiting on each
+other. The queries are large `spExecuteSQL` catalog queries from IDIESWWW01/03 (SkyServer) and
+JOBSSERVICEPROD (CasJobs). No user blocked another. (The 10-20 burst is past the tool's 7-day limit
+and was not classified.) sdss5b and sdss4c were Healthy all week.
 
 | # | Step | Expected gain | Risk / notes |
 |---|---|---|---|
@@ -292,7 +346,7 @@ The first run with the fix was the 12:00 local run (16:00 UTC), checked with sec
 | 3 | **Mark the 4 dead linked-server sources INACTIVE** (2081, 2082, 2170, 2178) | ~60-80 s/hour; stops `ErrorLog` noise | Very low; reversible |
 | 4 | **Mark the 21 dead XCOPY sources INACTIVE** (list above) | Probably under a minute, but less noise | Very low; reversible. Confirm with the web team that these sites are retired |
 | 5 | **Retire the duplicate LogSource rows** (2181/2182 or 2179/2180) | Ends the double-logging | Decide which ID to keep, and whether to delete the ~160M duplicate rows already stored (large DELETE; plan it separately) |
-| 4b | **Move IIS logs older than ~7 days out of the 12 live folders** to a sibling `archive\` tree (not a subfolder) | Most of step 1's fixed ~570 s (~23k file opens/hour down to ~100) | Low for the load (old days are already in `weblogAll`). The web team decides retention and where the archive lives |
+| 4b | **Move IIS logs older than ~7 days out of the 12 live folders** to a sibling `archive\` tree (not a subfolder) | Most of step 1's fixed ~570 s (~23k file opens/hour down to ~100). **Growing ~30-40 s/day as of 10-27**, so this is now the top open item | Low for the load (old days are already in `weblogAll`). The web team decides retention and where the archive lives |
 | 5b | **Retire one logID of each step 1 duplicate pair** (4/15, 16/23, 14/17) | ~20% of step 1's live-source work; ends ~240k dup rows/day | Same decision as #5 (which ID to keep; historical cleanup separate) |
 | 6 | ~~Find the source for `BcpWeblogNew.exe`~~ **Done.** It's disassembled (see step 1). If it is rebuilt: write UTF-8 without a BOM, take the date from the file name or `#Date:` instead of first line + 1 day, and stop opening every file in the folder | Removes the row-1 rejects and the latent date bug | Needs a rebuild and redeploy; a separate decision |
 | 7 | ~~Review step 6~~ **Done 2026-10-16** (see the step 6 section; the fix is #0) | | |
