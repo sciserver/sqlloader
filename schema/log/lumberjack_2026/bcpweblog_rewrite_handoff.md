@@ -3,6 +3,29 @@
 Written 2026-10-27 at the end of the lumberjack weblog-job session. Updated the same day after
 checking the branch state. Read this first in the next session, then `lumberjack_steps1_2_findings.md` (step 1 section) for the details behind it.
 
+## STATUS at the end of the 2026-10-27 session (read this first)
+
+**The big change:** web page traffic is collected from the OLD web servers (dsa001/003/005, ~98% health
+checks). The real SkyServer traffic is `W3SVC2` on idieswww01-03, and nothing collects it. Query traffic
+(SqlLogAll) is fine. Full write-up, sent to the boss: `weblog_collection_findings_20261027.md` (commit
+1060735). The user offered the boss a call. The user does NOT own the web servers / IIS / LogSource setup;
+they came in for the job blocking. Keep findings neutral and send config questions to their owners.
+
+**Waiting on the boss (nothing can move until then):**
+1. `C:\sqlloader` group B files: OK to copy onto dr20? (`dr20/c_sqlloader_uncommitted_20261027.md`; the
+   plan is in memory: copy from C: into the H: checkout, never write to C:, ask for name/email for `--author`.)
+2. The 2017 bcpWeblog source (not hopeful; not needed, the IL covers the gap).
+3. Answers to the 9 questions in the findings doc. The key ones: what happened 2025-10-21; who owns
+   IIS logging on idieswww01-03; which servers `LogSource` should collect; bytesIn fix (yes?).
+
+**Then:** dr20 -> master PR, rewrite branch off master, spec. The rewrite v1 requirements are revised
+below ("REVISED 2026-10-27"). Spec base: the boss's 2009 C# in `H:\bcpweblog_reference\from_boss\` + IL for the
+2017 changes.
+
+**Corrections to the older notes below:** step 1 runs 36 active XCOPY sources (33 folders), not "12 live
+folders". The idieswww01 SkyServer log was last written 2026-10-23 09:53, the same day as the unexplained
++140 s step 1 jump. Step 1 doesn't read idieswww, so probably a coincidence, but worth asking about.
+
 ## Where things stand
 
 - **Owner of the rewrite:** suzanne (agreed 2026-10-27; the boss asked whether a rewrite could
