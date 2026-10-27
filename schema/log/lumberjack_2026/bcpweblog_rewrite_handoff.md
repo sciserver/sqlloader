@@ -22,6 +22,17 @@ they came in for the job blocking. Keep findings neutral and send config questio
 below ("REVISED 2026-10-27"). Spec base: the boss's 2009 C# in `H:\bcpweblog_reference\from_boss\` + IL for the
 2017 changes.
 
+**2025-10-21 explained (the user remembered):** a stopgap for weblog DB size. The old `weblogAll` was renamed
+`weblogAll_10212025` (6.18 B rows since 2016, still there, so older `trafficBase` can be checked) and a new empty
+`weblogAll` was created. idieswww01 sources were switched off the same day. They had never loaded a row
+(the exe can't match `u_ex*`), but their `tstamp` kept updating. The old table holds the same probe/duplicate pattern.
+**Proposals queued for after the call:**
+(a) a daily data check, a separate Agent job running `spWeblogDailyCheck` over yesterday, alerting through the existing
+"Weblog Job failure alert" operator / Database Mail. It checks rows, not `tstamp`: no duplicate pathnames, each expected web
+server has rows, probe share < ~90%, ≥ 50% of the same weekday's 4-week average, SQL sources have rows. It needs an
+expected-source list from the owner. (b) In the rewrite, log "files seen vs matched" per folder and run, and ask the owner
+whether to drop load-balancer probes at load time.
+
 **Corrections to the older notes below:** step 1 runs 36 active XCOPY sources (33 folders), not "12 live
 folders". The idieswww01 SkyServer log was last written 2026-10-23 09:53, the same day as the unexplained
 +140 s step 1 jump. Step 1 doesn't read idieswww, so probably a coincidence, but worth asking about.
