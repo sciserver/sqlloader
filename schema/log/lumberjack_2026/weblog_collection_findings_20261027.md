@@ -81,6 +81,11 @@ The copies are row-for-row identical.
 | `SDSS4J.weblog` | 2179, 2181 | DR17 query counts doubled in `SqlLogAll` |
 | `SDSS4K.weblog` | 2180, 2182 | DR18 query counts doubled |
 
+The SDSS4J/4K pairs are **not** the CasJobs quick and long queues: `spCopySqlLogs` copies all of
+`<pathname>.dbo.sqlLogUtc` for each source (no per-source filter), both logIDs have identical counts for
+every `access` type, and `EXCEPT` both ways is 0 / 0. The rows are SkyServer / SkyserverWS queries; CasJobs
+is collected separately (logID 2061, `batch.jobs`). SDSS4J also has only a quick queue in `batch.servers`.
+
 `trafficBase.hits` is `count(*)` over `weblogAll` and `trafficBase.SQL` is `count(*)` over `SqlLogAll`, with
 no split by logID, so both include the duplicates. On 2026-10-26, 233,151 of 1,550,570 `hits` (15%) were
 duplicates. Every month checked back to 2025-11-01 shows the same pattern.
