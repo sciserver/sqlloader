@@ -351,6 +351,32 @@ One line per source to stdout (the job history) and appended to a log file:
    10-26; +64 dated 10-27 from the head of file 28). A backfill of 10-26 then deleted exactly the 93 rows incremental had loaded
    from file 27's head and reloaded them with the rest of the day. Still to do: the 2-day hourly version.
 5. **Failure and restart.** Kill a run partway, and fail bcp on purpose: the next run must leave no gap and no duplicate.
+   **Done 2026-10-28** on sdss4c `bcpweblog_test`, logID 3001 (idieswww01's monthly file, so every run read a full 1 GB
+   chunk). Start: 10,897,488 rows, offset 2,999,999,764.
+
+   | test | what was done | run | left behind | weblogAll / offset |
+   |---|---|---|---|---|
+   | T1 | process tree killed 20 s into parsing | 10 | `started`; nothing staged | unchanged |
+   | T2 | tree killed 25 s into the `weblogStage` bcp | 11 | `started`; 1,000,000 rows staged (2 committed bcp batches) | unchanged |
+   | T3 | tree killed 10 s into `spLoadWeblogStage` | 12 | `started`; 3,531,522 rows + 1 offset staged (the proc's CATCH doesn't run when the client disconnects) | unchanged (rolled back) |
+   | T3b | **python only** killed 10 s into the load; the orphan `sqlcmd` ran on | 13 | `loaded` | +3,531,522 rows, offset moved, together |
+   | T4 | `LogFileStateStage` given an extra column, so the offsets bcp fails after all rows are staged | 14 | `failed`; its 708,591 staged rows removed | unchanged |
+   | T5 | bcp's SQL session `KILL`ed after its first 500k batch committed | 15 | `failed`; the committed batch removed | unchanged |
+   | recovery | runs 10-12 backdated 13 h, then one normal run | 16 | 10-12 `abandoned`, staging empty; `loaded` | +3,579,297 rows |
+
+   End: 18,008,307 rows = 18,008,307 distinct `Seq` (no duplicates), and `check_counts.py` gives 18,008,307 raw lines up to
+   the offset, 174 hours compared, **0 differ** (no gap). Runs 11 and 12 read the same chunk and produced the same row count.
+
+   Findings:
+   - **In T4, bcp exited 0 having copied 0 of 1 rows** ("Unexpected EOF encountered in BCP data-file"). The row-count check
+     (4.6 step 4) is what failed the run. With an exit-code check only, the rows would have loaded and the offset wouldn't
+     have moved, so the next run would have loaded them again. That check must stay.
+   - Killing only python, as stopping a CmdExec job step probably does, leaves `bcp`/`sqlcmd` running. That's safe: an
+     orphan bcp only stages rows under a dead runID, and an orphan load commits rows and offsets together. But the job step
+     then reports a failure for a run that did load; read `LoadRun`, not the job outcome.
+   - A killed run's staged rows (up to ~3.5 M at the 1 GB cap) stay in `weblogStage` until the 12 h sweep.
+   - **Load files are never removed after a failure or kill**: `run<N>.weblog.bcp` (up to ~0.9 GB at the cap) stays in the
+     workdir. Open: keep only the newest failed run's files (useful for the `.err` files) and delete older ones at start.
 6. **Time.** Step 1 time before and after, on the same sources. Keep the two kinds of number apart: the **Agent job**
    (hourly incremental, the original problem) and **backfill** (one-off history load).
 
