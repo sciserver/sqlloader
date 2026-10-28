@@ -138,11 +138,17 @@ def convert(line, fm, log_id, seq):
     parts = line.split(' ')
     if len(parts) != fm.count:
         raise Reject('field count')
+    # Checked strictly here: spLoadWeblogStage loads a run all-or-nothing, so one row the database
+    # can't turn into a datetime would fail that source's run every hour, on the same bytes.
     date = field(parts, fm.date)
     if not DATE.match(date):
         raise Reject('bad date')
+    try:
+        datetime.date(int(date[0:4]), int(date[5:7]), int(date[8:10]))
+    except ValueError:
+        raise Reject('bad date')
     tod = field(parts, fm.time)
-    if not TIME.match(tod):
+    if not TIME.match(tod) or int(tod[0:2]) > 23 or int(tod[3:5]) > 59 or int(tod[6:8]) > 59:
         raise Reject('bad time')
 
     command = field(parts, fm.stem)

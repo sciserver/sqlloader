@@ -24,8 +24,8 @@ CLIENT = '203.0.113.7'
 PROXY = '192.0.2.200'
 
 
-def www02(xff='-', query='-', status='200', sc='5120', cs='432', taken='15', date='2026-10-27'):
-    return ' '.join([date, '13:45:07', '192.0.2.1', 'GET', '/dr20/en/tools/chart/navi.aspx', query, '443', '-',
+def www02(xff='-', query='-', status='200', sc='5120', cs='432', taken='15', date='2026-10-27', tod='13:45:07'):
+    return ' '.join([date, tod,'192.0.2.1', 'GET', '/dr20/en/tools/chart/navi.aspx', query, '443', '-',
                      LB, 'Mozilla/5.0+(Windows+NT+10.0)', 'https://example.org/', status, '0', '0',
                      sc, cs, taken, xff])
 
@@ -107,6 +107,9 @@ class Convert(unittest.TestCase):
     def test_rejects(self):
         cases = [(www02() + ' extra', 'field count'),
                  (www02(date='27/10/2026'), 'bad date'),
+                 (www02(date='2026-02-30'), 'bad date'),     # right shape, not a day: would fail the load
+                 (www02(tod='10:61:99'), 'bad time'),
+                 (www02(tod='24:00:00'), 'bad time'),
                  (www02(query='q=' + 'x' * 8000), 'line too long')]
         for line, reason in cases:
             with self.assertRaises(b.Reject) as cm:

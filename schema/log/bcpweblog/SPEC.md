@@ -185,20 +185,25 @@ moving a source is a one-row `UPDATE`. Which sources to add is the `LogSource` o
 
 ### 4.3 State: per-file offsets in the database (proposal)
 
-New table `weblog.dbo.LogFileState`:
+New table `weblog.dbo.LogFileState` (DDL in `bcpweblog_schema.sql`):
 
 | column | type | meaning |
 |---|---|---|
 | `logID` | int | `LogSource.logID` |
 | `fileName` | varchar(260) | name within the source folder |
-| `offset` | bigint | bytes consumed (always at a line boundary) |
-| `fields` | varchar(2000) | the `#Fields` list in effect at `offset` |
+| `byteOffset` | bigint | bytes consumed (always at a line boundary) |
+| `fields` | varchar(2000) | the `#Fields` list in effect at `byteOffset` |
 | `fileDate` | date | from the name: `yymmdd`, or the 1st for `yymm` |
-| `updated` | datetime2 | UTC |
+| `updated` | datetime2(0) | UTC |
+| `runID` | int | the `LoadRun` that last moved it |
 
 Primary key `(logID, fileName)`. The offsets are moved **in the same transaction as the rows** (section 4.6), so a failed run
 leaves both unchanged and the next run repeats it: no gaps, no duplicates. A file whose real size is now smaller than its
 offset was replaced: it's logged as a warning and read again from 0.
+
+Each run also gets a row in `LoadRun` (`runID`, mode, host, started/finished UTC, status `started | loaded | failed |
+abandoned`, files/rows loaded, rows deleted, error message). That's the run log, and it's what a daily check should read
+("did rows arrive?") instead of `LogSource.tstamp`, which moves even when nothing was loaded.
 
 Alternative: a JSON state file on the cluster volume. Simpler, but it can't be committed together with the rows.
 
@@ -249,15 +254,33 @@ original client).
 
 ### 4.6 Loading (proposal)
 
-1. The loader writes one bcp file per run (all sources, rows prefixed with `logID`) and a small offsets file.
-2. `bcp` both into two staging tables: `weblogStage` (`weblogTemp` + `logID`) and `LogFileStateStage`.
-3. One `sqlcmd` call runs a new proc, `spLoadWeblogStage`, which in **one transaction** inserts `weblogStage` into
-   `weblogAll` (with the same `theTime`, `password=` and `isVisible` rules as `spCopyWebLogs`), upserts `LogFileState`
-   from `LogFileStateStage`, updates `LogSource.tstamp`, and truncates both staging tables.
+Built and tested on sdss4c `bcpweblog_test` (2026-10-28): `bcpweblog_schema.sql` (the objects to deploy to `weblog`) and
+`bcpweblog_test_setup.sql` (sdss4c only: the database, copies of `weblogAll`/`LogSource`, test sources).
+
+1. `EXEC spStartWeblogRun @mode` returns a new `runID`. It also marks `started` runs older than 12 h `abandoned` and deletes
+   their staged rows (a run killed between bcp and step 3).
+2. The loader writes one bcp file per run (all sources; each row starts with `runID`, `logID`) and a small offsets file
+   (only files whose offset moved), and `bcp`s them into `weblogStage` (`runID`, `logID` + `weblogTemp`'s columns) and
+   `LogFileStateStage`. bcp options: `-c -C 65001 -t \t -r 0x0a`, no `-k`, so empty fields load the column default.
+3. `EXEC spLoadWeblogStage @runID` does in **one transaction**: insert the run's rows into `weblogAll` (with the same `theTime`,
+   `password=` and `isVisible` rules as `spCopyWebLogs`; `TABLOCK` as before), upsert `LogFileState`, update `LogSource.tstamp`,
+   delete the run's staged rows, mark the run `loaded`. On any error it rolls back, deletes the run's staged rows, marks the
+   run `failed` with the message, and re-raises (`sqlcmd -b` exits non-zero).
 4. Any non-zero exit from bcp or sqlcmd stops the run with a non-zero exit code, and nothing is committed.
 
-Backfill uses the same proc, with a `DELETE weblogAll WHERE logID = @logID AND <date in range>` first, in batches, to keep
-the log small.
+**Why `runID`:** the staging tables are shared. Tagging rows by run means a backfill and the hourly run can stage at the same
+time without loading each other's rows, and leftovers from a killed run are never picked up by the next one.
+
+**Backfill:** `spLoadWeblogStage @runID, @replaceFrom, @replaceTo` first checks that every staged row is dated inside the
+range (otherwise it fails before deleting anything), then deletes those days for the run's logIDs, one day and logID at a time
+(a seek on the `yy/mm/dd` key prefix), in batches of 100,000, **outside** the transaction to keep the log small, then loads as
+above. A failure after the delete leaves the days empty, and rerunning the same backfill repairs that (tested: two identical
+runs give the same rows). Because daily files start with a few seconds of the previous day, the loader must read the files
+around the range and stage only rows dated inside it.
+
+**One bad row fails the whole run**, and the next run rereads the same bytes and fails again. So the parser must reject
+anything the database can't convert. `convert()` checks the date and time are real values, not just the right shape
+(`2026-02-30` and `10:61:99` are rejected; tested by sending `10:61:99` through the proc, which failed the run as expected).
 
 Volume: the idieswww servers could add 10-15 M rows/day to `weblogAll` (unless health checks are dropped, open question 2).
 That affects table size and steps 3/6.
