@@ -134,22 +134,16 @@ their own connection strings, which evidently point at 5A.
 4. Are dsa001/003/005 still meant to be in service?
 
 **Weblog configuration (owner of `LogSource` / the weblog):**
-5. On 2025-10-21 (the table swap), were the idieswww01 entries switched off because they loaded nothing? Was
-   collection from the new servers meant to be set up separately?
-6. Should `trafficBase` history be recomputed or annotated? The row data is still available
-   (`weblogAll_10212025` from 2016, plus the current `weblogAll`). It holds only what was collected, though,
-   so it can remove duplicates and health checks but can't add the real traffic that was never loaded.
-7a. Should the new loader drop load-balancer health checks at load time? Real traffic could be 10-15 M
-   rows/day, so the size problem behind the 2025-10-21 stopgap would come back faster otherwise.
-7. Duplicates: which logID in each pair stays active?
-8. SDSS5B is up but receives almost no query traffic (sql-monitor). In CasJobs it only takes the
-   `DR20Collab_long` and `DR19_long` queues. Is that split intended (and should `DR20_long`, the busiest long
-   queue, be on 5B?), and should SkyServer / the web services send any queries to 5B?
+
+5. On 2025-10-21 (the table swap), were the idieswww01 entries switched off because they loaded nothing? Was collection from the new servers meant to be set up separately?
+6. Should `trafficBase` history be recomputed or annotated? The row data is still available (`weblogAll_10212025` from 2016, plus the current `weblogAll`). It holds only what was collected, though, so it can remove duplicates and health checks but can't add the real traffic that was never loaded.
+7. Should the new loader drop load-balancer health checks at load time? Real traffic could be 10-15 M rows/day, so the size problem behind the 2025-10-21 stopgap would come back faster otherwise.
+8. Duplicates: which logID in each pair stays active?
+9. SDSS5B is up but receives almost no query traffic (sql-monitor). In CasJobs it only takes the `DR20Collab_long` and `DR19_long` queues. Is that split intended (and should `DR20_long`, the busiest long queue, be on 5B?), and should SkyServer / the web services send any queries to 5B?
 
 **bcpWeblog rewrite** (in progress; see `bcpweblog_rewrite_handoff.md`):
-9. The rewrite will handle `u_ex*` names, parse `#Fields` by name, take the client IP from `XForwardedFor`,
-   and read only the lines added since the last run. Should it also write `bytesIn` correctly
-   (recommended), and are the larger volumes OK for `weblogAll` and the aggregation steps?
+
+10. The rewrite will handle `u_ex*` names, parse `#Fields` by name, take the client IP from `XForwardedFor`, and read only the lines added since the last run. Should it also write `bytesIn` correctly (recommended), and are the larger volumes OK for `weblogAll` and the aggregation steps?
 
 ## How to check
 
