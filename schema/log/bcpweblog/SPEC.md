@@ -219,6 +219,16 @@ Per source: list the folder (no recursion), keep names that match section 3.1, a
 Files whose name date is older than the window are **never opened**. Today's exe opens every file in every folder every
 hour, so that's the main time saving.
 
+A file with no state row is read **from byte 0**, so incremental always loads whole files. Each file is read at most
+`--max-bytes` per run (default 1 GB, at a line boundary), so a large backlog (idieswww01's monthly file on its first run, or
+catch-up after an outage) is spread over several runs instead of one huge transaction. Tested: a 1.29 GB file capped at 1 GB,
+finished by the next run, gives the same rows as one pass.
+
+**Cut-over rule:** because incremental loads whole files, the first file it reads for a source marks the boundary.
+History before it is loaded with backfill, and backfill refuses `--to` on or after the earliest `LogFileState.fileDate` of that
+source. For idieswww01 (monthly), that means backfill up to the end of the month before the cut-over, and incremental reads the
+current month's file from the start.
+
 ### 4.5 Parsing
 
 - `#Fields:` sets the field list (by name) until the next `#Fields:`. Other `#` lines are ignored.
@@ -266,7 +276,9 @@ Built and tested on sdss4c `bcpweblog_test` (2026-10-28): `bcpweblog_schema.sql`
    `password=` and `isVisible` rules as `spCopyWebLogs`; `TABLOCK` as before), upsert `LogFileState`, update `LogSource.tstamp`,
    delete the run's staged rows, mark the run `loaded`. On any error it rolls back, deletes the run's staged rows, marks the
    run `failed` with the message, and re-raises (`sqlcmd -b` exits non-zero).
-4. Any non-zero exit from bcp or sqlcmd stops the run with a non-zero exit code, and nothing is committed.
+4. Any non-zero exit from bcp or sqlcmd stops the run with a non-zero exit code, and nothing is committed. If the run had
+   started, the loader calls `spAbortWeblogRun` (marks it `failed`, deletes its staged rows) rather than leaving it for the
+   12 h `abandoned` sweep. bcp's "N rows copied" must equal the rows written, or the run fails.
 
 **Why `runID`:** the staging tables are shared. Tagging rows by run means a backfill and the hourly run can stage at the same
 time without loading each other's rows, and leftovers from a killed run are never picked up by the next one.
@@ -275,8 +287,16 @@ time without loading each other's rows, and leftovers from a killed run are neve
 range (otherwise it fails before deleting anything), then deletes those days for the run's logIDs, one day and logID at a time
 (a seek on the `yy/mm/dd` key prefix), in batches of 100,000, **outside** the transaction to keep the log small, then loads as
 above. A failure after the delete leaves the days empty, and rerunning the same backfill repairs that (tested: two identical
-runs give the same rows). Because daily files start with a few seconds of the previous day, the loader must read the files
-around the range and stage only rows dated inside it.
+runs give the same rows).
+
+How `bcpweblog.py backfill` uses it: day D's rows are in file D and at the head of file D+1 (the last seconds before
+midnight). The loader reads files dated `--from`..`--to`+1 in order, writes one load file per day, and loads day D (its own
+run and transaction) once it sees a row after D+1 00:05; reading stops at the first row after `--to`+1 00:05, so the day after
+costs about 1 MB, and a monthly file is read once, up to `--to`. Rows outside the range are counted and skipped. Rows for a day
+that was already loaded would be counted as "late" and reported (none seen).
+
+Each backfilled day of idieswww02 (~4.2 M rows) took ~95 s to read over SMB and ~225 s to bcp + insert on sdss4c. The insert
+holds a table lock on `weblogAll` for its transaction, so on lumberjack run backfills **outside the job window** (:00-:20).
 
 **One bad row fails the whole run**, and the next run rereads the same bytes and fails again. So the parser must reject
 anything the database can't convert. `convert()` checks the date and time are real values, not just the right shape
@@ -313,6 +333,11 @@ One line per source to stdout (the job history) and appended to a log file:
    files.
 4. **Incremental = backfill.** Run hourly into a scratch database for 2 days; backfill the same days into another; the
    row sets must match exactly. This is the test that proves the offsets.
+   **Done (short form) 2026-10-28** on sdss4c `bcpweblog_test`: two incremental runs for idieswww02 (logID 3002; the first capped
+   the 10-27 file at 1 GB) vs a backfill of 10-27 into a twin source (logID 3102, same folder): 4,213,295 rows each, and `EXCEPT`
+   both ways on every content column = 0. The counts reconcile with the standalone parse (4,213,324 rows in the file, 93 dated
+   10-26; +64 dated 10-27 from the head of file 28). A backfill of 10-26 then deleted exactly the 93 rows incremental had loaded
+   from file 27's head and reloaded them with the rest of the day. Still to do: the 2-day hourly version.
 5. **Failure and restart.** Kill a run partway, and fail bcp on purpose: the next run must leave no gap and no duplicate.
 6. **Time.** Step 1 time before and after, on the same sources.
 
@@ -336,6 +361,9 @@ One line per source to stdout (the job history) and appended to a log file:
 - **Invocation:** a CmdExec job step (section 4.7). The job change is made by whoever owns the job.
 - **Subfolders:** not needed (section 2.6).
 - **`XForwardedFor`:** first entry, port removed (section 4.5).
+- **`/collab` rule (`isvisible = 0`):** kept for parity. Checked 2026-10-28: idieswww02 `W3SVC2` had 1 `/collab` request in
+  4.2 M on 10-27, and `weblogAll` had none hidden 10-21..10-27; the old table had tens to ~1,500/day up to mid-2025 (sampled
+  on sdss4c `dev_weblog`). The `password=` cut is kept too.
 
 ### Open (for the boss / the weblog owner)
 

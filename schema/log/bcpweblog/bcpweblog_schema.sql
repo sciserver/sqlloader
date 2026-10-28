@@ -141,6 +141,24 @@ END
 GO
 
 --=====================================================================
+-- spAbortWeblogRun: the loader failed before spLoadWeblogStage (e.g. bcp
+-- failed).  Marks the run failed and removes what it staged.
+--=====================================================================
+CREATE OR ALTER PROCEDURE dbo.spAbortWeblogRun
+	@runID		int,
+	@message	nvarchar(2048)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DELETE dbo.weblogStage WHERE runID = @runID
+	DELETE dbo.LogFileStateStage WHERE runID = @runID
+	UPDATE dbo.LoadRun
+		SET status = 'failed', finished = SYSUTCDATETIME(), message = LEFT(@message, 2048)
+		WHERE runID = @runID AND status = 'started'
+END
+GO
+
+--=====================================================================
 -- spLoadWeblogStage: move one run's staged rows into weblogAll.
 -- Same column rules as spCopyWebLogs: hh/mi/ss and theTime from Second,
 -- anything after 'password=' cut off, isvisible = 0 for /collab URLs.
@@ -237,8 +255,9 @@ BEGIN
 					  WHERE f.logID = s.logID AND f.fileName = s.fileName)
 		SELECT @files = COUNT(*) FROM dbo.LogFileStateStage WHERE runID = @runID
 
-		-- tstamp = "this source was read", as before.  It moves even when no
-		-- rows were found; check LoadRun / weblogAll rows, not tstamp.
+		-- tstamp moves for sources with staged rows or offsets, i.e. new
+		-- bytes were read (the old proc moved it every run).  The run log is
+		-- LoadRun; check rows there or in weblogAll, not tstamp.
 		UPDATE dbo.LogSource SET tstamp = GETUTCDATE()
 			WHERE logID IN (SELECT logID FROM dbo.LogFileStateStage WHERE runID = @runID
 					UNION SELECT logID FROM dbo.weblogStage WHERE runID = @runID)

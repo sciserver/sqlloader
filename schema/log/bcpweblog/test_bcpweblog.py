@@ -129,7 +129,7 @@ class Files(unittest.TestCase):
 
     def parse(self, path, **kw):
         out, rej = io.BytesIO(), io.StringIO()
-        r = b.parse_file(path, 1, out, rej, **kw)
+        r = b.parse_file(path, 1, b.file_sink(out), rej, **kw)
         return r, out.getvalue().decode('utf-8').splitlines()
 
     def test_header_midfile_and_partial_last_line(self):
@@ -150,17 +150,101 @@ class Files(unittest.TestCase):
         path = self.write(head + ''.join(l + '\r\n' for l in lines))
         r_all, rows_all = self.parse(path)
         cut = len(head) + 2 * (len(lines[0]) + 2)
-        r_b, rows_b = self.parse(path, offset=cut, fields_line=F_WWW02)
+        r_b, rows_b = self.parse(path, offset=cut, fields=F_WWW02[9:])
         self.assertEqual(rows_all[2:], rows_b)                     # same rows, same Seq (byte offsets)
         self.assertEqual(r_b.next_offset, r_all.next_offset)
+
+    def test_max_bytes_runs_add_up_to_one_pass(self):
+        # The per-run cap: several capped runs, each resuming at the last offset, give the same rows.
+        lines = [www02(query='n=%d' % i) for i in range(20)]
+        path = self.write('#Fields: ' + F_WWW02[9:] + '\r\n' + ''.join(l + '\r\n' for l in lines))
+        r_all, rows_all = self.parse(path)
+        rows, offset, fields = [], 0, None
+        while True:
+            r, part = self.parse(path, offset=offset, fields=fields, max_bytes=500)
+            if r.next_offset == offset:
+                break
+            rows += part
+            offset, fields = r.next_offset, r.fields_at_end
+        self.assertEqual(rows, rows_all)
+        self.assertEqual(offset, r_all.next_offset)
 
     def test_no_bom_and_tabs(self):
         path = self.write('#Fields: ' + F_WWW02[9:] + '\n' + www02() + '\n')
         out, rej = io.BytesIO(), io.StringIO()
-        b.parse_file(path, 1, out, rej)
+        b.parse_file(path, 1, b.file_sink(out), rej)
         data = out.getvalue()
         self.assertFalse(data.startswith(b'\xef\xbb\xbf'))
         self.assertEqual(data.count(b'\t'), len(b.COLUMNS) - 1)
+
+
+class PlanIncremental(unittest.TestCase):
+    TODAY = datetime.date(2026, 10, 28)
+
+    def plan(self, sizes, state, days=2):
+        first = self.TODAY - datetime.timedelta(days=days - 1)
+        return b.plan_incremental(list(sizes), state, first, self.TODAY, sizes.__getitem__)
+
+    def test_window_and_offsets(self):
+        sizes = {'u_ex261026_x.log': 900,           # before the window: never opened
+                 'u_ex261027_x.log': 500,           # finished: offset == size
+                 'u_ex261028_x.log': 300}           # growing
+        state = {'u_ex261027_x.log': (500, 'f'), 'u_ex261028_x.log': (100, 'f')}
+        reads, warnings = self.plan(sizes, state)
+        self.assertEqual([(r.name, r.offset, r.fields) for r in reads], [('u_ex261028_x.log', 100, 'f')])
+        self.assertEqual(warnings, [])
+
+    def test_new_file_from_zero_and_monthly(self):
+        reads, _ = self.plan({'u_ex2610_x.log': 10 ** 10, 'u_ex261028_x.log': 50}, {})
+        self.assertEqual([(r.name, r.offset, r.file_date) for r in reads],
+                         [('u_ex2610_x.log', 0, datetime.date(2026, 10, 1)),
+                          ('u_ex261028_x.log', 0, datetime.date(2026, 10, 28))])
+
+    def test_last_months_file_still_read_on_the_1st(self):
+        first = datetime.date(2026, 11, 1)
+        reads, _ = b.plan_incremental(['u_ex2610_x.log'], {'u_ex2610_x.log': (5, None)},
+                                      first - datetime.timedelta(days=1), first, lambda n: 9)
+        self.assertEqual(len(reads), 1)
+
+    def test_shrunk_file_is_reread_with_warning(self):
+        reads, warnings = self.plan({'u_ex261028_x.log': 50}, {'u_ex261028_x.log': (400, 'f')})
+        self.assertEqual((reads[0].offset, reads[0].fields), (0, None))
+        self.assertEqual(len(warnings), 1)
+
+
+class Backfill(unittest.TestCase):
+    """DayLoader routing, in dry-run mode (no database): days, outside rows, STOP."""
+
+    def row(self, date, tod):
+        return b.convert(www02(date=date, tod=tod), b.FieldMap(F_WWW02), 3002, 0)
+
+    def test_days_close_and_stop(self):
+        work = tempfile.mkdtemp()
+        msgs = []
+        d = b.DayLoader(None, work, 3002, datetime.date(2026, 10, 26), datetime.date(2026, 10, 27), True, msgs.append)
+        feed = [('2026-10-25', '23:59:50'),         # outside (head of file 26)
+                ('2026-10-26', '00:00:01'), ('2026-10-26', '23:59:59'),
+                ('2026-10-26', '23:59:58'),         # head of file 27: still day 26
+                ('2026-10-27', '00:03:00'),         # within the slack: 26 stays open
+                ('2026-10-27', '00:06:00'),         # past 27 00:05 -> 26 is complete and loaded
+                ('2026-10-27', '23:59:59'),
+                ('2026-10-28', '00:01:00'),         # head of file 28: outside, within the slack
+                ('2026-10-28', '00:06:00')]         # past --to + slack: stop reading
+        results = [d.sink(self.row(*x)) for x in feed]
+        self.assertIs(results[-1], b.STOP)
+        self.assertNotIn(b.STOP, results[:-1])
+        self.assertEqual([x[0].day for x in d.loaded], [26])
+        d.finish()
+        self.assertEqual([(x[0].day, x[1]) for x in d.loaded], [(26, 3), (27, 3)])
+        self.assertEqual((d.outside, d.late), (2, 0))
+
+    def test_late_row_is_counted(self):
+        d = b.DayLoader(None, tempfile.mkdtemp(), 1, datetime.date(2026, 10, 26), datetime.date(2026, 10, 28),
+                        True, lambda m: None)
+        for x in [('2026-10-26', '10:00:00'), ('2026-10-27', '00:10:00'), ('2026-10-26', '10:00:01')]:
+            d.sink(self.row(*x))
+        d.finish()
+        self.assertEqual(d.late, 1)
 
 
 if __name__ == '__main__':

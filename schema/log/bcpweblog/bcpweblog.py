@@ -1,13 +1,14 @@
 """bcpweblog: load IIS W3C web logs into weblog.dbo.weblogAll.
 
 Replacement for BcpWeblogNew.exe. See SPEC.md in this folder.
-Standard library only; loading (later) goes through bcp.exe and sqlcmd.exe.
+Standard library only; loading goes through bcp.exe and sqlcmd.exe (Windows auth).
 
-This version has the parser and a dry run:
+    python bcpweblog.py incremental [--logid N ...] [--dry-run]     (hourly)
+    python bcpweblog.py backfill --logid N --from yyyy-mm-dd --to yyyy-mm-dd
+    python bcpweblog.py parse <logfile> ... --out <dir>             (parser check, no database)
 
-    python bcpweblog.py parse <logfile> [<logfile> ...] --out <dir> [--logid N] [--offset BYTES]
-
-which writes <dir>/<file>.bcp (what would be loaded), <dir>/<file>.rejects.txt and prints a summary.
+Common options: --server (localhost), --database (weblog), --workdir (load files, rejects, run log).
+Exit code 0 = loaded (warnings are printed), 1 = failed, nothing committed for the failing run.
 """
 
 import argparse
@@ -15,6 +16,7 @@ import collections
 import datetime
 import os
 import re
+import subprocess
 import sys
 import time
 
@@ -217,14 +219,35 @@ class FileResult:
         self.fields_seen = []
         self.next_offset = 0
         self.fields_at_end = None
+        self.stopped = False
 
 
-def parse_file(path, log_id, out, rejects_out, offset=0, fields_line=None):
-    """Parse one log file from offset to its current end; write rows to out (a binary file)."""
+def row_date(row):
+    return datetime.date(int(row[1]), int(row[2]), int(row[3]))
+
+
+STOP = object()     # a sink returns this to stop reading the file (backfill past --to)
+
+
+def file_sink(out):
+    """A sink that writes rows to a binary file, prefixed with prefix (e.g. the runID)."""
+    def sink(row, prefix=''):
+        out.write((prefix + '\t'.join(row) + '\n').encode('utf-8'))
+    return sink
+
+
+def parse_file(path, log_id, sink, rejects_out, offset=0, fields=None, max_bytes=None):
+    """Parse one log file from offset to its current end (or offset + max_bytes); pass each row to sink.
+
+    fields is the '#Fields' list in effect at offset (LogFileState.fields), without the '#Fields:' prefix.
+    sink(row) may return STOP; next_offset is then the start of the line that wasn't used.
+    """
     r = FileResult()
-    fm = FieldMap(fields_line) if fields_line else None
+    fm = FieldMap('#Fields: ' + fields) if fields else None
     with open(path, 'rb') as f:
         end = os.fstat(f.fileno()).st_size      # real size from the open handle, not the listing
+        if max_bytes is not None:
+            end = min(end, offset + max_bytes)
         r.next_offset = offset
         for line_offset, raw in complete_lines(f, offset, end):
             r.next_offset = line_offset + len(raw) + 1
@@ -245,12 +268,386 @@ def parse_file(path, log_id, out, rejects_out, offset=0, fields_line=None):
                 r.rejects[str(e)] += 1
                 rejects_out.write('%s\t%d\t%s\t%s\n' % (path, line_offset, e, line[:500]))
                 continue
-            out.write(('\t'.join(row) + '\n').encode('utf-8'))
+            if sink(row) is STOP:
+                r.next_offset = line_offset
+                r.stopped = True
+                break
             r.rows += 1
-            r.rows_per_day['%s-%02d-%02d' % (row[1], int(row[2]), int(row[3]))] += 1
+            r.rows_per_day[row_date(row).isoformat()] += 1
         r.bytes_read = r.next_offset - offset
     r.fields_at_end = fm.text if fm else None
     return r
+
+
+# ---------------------------------------------------------------------------------------------
+# Database: sqlcmd and bcp (SPEC 4.6)
+# ---------------------------------------------------------------------------------------------
+
+class LoadError(Exception):
+    pass
+
+
+def sql_str(s):
+    return "'" + s.replace("'", "''") + "'"
+
+
+class Db:
+    def __init__(self, server, database):
+        self.server = server
+        self.database = database
+
+    def query(self, sql):
+        """Run sql; return the result rows as lists of strings (tab-separated output, no headers)."""
+        cmd = ['sqlcmd', '-S', self.server, '-d', self.database, '-E', '-C', '-b', '-r1', '-h', '-1', '-W',
+               '-s', '\t', '-f', '65001', '-Q', 'SET NOCOUNT ON; ' + sql]
+        p = subprocess.run(cmd, capture_output=True, encoding='utf-8', errors='replace')
+        if p.returncode != 0:
+            raise LoadError('sqlcmd failed (exit %d): %s' % (p.returncode, (p.stderr or p.stdout).strip()[:2000]))
+        return [line.split('\t') for line in p.stdout.splitlines() if line.strip()]
+
+    def bcp_in(self, table, path, expected):
+        """bcp a load file into a staging table; fail unless exactly expected rows arrived."""
+        cmd = ['bcp', '%s.dbo.%s' % (self.database, table), 'in', path, '-S', self.server, '-T',
+               '-c', '-C', '65001', '-t', '\\t', '-r', '0x0a', '-b', '500000', '-m', '1', '-e', path + '.err']
+        p = subprocess.run(cmd, capture_output=True, encoding='utf-8', errors='replace')
+        m = re.search(r'^(\d+) rows copied', p.stdout, re.MULTILINE)
+        copied = int(m.group(1)) if m else -1
+        if p.returncode != 0 or copied != expected:
+            raise LoadError('bcp into %s: %d of %d rows (exit %d): %s'
+                            % (table, copied, expected, p.returncode, (p.stdout + p.stderr).strip()[-2000:]))
+        if os.path.exists(path + '.err') and os.path.getsize(path + '.err') == 0:
+            os.remove(path + '.err')
+
+    def sources(self, method, log_ids=None):
+        """[(logID, pathname)] of the active sources read by this loader."""
+        sql = ("SELECT logID, pathname FROM dbo.LogSource WHERE method = %s AND status = 'ACTIVE' AND isvisible = 1"
+               % sql_str(method))
+        if log_ids:
+            sql += ' AND logID IN (%s)' % ','.join(str(int(i)) for i in log_ids)
+        return [(int(r[0]), r[1]) for r in self.query(sql + ' ORDER BY logID')]
+
+    def file_state(self, log_ids):
+        """{logID: {fileName: (byteOffset, fields or None)}}"""
+        state = collections.defaultdict(dict)
+        if log_ids:
+            for r in self.query("SELECT logID, fileName, byteOffset, ISNULL(fields, '') FROM dbo.LogFileState "
+                                "WHERE logID IN (%s)" % ','.join(str(i) for i in log_ids)):
+                state[int(r[0])][r[1]] = (int(r[2]), r[3] or None)
+        return state
+
+    def first_state_date(self, log_id):
+        """The earliest fileDate incremental has state for (backfill must stay before it), or None."""
+        rows = self.query('SELECT CONVERT(char(10), MIN(fileDate), 23) FROM dbo.LogFileState WHERE logID = %d'
+                          % log_id)
+        value = rows[0][0] if rows else 'NULL'
+        return None if value == 'NULL' else datetime.date.fromisoformat(value)
+
+    def start_run(self, mode):
+        return int(self.query('EXEC dbo.spStartWeblogRun %s' % sql_str(mode))[0][0])
+
+    def load_run(self, run_id, replace_from=None, replace_to=None):
+        """spLoadWeblogStage; returns (files, rows, deleted)."""
+        sql = 'EXEC dbo.spLoadWeblogStage %d' % run_id
+        if replace_from:
+            sql += ", '%s', '%s'" % (replace_from.isoformat(), replace_to.isoformat())
+        r = self.query(sql)[0]
+        return int(r[1]), int(r[2]), int(r[3])
+
+    def abort_run(self, run_id, message):
+        self.query('EXEC dbo.spAbortWeblogRun %d, %s' % (run_id, sql_str(message[:2000])))
+
+
+# ---------------------------------------------------------------------------------------------
+# Which files are read (SPEC 4.4)
+# ---------------------------------------------------------------------------------------------
+
+Read = collections.namedtuple('Read', 'name offset fields file_date size')
+
+
+def name_key(name):
+    return name_dates(name)[0], name.lower()
+
+
+def plan_incremental(names, state, first_day, last_day, size_of):
+    """Pick the files to read and where to start.
+
+    names: log file names in the folder; state: {fileName: (byteOffset, fields)};
+    size_of(name): the real size. A file is read if the dates its name covers overlap first_day..last_day
+    and it has bytes past its offset. Files outside the window are never opened.
+    Returns (reads, warnings).
+    """
+    reads, warnings = [], []
+    for name in sorted(names, key=name_key):
+        first, last = name_dates(name)
+        if last < first_day or first > last_day:
+            continue
+        size = size_of(name)
+        offset, fields = state.get(name, (0, None))
+        if size < offset:
+            warnings.append('%s: size %d is below the stored offset %d (file replaced?); reading it from 0'
+                            % (name, size, offset))
+            offset, fields = 0, None
+        if size > offset:
+            reads.append(Read(name, offset, fields, first, size))
+    return reads, warnings
+
+
+def list_logs(folder):
+    """(names of all files, names matching the log pattern). Raises OSError if the folder can't be listed."""
+    names = [e.name for e in os.scandir(folder) if e.is_file()]
+    return names, [n for n in names if name_dates(n)]
+
+
+# ---------------------------------------------------------------------------------------------
+# Modes
+# ---------------------------------------------------------------------------------------------
+
+def utc_today():
+    return datetime.datetime.now(datetime.timezone.utc).date()
+
+
+class RunLog:
+    """Prints to stdout (the job history) and appends to <workdir>/bcpweblog.log."""
+
+    def __init__(self, workdir):
+        self.path = os.path.join(workdir, 'bcpweblog.log')
+
+    def __call__(self, msg):
+        line = '%s %s' % (datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M:%S'), msg)
+        print(line, flush=True)
+        with open(self.path, 'a', encoding='utf-8') as f:
+            f.write(line + '\n')
+
+
+def remove_if_empty(path):
+    if os.path.exists(path) and os.path.getsize(path) == 0:
+        os.remove(path)
+
+
+def cmd_incremental(args):
+    os.makedirs(args.workdir, exist_ok=True)
+    log = RunLog(args.workdir)
+    db = Db(args.server, args.database)
+    today = utc_today()
+    first_day = today - datetime.timedelta(days=args.days - 1)
+
+    sources = db.sources(args.method, args.logid)
+    if not sources:
+        log('incremental: no active %s sources%s; nothing to do' % (args.method, ' with those logIDs' if args.logid else ''))
+        return 0
+    state = db.file_state([s[0] for s in sources])
+
+    run_id = 0 if args.dry_run else db.start_run('incremental')
+    tag = ('run%d' % run_id) if run_id else 'dryrun_' + time.strftime('%Y%m%d_%H%M%S')
+    rows_path = os.path.join(args.workdir, tag + '.weblog.bcp')
+    state_path = os.path.join(args.workdir, tag + '.state.bcp')
+    rejects_path = os.path.join(args.workdir, tag + '.rejects.txt')
+    log('incremental %s: %d sources, window %s..%s, max %d MB per file'
+        % (tag, len(sources), first_day, today, args.max_bytes // 1000000))
+
+    total_rows = total_states = total_rejects = 0
+    try:
+        with open(rows_path, 'wb') as out, open(state_path, 'wb') as st, \
+                open(rejects_path, 'w', encoding='utf-8') as rej:
+            write = file_sink(out)
+            prefix = '%d\t' % run_id
+            sink = lambda row: write(row, prefix)
+            for log_id, folder in sources:
+                started = time.monotonic()
+                try:
+                    listed, matched = list_logs(folder)
+                except OSError as e:
+                    log('  WARNING logID %d: cannot list %s (%s); skipped' % (log_id, folder, e.strerror or e))
+                    continue
+                stored = state.get(log_id, {})
+                reads, warnings = plan_incremental(matched, stored, first_day, today,
+                                                   lambda n: os.stat(os.path.join(folder, n)).st_size)
+                for w in warnings:
+                    log('  WARNING logID %d: %s' % (log_id, w))
+                n_bytes = n_lines = n_rows = n_rej = 0
+                for rd in reads:
+                    r = parse_file(os.path.join(folder, rd.name), log_id, sink, rej,
+                                   offset=rd.offset, fields=rd.fields, max_bytes=args.max_bytes)
+                    if r.next_offset != stored.get(rd.name, (0, None))[0]:
+                        st.write(('%d\t%d\t%s\t%d\t%s\t%s\n' % (run_id, log_id, rd.name, r.next_offset,
+                                                                r.fields_at_end or '', rd.file_date)).encode('utf-8'))
+                        total_states += 1
+                    n_bytes += r.bytes_read
+                    n_lines += r.lines
+                    n_rows += r.rows
+                    n_rej += sum(r.rejects.values())
+                    if rd.offset + args.max_bytes < rd.size:
+                        log('  logID %d: %s capped at %d of %d bytes; the next run continues'
+                            % (log_id, rd.name, r.next_offset, rd.size))
+                total_rows += n_rows
+                total_rejects += n_rej
+                log('  logID %d %s: listed %d, matched %d, read %d files, %.1f MB, %d lines, %d rows, %d rejects, %.1f s'
+                    % (log_id, folder, len(listed), len(matched), len(reads), n_bytes / 1e6, n_lines, n_rows,
+                       n_rej, time.monotonic() - started))
+
+        if args.dry_run:
+            log('dry run: %d rows, %d file offsets in %s (nothing loaded)' % (total_rows, total_states, rows_path))
+            remove_if_empty(rejects_path)
+            return 0
+        if total_rows:
+            db.bcp_in('weblogStage', rows_path, total_rows)
+        if total_states:
+            db.bcp_in('LogFileStateStage', state_path, total_states)
+        files, rows, _ = db.load_run(run_id)
+    except Exception as e:      # noqa: BLE001 - every failure must fail the step
+        msg = '%s: %s' % (type(e).__name__, e)
+        log('FAILED %s: %s' % (tag, msg))
+        if run_id:
+            try:
+                db.abort_run(run_id, msg)
+            except Exception as e2:     # noqa: BLE001
+                log('  (could not mark run %d failed: %s)' % (run_id, e2))
+        return 1
+
+    for p in (rows_path, state_path):
+        os.remove(p)
+    remove_if_empty(rejects_path)
+    log('loaded %s: %d rows, %d file offsets, %d rejects%s'
+        % (tag, rows, files, total_rejects, ' (see %s)' % rejects_path if total_rejects else ''))
+    return 0
+
+
+CLOSE_SLACK = datetime.timedelta(minutes=5)     # a day is complete once rows are 5 min into the day after next
+
+
+class DayLoader:
+    """Backfill sink: routes rows to one load file per day and loads each day once it is complete.
+
+    Day D's rows are in file D and at the head of file D+1 (the last seconds before midnight), so D is
+    loaded once a row timestamped after D+1 00:05 has been seen. Each day is its own run and transaction:
+    spLoadWeblogStage deletes that day for this logID and inserts the new rows.
+    """
+
+    def __init__(self, db, workdir, log_id, first, last, dry_run, log):
+        self.db, self.workdir, self.log_id = db, workdir, log_id
+        self.first, self.last, self.dry_run, self.log = first, last, dry_run, log
+        self.open = {}          # date -> [run_id, path, file, rows]
+        self.closed = set()
+        self.outside = self.late = 0
+        self.loaded = []        # (date, rows, deleted)
+
+    def sink(self, row):
+        d = row_date(row)
+        ts = datetime.datetime.combine(d, datetime.time.fromisoformat(row[5]))
+        if ts > datetime.datetime.combine(self.last + datetime.timedelta(days=1), datetime.time()) + CLOSE_SLACK:
+            return STOP
+        for day in [x for x in self.open if ts > datetime.datetime.combine(x + datetime.timedelta(days=1),
+                                                                           datetime.time()) + CLOSE_SLACK]:
+            self.load(day)
+        if d < self.first or d > self.last:
+            self.outside += 1
+            return None
+        if d in self.closed:
+            self.late += 1
+            return None
+        entry = self.open.get(d) or self._open(d)
+        entry[2].write(('%d\t' % entry[0] + '\t'.join(row) + '\n').encode('utf-8'))
+        entry[3] += 1
+        return None
+
+    def _open(self, d):
+        run_id = 0 if self.dry_run else self.db.start_run('backfill')
+        path = os.path.join(self.workdir, 'backfill_%d_%s_run%d.weblog.bcp' % (self.log_id, d, run_id))
+        entry = self.open[d] = [run_id, path, open(path, 'wb'), 0]
+        return entry
+
+    def load(self, d):
+        run_id, path, f, rows = self.open.pop(d)
+        f.close()
+        self.closed.add(d)
+        started = time.monotonic()
+        if self.dry_run:
+            self.loaded.append((d, rows, 0))
+            self.log('  %s: %d rows (dry run, %s)' % (d, rows, path))
+            return
+        try:
+            self.db.bcp_in('weblogStage', path, rows)
+            _, loaded, deleted = self.db.load_run(run_id, d, d)
+        except Exception as e:      # noqa: BLE001
+            try:
+                self.db.abort_run(run_id, '%s: %s' % (type(e).__name__, e))
+            except Exception:       # noqa: BLE001
+                pass
+            raise
+        os.remove(path)
+        self.loaded.append((d, loaded, deleted))
+        self.log('  %s: run %d, %d rows loaded, %d deleted, %.1f s' % (d, run_id, loaded, deleted,
+                                                                       time.monotonic() - started))
+
+    def finish(self):
+        for d in sorted(self.open):
+            self.load(d)
+
+    def abort(self, msg):
+        for d in list(self.open):
+            run_id, _, f, _ = self.open.pop(d)
+            f.close()
+            if run_id:
+                try:
+                    self.db.abort_run(run_id, msg)
+                except Exception:   # noqa: BLE001
+                    pass
+
+
+def cmd_backfill(args):
+    first, last = args.date_from, args.date_to
+    if first > last or last >= utc_today():
+        print('backfill: need --from <= --to < today (UTC)', file=sys.stderr)
+        return 1
+    os.makedirs(args.workdir, exist_ok=True)
+    log = RunLog(args.workdir)
+    db = Db(args.server, args.database)
+
+    sources = db.sources(args.method, args.logid)
+    missing = set(args.logid) - {s[0] for s in sources}
+    if missing:
+        log('backfill: no active %s source with logID %s' % (args.method, sorted(missing)))
+        return 1
+    for log_id, _ in sources:
+        owned = db.first_state_date(log_id)
+        if owned and last >= owned:
+            log('backfill: logID %d has incremental state from %s; --to must be before that' % (log_id, owned))
+            return 1
+
+    rejects_path = os.path.join(args.workdir, 'backfill_%s.rejects.txt' % time.strftime('%Y%m%d_%H%M%S'))
+    log('backfill %s..%s for logIDs %s%s' % (first, last, [s[0] for s in sources], ' (dry run)' if args.dry_run else ''))
+    with open(rejects_path, 'w', encoding='utf-8') as rej:
+        for log_id, folder in sources:
+            days = DayLoader(db, args.workdir, log_id, first, last, args.dry_run, log)
+            try:
+                _, matched = list_logs(folder)
+                # Files dated first..last+1: the day after holds the last seconds of `last`.
+                names = sorted((n for n in matched
+                                if name_dates(n)[1] >= first and name_dates(n)[0] <= last + datetime.timedelta(days=1)),
+                               key=name_key)
+                for name in names:
+                    started = time.monotonic()
+                    r = parse_file(os.path.join(folder, name), log_id, days.sink, rej)
+                    log('  logID %d %s: %.1f MB, %d rows, %d rejects, %.1f s%s'
+                        % (log_id, name, r.bytes_read / 1e6, r.rows, sum(r.rejects.values()),
+                           time.monotonic() - started, ' (stopped past --to)' if r.stopped else ''))
+                    if r.stopped:
+                        break
+                days.finish()
+            except Exception as e:      # noqa: BLE001
+                msg = '%s: %s' % (type(e).__name__, e)
+                days.abort(msg)
+                log('FAILED logID %d: %s. Days loaded before the failure stay loaded; rerun the same backfill.'
+                    % (log_id, msg))
+                return 1
+            empty = [first + datetime.timedelta(days=i) for i in range((last - first).days + 1)]
+            empty = [d for d in empty if d not in {x[0] for x in days.loaded}]
+            log('  logID %d done: %d days, %d rows; %d rows outside the range skipped%s%s'
+                % (log_id, len(days.loaded), sum(x[1] for x in days.loaded), days.outside,
+                   '; WARNING %d rows arrived after their day was loaded (lost)' % days.late if days.late else '',
+                   '; WARNING no rows for %s' % ', '.join(map(str, empty)) if empty else ''))
+    remove_if_empty(rejects_path)
+    return 0
 
 
 # ---------------------------------------------------------------------------------------------
@@ -264,7 +661,7 @@ def cmd_parse(args):
         started = time.monotonic()
         with open(base + '.bcp', 'wb') as out, \
                 open(base + '.rejects.txt', 'w', encoding='utf-8') as rej:
-            r = parse_file(path, args.logid, out, rej, offset=args.offset)
+            r = parse_file(path, args.logid, file_sink(out), rej, offset=args.offset)
         secs = time.monotonic() - started
         mb = r.bytes_read / 1e6
         print('== %s' % path)
@@ -284,7 +681,31 @@ def cmd_parse(args):
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     sub = p.add_subparsers(dest='command', required=True)
-    pp = sub.add_parser('parse', help='dry run: parse log files into load files, load nothing')
+
+    def common(sp):
+        sp.add_argument('--server', default='localhost')
+        sp.add_argument('--database', default='weblog')
+        sp.add_argument('--method', default='TAIL', help="LogSource.method of the sources this loader reads")
+        sp.add_argument('--workdir', default=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'work'),
+                        help='load files, rejects files and bcpweblog.log')
+        sp.add_argument('--dry-run', action='store_true', help='read and parse, write the load files, load nothing')
+
+    pi = sub.add_parser('incremental', help='hourly: load new complete lines since the stored offsets')
+    common(pi)
+    pi.add_argument('--logid', type=int, nargs='+', help='only these sources')
+    pi.add_argument('--days', type=int, default=2, help='window of file dates, ending today (UTC)')
+    pi.add_argument('--max-bytes', type=int, default=1000 * 1000 * 1000,
+                    help='per file per run; a bigger backlog is caught up over several runs')
+    pi.set_defaults(func=cmd_incremental)
+
+    pb = sub.add_parser('backfill', help='load closed days from offset 0, replacing those days')
+    common(pb)
+    pb.add_argument('--logid', type=int, nargs='+', required=True)
+    pb.add_argument('--from', dest='date_from', type=datetime.date.fromisoformat, required=True)
+    pb.add_argument('--to', dest='date_to', type=datetime.date.fromisoformat, required=True)
+    pb.set_defaults(func=cmd_backfill)
+
+    pp = sub.add_parser('parse', help='parser check: parse log files into load files, no database')
     pp.add_argument('files', nargs='+')
     pp.add_argument('--out', required=True, help='folder for the .bcp and .rejects.txt files')
     pp.add_argument('--logid', type=int, default=0)
