@@ -143,7 +143,7 @@ their own connection strings, which evidently point at 5A.
 5. On 2025-10-21 (the table swap), were the idieswww01 entries switched off because they loaded nothing? Was collection from the new servers meant to be set up separately?
 6. Should `trafficBase` history be recomputed or annotated? The row data is still available (`weblogAll_10212025` from 2016, plus the current `weblogAll`). It holds only what was collected, though, so it can remove duplicates and health checks but can't add the real traffic that was never loaded.
 7. Should the new loader drop load-balancer health checks at load time? Real traffic could be 10-15 M rows/day, so the size problem behind the 2025-10-21 stopgap would come back faster otherwise.
-8. Duplicates: which logID in each pair stays active?
+8. Duplicates: which logID in each pair stays active? Related: **8 of the 33 active `XCOPY` folders don't exist** (checked 2026-10-28): logIDs 1002, 1003 (dsa001), 22, 2022, 2023 (dsa003) and 12, 1022, 1023 (dsa005), i.e. `W3SVC469008127`, `W3SVC469019628`, and `W3SVC1338999339` on dsa003/005. For each, the loader fails without any message every hour. Switch them off?
 9. SDSS5B is up but receives almost no query traffic (sql-monitor). In CasJobs it only takes the `DR20Collab_long` and `DR19_long` queues. Is that split intended (and should `DR20_long`, the busiest long queue, be on 5B?), and should SkyServer / the web services send any queries to 5B?
 
 **bcpWeblog rewrite** (in progress; see `bcpweblog_rewrite_handoff.md`):
