@@ -1,7 +1,15 @@
-"""Independent row-count check (SPEC 5.3). Does NOT use bcpweblog.py.
+"""Independent row-count check (SPEC 5.3). Deliberately does NOT use bcpweblog.py, so a parser bug can't hide.
 
 For a logID: read LogSource.pathname and LogFileState offsets, count raw data lines (not '#', not empty)
 per 'yyyy-mm-dd hh' in each file up to its stored offset, and compare with weblogAll rows per hour.
+
+    python -I check_counts.py <server> <database> <logID>        e.g. sdss4c bcpweblog_test 3003
+
+TEST DATABASES ONLY. The weblogAll query filters on logID, which is not a key prefix: on lumberjack's
+weblog that is a full scan of the whole table (it caused turblog blocking on 2026-10-28).
+
+Only meaningful when all of the logID's rows came from incremental runs: backfilled days aren't in
+LogFileState, so their hours show as differences.
 """
 import collections
 import os
