@@ -331,6 +331,18 @@ One line per source to stdout (the job history) and appended to a log file:
    user agent, ~9% are a headless browser (`Lightpanda`), ~2% self-declared crawlers.
 3. **New-format counts.** For idieswww02/03 and 01, compare rows per file and hour with an independent line count of the raw
    files.
+   **Done 2026-10-28** on sdss4c `bcpweblog_test`, with a separate counter that doesn't use `bcpweblog.py` (data lines per
+   `yyyy-mm-dd hh` up to each stored offset vs `weblogAll` rows per hour). The counter was first run where the answer was
+   known (logID 3002, which also holds a backfilled day outside `LogFileState`): it flagged exactly those 24 hours.
+
+   | server | files | runs | raw lines | rows | hours | differ |
+   |---|---|---|---|---|---|---|
+   | idieswww02 (3002) | 10-27, 10-28 (to offset) | 2 (1 capped) | 7,525,462 | 7,525,462 | 46 | 0 |
+   | idieswww03 (3003) | 10-27, 10-28 (to offset) | 2 (1 capped) | 7,756,607 | 7,756,607 | 48 | 0 |
+   | idieswww01 (3001) | monthly `u_ex2610_x.log`, first 3 GB of 25 GB | 3 (all capped) | 10,897,488 | 10,897,488 | 108 | 0 |
+
+   0 rejects on every run. idieswww01's file was being written during the runs (24.80 -> 25.04 GB); each run resumed exactly at
+   the previous offset. Each 1 GB capped run: ~55 s read + ~2.5-3 min load on sdss4c.
 4. **Incremental = backfill.** Run hourly into a scratch database for 2 days; backfill the same days into another; the
    row sets must match exactly. This is the test that proves the offsets.
    **Done (short form) 2026-10-28** on sdss4c `bcpweblog_test`: two incremental runs for idieswww02 (logID 3002; the first capped
