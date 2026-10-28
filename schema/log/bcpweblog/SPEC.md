@@ -339,7 +339,28 @@ One line per source to stdout (the job history) and appended to a log file:
    10-26; +64 dated 10-27 from the head of file 28). A backfill of 10-26 then deleted exactly the 93 rows incremental had loaded
    from file 27's head and reloaded them with the rest of the day. Still to do: the 2-day hourly version.
 5. **Failure and restart.** Kill a run partway, and fail bcp on purpose: the next run must leave no gap and no duplicate.
-6. **Time.** Step 1 time before and after, on the same sources.
+6. **Time.** Step 1 time before and after, on the same sources. Keep the two kinds of number apart: the **Agent job**
+   (hourly incremental, the original problem) and **backfill** (one-off history load).
+
+   Measured 2026-10-28 on sdss4c (Python 3.14), idieswww02 `u_ex261027_x.log`, 1.29 GB, 4.21 M lines:
+
+   | step | time | rate |
+   |---|---|---|
+   | copy over SMB to local disk | 1.4 s | ~950 MB/s (probably cached: the file had been read an hour earlier) |
+   | Python: read + split into lines (local) | 3.6 s | 360 MB/s |
+   | Python: full parse, rows discarded (local) | 60 s | 21 MB/s (~14 µs/line) |
+   | Python: parse + write load file (local) | 66 s | 20 MB/s |
+   | same file over SMB inside a backfill run | 93 s | 14 MB/s |
+   | bcp + insert of that day's 4.2 M rows | ~225 s | ~19k rows/s |
+
+   So the **parser** (`convert()`), not SMB, sets the read rate; it could probably be made faster, but only backfill would notice.
+
+   **Agent job (estimate, not measured on lumberjack):** today step 1 is ~720 s/hour, ~570 s of it opening ~23,000 old files.
+   Hourly new data for idieswww01-03 W3SVC2 is ~35-55 MB per server, so ~2-3 s of parsing per server, plus loading ~0.5 M rows
+   (~25 s at the sdss4c rate; lumberjack's rate unknown and probably slower). For the 15 dsa sources the old step loads, the
+   new work would be a few seconds.
+   **Backfill (estimate):** ~5 min per server-day on sdss4c (1.5 min read + 3.75 min load), so ~3 servers x 365 days is
+   ~90 hours of run time per year of history, before any lumberjack slowdown; to be planned outside the job window.
 
 ## 6. Out of scope for v1
 
