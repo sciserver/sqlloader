@@ -127,9 +127,14 @@ their own connection strings, which evidently point at 5A.
 
 **Web servers / IIS (web admins):**
 1. idieswww01's SkyServer log (`W3SVC2`) was last written **2026-10-23 09:53**. Is 01 out of the load balancer,
-   or has its logging stopped?
+   or has its logging stopped? (Update 2026-10-28: it's being written again, last write 10-28 10:59, so the
+   question is now about the gap after 10-23.)
 2. Can IIS logging on the three servers be made the same: daily rollover, and the same fields
-   (including `sc-bytes`, `cs-bytes`, `XForwardedFor`)?
+   (including `sc-bytes`, `cs-bytes`, `XForwardedFor`)? From the file names and headers (2026-10-28): all three
+   rolled over daily until **2025-11-10 16:54**, when idieswww01 alone switched to **monthly** (now 20-28 GB per file).
+   `XForwardedFor` was added on all three on 2025-11-04 at ~19:00. idieswww01 has had no `sc-bytes`/`cs-bytes`
+   in every file checked. Also: there are **no `W3SVC2` log files at all from 2025-07-10 to 2025-08-26** on
+   02/03 (on 01 from 2025-04-30). Were the servers not logging then, or were the files removed?
 3. The `imgcutout.asmx` probe gets HTTP 500 about once a second. Is that a health check on a broken endpoint?
 4. Are dsa001/003/005 still meant to be in service?
 
