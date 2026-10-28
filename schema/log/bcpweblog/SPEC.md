@@ -278,12 +278,20 @@ One line per source to stdout (the job history) and appended to a log file:
 
 1. **Old-format parity.** Dry run on one dsa001 source for a closed day; compare with `weblogAll` for that logID and day.
    Expected differences only: the pre-midnight rows' date, no `?-`, `bytesIn`, and the row 1 BOM reject.
-2. **New-format counts.** For idieswww02/03 and 01, compare rows per file and hour with an independent line count of the raw
+   **Done 2026-10-28** (logID 4, `ex261027_x.log`, compared with `weblogAll` dd=27): 78,128 rows new vs 78,127 old. The extra
+   row is line 1 (the BOM reject). With `?-` removed, `-` read as empty, and the proc's `password=` cut applied, **every
+   row matches** on time, method, URL, status, user agent, referer, bytesOut and elapsed. Old `bytesIn` = `bytesOut` on
+   100% of rows. `clientIP` differs as intended: the old rows have a literal `-` (76,299 health-check rows, empty `c-ip`),
+   and the new rows have the internal address from `XForwardedFor`; the 1,392 public-address rows are identical.
+2. **New-format first look.** Done 2026-10-28 on idieswww02 `u_ex261027_x.log` (1.29 GB): 4,213,324 rows, 0 rejects,
+   57 s (22 MB/s over SMB); 93 pre-midnight rows dated 10-26. No dominant probe URL on `W3SVC2`; 44% of requests have no
+   user agent, ~9% are a headless browser (`Lightpanda`), ~2% self-declared crawlers.
+3. **New-format counts.** For idieswww02/03 and 01, compare rows per file and hour with an independent line count of the raw
    files.
-3. **Incremental = backfill.** Run hourly into a scratch database for 2 days; backfill the same days into another; the
+4. **Incremental = backfill.** Run hourly into a scratch database for 2 days; backfill the same days into another; the
    row sets must match exactly. This is the test that proves the offsets.
-4. **Failure and restart.** Kill a run partway, and fail bcp on purpose: the next run must leave no gap and no duplicate.
-5. **Time.** Step 1 time before and after, on the same sources.
+5. **Failure and restart.** Kill a run partway, and fail bcp on purpose: the next run must leave no gap and no duplicate.
+6. **Time.** Step 1 time before and after, on the same sources.
 
 ## 6. Out of scope for v1
 
