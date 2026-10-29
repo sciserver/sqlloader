@@ -5,7 +5,7 @@ Only what needs the owner of idieswww01-03 and of lumberjack's Agent jobs. Backg
 
 ## Blocking: nothing new can be loaded until these are done
 
-1. **Read access to the SkyServer logs on idieswww02 and idieswww03** (section 5). The weblog loader runs as
+1. **Read access to the logs on idieswww02 and idieswww03** (section 5). The weblog loader runs as
    `sdss\mssql` (step 1 calls the exe through `xp_cmdshell`). That account gets "Access is denied" on `LogFiles\W3SVC2`
    on 02 and 03. On 01 it can read, through `BUILTIN\Users`.
    - Which account should the loader use? Suggest a dedicated service account (or a group), given to the weblog step
