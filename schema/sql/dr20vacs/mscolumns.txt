@@ -1,0 +1,178 @@
+﻿    source_id bigint NOT NULL, --/U  --/D Gaia DR3 Source ID  
+    g real NOT NULL, --/U mag --/D Gaia DR3 G magnitude  
+    bp real NOT NULL, --/U mag --/D Gaia DR3 BP magnitude  
+    rp real NOT NULL, --/U mag --/D Gaia DR3 RP magnitude  
+    ra float NOT NULL, --/U deg --/D Gaia DR3 right ascension  
+    dec float NOT NULL, --/U deg --/D Gaia DR3 declination  
+    parallax float NOT NULL, --/U mas --/D Gaia DR3 parallax  
+    parallax_error float NOT NULL, --/U mas --/D Gaia DR3 parallax error  
+    parallax_over_error float NOT NULL, --/U  --/D Gaia DR3 parallax over error  
+    pmra float NOT NULL, --/U mas/yr --/D Gaia DR3 proper motion in right ascension  
+    pmdec float NOT NULL, --/U mas/yr --/D Gaia DR3 proper motion in declination  
+    pmra_error float NOT NULL, --/U mas/yr --/D Uncertainty on Gaia DR3 proper motion in right ascension  
+    pmdec_error float NOT NULL, --/U mas/yr --/D Uncertainty on Gaia DR3 proper motion in declination  
+    bp_rp real NOT NULL, --/U mag --/D Gaia DR3 BP-RP color index  
+    l float NOT NULL, --/U deg --/D Galactic longitude  
+    b float NOT NULL, --/U deg --/D Galactic latitude  
+    catalogid bigint NOT NULL, --/U  --/D SDSS catalog identification number  
+    sdssid bigint NOT NULL, --/U  --/D SDSS object identifier  
+    field bigint NOT NULL, --/U  --/D Field number for the observation  
+    mjd bigint NOT NULL, --/U day --/D Mean modified Julian date of observations  
+    obs varchar(10) NOT NULL, --/U  --/D Three-letter code identifying the observatory (APO or LCO)  
+    n_exp bigint NOT NULL, --/U count --/D Number of individual 15-min exposures co-added  
+    n_spall bigint NOT NULL, --/U count --/D Number of spAll rows co-added  
+    snr real NOT NULL, --/U  --/D Median signal-to-noise ratio per pixel of the combined spectrum  
+    acat_id bigint NOT NULL, --/U  --/D Internal identifier for MINESweeper catalog  
+    eep float NOT NULL, --/U  --/D Equivalent evolutionary phase used in isochrone fitting  
+    eep_lerr float NOT NULL, --/U  --/D Lower uncertainty on EEP  
+    eep_uerr float NOT NULL, --/U  --/D Upper uncertainty on EEP  
+    eep_err float NOT NULL, --/U  --/D Typical uncertainty on EEP  
+    init_feh float NOT NULL, --/U dex --/D Initial stellar metallicity from isochrone fit  
+    init_feh_lerr float NOT NULL, --/U dex --/D Lower error on initial [Fe/H]  
+    init_feh_uerr float NOT NULL, --/U dex --/D Upper error on initial [Fe/H]  
+    init_feh_err float NOT NULL, --/U dex --/D Uncertainty on initial [Fe/H]  
+    init_afe float NOT NULL, --/U dex --/D Initial stellar alpha-element enhancement from isochrone fit  
+    init_afe_lerr float NOT NULL, --/U dex --/D Lower error on initial [α/Fe]  
+    init_afe_uerr float NOT NULL, --/U dex --/D Upper error on initial [α/Fe]  
+    init_afe_err float NOT NULL, --/U dex --/D Uncertainty on initial [α/Fe]  
+    init_mass float NOT NULL, --/U M_sun --/D Initial stellar mass from isochrone fit, in solar masses  
+    init_mass_lerr float NOT NULL, --/U M_sun --/D Lower uncertainty on initial mass estimate  
+    init_mass_uerr float NOT NULL, --/U M_sun --/D Upper uncertainty on initial mass estimate  
+    init_mass_err float NOT NULL, --/U M_sun --/D Uncertainty on initial mass estimate  
+    pc_0 float NOT NULL, --/U  --/D Continuum polynomial coefficient 0  
+    pc_0_lerr float NOT NULL, --/U  --/D Lower error on pc_0  
+    pc_0_uerr float NOT NULL, --/U  --/D Upper error on pc_0  
+    pc_0_err float NOT NULL, --/U  --/D Uncertainty on pc_0  
+    pc_1 float NOT NULL, --/U  --/D Continuum polynomial coefficient 1 (unitless)  
+    pc_1_lerr float NOT NULL, --/U  --/D Lower error on pc_1  
+    pc_1_uerr float NOT NULL, --/U  --/D Upper error on pc_1  
+    pc_1_err float NOT NULL, --/U  --/D Uncertainty on pc_1  
+    pc_2 float NOT NULL, --/U  --/D Continuum polynomial coefficient 2 (unitless)  
+    pc_2_lerr float NOT NULL, --/U  --/D Lower error on pc_2  
+    pc_2_uerr float NOT NULL, --/U  --/D Upper error on pc_2  
+    pc_2_err float NOT NULL, --/U  --/D Uncertainty on pc_2  
+    pc_3 float NOT NULL, --/U  --/D Continuum polynomial coefficient 3 (unitless)  
+    pc_3_lerr float NOT NULL, --/U  --/D Lower error on pc_3  
+    pc_3_uerr float NOT NULL, --/U  --/D Upper error on pc_3  
+    pc_3_err float NOT NULL, --/U  --/D Uncertainty on pc_3  
+    teff float NOT NULL, --/U K --/D Effective temperature in Kelvin  
+    teff_lerr float NOT NULL, --/U K --/D Lower error on effective temperature  
+    teff_uerr float NOT NULL, --/U K --/D Upper error on effective temperature  
+    teff_err float NOT NULL, --/U K --/D Uncertainty on effective temperature  
+    logg float NOT NULL, --/U dex --/D Logarithm (base 10) of the surface gravity in cm/s²  
+    logg_lerr float NOT NULL, --/U dex --/D Lower error on logg  
+    logg_uerr float NOT NULL, --/U dex --/D Upper error on logg  
+    logg_err float NOT NULL, --/U dex --/D Uncertainty on logg  
+    logr float NOT NULL, --/U dex --/D Logarithm of the stellar radius (in solar radii)  
+    logr_lerr float NOT NULL, --/U dex --/D Lower error on logR  
+    logr_uerr float NOT NULL, --/U dex --/D Upper error on logR  
+    logr_err float NOT NULL, --/U dex --/D Uncertainty on logR  
+    feh float NOT NULL, --/U dex --/D Metallicity measurement [Fe/H]  
+    feh_lerr float NOT NULL, --/U dex --/D Lower error on present [Fe/H]  
+    feh_uerr float NOT NULL, --/U dex --/D Upper error on present [Fe/H]  
+    feh_err float NOT NULL, --/U dex --/D Uncertainty on present [Fe/H]  
+    afe float NOT NULL, --/U dex --/D Alpha element enhancement measurement  
+    afe_lerr float NOT NULL, --/U dex --/D Lower error on alpha enhancement  
+    afe_uerr float NOT NULL, --/U dex --/D Upper error on alpha enhancement  
+    afe_err float NOT NULL, --/U dex --/D Uncertainty on alpha enhancement  
+    vrad float NOT NULL, --/U km/s --/D Radial velocity in km/s  
+    vrad_lerr float NOT NULL, --/U km/s --/D Lower error on radial velocity  
+    vrad_uerr float NOT NULL, --/U km/s --/D Upper error on radial velocity  
+    vrad_err float NOT NULL, --/U km/s --/D Uncertainty on radial velocity  
+    vrot float NOT NULL, --/U km/s --/D Projected rotational velocity  
+    vrot_lerr float NOT NULL, --/U km/s --/D Lower error on Vrot  
+    vrot_uerr float NOT NULL, --/U km/s --/D Upper error on Vrot  
+    vrot_err float NOT NULL, --/U km/s --/D Uncertainty on Vrot  
+    dist float NOT NULL, --/U kpc --/D Distance from the Sun in kiloparsecs  
+    dist_lerr float NOT NULL, --/U kpc --/D Lower error on distance  
+    dist_uerr float NOT NULL, --/U kpc --/D Upper error on distance  
+    dist_err float NOT NULL, --/U kpc --/D Uncertainty on distance  
+    av float NOT NULL, --/U mag --/D Visual V-band extinction in magnitudes  
+    av_lerr float NOT NULL, --/U mag --/D Lower error on A_V  
+    av_uerr float NOT NULL, --/U mag --/D Upper error on A_V  
+    av_err float NOT NULL, --/U mag --/D Uncertainty on A_V  
+    logage float NOT NULL, --/U log(yr) --/D Logarithm (base 10) of stellar age (years)  
+    logage_lerr float NOT NULL, --/U log(yr) --/D Lower error on log stellar age  
+    logage_uerr float NOT NULL, --/U log(yr) --/D Upper error on log stellar age  
+    logage_err float NOT NULL, --/U log(yr) --/D Uncertainty on log stellar age  
+    mass float NOT NULL, --/U M_sun --/D Current stellar mass in solar masses  
+    mass_lerr float NOT NULL, --/U M_sun --/D Lower error on current mass estimate  
+    mass_uerr float NOT NULL, --/U M_sun --/D Upper error on current mass estimate  
+    mass_err float NOT NULL, --/U M_sun --/D Uncertainty on current mass estimate  
+    logl float NOT NULL, --/U log(L/L_sun) --/D Logarithm of stellar luminosity relative to the Sun  
+    logl_lerr float NOT NULL, --/U log(L/L_sun) --/D Lower error on log luminosity  
+    logl_uerr float NOT NULL, --/U log(L/L_sun) --/D Upper error on log luminosity  
+    logl_err float NOT NULL, --/U log(L/L_sun) --/D Uncertainty on log luminosity  
+    para float NOT NULL, --/U mas --/D Fitted parallax  
+    para_lerr float NOT NULL, --/U mas --/D Lower error on fitted parallax  
+    para_uerr float NOT NULL, --/U mas --/D Upper error on fitted parallax  
+    para_err float NOT NULL, --/U mas --/D Uncertainty on fitted parallax  
+    age float NOT NULL, --/U Gyr --/D Stellar age in gigayears  
+    age_lerr float NOT NULL, --/U Gyr --/D Lower error on age  
+    age_uerr float NOT NULL, --/U Gyr --/D Upper error on age  
+    age_err float NOT NULL, --/U Gyr --/D Uncertainty on age  
+    lnz float NOT NULL, --/U  --/D Natural logarithm of the Bayesian evidence  
+    lnl float NOT NULL, --/U  --/D Natural logarithm of the likelihood  
+    lnp float NOT NULL, --/U  --/D Natural logarithm of the posterior probability from the fit  
+    chisq_spec float NOT NULL, --/U  --/D Chi-square statistic for the spectral fit  
+    nspecpix bigint NOT NULL, --/U pixels --/D Number of spectral pixels used in fitting  
+    chisq_phot float NOT NULL, --/U  --/D Chi-square statistic for the photometric fit  
+    nbands bigint NOT NULL, --/U bands --/D Number of photometric bands utilized  
+    r_gal float NOT NULL, --/U kpc --/D Galactocentric radial distance in kiloparsecs  
+    r_gal_err float NOT NULL, --/U kpc --/D Uncertainty on R_gal  
+    x_gal float NOT NULL, --/U kpc --/D Galactocentric X-coordinate in kiloparsecs  
+    x_gal_err float NOT NULL, --/U kpc --/D Uncertainty on X_gal  
+    y_gal float NOT NULL, --/U kpc --/D Galactocentric Y-coordinate in kiloparsecs  
+    y_gal_err float NOT NULL, --/U kpc --/D Uncertainty on Y_gal  
+    z_gal float NOT NULL, --/U kpc --/D Galactocentric Z-coordinate in kiloparsecs  
+    z_gal_err float NOT NULL, --/U kpc --/D Uncertainty on Z_gal  
+    vx_gal float NOT NULL, --/U km/s --/D Galactic Cartesian velocity in X direction  
+    vx_gal_err float NOT NULL, --/U km/s --/D Uncertainty on Vx_gal  
+    vy_gal float NOT NULL, --/U km/s --/D Galactic Cartesian velocity in Y direction  
+    vy_gal_err float NOT NULL, --/U km/s --/D Uncertainty on Vy_gal  
+    vz_gal float NOT NULL, --/U km/s --/D Galactic Cartesian velocity in Z direction  
+    vz_gal_err float NOT NULL, --/U km/s --/D Uncertainty on Vz_gal  
+    vr_gal float NOT NULL, --/U km/s --/D Radial component of galactic velocity  
+    vr_gal_err float NOT NULL, --/U km/s --/D Uncertainty on Vr_gal  
+    vphi_gal float NOT NULL, --/U km/s --/D Azimuthal component of galactic velocity  
+    vphi_gal_err float NOT NULL, --/U km/s --/D Uncertainty on Vphi_gal  
+    vtheta_gal float NOT NULL, --/U km/s --/D Polar component of galactic velocity  
+    vtheta_gal_err float NOT NULL, --/U km/s --/D Uncertainty on Vtheta_gal  
+    v_tan float NOT NULL, --/U km/s --/D Tangential velocity relative to the Sun  
+    v_tan_err float NOT NULL, --/U km/s --/D Uncertainty on V_tan  
+    v_gsr float NOT NULL, --/U km/s --/D Velocity in the Galactic Standard of Rest frame  
+    v_gsr_err float NOT NULL, --/U km/s --/D Uncertainty on V_gsr  
+    lx float NOT NULL, --/U kpc km/s --/D X-component of the angular momentum  
+    lx_err float NOT NULL, --/U kpc km/s --/D Uncertainty on Lx  
+    ly float NOT NULL, --/U kpc km/s --/D Y-component of the angular momentum  
+    ly_err float NOT NULL, --/U kpc km/s --/D Uncertainty on Ly  
+    lz float NOT NULL, --/U kpc km/s --/D Z-component of the angular momentum  
+    lz_err float NOT NULL, --/U kpc km/s --/D Uncertainty on Lz  
+    ltot float NOT NULL, --/U kpc km/s --/D Total angular momentum magnitude  
+    ltot_err float NOT NULL, --/U kpc km/s --/D Uncertainty on total angular momentum  
+    e_kin_mw22 float NOT NULL, --/U km^2/s^2 --/D Kinetic energy from the MW22 potential model  
+    e_kin_mw22_err float NOT NULL, --/U km^2/s^2 --/D Uncertainty on kinetic energy from the MW22 model  
+    e_pot_mw22 float NOT NULL, --/U km^2/s^2 --/D Potential energy from the MW22 potential model  
+    e_pot_mw22_err float NOT NULL, --/U km^2/s^2 --/D Uncertainty on potential energy from the MW22 model  
+    e_tot_mw22 float NOT NULL, --/U km^2/s^2 --/D Total energy from the MW22 potential model  
+    e_tot_mw22_err float NOT NULL, --/U km^2/s^2 --/D Uncertainty on total energy from the MW22 model  
+    ecc_mw22 float NOT NULL, --/U  --/D Orbital eccentricity from the MW22 model  
+    ecc_mw22_err float NOT NULL, --/U  --/D Uncertainty on the orbital eccentricity  
+    r_apo_mw22 float NOT NULL, --/U kpc --/D Apocentric radius from MW22 orbit integration  
+    r_apo_mw22_err float NOT NULL, --/U kpc --/D Uncertainty on the apocenter distance  
+    r_peri_mw22 float NOT NULL, --/U kpc --/D Pericentric radius from MW22 orbit integration  
+    r_peri_mw22_err float NOT NULL, --/U kpc --/D Uncertainty on the pericenter distance  
+    z_max_mw22 float NOT NULL, --/U kpc --/D Maximum vertical height reached in MW22 orbit integration  
+    z_max_mw22_err float NOT NULL, --/U kpc --/D Uncertainty on the maximum vertical height  
+    flag bigint NOT NULL, --/U  --/D Data quality flag from MINESweeper fit (FLAG==0 selects clean data)  
+    sgr_l float NOT NULL, --/U deg --/D Sagittarius stream coordinate (longitude)  
+    sgr_b float NOT NULL, --/U deg --/D Sagittarius stream coordinate (latitude)  
+    in_sgr_l bit NOT NULL, --/U  --/D Flag indicating association with the Sagittarius Stream based on angular momentum  
+    in_substructure bit NOT NULL, --/U  --/D Flag indicating membership in a known halo substructure  
+    in_cluster bit NOT NULL, --/U  --/D Flag indicating membership in a calibration cluster  
+    cluster varchar(10) NOT NULL, --/U  --/D Identifier for the cluster if membership is determined, otherwise n/a  
+    kg_near bit NOT NULL, --/U  --/D Flag indicating membership in 10-30 kpc K giant target class  
+    kg_far bit NOT NULL, --/U  --/D Flag indicating membership in >30 kpc K giant target class  
+    xp_vmp bit NOT NULL, --/U  --/D Flag indicating membership in very metal-poor (VMP) target class based on Gaia XP  
+    xp_mp bit NOT NULL, --/U  --/D Flag indicating membership in metal-poor (MP) target class based on Gaia XP  
+    bb_mp bit NOT NULL, --/U  --/D Flag indicating membership in metal-poor (MP) target class based on IR colors ('best and brightest')  
