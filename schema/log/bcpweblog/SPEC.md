@@ -241,7 +241,7 @@ Column mapping (`weblogTemp` order, plus `logID`, see section 4.6):
 | column | from | when missing |
 |---|---|---|
 | `YY`/`MM`/`DD` | `date` | (reject the line) |
-| `Seq` | per-file line number | |
+| `Seq` | byte offset of the line in its file (staged only: like `weblogTemp.Seq`, it isn't copied; `weblogAll.seq` is an identity) | |
 | `Second` | `time` | (reject the line) |
 | `clientIP` | first entry of `XForwardedFor`, with any `:port` removed; else `c-ip` | `0.0.0.0` |
 | `op` | `cs-method`, max 8 chars | `''` |
@@ -364,8 +364,10 @@ One line per source to stdout (the job history) and appended to a log file:
    | T5 | bcp's SQL session `KILL`ed after its first 500k batch committed | 15 | `failed`; the committed batch removed | unchanged |
    | recovery | runs 10-12 backdated 13 h, then one normal run | 16 | 10-12 `abandoned`, staging empty; `loaded` | +3,579,297 rows |
 
-   End: 18,008,307 rows = 18,008,307 distinct `Seq` (no duplicates), and `check_counts.py` gives 18,008,307 raw lines up to
-   the offset, 174 hours compared, **0 differ** (no gap). Runs 11 and 12 read the same chunk and produced the same row count.
+   End: 18,008,307 rows, and `check_counts.py` gives 18,008,307 raw lines up to the offset, 174 hours compared, **0 differ**:
+   no gap, and no duplicate (each failure mode would have repeated or dropped a whole chunk, and a repeated chunk would
+   double its hours). Runs 11 and 12 read the same chunk and produced the same row count. (`weblogAll.seq` is an identity,
+   so it can't show duplicates.)
 
    Findings:
    - **In T4, bcp exited 0 having copied 0 of 1 rows** ("Unexpected EOF encountered in BCP data-file"). The row-count check
@@ -423,6 +425,11 @@ One line per source to stdout (the job history) and appended to a log file:
 - **`/collab` rule (`isvisible = 0`):** kept for parity. Checked 2026-10-28: idieswww02 `W3SVC2` had 1 `/collab` request in
   4.2 M on 10-27, and `weblogAll` had none hidden 10-21..10-27; the old table had tens to ~1,500/day up to mid-2025 (sampled
   on sdss4c `dev_weblog`). The `password=` cut is kept too.
+  Checked 2026-10-28 on the ~48 M test rows on sdss4c (idieswww01 10-01..10-08, idieswww02 10-26..10-28, idieswww03 10-27..10-28): the cut fired on
+  14 rows, all `/casjobs/forgotpass.aspx` on idieswww01 on 10-02, within 4 minutes. The parameter is `SendPassword=`
+  (`LIKE '%password=%'` is case-insensitive and matches the end of the name). Its value is the button label "Send
+  Password", and 12 of the 14 rows carry SQL-injection probes in `SendPassword` or the `id` after it. No real password
+  was seen. The cut removes those probes from `weblogAll`, but the load files and rejects file hold the full URL.
 
 ### Open (for the boss / the weblog owner)
 
