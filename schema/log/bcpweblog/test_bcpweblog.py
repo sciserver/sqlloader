@@ -247,5 +247,92 @@ class Backfill(unittest.TestCase):
         self.assertEqual(d.late, 1)
 
 
+class FakeDb:
+    def __init__(self, status=None, fail=False):
+        self.status, self.fail, self.asked = status or {}, fail, None
+
+    def run_status(self, run_ids):
+        if self.fail:
+            raise b.LoadError('sqlcmd failed')
+        self.asked = run_ids
+        return {r: s for r, s in self.status.items() if r in run_ids}
+
+
+class CleanWorkdir(unittest.TestCase):
+    NOW = 1800000000                # 2027-01-15 08:00 UTC
+    OLD = NOW - 31 * 86400
+    NEW = NOW - 3600
+
+    def make(self, files, empty=()):
+        """files: {name: mtime}, all one byte long except the names in empty; returns the workdir."""
+        work = tempfile.mkdtemp()
+        for name, mtime in files.items():
+            path = os.path.join(work, name)
+            with open(path, 'w') as f:
+                f.write('' if name in empty else 'x')
+            os.utime(path, (mtime, mtime))
+        return work
+
+    def clean(self, work, db):
+        msgs = []
+        b.clean_workdir(db, work, msgs.append, 30, now=self.NOW)
+        return sorted(os.listdir(work)), msgs
+
+    def test_load_files_go_when_run_is_not_started(self):
+        work = self.make({'run1.weblog.bcp': self.NEW, 'run1.state.bcp': self.NEW,     # loaded
+                          'run2.weblog.bcp': self.NEW,                                  # failed
+                          'run3.weblog.bcp': self.OLD,                                  # abandoned
+                          'run4.weblog.bcp': self.NEW, 'run4.state.bcp': self.OLD,     # started: another run
+                          'backfill_3002_2026-10-26_run5.weblog.bcp': self.NEW,         # started: a backfill
+                          'backfill_3002_2026-10-25_run6.weblog.bcp': self.NEW})        # loaded
+        db = FakeDb({1: 'loaded', 2: 'failed', 3: 'abandoned', 4: 'started', 5: 'started', 6: 'loaded'})
+        left, msgs = self.clean(work, db)
+        self.assertEqual(left, ['backfill_3002_2026-10-26_run5.weblog.bcp', 'run4.state.bcp', 'run4.weblog.bcp'])
+        self.assertEqual(db.asked, [1, 2, 3, 4, 5, 6])
+        self.assertIn('removed 5 old files', msgs[0])
+
+    def test_small_files_and_unknown_runs_go_by_age(self):
+        work = self.make({'run2.weblog.bcp.err': self.NEW, 'run2.rejects.txt': self.NEW,
+                          'run1.weblog.bcp.err': self.OLD, 'run1.rejects.txt': self.OLD,
+                          'backfill_20261028_213000.rejects.txt': self.OLD,
+                          'dryrun_20261028_213000.weblog.bcp': self.OLD,
+                          'dryrun_20261201_100000.weblog.bcp': self.NEW,
+                          'run9.weblog.bcp': self.NEW,                  # not in LoadRun (another database?)
+                          'run8.weblog.bcp': self.OLD,
+                          'notes.txt': self.OLD, 'u_ex261027_x.log': self.OLD})     # not ours: never touched
+        left, _ = self.clean(work, FakeDb({1: 'failed', 2: 'failed'}))
+        self.assertEqual(left, ['dryrun_20261201_100000.weblog.bcp', 'notes.txt', 'run2.rejects.txt',
+                                'run2.weblog.bcp.err', 'run9.weblog.bcp', 'u_ex261027_x.log'])
+
+    def test_log_trimmed_with_multiline_messages(self):
+        work = tempfile.mkdtemp()
+        path = os.path.join(work, 'bcpweblog.log')
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write('2026-12-01 10:00:00 FAILED run1: bcp error\nSQLState = S1000\n'
+                    '2027-01-14 10:00:00 loaded run2\n2027-01-15 07:00:00 FAILED run3: x\nsecond line\n')
+        self.clean(work, FakeDb())
+        with open(path, encoding='utf-8') as f:
+            self.assertEqual(f.read(), '2027-01-14 10:00:00 loaded run2\n2027-01-15 07:00:00 FAILED run3: x\nsecond line\n')
+
+    def test_database_error_never_fails_and_removes_nothing(self):
+        work = self.make({'run1.weblog.bcp': self.OLD})
+        left, msgs = self.clean(work, FakeDb(fail=True))
+        self.assertEqual(left, ['run1.weblog.bcp'])
+        self.assertIn('cleanup skipped', msgs[0])
+
+    def test_empty_small_files_go_when_run_is_done(self):
+        files = {'run1.rejects.txt': self.NEW, 'run1.weblog.bcp.err': self.NEW,      # failed, empty: go
+                 'run2.weblog.bcp.err': self.NEW,                                    # failed, has rows: stays
+                 'run3.rejects.txt': self.NEW,                                       # started, empty: stays
+                 'run9.rejects.txt': self.NEW}                                       # unknown, empty: stays
+        work = self.make(files, empty={'run1.rejects.txt', 'run1.weblog.bcp.err', 'run3.rejects.txt',
+                                       'run9.rejects.txt'})
+        left, _ = self.clean(work, FakeDb({1: 'failed', 2: 'failed', 3: 'started'}))
+        self.assertEqual(left, ['run2.weblog.bcp.err', 'run3.rejects.txt', 'run9.rejects.txt'])
+
+    def test_remove_quietly_when_already_gone(self):
+        b.remove_quietly(os.path.join(tempfile.mkdtemp(), 'run1.weblog.bcp'))
+
+
 if __name__ == '__main__':
     unittest.main()

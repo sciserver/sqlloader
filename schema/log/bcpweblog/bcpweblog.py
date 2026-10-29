@@ -315,8 +315,7 @@ class Db:
         if p.returncode != 0 or copied != expected:
             raise LoadError('bcp into %s: %d of %d rows (exit %d): %s'
                             % (table, copied, expected, p.returncode, (p.stdout + p.stderr).strip()[-2000:]))
-        if os.path.exists(path + '.err') and os.path.getsize(path + '.err') == 0:
-            os.remove(path + '.err')
+        remove_if_empty(path + '.err')
 
     def sources(self, method, log_ids=None):
         """[(logID, pathname)] of the active sources read by this loader."""
@@ -355,6 +354,15 @@ class Db:
 
     def abort_run(self, run_id, message):
         self.query('EXEC dbo.spAbortWeblogRun %d, %s' % (run_id, sql_str(message[:2000])))
+
+    def run_status(self, run_ids):
+        """{runID: status} for the runIDs LoadRun has."""
+        status = {}
+        for i in range(0, len(run_ids), 500):
+            ids = ','.join(str(int(r)) for r in run_ids[i:i + 500])
+            for r in self.query('SELECT runID, status FROM dbo.LoadRun WHERE runID IN (%s)' % ids):
+                status[int(r[0])] = r[1]
+        return status
 
 
 # ---------------------------------------------------------------------------------------------
@@ -421,7 +429,88 @@ class RunLog:
 
 def remove_if_empty(path):
     if os.path.exists(path) and os.path.getsize(path) == 0:
+        remove_quietly(path)
+
+
+def remove_quietly(path):
+    """Remove a file that may already be gone (another run's clean_workdir can get there first)."""
+    try:
         os.remove(path)
+    except FileNotFoundError:
+        pass
+
+
+# Files this loader writes to the workdir. Nothing else there is touched.
+WORK_FILE = re.compile(r'^(?:run(\d+)|backfill_\d+_[\d-]+_run(\d+)|backfill_[\d_]+|dryrun_[\d_]+)'
+                       r'\.(weblog\.bcp|state\.bcp|rejects\.txt)(\.err)?$')
+
+
+def clean_workdir(db, workdir, log, keep_days, now=None):
+    """Remove old files from the workdir (SPEC 4.9). Never fails the run: problems are logged.
+
+    A load file (.weblog.bcp / .state.bcp) is removed once its run is no longer 'started' in LoadRun:
+    loaded, failed, or abandoned by the 12 h sweep. It can be rebuilt with --dry-run, because a failed
+    run doesn't move the offsets. So is an empty .err or rejects file (a killed run leaves them).
+    Everything else (.err, rejects, dry-run files, load files of runs LoadRun doesn't know) is removed
+    after keep_days, and bcpweblog.log is trimmed to keep_days. A 'started' run's files are never touched.
+    runIDs belong to one database, so a workdir must serve only one database.
+    """
+    now = time.time() if now is None else now
+    cutoff = now - keep_days * 86400
+    try:
+        found = []
+        for name in os.listdir(workdir):
+            m = WORK_FILE.match(name)
+            if m:
+                run_id = m.group(1) or m.group(2)
+                is_load = m.group(3) != 'rejects.txt' and not m.group(4)
+                found.append((name, int(run_id) if run_id else None, is_load))
+        status = db.run_status(sorted({r for _, r, _ in found if r is not None}))
+        removed = size = 0
+        for name, run_id, is_load in found:
+            path = os.path.join(workdir, name)
+            st = os.stat(path)
+            if status.get(run_id) == 'started':
+                continue
+            run_done = run_id in status
+            if (run_done and (is_load or st.st_size == 0)) or st.st_mtime < cutoff:
+                try:
+                    os.remove(path)
+                except FileNotFoundError:
+                    continue
+                except OSError as e:
+                    log('  WARNING workdir: cannot remove %s (%s)' % (name, e.strerror or e))
+                    continue
+                removed += 1
+                size += st.st_size
+        if removed:
+            log('workdir: removed %d old files, %.1f MB' % (removed, size / 1e6))
+        trim_log(os.path.join(workdir, 'bcpweblog.log'), cutoff)
+    except Exception as e:      # noqa: BLE001 - housekeeping must not stop the load
+        log('  WARNING workdir cleanup skipped: %s: %s' % (type(e).__name__, e))
+
+
+def trim_log(path, cutoff):
+    """Drop bcpweblog.log lines older than cutoff (epoch seconds). Lines without a timestamp
+    (a multi-line message) go with the line before them."""
+    oldest = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(cutoff))
+    if not os.path.exists(path):
+        return
+    with open(path, encoding='utf-8', errors='replace') as f:
+        first = f.readline()
+        if not first or first[:19] >= oldest:
+            return
+        f.seek(0)
+        lines = f.readlines()
+    kept, keep = [], False
+    for line in lines:
+        if re.match(r'\d{4}-\d\d-\d\d \d\d:\d\d:\d\d ', line):
+            keep = line[:19] >= oldest
+        if keep:
+            kept.append(line)
+    with open(path + '.tmp', 'w', encoding='utf-8') as f:
+        f.writelines(kept)
+    os.replace(path + '.tmp', path)
 
 
 def cmd_incremental(args):
@@ -436,6 +525,8 @@ def cmd_incremental(args):
         log('incremental: no active %s sources%s; nothing to do' % (args.method, ' with those logIDs' if args.logid else ''))
         return 0
     state = db.file_state([s[0] for s in sources])
+    if not args.dry_run:
+        clean_workdir(db, args.workdir, log, args.keep_days)
 
     run_id = 0 if args.dry_run else db.start_run('incremental')
     tag = ('run%d' % run_id) if run_id else 'dryrun_' + time.strftime('%Y%m%d_%H%M%S')
@@ -502,10 +593,13 @@ def cmd_incremental(args):
                 db.abort_run(run_id, msg)
             except Exception as e2:     # noqa: BLE001
                 log('  (could not mark run %d failed: %s)' % (run_id, e2))
+            # The load files can be rebuilt (the offsets didn't move); keep only the small .err and rejects files.
+            for p in (rows_path, state_path):
+                remove_quietly(p)
         return 1
 
     for p in (rows_path, state_path):
-        os.remove(p)
+        remove_quietly(p)
     remove_if_empty(rejects_path)
     log('loaded %s: %d rows, %d file offsets, %d rejects%s'
         % (tag, rows, files, total_rejects, ' (see %s)' % rejects_path if total_rejects else ''))
@@ -573,8 +667,9 @@ class DayLoader:
                 self.db.abort_run(run_id, '%s: %s' % (type(e).__name__, e))
             except Exception:       # noqa: BLE001
                 pass
+            remove_quietly(path)
             raise
-        os.remove(path)
+        remove_quietly(path)
         self.loaded.append((d, loaded, deleted))
         self.log('  %s: run %d, %d rows loaded, %d deleted, %.1f s' % (d, run_id, loaded, deleted,
                                                                        time.monotonic() - started))
@@ -585,8 +680,10 @@ class DayLoader:
 
     def abort(self, msg):
         for d in list(self.open):
-            run_id, _, f, _ = self.open.pop(d)
+            run_id, path, f, _ = self.open.pop(d)
             f.close()
+            if not self.dry_run:
+                remove_quietly(path)
             if run_id:
                 try:
                     self.db.abort_run(run_id, msg)
@@ -613,6 +710,8 @@ def cmd_backfill(args):
         if owned and last >= owned:
             log('backfill: logID %d has incremental state from %s; --to must be before that' % (log_id, owned))
             return 1
+    if not args.dry_run:
+        clean_workdir(db, args.workdir, log, args.keep_days)
 
     rejects_path = os.path.join(args.workdir, 'backfill_%s.rejects.txt' % time.strftime('%Y%m%d_%H%M%S'))
     log('backfill %s..%s for logIDs %s%s' % (first, last, [s[0] for s in sources], ' (dry run)' if args.dry_run else ''))
@@ -687,7 +786,9 @@ def main(argv=None):
         sp.add_argument('--database', default='weblog')
         sp.add_argument('--method', default='TAIL', help="LogSource.method of the sources this loader reads")
         sp.add_argument('--workdir', default=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'work'),
-                        help='load files, rejects files and bcpweblog.log')
+                        help='load files, rejects files and bcpweblog.log; one workdir per database')
+        sp.add_argument('--keep-days', type=int, default=30,
+                        help='keep .err, rejects and dry-run files and bcpweblog.log lines this long')
         sp.add_argument('--dry-run', action='store_true', help='read and parse, write the load files, load nothing')
 
     pi = sub.add_parser('incremental', help='hourly: load new complete lines since the stored offsets')

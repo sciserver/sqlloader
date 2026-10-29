@@ -317,6 +317,29 @@ One line per source to stdout (the job history) and appended to a log file:
 `logID, folder, files listed, files matched, files read, bytes read, lines, rows, rejects, seconds`.
 "Listed vs matched" catches a source whose file names stop matching (what happened with `u_ex*`).
 
+### 4.9 Workdir cleanup
+
+The workdir holds load files (up to ~0.9 GB per run at the cap), bcp `.err` files, rejects files and `bcpweblog.log`.
+They hold client IPs, full URLs and user agents, so they are kept no longer than needed. Every non-dry run, before it
+starts its own run, does the following:
+
+- A load file (`.weblog.bcp`, `.state.bcp`) is removed once its run is no longer `started` in `LoadRun` (loaded, failed,
+  or abandoned by the 12 h sweep). A failed run also removes its own load files at once. Nothing is lost: a failed run
+  doesn't move the offsets, so `--dry-run` rebuilds the same file.
+- An empty `.err` or rejects file of a finished run is removed (a killed run leaves them).
+- Anything else (non-empty `.err` and rejects files, dry-run output, files of runIDs `LoadRun` doesn't know) is removed
+  after `--keep-days` (default 30; to be reviewed). `bcpweblog.log` is trimmed to the same window.
+- A `started` run's files are never touched, so a backfill and the hourly run can share a workdir. The age is never used
+  on its own to decide, for the same reason.
+- Only names the loader writes are touched. Removing a file that's already gone is not an error (another run's cleanup
+  can get there first). Any other problem is logged and the run goes on: cleanup never fails a load.
+
+**One workdir per database**: runIDs are per database, so a workdir shared by `weblog` and a test database would check
+files against the wrong `LoadRun`.
+
+Tested 2026-10-29 on the validation 5 workdir: the first run removed 12 files (4.19 GB) and kept the small files; the
+second removed the 8 empty ones, leaving only run 15's 186-byte bcp error.
+
 ## 5. Validation plan
 
 1. **Old-format parity.** Dry run on one dsa001 source for a closed day; compare with `weblogAll` for that logID and day.
@@ -378,7 +401,7 @@ One line per source to stdout (the job history) and appended to a log file:
      then reports a failure for a run that did load; read `LoadRun`, not the job outcome.
    - A killed run's staged rows (up to ~3.5 M at the 1 GB cap) stay in `weblogStage` until the 12 h sweep.
    - **Load files are never removed after a failure or kill**: `run<N>.weblog.bcp` (up to ~0.9 GB at the cap) stays in the
-     workdir. Open: keep only the newest failed run's files (useful for the `.err` files) and delete older ones at start.
+     workdir. Fixed: section 4.9.
 6. **Time.** Step 1 time before and after, on the same sources. Keep the two kinds of number apart: the **Agent job**
    (hourly incremental, the original problem) and **backfill** (one-off history load).
 
