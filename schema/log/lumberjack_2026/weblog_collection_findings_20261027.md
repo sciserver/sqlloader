@@ -16,6 +16,8 @@ listings / log headers of the web servers' `LogFiles` shares. **Nothing has been
    logs). So the query numbers look fine, and they've masked problem 1.
 3. Smaller issues: duplicate log sources (web and SQL), no rows from SDSS5B, and a `bytesIn` column
    that has never been loaded correctly.
+4. **The account the loader runs as can read idieswww01's logs but not idieswww02's or 03's** (added
+   2026-10-29, section 5). Any loader, old or new, needs read access there first.
 
 Consequence: the web-traffic numbers in `weblogAll` and `trafficBase` (`hits`, the language columns,
 `SkyServer`) mostly count health checks: every day checked since 2025-10-20 (the last day in the old table
@@ -51,7 +53,8 @@ client IP and no user agent, a flat ~3,100 per hour around the clock (a health-c
 Zabbix. Only a few hundred rows a day look like real visitors. Only 105 `weblogAll` rows that day mention
 `dr20`.
 
-**What the new servers log** (`\\idieswww0N\LogFiles`, reachable from lumberjack):
+**What the new servers log** (`\\idieswww0N\LogFiles`, reachable from lumberjack with a personal account; the
+service account can read only idieswww01, see section 5):
 
 | IIS folder | Content | Size |
 |---|---|---|
@@ -123,6 +126,40 @@ their own connection strings, which evidently point at 5A.
 2009 source and in the deployed binary. `bytesIn` therefore always equals `bytesOut` (all 1.55 M rows on
 2026-10-26). Low impact: `trafficBase` uses neither column.
 
+## 5. Which account can read the new servers' logs
+
+Checked 2026-10-29: folder permissions read from sdss4c, service accounts and job settings read on lumberjack
+(`sys.dm_server_services`, `msdb`).
+
+**Which account each loader runs as.** On lumberjack, the SQL Server service runs as `sdss\mssql` and SQL Server
+Agent as `sdss\victor`. Step 1 is a T-SQL step owned by `sa`, and `spCopyWebLogs` starts `BcpWeblogNew.exe` through
+`xp_cmdshell`, with no `xp_cmdshell` proxy configured, so the exe runs as **`sdss\mssql`**. A CmdExec step (proposed
+for the rewrite) would run as the Agent account, `sdss\victor`, unless an Agent proxy is set for that step.
+
+**Permissions on `LogFiles\W3SVC2`:**
+
+| | idieswww01 | idieswww02 | idieswww03 |
+|---|---|---|---|
+| `BUILTIN\Users` | read | - | - |
+| `SDSS\victor` | full control (explicit entry) | - | - |
+| Administrators, SYSTEM | full control | full control | full control |
+
+**Tested:** a SQL Agent job on sdss4c running as `sdss\mssql` (the same domain account) read idieswww01's folder
+and got **"Access is denied"** on idieswww02 and idieswww03.
+
+So the account the current loader runs as can read only idieswww01, which fits `LogSource` only ever having
+idieswww01 entries for the new servers (section 1, question 5). Whether `sdss\victor` can read 02/03 depends on
+membership of their Administrators group, which can't be seen from here. The listings in section 1 ("reachable
+from lumberjack") were made with a personal account, not a service account.
+
+**Beyond the weblog:** with Agent running as a named user account, a password change or a disabled account stops
+the Agent service at its next restart, and with it every Agent job on lumberjack. Jobs that read network files also
+depend on that account's permissions on each server.
+
+**What the rewrite needs:** read on `LogFiles\W3SVC2` on idieswww01-03 for the account its job step runs as.
+Preferably a dedicated service account (or a group), given to the step through an Agent proxy, so the weblog load
+doesn't depend on a personal account and nothing else about Agent has to change.
+
 ## Questions
 
 **Web servers / IIS (web admins):**
@@ -150,6 +187,11 @@ their own connection strings, which evidently point at 5A.
 
 10. The rewrite will handle `u_ex*` names, parse `#Fields` by name, take the client IP from `XForwardedFor`, and read only the lines added since the last run. Should it also write `bytesIn` correctly (recommended), and are the larger volumes OK for `weblogAll` and the aggregation steps?
 
+**Accounts (owners of lumberjack and of the web servers)** (section 5):
+
+11. Which account should the new loader run as (a dedicated service account through an Agent proxy?), and can it be given read on `LogFiles\W3SVC2` on idieswww01, 02 and 03?
+12. SQL Server Agent on lumberjack runs as `sdss\victor`. Is that intended, or should it move to a service account?
+
 ## How to check
 
 - `verify_duplicate_logsources.sql` (same folder): read-only, about 40 s. Shares of sources per folder,
@@ -159,6 +201,9 @@ their own connection strings, which evidently point at 5A.
 ```powershell
 # Reachable shares and their IIS folders
 foreach ($h in 'idieswww01','idieswww02','idieswww03') { $p = "\\$h\LogFiles"; "{0}: {1}" -f $p, (Test-Path $p); if (Test-Path $p) { Get-ChildItem $p -Directory | Select-Object -ExpandProperty Name } }
+
+# Who can read each server's SkyServer log folder (section 5)
+foreach ($h in 'idieswww01','idieswww02','idieswww03') { "== $h"; (Get-Acl "\\$h\LogFiles\W3SVC2").Access | Format-Table IdentityReference, FileSystemRights, AccessControlType -AutoSize }
 
 # Per folder: file count and newest log
 foreach ($h in 'idieswww01','idieswww02','idieswww03') { Get-ChildItem "\\$h\LogFiles" -Directory | ForEach-Object { $f = @(Get-ChildItem $_.FullName -File -Filter *.log); $n = $f | Sort-Object LastWriteTime -Descending | Select-Object -First 1; "{0}\{1}: {2} files, newest {3} {4:yyyy-MM-dd HH:mm} {5:N0} KB" -f $h, $_.Name, $f.Count, $n.Name, $n.LastWriteTime, ($n.Length/1KB) } }
