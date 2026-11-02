@@ -13,7 +13,7 @@ reads `method = 'TAIL'` rows (SPEC 4.2), so the two never see each other's sourc
 |---|---|---|---|
 | D1 | logIDs for idieswww01-03 `W3SVC2` | Victor | `LogSource.logID` is **not** an identity; IDs are chosen by hand. In use: 1-43, 1001-1025, 2001-2202, 8001-8002, 9001. 3000-7999 is free. Choose once: `LogFileState` and `weblogAll` are keyed by it |
 | D2 | `method` value (`'TAIL'` proposed) | boss / Victor | must not be `'XCOPY'`: as XCOPY the old exe matches no `u_ex*` file, yet `tstamp` moves hourly, so the sources look collected but aren't |
-| D3 | Exit code when a source folder can't be listed | us | today: warning + exit 0. Proposed: load what is readable, then exit 1 so the step fails and the alert fires |
+| D3 | Exit code when a source folder can't be listed | us | **DECIDED 2026-11-02**: load what is readable, then exit 1 so the step fails and the alert fires (SPEC 4.8). With quit-on-failure (section 5) that also skips steps 2-6 for the hour until the source is fixed or set `INACTIVE` |
 | D4 | Where the new job step goes (section 5) | Victor | recommendation: new step 2, right after "Local weblogs" |
 | D5 | Volume: 10-15 M rows/day more in `weblogAll` | boss | affects table size and steps 5/6 (SPEC 4.6) |
 | D6 | SPEC 7 open questions 1-2 (`bytesIn`, health checks) | boss | v1 loads `bytesIn` and keeps health-check rows |
@@ -147,9 +147,12 @@ Runtime once caught up (measured on sdss4c, idieswww01 only): ~1 s read + ~2-3 s
 
 - First 2-3 runs: job history green; `LoadRun` one `loaded` row per hour; `work\bcpweblog.log` shows each source "listed N,
   matched N" and 0 rejects.
-- A source the account can't list is today a WARNING only (D3). Look for it in the log until D3 is decided.
-- Known harmless case (seen on sdss4c 2026-10-30): a log file created just before a run can show size 0 and is skipped once
-  with no message; the next run reads it from byte 0.
+- A source the account can't list fails the step (D3): the log has `WARNING logID n: cannot list ...` and a `FAILED: ...
+  could not be listed` line; the other sources did load. Fix the access, or set the row `INACTIVE` if the folder is gone.
+- Known harmless case: a log file created just before a run can show size 0 and is skipped once with no message; the next
+  run reads it from byte 0. With daily files (idieswww01 since 2026-10-30) this happens **every day at 00:05 UTC**: the
+  00:05 run finishes yesterday's file to its last byte, the 01:05 run starts today's. Verified on sdss4c 10-31, 11-01,
+  11-02 (offsets = file sizes, to the byte).
 - `weblogAll` growth and steps 5/6 duration (D5).
 
 ## 7. Backfill (optional, D7)

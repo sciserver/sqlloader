@@ -334,5 +334,77 @@ class CleanWorkdir(unittest.TestCase):
         b.remove_quietly(os.path.join(tempfile.mkdtemp(), 'run1.weblog.bcp'))
 
 
+class LoadDb:
+    """Stands in for Db in cmd_incremental: records what was staged and loaded."""
+
+    def __init__(self, sources):
+        self._sources, self.staged, self.loaded = sources, {}, []
+
+    def sources(self, method, log_ids=None):
+        return [s for s in self._sources if not log_ids or s[0] in log_ids]
+
+    def file_state(self, log_ids):
+        return {}
+
+    def run_status(self, run_ids):
+        return {}
+
+    def start_run(self, mode):
+        return 7
+
+    def bcp_in(self, table, path, expected):
+        with open(path, 'rb') as f:
+            self.staged[table] = f.read().count(b'\n')
+
+    def load_run(self, run_id, replace_from=None, replace_to=None):
+        self.loaded.append(run_id)
+        return self.staged.get('LogFileStateStage', 0), self.staged.get('weblogStage', 0), 0
+
+    def abort_run(self, run_id, message):
+        raise AssertionError('run should not abort: ' + message)
+
+
+class UnlistedSource(unittest.TestCase):
+    """D3 (2026-11-02): a source whose folder can't be listed doesn't stop the others; the step then fails."""
+
+    def run_incremental(self, sources, dry_run=False):
+        import argparse
+        import contextlib
+        from unittest import mock
+        root = tempfile.mkdtemp()
+        good = os.path.join(root, 'good')
+        os.makedirs(good)
+        today = b.utc_today()
+        with open(os.path.join(good, 'u_ex%s_x.log' % today.strftime('%y%m%d')), 'w', newline='') as f:
+            f.write(F_WWW02 + '\r\n' + www02(date=today.isoformat()) + '\r\n')
+        paths = {'good': good + os.sep, 'missing': os.path.join(root, 'missing') + os.sep}
+        db = LoadDb([(i, paths[k]) for i, k in sources])
+        args = argparse.Namespace(workdir=os.path.join(root, 'work'), server='x', database='x', method='TAIL',
+                                  logid=None, days=2, max_bytes=10 ** 9, dry_run=dry_run, keep_days=30)
+        out = io.StringIO()
+        with mock.patch.object(b, 'Db', lambda server, database: db), contextlib.redirect_stdout(out):
+            code = b.cmd_incremental(args)
+        return code, db, out.getvalue()
+
+    def test_readable_sources_load_then_exit_1(self):
+        code, db, out = self.run_incremental([(1, 'good'), (2, 'missing'), (3, 'good')])
+        self.assertEqual(code, 1)
+        self.assertEqual(db.loaded, [7])
+        self.assertEqual(db.staged, {'weblogStage': 2, 'LogFileStateStage': 2})
+        self.assertIn('WARNING logID 2: cannot list', out)
+        self.assertIn('could not be listed (logID 2)', out)
+
+    def test_all_listed_exit_0(self):
+        code, db, out = self.run_incremental([(1, 'good')])
+        self.assertEqual(code, 0)
+        self.assertEqual(db.loaded, [7])
+        self.assertNotIn('FAILED', out)
+
+    def test_dry_run_also_exit_1(self):
+        code, db, _ = self.run_incremental([(1, 'good'), (2, 'missing')], dry_run=True)
+        self.assertEqual(code, 1)
+        self.assertEqual(db.loaded, [])
+
+
 if __name__ == '__main__':
     unittest.main()

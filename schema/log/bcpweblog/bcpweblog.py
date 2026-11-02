@@ -537,6 +537,7 @@ def cmd_incremental(args):
         % (tag, len(sources), first_day, today, args.max_bytes // 1000000))
 
     total_rows = total_states = total_rejects = 0
+    unlisted = []       # logIDs whose folder couldn't be listed: the rest still load, then the step fails (SPEC 4.8)
     try:
         with open(rows_path, 'wb') as out, open(state_path, 'wb') as st, \
                 open(rejects_path, 'w', encoding='utf-8') as rej:
@@ -549,6 +550,7 @@ def cmd_incremental(args):
                     listed, matched = list_logs(folder)
                 except OSError as e:
                     log('  WARNING logID %d: cannot list %s (%s); skipped' % (log_id, folder, e.strerror or e))
+                    unlisted.append(log_id)
                     continue
                 stored = state.get(log_id, {})
                 reads, warnings = plan_incremental(matched, stored, first_day, today,
@@ -579,7 +581,7 @@ def cmd_incremental(args):
         if args.dry_run:
             log('dry run: %d rows, %d file offsets in %s (nothing loaded)' % (total_rows, total_states, rows_path))
             remove_if_empty(rejects_path)
-            return 0
+            return unlisted_exit(log, unlisted)
         if total_rows:
             db.bcp_in('weblogStage', rows_path, total_rows)
         if total_states:
@@ -603,7 +605,20 @@ def cmd_incremental(args):
     remove_if_empty(rejects_path)
     log('loaded %s: %d rows, %d file offsets, %d rejects%s'
         % (tag, rows, files, total_rejects, ' (see %s)' % rejects_path if total_rejects else ''))
-    return 0
+    return unlisted_exit(log, unlisted)
+
+
+def unlisted_exit(log, unlisted):
+    """Exit code once the readable sources are done: 1 if any source couldn't be listed, so the job step fails.
+
+    Nothing of an unlisted source was read or staged and its offsets didn't move, so the next run picks it up
+    from where it was; the sources that did load are complete and won't be read again.
+    """
+    if not unlisted:
+        return 0
+    log('FAILED: %d source(s) could not be listed (logID %s); the other sources loaded. Exit 1.'
+        % (len(unlisted), ', '.join(map(str, unlisted))))
+    return 1
 
 
 CLOSE_SLACK = datetime.timedelta(minutes=5)     # a day is complete once rows are 5 min into the day after next

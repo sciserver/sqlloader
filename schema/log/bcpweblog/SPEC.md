@@ -110,7 +110,7 @@ one bcp per file.
 | Short lines still written | `remap` returns `""` and `"".IndexOf("\t")` is -1, so a 5-field row is written; bcp then rejects it or misaligns it | **fix**: count and skip (section 4.5) |
 | Header must be exactly 4 lines | section 2.3 | **fix**: header lines can appear anywhere |
 | Recurses into subfolders | `ScanFolder` | **drop**: none of the 33 active source folders has a subfolder (checked 2026-10-28) |
-| A missing folder is silent | `Directory.Exists` fails, so it prints usage and exits 1, which nobody sees. **8 of the 33 active folders don't exist** (2026-10-28) | **fix**: reported in the run summary as a warning (not a failure, or the step would fail every hour until `LogSource` is cleaned up) |
+| A missing folder is silent | `Directory.Exists` fails, so it prints usage and exits 1, which nobody sees. **8 of the 33 active folders don't exist** (2026-10-28) | **fix** (decided 2026-11-02, D3): the other sources load, then the run exits 1 so the step fails (section 4.8). The new loader reads only its own `method` rows, not the 33 `XCOPY` ones, so a folder that is gone for good is set `INACTIVE` in `LogSource` rather than left to fail hourly |
 | Failures are silent | `Main` returns void (exit 0); a bcp failure is only printed; the proc ignores `xp_cmdshell`'s result | **fix**: non-zero exit, step fails, the existing alert fires |
 | Fixed-position columns | section 2.4 | **fix**: map by `#Fields` name |
 
@@ -316,6 +316,12 @@ Agent account, as bcp does today.
 One line per source to stdout (the job history) and appended to a log file:
 `logID, folder, files listed, files matched, files read, bytes read, lines, rows, rejects, seconds`.
 "Listed vs matched" catches a source whose file names stop matching (what happened with `u_ex*`).
+
+A source whose folder can't be listed (missing, or "Access is denied" as on idieswww02/03 on 2026-10-29) gets a WARNING
+line and is skipped; the other sources are read and loaded as normal, then the run logs `FAILED: n source(s) could not be
+listed` and **exits 1** (decided 2026-11-02). Nothing of the skipped source was read and its offsets didn't move, so the
+next run that can list it continues where it was: no gap, no duplicate. Note that `LoadRun` shows the run as `loaded`
+(it did load the others); the job step shows the failure.
 
 ### 4.9 Workdir cleanup
 
