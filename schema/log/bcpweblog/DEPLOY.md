@@ -15,9 +15,11 @@ reads `method = 'TAIL'` rows (SPEC 4.2), so the two never see each other's sourc
 | D2 | `method` value (`'TAIL'` proposed) | boss / Victor | must not be `'XCOPY'`: as XCOPY the old exe matches no `u_ex*` file, yet `tstamp` moves hourly, so the sources look collected but aren't |
 | D3 | Exit code when a source folder can't be listed | us | **DECIDED 2026-11-02**: load what is readable, then exit 1 so the step fails and the alert fires (SPEC 4.8). With quit-on-failure (section 5) that also skips steps 2-6 for the hour until the source is fixed or set `INACTIVE` |
 | D4 | Where the new job step goes (section 5) | Victor | recommendation: new step 2, right after "Local weblogs" |
-| D5 | Volume: 10-15 M rows/day more in `weblogAll` | boss | affects table size and steps 5/6 (SPEC 4.6) |
+| D5 | Volume: 10-15 M rows/day more in `weblogAll` | boss | affects table size and steps 5/6 (SPEC 4.6). **Update 2026-11-02:** traffic has grown a lot since this estimate (roughly 2-3x); D9 can reduce it substantially. Current numbers in the DBA notes |
 | D6 | SPEC 7 open questions 1-2 (`bytesIn`, health checks) | boss | v1 loads `bytesIn` and keeps health-check rows |
 | D7 | How far back to backfill | boss | backfill is optional and can run any time after go-live (section 7) |
+| D8 | Alert routing: also send job failures to Slack | Victor | today job failures go by email only. Use the same mechanism as the existing Slack alerts for the backups. Not a blocker for go-live |
+| D9 | Requests the web server refuses before the application sees them: load, skip, or load flagged? | boss | a large share of all rows at current traffic (SPEC 7, open question 4; numbers in the DBA notes). Recommendation: skip them and count them in the run summary (option B, a small code change). Decide before more sources go live |
 
 ## Verified 2026-10-30
 

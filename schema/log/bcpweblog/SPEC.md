@@ -466,3 +466,19 @@ second removed the 8 empty ones, leaving only run 15's 186-byte bcp error.
 2. Drop load-balancer health checks at load time (findings doc question 7)?
 3. Which sources, and the new `method` value (findings doc questions 5-8)? Also: 8 of the 33 active `XCOPY` folders
    don't exist any more.
+4. **Requests the web server refuses (DEPLOY D9):** load them, skip them, or load them flagged? Some requests are
+   refused by IIS itself, before the application sees them (a 4xx status with a non-zero `sc-substatus`). v1 loads
+   them, and `weblogAll` can't tell them apart from ordinary errors: it keeps `sc-status` (`error`) but not
+   `sc-substatus`. At current traffic they are a large share of all rows, so the choice affects volume (D5) and the
+   traffic stats (job step 6). Measurements are kept in the DBA notes, not in this repo.
+
+   Options:
+   - **A. Load everything** (v1 as written). Simplest. Refused requests count as traffic.
+   - **B. Skip refusals at load time, count them** (recommended). Read `sc-substatus`; skip a short configurable list
+     of status.substatus values. The run summary (4.8) gets a `refused` count per source, so the volume stays visible.
+     The raw IIS files keep every line. Small change: one field, one constant, one counter, tests.
+   - **C. Load them, flagged.** Either `isvisible = 0` (as for `/collab`; whether steps 5/6 honour it needs checking), or
+     a new `substatus` column on `weblogAll` (nullable `ADD` is metadata-only, but it changes the table layout and the
+     old exe's bcp format). Keeps every row and the volume.
+
+   Decide before more sources go live: rows already loaded aren't changed by a later choice (other than by a backfill).
