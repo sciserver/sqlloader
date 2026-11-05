@@ -8,9 +8,10 @@ the dr20 branch.
 from this list.
 
 Rule: reusable code and the DR20 load work go to master; session notes, WIP and run output
-stay. Files with **dr20 in the name** outside `dr20/` (section C) also go to master (decided
-2026-11-05), so master can rebuild the DR20 VAC/Astra tables its loaders expect; clean up later
-if needed.
+stay. Files with **dr20 in the name** outside `dr20/` (section C) stay on dr20: they are raw
+source copies the build never reads (the edited, live versions are in `VacTables.sql`,
+`AstraTables.sql`, `SpectroTables.sql` and `IndexMap.sql`). Briefly ticked on 2026-11-05, then
+unticked the same day after the PR #2 review tripped over the stale copies.
 
 ## A. `dr20/` folder
 
@@ -148,13 +149,15 @@ Files that differ between master and dr20.
 ### Stays on dr20
 - [ ] `schema/log/lumberjack_2026/` (14 files: weblog investigation notes and findings)
 
-## C. dr20 in the name, outside `dr20/` (go to master, decided 2026-11-05)
+## C. dr20 in the name, outside `dr20/` (stay on dr20, decided 2026-11-05)
 
-- [x] `schema/sql/dr20vacs/` (35 files: DR20 VAC table scripts, `IndexMapDR20VACs.sql`, `VacTablesDR20.sql`)
-- [x] `schema/sql/astra_dr20/` (15 files: bossnet, slam, snowwhite, mwm_*, ...)
-- [x] `schema/sql/allspecDR20.sql`
-- [x] `schema/sql/spall_allepoch_dr20.sql`
-- [x] `schema/sql/spall_epoch_dr20.sql`
+None of these is read by the build (`xschema*.txt`) or referenced anywhere else in the repo.
+
+- [ ] `schema/sql/dr20vacs/` (35 files: raw casload copies; live versions in `VacTables.sql` / `IndexMap.sql`)
+- [ ] `schema/sql/astra_dr20/` (15 files: bossnet, slam, snowwhite, mwm_*, ...; live versions in `AstraTables.sql`)
+- [ ] `schema/sql/allspecDR20.sql` (live version in `SpectroTables.sql`)
+- [ ] `schema/sql/spall_allepoch_dr20.sql` (live version in `SpectroTables.sql`)
+- [ ] `schema/sql/spall_epoch_dr20.sql` (live version in `SpectroTables.sql`)
 
 ## Not on either branch
 
