@@ -108,7 +108,7 @@ Files that differ between master and dr20.
 - [x] `ApogeeTables.sql`
 - [x] `AstraTables.sql`
 - [x] `IndexMap.sql`
-- [x] `LvmTables.sql` (already on master since `e3cf3d0`, Ani 07-28; identical, nothing to copy)
+- [x] `LvmTables.sql` (on master since `e3cf3d0`, Ani 07-28; dr20 drops an empty 2016 history line, 2026-11-05)
 - [x] `MastarTables.sql`
 - [x] `mosTables.sql`
 - [x] `resolveTables.sql`
