@@ -67,6 +67,7 @@
 ' 2025-04-25    Ani: Added astra and dr19vacs for DR19.
 ' 2025-05-16    Ani: Added allspec for DR19.
 ' 2025-06-11    Ani: Added apogge_drp_all[star|visit] for DR19.
+' 2026-07-08    Ani: Added dr20vacs for DR20 VACs.
 '==============================================================
 
 Option Explicit
@@ -206,6 +207,9 @@ Public Sub CheckDir (root,level)
 		s = s & "(^sql(Astra|Mwm)" & "[\-_a-zA-Z0-9]*\.csv$)"
 	ElseIf ( theexporttype = "dr19vacs" ) Then
 		s = s & "(^sql(A|D|E|M|O|S)" & "[\-_a-zA-Z0-9]*\.csv$)"
+	ElseIf ( theexporttype = "dr20vacs" ) Then
+'		s = s & "(^sql(B|D|E|F|G|M|P|Q|Y)" & "[\-_a-zA-Z0-9]*\.csv$)"
+		s = s & "(^sql" & "[\-_a-zA-Z0-9]*\.csv$)"
 	ElseIf ( theexporttype = "allspec" ) Then
 		s = s & "(^sql(All|Mul)" & "[\-_a-zA-Z0-9]*\.csv$)"
 	Else

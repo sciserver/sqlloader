@@ -50,6 +50,10 @@ CREATE TABLE mastar_goodstars (
     input_alpha_m real NOT NULL, --/U  --/D   [alpha/M] in the input catalog (with some adjustment made).
     input_source varchar(16) NOT NULL, --/U  --/D   Source catalog for stellar parameters.
     photocat varchar(10) NOT NULL, --/U  --/D   Source of astrometry and photometry.
+    htmid bigint, --/D 20 deep Hierarchical Triangular Mesh ID --/K CODE_HTM
+    cx float, --/D x of the J2000 unit vector for ra+dec --/K POS_EQ_CART_X
+    cy float, --/D y of the J2000 unit vector for ra+dec --/K POS_EQ_CART_Y
+    cz float --/D z of the J2000 unit vector for ra+dec --/K POS_EQ_CART_Z
 )
 GO
 --

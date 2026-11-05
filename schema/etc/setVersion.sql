@@ -36,12 +36,12 @@ EXEC spCheckDBIndexes
 EXECUTE spSetVersion
   0
   ,0
-  ,'10'
-  ,'154989'
-  ,'Update DR'
-  ,'.7'
-  ,'Schema updates for WISE_allsky and TwoMASS'
-  ,'Added columns to WISE_allsky and indices to TwoMASS, PRs 1900,1909,1913'
-  ,'D.Muna,A.Thakar'
-
+  ,'20'
+  ,'f16ec9b'
+  ,'Create DR'
+  ,'.1'
+  ,'Initial version'
+  ,'DR20 includes MWM and BHM spectra from LCO, more tiles and a visualization tool from LVM, and several new VACs and MOS tables'
+  ,'A.M.Weijmans,J.Brownstein,M.Taghizadeh-Popp,S.Werner,A.Thakar'
+  ,0      -- don't update statistics, this will take a long time!
 

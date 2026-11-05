@@ -61,6 +61,8 @@
 --* 2025-06-11 Ani: added apogee_drp_all[star|visit]. (DR19)
 --* 2025-06-13 Ani: Made PK columns NOT NULL for apogee_drp_all[star|visit].
 --*            (DR19)
+--* 2026-02-17 Ani: Moved htmid, cx, cy, cz columns to apogee_drp_allstar 
+--*            rom apogee_drp_allvisit.
 -------------------------------------------------------------------------------
 
 SET NOCOUNT ON;
@@ -866,6 +868,10 @@ CREATE TABLE apogee_drp_allstar (
     N_COMPONENTS	bigint,  --/D Number of components from RV cross correlation
     MEANFIB	real,  --/D Mean FiberID for all the star visits
     SIGFIB	real,  --/D Standard deviation of FiberID for all the star visits
+	HTMID bigint not null, --/D the htmid
+	CX float, --/D cx coordinate
+	CY float, --/D cy coordinate
+	CZ float, --/D cz coordinate
 )
 GO
 
@@ -949,10 +955,6 @@ CREATE TABLE apogee_drp_allvisit (
     RV_COMPONENTS_0 float,  --/U km/s --/D RV offset for components 0 --/F RV_COMPONENTS
     RV_COMPONENTS_1 float,  --/U km/s --/D RV offset for components 1 --/F RV_COMPONENTS
     RV_COMPONENTS_2 float,  --/U km/s --/D RV offset for components 2 --/F RV_COMPONENTS
-	HTMID bigint not null, --/D the htmid
-	CX float, --/D cx coordinate
-	CY float, --/D cy coordinate
-	CZ float, --/D cz coordinate
 )
 GO
 

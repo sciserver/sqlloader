@@ -35,6 +35,7 @@
 -- 2025-03-19   Ani: Added ASTRA to spNewTask. (DR19)
 -- 2025-04-25   Ani: Added DR19VACS to spNewTask. (DR19)
 -- 2025-05-16   Ani: Added ALLSPEC to spNewTask. (DR19)
+-- 2026-07-14   Ani: Added DR20VACS to spNewTask. (DR20)
 --=============================================================
 
 
@@ -221,7 +222,7 @@ BEGIN
 	RETURN
 	END
 
-    IF UPPER(@type) IN ('BEST', 'PLATES', 'TILES', 'MASK', 'MaNGA', 'MASTAR', 'NSA', 'WINDOW', 'WISE', 'SSPP', 'GALPROD', 'GALSPEC', 'RESOLVE', 'PM', 'APOGEE', 'EBOSS', 'ASTRA', 'DR19VACS', 'ALLSPEC', 'FORCED')
+    IF UPPER(@type) IN ('BEST', 'PLATES', 'TILES', 'MASK', 'MaNGA', 'MASTAR', 'NSA', 'WINDOW', 'WISE', 'SSPP', 'GALPROD', 'GALSPEC', 'RESOLVE', 'PM', 'APOGEE', 'EBOSS', 'ASTRA', 'DR19VACS', 'DR20VACS', 'ALLSPEC', 'FORCED')
 	SET @pubtype='BEST-PUB'
     ELSE
 	SET @pubtype=UPPER(@type)+'-PUB'

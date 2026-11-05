@@ -354,6 +354,10 @@ INSERT History VALUES('IndexMap','2025-04-23','Ani','Added DR19 VAC PKs (DR19). 
 INSERT History VALUES('IndexMap','2025-05-20','Ani','Added allspec PKs (DR19). ');
 INSERT History VALUES('IndexMap','2025-06-11','Ani','Added apogee_drp_all[star|visit] PKs. (DR19) ');
 INSERT History VALUES('IndexMap','2025-06-12','Ani','Commented out StarFlow_summary PK creation (identity column PK to be added as for all Astra tables. (DR19) ');
+INSERT History VALUES('IndexMap','2026-02-23','Ani','Remoced incorrect apogee-drp-* entries, and added MOS table indexes. ');
+INSERT History VALUES('IndexMap','2026-07-02','Ani','Added expnum as PK for LVM tables (per Joel B). (DR20) ');
+INSERT History VALUES('IndexMap','2026-07-06','Ani','Replaced PK with spectrum_PK for ASTRA tables. (DR20) ');
+INSERT History VALUES('IndexMap','2026-07-23','Ani','Added/updated DR20 VAC PKs. (DR20) ');
 INSERT History VALUES('PhotoTables','2009-04-27','Ani','Swapped in updated schema for photo tables for SDSS-III. Added new table Run. ');
 INSERT History VALUES('PhotoTables','2009-05-05','Ani','Added loadVersion to Field table. ');
 INSERT History VALUES('PhotoTables','2009-06-11','Ani','Added nProf_[ugriz] to Field table. ');
@@ -531,6 +535,8 @@ INSERT History VALUES('SpectroTables','2024-09-06','Ani','Increased size of cart
 INSERT History VALUES('SpectroTables','2025-05-16','Ani','Added allspec tables. (DR19) ');
 INSERT History VALUES('SpectroTables','2025-07-03','Ani','Added htmid,cx,cy,cz to spAll and allspec  tables. (DR19) ');
 INSERT History VALUES('SpectroTables','2025-07-24','Ani','Added column has_mwmStar to allspec. (DR19) ');
+INSERT History VALUES('SpectroTables','2026-06-11','Ani','Swapped in updated version of allspec. (DR20) ');
+INSERT History VALUES('SpectroTables','2026-06-17','Ani','Swapped in updated version of spall* tables. (DR20) ');
 INSERT History VALUES('GalaxyProductTables','2013-05-01','Ani','Moved galprod tables here from SpectroTables.sql and updated with new schema for DR10. ');
 INSERT History VALUES('GalaxyProductTables','2013-05-06','Ani','Made specobjid (PK) NOT NULL for galprod FSPSGran tables. ');
 INSERT History VALUES('GalaxyProductTables','2014-02-11','Ani','Swapped in updated definition of emissionLinesPort table that includes fixes for PR #1962 made by Ben Weaver. ');
@@ -648,9 +654,12 @@ INSERT History VALUES('ApogeeTables','2021-07-28','Ani','Updated ApogeeVisit - a
 INSERT History VALUES('ApogeeTables','2023-02-16','Ani','Added cx, cy, cz to ApogeeStar ');
 INSERT History VALUES('ApogeeTables','2025-06-11','Ani','added apogee_drp_all[star|visit]. (DR19) ');
 INSERT History VALUES('ApogeeTables','2025-06-13','Ani','Made PK columns NOT NULL for apogee_drp_all[star|visit]. (DR19) ');
+INSERT History VALUES('ApogeeTables','2026-02-17','Ani','Moved htmid, cx, cy, cz columns to apogee_drp_allstar  rom apogee_drp_allvisit. ');
 INSERT History VALUES('AstraTables','2025-04-14','Ani','Imported all the table definitions from https://github.com/sdss/casload/tree/master/sql/astra ');
 INSERT History VALUES('AstraTables','2025-04-14','Ani','Replaced "bool" columns with "bit" iin MWM tables. ');
 INSERT History VALUES('AstraTables','2025-07-03','Ani','Added PK column to all tables, commented out table the_cannon_apogee_star. ');
+INSERT History VALUES('AstraTables','2026-06-17','Ani','Swapped in the DR20 versions of several tables. (DR20} ');
+INSERT History VALUES('AstraTables','2026-07-06','Ani','Replaced PK with spectrum_PK for all tables. (DR20) ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Adapted from sas-sql/mangadrp.sql. ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Increased length of mangaTarget.nsa_subdir to 128. ');
 INSERT History VALUES('MangaTables','2016-04-22','Ani','Added htmID to mangaDRPall. ');
@@ -761,6 +770,11 @@ INSERT History VALUES('VacTables','2022-12-28','Ani','Replaced "--\" with "--/" 
 INSERT History VALUES('VacTables','2025-04-21','Ani','Added VACs (DR19). ');
 INSERT History VALUES('VacTables','2025-05-26','Ani','Added StarFlow, StarHorse (DR19 version) and  eROSITA VACs (DR19). ');
 INSERT History VALUES('VacTables','2025-06-03','Ani','Added PK column to StarFlow summary. (DR19) ');
+INSERT History VALUES('VacTables','2026-07-15','Ani','Swapped in the DR20 VACs, from:  https://github.com/sdss/casload/blob/DR20_VAC_??/sql/[MWM|BHM]/ Also updated table and column names as necessary.  ');
+INSERT History VALUES('VacTables','2026-07-22','Ani','Refreshed schema for VAC-27 (spiders AGN) tables. (DR20) ');
+INSERT History VALUES('VacTables','2026-07-24','SW','Added eROSITA DR1 tables (from casload/sql/erosita/dr1). ');
+INSERT History VALUES('LvmTables','2026-06-03','Ani','Adapted from master/sql/lvm ');
+INSERT History VALUES('LvmTables','2016-03-29','Ani',' ');
 INSERT History VALUES('spHtmCSharp','2005-05-01','Jim','started ');
 INSERT History VALUES('spHtmCSharp','2005-05-02','Jim','removed fHtmLookup and fHtmLookupError added fHtmToString ');
 INSERT History VALUES('spHtmCSharp','2005-05-05','GYF','added .pdb to assembly for symbolic debugging added fHtmToName (faster than fHtmToString and reports error) ');
@@ -842,6 +856,7 @@ INSERT History VALUES('spNearby','2023-02-16','Sue','updated fGetNearbyApogeeSta
 INSERT History VALUES('spNearby','2023-02-17','Ani','Added fGetNearestMosTargetXYZ, fGetNearestApogeeStar[Eq|XYZ], updated documentation text for new functions added for DR18. ');
 INSERT History VALUES('spNearby','2023-02-20','Ani','Added back fGetNear[by|est]MastarEq functions (DR18) with change to ');
 INSERT History VALUES('spNearby','2025-07-03','Sue','Adding fGetNearby and Nearest functions for Allspec, ApogeeDRPAllstar, spAll tables ');
+INSERT History VALUES('spNearby','2026-02-17','Ani','Removed "USE BestDRxx" statements. ');
 INSERT History VALUES('spApogee','2016-04-27','Ani','Created inital version as per JOn Holtzman request. ');
 INSERT History VALUES('spApogee','2016-05-13','Ani','Updated description of fAspcapFelem* functions. ');
 INSERT History VALUES('spApogee','2016-05-18','Ani','Removed dbo. prefix from function definitions and also. trailing spaces from some functions. ');
@@ -1164,6 +1179,9 @@ INSERT History VALUES('spValidate','2025-05-16','Ani','Added spValidateAllspec. 
 INSERT History VALUES('spValidate','2025-05-26','Ani','Added StarFlow, StarHorse and eROSITA VACs to  spValidateDR19VACs. (DR19) ');
 INSERT History VALUES('spValidate','2025-06-11','Ani','Added apogee_drp_all[star|visit] to spValidateApogee. (DR19) ');
 INSERT History VALUES('spValidate','2025-06-12','Ani','Replaced StarFlow_summary PK with identity column. (DR19) ');
+INSERT History VALUES('spValidate','2026-06-29','Ani','Added spValidateDR20VACs. (DR20) ');
+INSERT History VALUES('spValidate','2026-07-06','Ani','Updated spValidateAstra to use spectrum_PK as primary key for all ASTRA tables. (DR20) ');
+INSERT History VALUES('spValidate','2026-07-23','Ani','Updated spValidateDR20VACs. (DR20) ');
 INSERT History VALUES('spPublish','2002-11-08','Jim','added INIT clause to backup ');
 INSERT History VALUES('spPublish','2002-11-10','Jim','commented out detach, reserved DONE status for the end of the step. added spPublishTiling, changed spPublish to spPublishStep, add insert to load history ');
 INSERT History VALUES('spPublish','2002-11-13','Jim','fixed transaction scope bug in CopyTable ');
@@ -1218,6 +1236,8 @@ INSERT History VALUES('spPublish','2025-04-25','Ani','Added DR19 VACs. (DR19) ')
 INSERT History VALUES('spPublish','2025-05-16','Ani','Added Allspec. (DR19) ');
 INSERT History VALUES('spPublish','2025-05-26','Ani','StarFlow, StarHorse and eROSITA VACs to  spPublishDR19VACs. (DR19) ');
 INSERT History VALUES('spPublish','2025-06-11','Ani','Added apogee_drp_all[star|visit] to spPublishApogee. (DR19) ');
+INSERT History VALUES('spPublish','2026-07-23','Ani','Added spPublishDR20VACs. (DR20) ');
+INSERT History VALUES('spPublish','2026-07-23','Ani','Updated spCopyATable to pre-delete table when @firsttime = 1.  ');
 INSERT History VALUES('spFinish','2002-10-29','Jim','split spValidate and spFinish  (finish does neighbors and photo-spectro matchup). removed references to sdssdr1. ');
 INSERT History VALUES('spFinish','2002-11-25','Jim','added index build ');
 INSERT History VALUES('spFinish','2002-12-01','Jim','support *-pub types in spNeighbors ');
@@ -1380,6 +1400,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1370 lines inserted into History'
+PRINT '1390 lines inserted into History'
 ------------------------------------
 GO
