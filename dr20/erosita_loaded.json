@@ -1,0 +1,58 @@
+{
+  "efeds_c001_hard_pointsources_ctp_redshift_v17": {
+    "loaded_at": "2026-07-24 11:40:24",
+    "rows": 246,
+    "source_rows": 246,
+    "pk_col": "ero_id_src",
+    "compression": "NONE",
+    "elapsed_s": 0.3
+  },
+  "efeds_c001_hard_v7_5": {
+    "loaded_at": "2026-07-24 11:40:24",
+    "rows": 246,
+    "source_rows": 246,
+    "pk_col": "id_src",
+    "compression": "NONE",
+    "elapsed_s": 0.5
+  },
+  "efeds_c001_main_pointsources_ctp_redshift_v17": {
+    "loaded_at": "2026-07-24 11:40:27",
+    "rows": 27369,
+    "source_rows": 27369,
+    "pk_col": "ero_id_src",
+    "compression": "NONE",
+    "elapsed_s": 2.2
+  },
+  "efeds_c001_main_v7_4": {
+    "loaded_at": "2026-07-24 11:40:30",
+    "rows": 27910,
+    "source_rows": 27910,
+    "pk_col": "id_src",
+    "compression": "NONE",
+    "elapsed_s": 2.8
+  },
+  "erass1_hard_v1_0": {
+    "loaded_at": "2026-07-24 11:40:30",
+    "rows": 5466,
+    "source_rows": 5466,
+    "pk_col": "uid",
+    "compression": "NONE",
+    "elapsed_s": 0.5
+  },
+  "erass1_main_v1_2": {
+    "loaded_at": "2026-07-24 11:41:39",
+    "rows": 930203,
+    "source_rows": 930203,
+    "pk_col": "uid",
+    "compression": "NONE",
+    "elapsed_s": 68.3
+  },
+  "salvato_etal2025_dr1_ls10": {
+    "loaded_at": "2026-07-24 11:42:56",
+    "rows": 966194,
+    "source_rows": 966194,
+    "pk_col": "uid",
+    "compression": "NONE",
+    "elapsed_s": 77.5
+  }
+}

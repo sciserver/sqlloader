@@ -247,6 +247,8 @@ INSERT Dependency VALUES('spPublish','spPublishApogee','spCopyATable');
 INSERT Dependency VALUES('spPublish','spPublishApogee','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishDR19VACs','spCopyATable');
 INSERT Dependency VALUES('spPublish','spPublishDR19VACs','spNewPhase');
+INSERT Dependency VALUES('spPublish','spPublishDR20VACs','spCopyATable');
+INSERT Dependency VALUES('spPublish','spPublishDR20VACs','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishGalProd','spCopyATable');
 INSERT Dependency VALUES('spPublish','spPublishGalProd','spNewPhase');
 INSERT Dependency VALUES('spPublish','spPublishGalSpec','spCopyATable');
@@ -275,6 +277,7 @@ INSERT Dependency VALUES('spPublish','spPublishStep','spPublishAllspec');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishApogee');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishAstra');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishDR19VACs');
+INSERT Dependency VALUES('spPublish','spPublishStep','spPublishDR20VACs');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishEboss');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishGalProd');
 INSERT Dependency VALUES('spPublish','spPublishStep','spPublishGalSpec');
@@ -392,9 +395,13 @@ INSERT Dependency VALUES('spValidate','spValidateApogee','spNewPhase');
 INSERT Dependency VALUES('spValidate','spValidateApogee','spTestUniqueKey');
 INSERT Dependency VALUES('spValidate','spValidateAstra','fDatediffSec');
 INSERT Dependency VALUES('spValidate','spValidateAstra','spNewPhase');
+INSERT Dependency VALUES('spValidate','spValidateAstra','spTestUniqueKey');
 INSERT Dependency VALUES('spValidate','spValidateDR19VACs','fDatediffSec');
 INSERT Dependency VALUES('spValidate','spValidateDR19VACs','spNewPhase');
 INSERT Dependency VALUES('spValidate','spValidateDR19VACs','spTestUniqueKey');
+INSERT Dependency VALUES('spValidate','spValidateDR20VACs','fDatediffSec');
+INSERT Dependency VALUES('spValidate','spValidateDR20VACs','spNewPhase');
+INSERT Dependency VALUES('spValidate','spValidateDR20VACs','spTestUniqueKey');
 INSERT Dependency VALUES('spValidate','spValidateEboss','fDatediffSec');
 INSERT Dependency VALUES('spValidate','spValidateEboss','spNewPhase');
 INSERT Dependency VALUES('spValidate','spValidateEboss','spTestUniqueKey');
@@ -444,6 +451,7 @@ INSERT Dependency VALUES('spValidate','spValidateStep','spValidateAllspec');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateApogee');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateAstra');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateDR19VACs');
+INSERT Dependency VALUES('spValidate','spValidateStep','spValidateDR20VACs');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateEboss');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateGalProd');
 INSERT Dependency VALUES('spValidate','spValidateStep','spValidateGalSpec');
@@ -472,6 +480,6 @@ INSERT Dependency VALUES('spValidate','spValidateWise','spTestUniqueKey');
 GO
 
 ------------------------------------
-PRINT '462 lines inserted into Dependency'
+PRINT '470 lines inserted into Dependency'
 ------------------------------------
 GO

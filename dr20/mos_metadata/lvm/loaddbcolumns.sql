@@ -1,0 +1,135 @@
+
+----------------------------- 
+--  DBColumns.sql 
+----------------------------- 
+SET NOCOUNT ON
+GO
+TRUNCATE TABLE DBColumns 
+GO
+
+INSERT DBColumns VALUES('LVM_DRPall','tilegrp','','','','Tile group identifier','0');
+INSERT DBColumns VALUES('LVM_DRPall','tileid','','','','Unique tile identifier','0');
+INSERT DBColumns VALUES('LVM_DRPall','mjd','','','','Modified Julian Date of the observation','0');
+INSERT DBColumns VALUES('LVM_DRPall','expnum','','','','Exposure number within the observing sequence','0');
+INSERT DBColumns VALUES('LVM_DRPall','exptime','seconds','','','Exposure time','0');
+INSERT DBColumns VALUES('LVM_DRPall','stage','','','','Reduction stage identifier','0');
+INSERT DBColumns VALUES('LVM_DRPall','status','','','','Processing status flag','0');
+INSERT DBColumns VALUES('LVM_DRPall','drpqual','','','','DRP quality flag','0');
+INSERT DBColumns VALUES('LVM_DRPall','drpver','','','','Version of the DRP used','0');
+INSERT DBColumns VALUES('LVM_DRPall','dpos','','','','Dither position index','0');
+INSERT DBColumns VALUES('LVM_DRPall','object','','','','Object or field name','0');
+INSERT DBColumns VALUES('LVM_DRPall','obstime','','','','Observation timestamp','0');
+INSERT DBColumns VALUES('LVM_DRPall','sci_ra','degree','','','Right Ascension of science pointing','0');
+INSERT DBColumns VALUES('LVM_DRPall','sci_dec','degree','','','Declination of science pointing','0');
+INSERT DBColumns VALUES('LVM_DRPall','sci_pa','degree','','','Position angle of science field','0');
+INSERT DBColumns VALUES('LVM_DRPall','sci_amass','','','','Airmass of science exposure','0');
+INSERT DBColumns VALUES('LVM_DRPall','sci_kmpos','','','','KM mirror position','0');
+INSERT DBColumns VALUES('LVM_DRPall','sci_focpos','','','','Focus position','0');
+INSERT DBColumns VALUES('LVM_DRPall','sci_alt','degree','','','Altitude of science pointing','0');
+INSERT DBColumns VALUES('LVM_DRPall','sci_sh_hght','','','','Shack-Hartmann height or focus metric','0');
+INSERT DBColumns VALUES('LVM_DRPall','sci_moon_sep','degree','','','Angular separation to the Moon','0');
+INSERT DBColumns VALUES('LVM_DRPall','skye_ra','degree','','','RA of eastern sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','skye_dec','degree','','','DEC of eastern sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','skye_pa','degree','','','Position angle of sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','skye_amass','','','','Airmass of sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','skye_kmpos','','','','KM mirror position for sky','0');
+INSERT DBColumns VALUES('LVM_DRPall','skye_focpos','','','','Focus position for sky','0');
+INSERT DBColumns VALUES('LVM_DRPall','skye_name','','','','Identifier of sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','skye_alt','degree','','','Altitude of sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','sci_skye_sep','degree','','','Separation SCI–SKYE','0');
+INSERT DBColumns VALUES('LVM_DRPall','skye_sh_hght','','','','Focus metric for sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','skye_moon_sep','degree','','','Separation sky–Moon','0');
+INSERT DBColumns VALUES('LVM_DRPall','skyw_ra','degree','','','RA of western sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','skyw_dec','degree','','','DEC of western sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','skyw_pa','degree','','','Position angle of sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','skyw_amass','','','','Airmass of sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','skyw_kmpos','','','','KM mirror position for sky','0');
+INSERT DBColumns VALUES('LVM_DRPall','skyw_focpos','','','','Focus position for sky','0');
+INSERT DBColumns VALUES('LVM_DRPall','skyw_name','','','','Identifier of sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','skyw_alt','degree','','','Altitude of sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','sci_skyw_sep','degree','','','Separation SCI–SKYW','0');
+INSERT DBColumns VALUES('LVM_DRPall','skyw_sh_hght','','','','Focus metric for sky field','0');
+INSERT DBColumns VALUES('LVM_DRPall','skyw_moon_sep','degree','','','Separation sky–Moon','0');
+INSERT DBColumns VALUES('LVM_DRPall','moon_ra','degree','','','RA of the Moon','0');
+INSERT DBColumns VALUES('LVM_DRPall','moon_dec','degree','','','DEC of the Moon','0');
+INSERT DBColumns VALUES('LVM_DRPall','moon_phase','','','','Moon phase (fraction illuminated)','0');
+INSERT DBColumns VALUES('LVM_DRPall','moon_fli','','','','Fractional lunar illumination','0');
+INSERT DBColumns VALUES('LVM_DRPall','sun_alt','degree','','','Altitude of the Sun','0');
+INSERT DBColumns VALUES('LVM_DRPall','moon_alt','degree','','','Altitude of the Moon','0');
+INSERT DBColumns VALUES('LVM_DRPall','filename','','','','Name of the reduced file','0');
+INSERT DBColumns VALUES('LVM_DRPall','location','','','','File system location','0');
+INSERT DBColumns VALUES('LVM_DRPall','agcam_location','','','','Acquisition camera data location','0');
+INSERT DBColumns VALUES('LVM_DRPall','calib_mjd','','','','Calibration MJD used','0');
+INSERT DBColumns VALUES('LVM_DRPall','ra','degree','','','Reference RA of the target','0');
+INSERT DBColumns VALUES('LVM_DRPall','dec','degree','','','Reference DEC of the target','0');
+INSERT DBColumns VALUES('LVM_DRPall','pa','degree','','','Reference position angle','0');
+INSERT DBColumns VALUES('LVM_DRPall','ngcname','','','','NGC identifier if available','0');
+INSERT DBColumns VALUES('LVM_DRPall','ra_icrs','degree','','','RA in ICRS frame','0');
+INSERT DBColumns VALUES('LVM_DRPall','dec_icrs','degree','','','DEC in ICRS frame','0');
+INSERT DBColumns VALUES('LVM_DRPall','ra_g','degree','','','Galactic longitude','0');
+INSERT DBColumns VALUES('LVM_DRPall','dec_g','degree','','','Galactic latitude','0');
+INSERT DBColumns VALUES('LVM_DAPall','tilegrp','','','','Tile group identifier','0');
+INSERT DBColumns VALUES('LVM_DAPall','tileid','','','','Unique tile identifier','0');
+INSERT DBColumns VALUES('LVM_DAPall','mjd','','','','Modified Julian Date of the observation','0');
+INSERT DBColumns VALUES('LVM_DAPall','expnum','','','','Exposure number','0');
+INSERT DBColumns VALUES('LVM_DAPall','exptime','seconds','','','Exposure time','0');
+INSERT DBColumns VALUES('LVM_DAPall','dapfile','','','','Name of the associated DAP output file','0');
+INSERT DBColumns VALUES('LVM_DAPall','ra','degree','','','Right Ascension of the target','0');
+INSERT DBColumns VALUES('LVM_DAPall','dec','degree','','','Declination of the target','0');
+INSERT DBColumns VALUES('LVM_DAPall','teff','','','','Effective temperature','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_teff','','','','Uncertainty in effective temperature','0');
+INSERT DBColumns VALUES('LVM_DAPall','log_g','','','','Surface gravity (log g)','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_log_g','','','','Uncertainty in surface gravity','0');
+INSERT DBColumns VALUES('LVM_DAPall','fe','','','','Stellar metallicity ([Fe/H])','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_fe','','','','Uncertainty in metallicity','0');
+INSERT DBColumns VALUES('LVM_DAPall','alpha','','','','Alpha-element enhancement ([alpha/Fe])','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_alpha','','','','Uncertainty in alpha enhancement','0');
+INSERT DBColumns VALUES('LVM_DAPall','av_st','mag','','','Stellar extinction','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_av_st','mag','','','Uncertainty in stellar extinction','0');
+INSERT DBColumns VALUES('LVM_DAPall','z_st','','','','Stellar redshift','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_z_st','','','','Uncertainty in stellar redshift','0');
+INSERT DBColumns VALUES('LVM_DAPall','disp_st','km/s','','','Stellar velocity dispersion','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_disp_st','km/s','','','Uncertainty in velocity dispersion','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_st','10^-16 erg/s/cm^2','','','Average stellar flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','redshift_st','','','','Adopted stellar redshift','0');
+INSERT DBColumns VALUES('LVM_DAPall','med_flux_st','10^-16 erg/s/cm^2','','','Median stellar flux at the V-band within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_med_flux_st','10^-16 erg/s/cm^2','','','Uncertainty in the median stellar flux at the V-band within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','vel_st','km/s','','','Stellar velocity','0');
+INSERT DBColumns VALUES('LVM_DAPall','x_sq_st','','','','Chi-square of stellar fit','0');
+INSERT DBColumns VALUES('LVM_DAPall','x_sq_st_np','','','','Chi-square (non-parametric fit)','0');
+INSERT DBColumns VALUES('LVM_DAPall','x_sq_st_pek','','','','Chi-square for emission-line masked fit','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_3726_03','10^-16 erg/s/cm^2','','','Average [OII] 3726 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_3726_03','10^-16 erg/s/cm^2','','','Uncertainty in the average [OII] 3726 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_3728_82','10^-16 erg/s/cm^2','','','Average [OII] 3729 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_3728_82','10^-16 erg/s/cm^2','','','Uncertainty in the average [OII] 3729 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_4101_77','10^-16 erg/s/cm^2','','','Average Hδ flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_4101_77','10^-16 erg/s/cm^2','','','Uncertainty in the average Hδ flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_4340_49','10^-16 erg/s/cm^2','','','Average Hγ flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_4340_49','10^-16 erg/s/cm^2','','','Uncertainty in the average Hγ flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_4861_36','10^-16 erg/s/cm^2','','','Average Hβ flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_4861_36','10^-16 erg/s/cm^2','','','Uncertainty in the average Hβ flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_4958_91','10^-16 erg/s/cm^2','','','Average [OIII] 4959 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_4958_91','10^-16 erg/s/cm^2','','','Uncertainty in the average [OIII] 4959 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_5006_84','10^-16 erg/s/cm^2','','','Average [OIII] 5007 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_5006_84','10^-16 erg/s/cm^2','','','Uncertainty in the average [OIII] 5007 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_6300_3','10^-16 erg/s/cm^2','','','Average [OI] 6300 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_6300_3','10^-16 erg/s/cm^2','','','Uncertainty in the average [OI] 6300 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_6548_05','10^-16 erg/s/cm^2','','','Average [NII] 6548 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_6548_05','10^-16 erg/s/cm^2','','','Uncertainty in the average [NII] 6548 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_6562_85','10^-16 erg/s/cm^2','','','Average Hα flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_6562_85','10^-16 erg/s/cm^2','','','Uncertainty in the average Hα flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_6583_45','10^-16 erg/s/cm^2','','','Average [NII] 6583 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_6583_45','10^-16 erg/s/cm^2','','','Uncertainty in the average [NII] 6583 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_6716_44','10^-16 erg/s/cm^2','','','Average [SII] 6716 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_6716_44','10^-16 erg/s/cm^2','','','Uncertainty in the average [SII] 6716 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_6730_82','10^-16 erg/s/cm^2','','','Average [SII] 6731 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_6730_82','10^-16 erg/s/cm^2','','','Uncertainty in the average [SII] 6731 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_9069_0','10^-16 erg/s/cm^2','','','Average [SIII] 9069 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_9069_0','10^-16 erg/s/cm^2','','','Uncertainty in the average [SIII] 9069 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','flux_pek_9531_1','10^-16 erg/s/cm^2','','','Average [SIII] 9531 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+INSERT DBColumns VALUES('LVM_DAPall','e_flux_pek_9531_1','10^-16 erg/s/cm^2','','','Uncertainty in the average [SIII] 9531 flux within the field of view of the science IFU, reported in units measured in one fiber area.','0');
+
+GO
+----------------------------- 
+PRINT '121 lines inserted into DBColumns '
+----------------------------- 
