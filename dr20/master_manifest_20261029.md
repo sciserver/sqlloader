@@ -147,7 +147,7 @@ Files that differ between master and dr20.
 - [x] `.gitignore`
 
 ### Stays on dr20
-- [ ] `schema/log/lumberjack_2026/` (14 files: weblog investigation notes and findings)
+- [ ] `schema/log/lumberjack_2026/` (README + `bcpweblog_rewrite_handoff.md`; the investigation notes and scripts moved to the DBA repo on 2026-11-05)
 
 ## C. dr20 in the name, outside `dr20/` (stay on dr20, decided 2026-11-05)
 

@@ -1,5 +1,9 @@
 # Handoff: schema/log cleanup and the bcpWeblog Python rewrite
 
+> **2026-11-05:** the findings documents and scripts this handoff refers to (e.g.
+> `lumberjack_steps1_2_findings.md`, `weblog_collection_findings_20261027.md`, the step 5 scripts) moved
+> to the IDIES DBA repository. See `README.md` in this folder for where each one went.
+
 Written 2026-10-27 at the end of the lumberjack weblog-job session. Updated the same day after
 checking the branch state. Read this first in the next session, then `lumberjack_steps1_2_findings.md` (step 1 section) for the details behind it.
 
