@@ -354,7 +354,7 @@ INSERT History VALUES('IndexMap','2025-04-23','Ani','Added DR19 VAC PKs (DR19). 
 INSERT History VALUES('IndexMap','2025-05-20','Ani','Added allspec PKs (DR19). ');
 INSERT History VALUES('IndexMap','2025-06-11','Ani','Added apogee_drp_all[star|visit] PKs. (DR19) ');
 INSERT History VALUES('IndexMap','2025-06-12','Ani','Commented out StarFlow_summary PK creation (identity column PK to be added as for all Astra tables. (DR19) ');
-INSERT History VALUES('IndexMap','2026-02-23','Ani','Remoced incorrect apogee-drp-* entries, and added MOS table indexes. ');
+INSERT History VALUES('IndexMap','2026-02-23','Ani','Removed incorrect apogee-drp-* entries, and added MOS table indexes. ');
 INSERT History VALUES('IndexMap','2026-07-02','Ani','Added expnum as PK for LVM tables (per Joel B). (DR20) ');
 INSERT History VALUES('IndexMap','2026-07-06','Ani','Replaced PK with spectrum_PK for ASTRA tables. (DR20) ');
 INSERT History VALUES('IndexMap','2026-07-23','Ani','Added/updated DR20 VAC PKs. (DR20) ');
@@ -654,11 +654,11 @@ INSERT History VALUES('ApogeeTables','2021-07-28','Ani','Updated ApogeeVisit - a
 INSERT History VALUES('ApogeeTables','2023-02-16','Ani','Added cx, cy, cz to ApogeeStar ');
 INSERT History VALUES('ApogeeTables','2025-06-11','Ani','added apogee_drp_all[star|visit]. (DR19) ');
 INSERT History VALUES('ApogeeTables','2025-06-13','Ani','Made PK columns NOT NULL for apogee_drp_all[star|visit]. (DR19) ');
-INSERT History VALUES('ApogeeTables','2026-02-17','Ani','Moved htmid, cx, cy, cz columns to apogee_drp_allstar  rom apogee_drp_allvisit. ');
+INSERT History VALUES('ApogeeTables','2026-02-17','Ani','Moved htmid, cx, cy, cz columns to apogee_drp_allstar from apogee_drp_allvisit. ');
 INSERT History VALUES('AstraTables','2025-04-14','Ani','Imported all the table definitions from https://github.com/sdss/casload/tree/master/sql/astra ');
 INSERT History VALUES('AstraTables','2025-04-14','Ani','Replaced "bool" columns with "bit" iin MWM tables. ');
 INSERT History VALUES('AstraTables','2025-07-03','Ani','Added PK column to all tables, commented out table the_cannon_apogee_star. ');
-INSERT History VALUES('AstraTables','2026-06-17','Ani','Swapped in the DR20 versions of several tables. (DR20} ');
+INSERT History VALUES('AstraTables','2026-06-17','Ani','Swapped in the DR20 versions of several tables. (DR20) ');
 INSERT History VALUES('AstraTables','2026-07-06','Ani','Replaced PK with spectrum_PK for all tables. (DR20) ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Adapted from sas-sql/mangadrp.sql. ');
 INSERT History VALUES('MangaTables','2016-03-29','Ani','Increased length of mangaTarget.nsa_subdir to 128. ');
@@ -774,7 +774,6 @@ INSERT History VALUES('VacTables','2026-07-15','Ani','Swapped in the DR20 VACs, 
 INSERT History VALUES('VacTables','2026-07-22','Ani','Refreshed schema for VAC-27 (spiders AGN) tables. (DR20) ');
 INSERT History VALUES('VacTables','2026-07-24','SW','Added eROSITA DR1 tables (from casload/sql/erosita/dr1). ');
 INSERT History VALUES('LvmTables','2026-06-03','Ani','Adapted from master/sql/lvm ');
-INSERT History VALUES('LvmTables','2016-03-29','Ani',' ');
 INSERT History VALUES('spHtmCSharp','2005-05-01','Jim','started ');
 INSERT History VALUES('spHtmCSharp','2005-05-02','Jim','removed fHtmLookup and fHtmLookupError added fHtmToString ');
 INSERT History VALUES('spHtmCSharp','2005-05-05','GYF','added .pdb to assembly for symbolic debugging added fHtmToName (faster than fHtmToString and reports error) ');
@@ -1400,6 +1399,6 @@ INSERT History VALUES('spCosmology','2010-12-10','Ani','Deleted spMath* function
 GO
 
 ------------------------------------
-PRINT '1390 lines inserted into History'
+PRINT '1389 lines inserted into History'
 ------------------------------------
 GO

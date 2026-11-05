@@ -10,7 +10,7 @@
 --* 2025-04-14 Ani: Replaced "bool" columns with "bit" iin MWM tables.
 --* 2025-07-03 Ani: Added PK column to all tables, commented out table
 --*                 the_cannon_apogee_star.
---* 2026-06-17 Ani: Swapped in the DR20 versions of several tables. (DR20}
+--* 2026-06-17 Ani: Swapped in the DR20 versions of several tables. (DR20)
 --* 2026-07-06 Ani: Replaced PK with spectrum_PK for all tables. (DR20)
 -------------------------------------------------------------------------------
 

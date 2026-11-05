@@ -277,7 +277,7 @@
 --* 2025-06-11 Ani: Added apogee_drp_all[star|visit] PKs. (DR19)
 --* 2025-06-12 Ani: Commented out StarFlow_summary PK creation (identity column
 --*                 PK to be added as for all Astra tables. (DR19)
---* 2026-02-23 Ani: Remoced incorrect apogee-drp-* entries, and added MOS table
+--* 2026-02-23 Ani: Removed incorrect apogee-drp-* entries, and added MOS table
 --*                 indexes.
 --* 2026-07-02 Ani: Added expnum as PK for LVM tables (per Joel B). (DR20)
 --* 2026-07-06 Ani: Replaced PK with spectrum_PK for ASTRA tables. (DR20)
