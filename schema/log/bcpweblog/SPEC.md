@@ -15,7 +15,7 @@ Step 1 of the lumberjack job "Hourly Weblog Update2" (`spCopyWebLogs` -> `BcpWeb
    doesn't fit their field lists (section 3.3).
 2. **It's slow.** Every hour it opens every matching file in every source folder, and for each file that
    qualifies it copies the **whole file** to local disk and reloads it from line 1. That would not work for
-   idieswww01's monthly log (23.5 GB on 2026-10-28) or idieswww02's 1.3 GB/day.
+   idieswww01's monthly log (23.5 GB on 2026-10-28; daily since 2026-10-30) or idieswww02's 1.3 GB/day.
 3. **Known defects:** `bytesIn` is never loaded (section 2.6), every bcp file starts with a BOM, and failures are silent
    (section 2.7).
 
@@ -120,14 +120,19 @@ one bcp per file.
 
 | Server / folder | Newest file | Rollover |
 |---|---|---|
-| `\\idieswww01\LogFiles\W3SVC2` | `u_ex2610_x.log`, 23.5 GB, written 2026-10-28 | **monthly** since 2025-11-10 16:54 (daily before) |
+| `\\idieswww01\LogFiles\W3SVC2` | `u_ex2610_x.log`, 23.5 GB, written 2026-10-28 | **monthly** from 2025-11-10 16:54 to 2026-10-30 13:38 UTC; daily before and since |
 | `\\idieswww02\LogFiles\W3SVC2` | `u_ex261028_x.log` | daily, UTC midnight |
 | `\\idieswww03\LogFiles\W3SVC2` | `u_ex261028_x.log` | daily, UTC midnight |
 | `\\dsa001\LogFiles\W3SVC1858982642` (and dsa003/005) | `ex261028_x.log` | daily |
 
 History on the servers (for backfill): W3SVC2 logs start 2025-04-17 (02/03) and 2025-04-30 (01), with **no files**
 from 2025-07-10 (01: 04-30) to 2025-08-26. `XForwardedFor` (the `_x` names) was added on all three on 2025-11-04 at ~19:00.
-idieswww01 has had no byte fields in every file checked.
+idieswww01 had no byte fields until 2026-10-30 13:38 UTC.
+
+**Update 2026-11-09:** idieswww01 switched to daily files at 2026-10-30 13:38 UTC, and a new header block at line 590
+of `u_ex261030_x.log` (13:38:58) added `sc-bytes cs-bytes`. Since then all three servers log the same field list:
+`date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent) cs(Referer) sc-status
+sc-substatus sc-win32-status sc-bytes cs-bytes time-taken XForwardedFor`. None of them logs `cs-host`.
 
 File name pattern: `^(u_)?ex(\d{6}|\d{4})(_x)?\.log$`, case-insensitive. The digits are `yymmdd` (daily) or `yymm`
 (monthly); `_x` means the log has custom fields.
@@ -142,6 +147,8 @@ File name pattern: `^(u_)?ex(\d{6}|\d{4})(_x)?\.log$`, case-insensitive. The dig
 ```
 
 IIS can write a new header block in the middle of a file (e.g. after a restart or a config change), and the field list can change there.
+Example: idieswww01 `u_ex261030_x.log`. The lines right after the new `#Date: 2026-10-30 13:38:58` header are stamped
+13:38:55, so a line's time can be earlier than the header above it.
 
 ### 3.3 Field lists
 
@@ -149,7 +156,7 @@ IIS can write a new header block in the middle of a file (e.g. after a restart o
 |---|---|---|---|
 | `s-sitename` | yes | - | - |
 | `sc-substatus`, `sc-win32-status` | - | yes | yes |
-| `sc-bytes`, `cs-bytes` | yes | **-** | yes |
+| `sc-bytes`, `cs-bytes` | yes | from 2026-10-30 13:38 UTC | yes |
 | `XForwardedFor` (custom) | yes | yes | yes |
 
 All have `date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent)
