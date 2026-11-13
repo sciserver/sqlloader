@@ -422,6 +422,44 @@ class UnlistedSource(unittest.TestCase):
         self.assertIn('0 refused', out)
 
 
+class DbQuery(unittest.TestCase):
+    """2026-11-13: an abort message with double quotes broke sqlcmd -Q; the SQL now goes in a file (-i)."""
+
+    def test_sql_goes_in_a_file_and_the_file_is_removed(self):
+        from unittest import mock
+        seen = {}
+
+        def fake_run(cmd, **kw):
+            seen['cmd'] = cmd
+            path = cmd[cmd.index('-i') + 1]
+            with open(path, encoding='utf-8') as f:
+                seen['sql'] = f.read()
+            seen['path'] = path
+            return mock.Mock(returncode=0, stdout='1\tok\n', stderr='')
+
+        msg = 'error 547: conflicted with the FOREIGN KEY constraint "FK_x". Table \'dbo.y\''
+        with mock.patch.object(b.subprocess, 'run', fake_run):
+            b.Db('srv', 'db').abort_run(7, msg)
+        self.assertNotIn('-Q', seen['cmd'])
+        self.assertIn('EXEC dbo.spAbortWeblogRun 7, ', seen['sql'])
+        self.assertIn('"FK_x"', seen['sql'])                 # double quotes reach SQL unchanged
+        self.assertIn("''dbo.y''", seen['sql'])              # single quotes doubled by sql_str
+        self.assertFalse(os.path.exists(seen['path']))
+
+    def test_file_removed_when_sqlcmd_fails(self):
+        from unittest import mock
+        seen = {}
+
+        def fake_run(cmd, **kw):
+            seen['path'] = cmd[cmd.index('-i') + 1]
+            return mock.Mock(returncode=1, stdout='', stderr='boom')
+
+        with mock.patch.object(b.subprocess, 'run', fake_run):
+            with self.assertRaises(b.LoadError):
+                b.Db('srv', 'db').query('SELECT 1')
+        self.assertFalse(os.path.exists(seen['path']))
+
+
 class Refused(unittest.TestCase):
     """D9 option B (2026-11-13): requests IIS refused are counted, not loaded."""
     fm02 = b.FieldMap(F_WWW02)

@@ -18,6 +18,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 import time
 
 # ---------------------------------------------------------------------------------------------
@@ -339,10 +340,21 @@ class Db:
         self.database = database
 
     def query(self, sql):
-        """Run sql; return the result rows as lists of strings (tab-separated output, no headers)."""
-        cmd = ['sqlcmd', '-S', self.server, '-d', self.database, '-E', '-C', '-b', '-r1', '-h', '-1', '-W',
-               '-s', '\t', '-f', '65001', '-Q', 'SET NOCOUNT ON; ' + sql]
-        p = subprocess.run(cmd, capture_output=True, encoding='utf-8', errors='replace')
+        """Run sql; return the result rows as lists of strings (tab-separated output, no headers).
+
+        The SQL goes to sqlcmd in a file (-i), not on the command line (-Q): sqlcmd's own argument parsing breaks on
+        a double quote inside the text (seen 2026-11-13 when an error message quoting a constraint name was passed to
+        spAbortWeblogRun), and a file has no command-line length limit.
+        """
+        fd, path = tempfile.mkstemp(suffix='.sql', prefix='bcpweblog_')
+        try:
+            with os.fdopen(fd, 'w', encoding='utf-8', newline='\n') as f:
+                f.write('SET NOCOUNT ON; ' + sql + '\n')
+            cmd = ['sqlcmd', '-S', self.server, '-d', self.database, '-E', '-C', '-b', '-r1', '-h', '-1', '-W',
+                   '-s', '\t', '-f', '65001', '-i', path]
+            p = subprocess.run(cmd, capture_output=True, encoding='utf-8', errors='replace')
+        finally:
+            remove_quietly(path)
         if p.returncode != 0:
             raise LoadError('sqlcmd failed (exit %d): %s' % (p.returncode, (p.stderr or p.stdout).strip()[:2000]))
         return [line.split('\t') for line in p.stdout.splitlines() if line.strip()]
