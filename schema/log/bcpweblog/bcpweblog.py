@@ -74,6 +74,34 @@ class Reject(Exception):
     """A data line that can't be loaded; the message is the reason (used as a counter key)."""
 
 
+# Requests IIS refuses before the application sees them (DEPLOY D9, option B, decided 2026-11-13): not loaded,
+# counted per status.substatus. 404.19 = Request Filtering rule; 403.501/403.502 = Dynamic IP Restrictions
+# (concurrent-request / request-rate limit). The raw IIS files keep every line.
+REFUSED_DEFAULT = '404.19,403.501,403.502'
+REFUSED_CODE = re.compile(r'^\d{3}\.\d+$')
+
+
+class Refused(Exception):
+    """A well-formed line for a request IIS refused; the message is its status.substatus (a counter key)."""
+
+
+def refused_codes(text):
+    """'404.19,403.501' -> frozenset of codes; '' -> empty (load everything). Raises ValueError on a bad code."""
+    codes = frozenset(c.strip() for c in text.split(',') if c.strip())
+    bad = [c for c in codes if not REFUSED_CODE.match(c)]
+    if bad:
+        raise ValueError('not a status.substatus code: %s' % ', '.join(sorted(bad)))
+    return codes
+
+
+def refused_text(counter):
+    """Run-log text for a Counter of refused codes: '0 refused' or '1234 refused (404.19 1000, 403.502 234)'."""
+    total = sum(counter.values())
+    if not total:
+        return '0 refused'
+    return '%d refused (%s)' % (total, ', '.join('%s %d' % kv for kv in sorted(counter.items())))
+
+
 def clean(value, limit):
     """IIS writes '-' for empty. Tabs and line breaks would break the load file."""
     if value == '-':
@@ -120,6 +148,7 @@ class FieldMap:
         self.stem = pos.get('cs-uri-stem')
         self.query = pos.get('cs-uri-query')
         self.status = pos.get('sc-status')
+        self.substatus = pos.get('sc-substatus')
         self.agent = pos.get('cs(user-agent)')
         self.referer = pos.get('cs(referer)')
         self.sc_bytes = pos.get('sc-bytes')
@@ -131,8 +160,12 @@ def field(parts, i):
     return parts[i] if i is not None else ''
 
 
-def convert(line, fm, log_id, seq):
-    """One data line -> one output row (a tuple of strings in COLUMNS order). Raises Reject."""
+def convert(line, fm, log_id, seq, refused=frozenset()):
+    """One data line -> one output row (a tuple of strings in COLUMNS order).
+
+    Raises Reject for a line that can't be loaded, Refused for a well-formed line whose status.substatus is in
+    refused (checked after the line is known to be well-formed, so a broken line is always a Reject).
+    """
     if fm is None:
         raise Reject('no #Fields before data')
     if len(line) >= MAX_LINE:
@@ -152,6 +185,10 @@ def convert(line, fm, log_id, seq):
     tod = field(parts, fm.time)
     if not TIME.match(tod) or int(tod[0:2]) > 23 or int(tod[3:5]) > 59 or int(tod[6:8]) > 59:
         raise Reject('bad time')
+    if refused and fm.substatus is not None:
+        code = field(parts, fm.status) + '.' + field(parts, fm.substatus)
+        if code in refused:
+            raise Refused(code)
 
     command = field(parts, fm.stem)
     query = field(parts, fm.query)
@@ -215,6 +252,7 @@ class FileResult:
         self.header_lines = 0
         self.rows = 0
         self.rejects = collections.Counter()
+        self.refused = collections.Counter()    # status.substatus -> lines not loaded (REFUSED_DEFAULT)
         self.rows_per_day = collections.Counter()
         self.fields_seen = []
         self.next_offset = 0
@@ -236,10 +274,11 @@ def file_sink(out):
     return sink
 
 
-def parse_file(path, log_id, sink, rejects_out, offset=0, fields=None, max_bytes=None):
+def parse_file(path, log_id, sink, rejects_out, offset=0, fields=None, max_bytes=None, refused=frozenset()):
     """Parse one log file from offset to its current end (or offset + max_bytes); pass each row to sink.
 
     fields is the '#Fields' list in effect at offset (LogFileState.fields), without the '#Fields:' prefix.
+    Lines whose status.substatus is in refused are counted in r.refused, not passed to sink.
     sink(row) may return STOP; next_offset is then the start of the line that wasn't used.
     """
     r = FileResult()
@@ -263,7 +302,10 @@ def parse_file(path, log_id, sink, rejects_out, offset=0, fields=None, max_bytes
             if not line.strip():
                 continue
             try:
-                row = convert(line, fm, log_id, line_offset)
+                row = convert(line, fm, log_id, line_offset, refused)
+            except Refused as e:
+                r.refused[str(e)] += 1
+                continue
             except Reject as e:
                 r.rejects[str(e)] += 1
                 rejects_out.write('%s\t%d\t%s\t%s\n' % (path, line_offset, e, line[:500]))
@@ -536,7 +578,7 @@ def cmd_incremental(args):
     log('incremental %s: %d sources, window %s..%s, max %d MB per file'
         % (tag, len(sources), first_day, today, args.max_bytes // 1000000))
 
-    total_rows = total_states = total_rejects = 0
+    total_rows = total_states = total_rejects = total_refused = 0
     unlisted = []       # logIDs whose folder couldn't be listed: the rest still load, then the step fails (SPEC 4.8)
     try:
         with open(rows_path, 'wb') as out, open(state_path, 'wb') as st, \
@@ -558,9 +600,12 @@ def cmd_incremental(args):
                 for w in warnings:
                     log('  WARNING logID %d: %s' % (log_id, w))
                 n_bytes = n_lines = n_rows = n_rej = 0
+                n_refused = collections.Counter()
                 for rd in reads:
                     r = parse_file(os.path.join(folder, rd.name), log_id, sink, rej,
-                                   offset=rd.offset, fields=rd.fields, max_bytes=args.max_bytes)
+                                   offset=rd.offset, fields=rd.fields, max_bytes=args.max_bytes,
+                                   refused=args.refused)
+                    n_refused.update(r.refused)
                     if r.next_offset != stored.get(rd.name, (0, None))[0]:
                         st.write(('%d\t%d\t%s\t%d\t%s\t%s\n' % (run_id, log_id, rd.name, r.next_offset,
                                                                 r.fields_at_end or '', rd.file_date)).encode('utf-8'))
@@ -574,9 +619,11 @@ def cmd_incremental(args):
                             % (log_id, rd.name, r.next_offset, rd.size))
                 total_rows += n_rows
                 total_rejects += n_rej
-                log('  logID %d %s: listed %d, matched %d, read %d files, %.1f MB, %d lines, %d rows, %d rejects, %.1f s'
+                total_refused += sum(n_refused.values())
+                log('  logID %d %s: listed %d, matched %d, read %d files, %.1f MB, %d lines, %d rows, %d rejects, '
+                    '%s, %.1f s'
                     % (log_id, folder, len(listed), len(matched), len(reads), n_bytes / 1e6, n_lines, n_rows,
-                       n_rej, time.monotonic() - started))
+                       n_rej, refused_text(n_refused), time.monotonic() - started))
 
         if args.dry_run:
             log('dry run: %d rows, %d file offsets in %s (nothing loaded)' % (total_rows, total_states, rows_path))
@@ -603,8 +650,8 @@ def cmd_incremental(args):
     for p in (rows_path, state_path):
         remove_quietly(p)
     remove_if_empty(rejects_path)
-    log('loaded %s: %d rows, %d file offsets, %d rejects%s'
-        % (tag, rows, files, total_rejects, ' (see %s)' % rejects_path if total_rejects else ''))
+    log('loaded %s: %d rows, %d file offsets, %d rejects%s, %d refused (not loaded)'
+        % (tag, rows, files, total_rejects, ' (see %s)' % rejects_path if total_rejects else '', total_refused))
     return unlisted_exit(log, unlisted)
 
 
@@ -741,9 +788,9 @@ def cmd_backfill(args):
                                key=name_key)
                 for name in names:
                     started = time.monotonic()
-                    r = parse_file(os.path.join(folder, name), log_id, days.sink, rej)
-                    log('  logID %d %s: %.1f MB, %d rows, %d rejects, %.1f s%s'
-                        % (log_id, name, r.bytes_read / 1e6, r.rows, sum(r.rejects.values()),
+                    r = parse_file(os.path.join(folder, name), log_id, days.sink, rej, refused=args.refused)
+                    log('  logID %d %s: %.1f MB, %d rows, %d rejects, %s, %.1f s%s'
+                        % (log_id, name, r.bytes_read / 1e6, r.rows, sum(r.rejects.values()), refused_text(r.refused),
                            time.monotonic() - started, ' (stopped past --to)' if r.stopped else ''))
                     if r.stopped:
                         break
@@ -775,7 +822,7 @@ def cmd_parse(args):
         started = time.monotonic()
         with open(base + '.bcp', 'wb') as out, \
                 open(base + '.rejects.txt', 'w', encoding='utf-8') as rej:
-            r = parse_file(path, args.logid, file_sink(out), rej, offset=args.offset)
+            r = parse_file(path, args.logid, file_sink(out), rej, offset=args.offset, refused=args.refused)
         secs = time.monotonic() - started
         mb = r.bytes_read / 1e6
         print('== %s' % path)
@@ -784,6 +831,7 @@ def cmd_parse(args):
         print('   lines         : %d (%d header)' % (r.lines, r.header_lines))
         print('   rows          : %d' % r.rows)
         print('   rejects       : %s' % (dict(r.rejects) or 0))
+        print('   refused       : %s' % refused_text(r.refused))
         print('   next offset   : %d' % r.next_offset)
         for f in r.fields_seen:
             print('   #Fields       : %s' % f)
@@ -805,6 +853,12 @@ def main(argv=None):
         sp.add_argument('--keep-days', type=int, default=30,
                         help='keep .err, rejects and dry-run files and bcpweblog.log lines this long')
         sp.add_argument('--dry-run', action='store_true', help='read and parse, write the load files, load nothing')
+        refused_option(sp)
+
+    def refused_option(sp):
+        sp.add_argument('--refused', type=refused_codes, default=refused_codes(REFUSED_DEFAULT),
+                        help='status.substatus codes of refused requests, counted and not loaded '
+                             '(default %s; "" loads everything)' % REFUSED_DEFAULT)
 
     pi = sub.add_parser('incremental', help='hourly: load new complete lines since the stored offsets')
     common(pi)
@@ -826,6 +880,7 @@ def main(argv=None):
     pp.add_argument('--out', required=True, help='folder for the .bcp and .rejects.txt files')
     pp.add_argument('--logid', type=int, default=0)
     pp.add_argument('--offset', type=int, default=0, help='start at this byte offset (a line start)')
+    refused_option(pp)
     pp.set_defaults(func=cmd_parse)
     args = p.parse_args(argv)
     return args.func(args)

@@ -1,6 +1,7 @@
 # bcpweblog: deployment runbook for lumberjack
 
-DRAFT 2026-10-30. Nothing in this file has been done on lumberjack yet. Every fact under "Verified" was read on
+DRAFT 2026-10-30, in progress since 2026-11-13: sections 1-3 done on lumberjack 2026-11-13 (pre-flight passed as
+`sdss\mssql`; files installed with `VERSION.txt`; schema objects created). Every fact under "Verified" was read on
 2026-10-30 (reads only: metadata, `LogSource`, msdb, file listings).
 
 Order matters: the new loader is installed and running **before** any more sources are given to it. The old job step
@@ -11,15 +12,15 @@ reads `method = 'TAIL'` rows (SPEC 4.2), so the two never see each other's sourc
 
 | # | Decision | Who | Notes |
 |---|---|---|---|
-| D1 | logIDs for idieswww01-03 `W3SVC2` | Victor | `LogSource.logID` is **not** an identity; IDs are chosen by hand. In use: 1-43, 1001-1025, 2001-2202, 8001-8002, 9001. 3000-7999 is free. Choose once: `LogFileState` and `weblogAll` are keyed by it |
-| D2 | `method` value (`'TAIL'` proposed) | boss / Victor | must not be `'XCOPY'`: as XCOPY the old exe matches no `u_ex*` file, yet `tstamp` moves hourly, so the sources look collected but aren't |
+| D1 | logIDs for idieswww01-03 `W3SVC2` | Victor | **DECIDED 2026-11-13: 3001, 3002, 3003.** `LogSource.logID` is **not** an identity; IDs are chosen by hand. In use: 1-43, 1001-1025, 2001-2202, 8001-8002, 9001. 3000-7999 is free. Choose once: `LogFileState` and `weblogAll` are keyed by it |
+| D2 | `method` value | boss / Victor | **DECIDED 2026-11-13: `'TAIL'`.** Must not be `'XCOPY'`: as XCOPY the old exe matches no `u_ex*` file, yet `tstamp` moves hourly, so the sources look collected but aren't |
 | D3 | Exit code when a source folder can't be listed | us | **DECIDED 2026-11-02**: load what is readable, then exit 1 so the step fails and the alert fires (SPEC 4.8). With quit-on-failure (section 5) that also skips steps 2-6 for the hour until the source is fixed or set `INACTIVE` |
-| D4 | Where the new job step goes (section 5) | Victor | recommendation: new step 2, right after "Local weblogs" |
+| D4 | Where the new job step goes (section 5) | Victor | **DECIDED 2026-11-13: new step 2**, right after "Local weblogs" |
 | D5 | Volume: 10-15 M rows/day more in `weblogAll` | boss | affects table size and steps 5/6 (SPEC 4.6). **Update 2026-11-02:** traffic has grown a lot since this estimate (roughly 2-3x); D9 can reduce it substantially. Current numbers in the DBA notes |
 | D6 | SPEC 7 open questions 1-2 (`bytesIn`, health checks) | boss | v1 loads `bytesIn` and keeps health-check rows |
 | D7 | How far back to backfill | boss | backfill is optional and can run any time after go-live (section 7) |
 | D8 | Alert routing: also send job failures to Slack | Victor | today job failures go by email only. Use the same mechanism as the existing Slack alerts for the backups. Not a blocker for go-live |
-| D9 | Requests the web server refuses before the application sees them: load, skip, or load flagged? | boss | a large share of all rows at current traffic (SPEC 7, open question 4; numbers in the DBA notes). Recommendation: skip them and count them in the run summary (option B, a small code change). Decide before more sources go live |
+| D9 | Requests the web server refuses before the application sees them: load, skip, or load flagged? | boss | **DECIDED 2026-11-13: skip and count** (option B; SPEC 4.5, 4.8). `404.19`, `403.501`, `403.502` are not loaded; each run logs `n refused` per code. `--refused ""` reverts to loading everything |
 
 ## Verified 2026-10-30
 

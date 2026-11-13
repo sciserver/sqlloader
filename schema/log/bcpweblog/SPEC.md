@@ -242,6 +242,12 @@ current month's file from the start.
 - A data line whose field count doesn't match the field list is **rejected**: counted, and written (path, offset, first 500
   chars) to a rejects file. Lines of 8000+ chars likewise.
 - The date comes from each line's own `date` field.
+- A well-formed line whose `sc-status`.`sc-substatus` is in the **refused** list is not loaded, only counted per code
+  (decided 2026-11-13, section 7 question 4, option B). Default `404.19` (Request Filtering rule), `403.501` and `403.502`
+  (Dynamic IP Restrictions: concurrent-request and request-rate limits); `--refused` changes the list, `--refused ""` loads
+  everything. The check runs after the field-count, date and time checks, so a broken line is still a reject. A source
+  without `sc-substatus` (the old servers) is never filtered. Ordinary errors (`404.0`, `403.0`, `500`) are loaded as before.
+  Refused lines are not written to the rejects file; the raw IIS files keep them.
 
 Column mapping (`weblogTemp` order, plus `logID`, see section 4.6):
 
@@ -321,8 +327,10 @@ Agent account, as bcp does today.
 ### 4.8 Run summary
 
 One line per source to stdout (the job history) and appended to a log file:
-`logID, folder, files listed, files matched, files read, bytes read, lines, rows, rejects, seconds`.
-"Listed vs matched" catches a source whose file names stop matching (what happened with `u_ex*`).
+`logID, folder, files listed, files matched, files read, bytes read, lines, rows, rejects, refused (per code), seconds`.
+"Listed vs matched" catches a source whose file names stop matching (what happened with `u_ex*`). The run's last line has
+the totals, including `n refused (not loaded)`, so the volume of refused requests stays visible (section 4.5).
+Lines read = rows + rejects + refused + header and blank lines.
 
 A source whose folder can't be listed (missing, or "Access is denied" as on idieswww02/03 on 2026-10-29) gets a WARNING
 line and is skipped; the other sources are read and loaded as normal, then the run logs `FAILED: n source(s) could not be
@@ -473,7 +481,11 @@ second removed the 8 empty ones, leaving only run 15's 186-byte bcp error.
 2. Drop load-balancer health checks at load time (findings doc question 7)?
 3. Which sources, and the new `method` value (findings doc questions 5-8)? Also: 8 of the 33 active `XCOPY` folders
    don't exist any more.
-4. **Requests the web server refuses (DEPLOY D9):** load them, skip them, or load them flagged? Some requests are
+4. **DECIDED 2026-11-13: option B** (skip and count; section 4.5). Tested: 9 new unit tests (mutation-checked), a parse of
+   one live server-day (lines = rows + refused + headers, 0 rejects, read speed unchanged), and a capped incremental into
+   the SQL 2019 test database (`rowsLoaded` = rows logged, offsets exact). The original question, kept for the record:
+
+   **Requests the web server refuses (DEPLOY D9):** load them, skip them, or load them flagged? Some requests are
    refused by IIS itself, before the application sees them (a 4xx status with a non-zero `sc-substatus`). v1 loads
    them, and `weblogAll` can't tell them apart from ordinary errors: it keeps `sc-status` (`error`) but not
    `sc-substatus`. At current traffic they are a large share of all rows, so the choice affects volume (D5) and the

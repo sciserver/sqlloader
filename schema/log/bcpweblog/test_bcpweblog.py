@@ -24,9 +24,10 @@ CLIENT = '203.0.113.7'
 PROXY = '192.0.2.200'
 
 
-def www02(xff='-', query='-', status='200', sc='5120', cs='432', taken='15', date='2026-10-27', tod='13:45:07'):
+def www02(xff='-', query='-', status='200', sc='5120', cs='432', taken='15', date='2026-10-27', tod='13:45:07',
+          substatus='0'):
     return ' '.join([date, tod,'192.0.2.1', 'GET', '/dr20/en/tools/chart/navi.aspx', query, '443', '-',
-                     LB, 'Mozilla/5.0+(Windows+NT+10.0)', 'https://example.org/', status, '0', '0',
+                     LB, 'Mozilla/5.0+(Windows+NT+10.0)', 'https://example.org/', status, substatus, '0',
                      sc, cs, taken, xff])
 
 
@@ -367,7 +368,7 @@ class LoadDb:
 class UnlistedSource(unittest.TestCase):
     """D3 (2026-11-02): a source whose folder can't be listed doesn't stop the others; the step then fails."""
 
-    def run_incremental(self, sources, dry_run=False):
+    def run_incremental(self, sources, dry_run=False, extra_lines=(), refused=b.REFUSED_DEFAULT):
         import argparse
         import contextlib
         from unittest import mock
@@ -377,10 +378,13 @@ class UnlistedSource(unittest.TestCase):
         today = b.utc_today()
         with open(os.path.join(good, 'u_ex%s_x.log' % today.strftime('%y%m%d')), 'w', newline='') as f:
             f.write(F_WWW02 + '\r\n' + www02(date=today.isoformat()) + '\r\n')
+            for kw in extra_lines:
+                f.write(www02(date=today.isoformat(), **kw) + '\r\n')
         paths = {'good': good + os.sep, 'missing': os.path.join(root, 'missing') + os.sep}
         db = LoadDb([(i, paths[k]) for i, k in sources])
         args = argparse.Namespace(workdir=os.path.join(root, 'work'), server='x', database='x', method='TAIL',
-                                  logid=None, days=2, max_bytes=10 ** 9, dry_run=dry_run, keep_days=30)
+                                  logid=None, days=2, max_bytes=10 ** 9, dry_run=dry_run, keep_days=30,
+                                  refused=b.refused_codes(refused))
         out = io.StringIO()
         with mock.patch.object(b, 'Db', lambda server, database: db), contextlib.redirect_stdout(out):
             code = b.cmd_incremental(args)
@@ -404,6 +408,87 @@ class UnlistedSource(unittest.TestCase):
         code, db, _ = self.run_incremental([(1, 'good'), (2, 'missing')], dry_run=True)
         self.assertEqual(code, 1)
         self.assertEqual(db.loaded, [])
+
+    def test_refused_not_staged_but_counted(self):
+        extra = [dict(status='404', substatus='19'), dict(status='403', substatus='502'),
+                 dict(status='403', substatus='502'), dict(status='404', substatus='0')]
+        code, db, out = self.run_incremental([(1, 'good')], extra_lines=extra)
+        self.assertEqual(code, 0)
+        self.assertEqual(db.staged['weblogStage'], 2)          # the 200 and the plain 404
+        self.assertIn('3 refused (403.502 2, 404.19 1)', out)  # per source
+        self.assertIn('3 refused (not loaded)', out)           # run total
+        code, db, out = self.run_incremental([(1, 'good')], extra_lines=extra, refused='')
+        self.assertEqual(db.staged['weblogStage'], 5)          # --refused "" = v1, load everything
+        self.assertIn('0 refused', out)
+
+
+class Refused(unittest.TestCase):
+    """D9 option B (2026-11-13): requests IIS refused are counted, not loaded."""
+    fm02 = b.FieldMap(F_WWW02)
+    codes = b.refused_codes(b.REFUSED_DEFAULT)
+
+    def test_default_codes_refused(self):
+        for status, sub in (('404', '19'), ('403', '501'), ('403', '502')):
+            with self.assertRaises(b.Refused) as cm:
+                b.convert(www02(status=status, substatus=sub), self.fm02, 0, 0, self.codes)
+            self.assertEqual(str(cm.exception), '%s.%s' % (status, sub))
+
+    def test_ordinary_errors_and_other_substatus_load(self):
+        for status, sub in (('404', '0'), ('403', '0'), ('403', '503'), ('200', '19'), ('500', '19')):
+            row = row_dict(b.convert(www02(status=status, substatus=sub), self.fm02, 0, 0, self.codes))
+            self.assertEqual(row['error'], status)
+
+    def test_empty_set_loads_everything(self):
+        b.convert(www02(status='404', substatus='19'), self.fm02, 0, 0, frozenset())
+        b.convert(www02(status='404', substatus='19'), self.fm02, 0, 0)   # default argument: v1 behaviour
+
+    def test_no_substatus_field_never_refused(self):
+        fm = b.FieldMap(F_DSA)      # old servers: no sc-substatus
+        line = ' '.join(['2026-10-27', '13:45:07', 'W3SVC1', '192.0.2.1', 'GET', '/', '-', '80', '-', CLIENT,
+                         '-', '-', '404', '100', '50', '3', '-'])
+        self.assertEqual(row_dict(b.convert(line, fm, 0, 0, self.codes))['error'], '404')
+
+    def test_broken_line_is_reject_not_refused(self):
+        with self.assertRaises(b.Reject) as cm:
+            b.convert(www02(status='404', substatus='19', tod='25:00:00'), self.fm02, 0, 0, self.codes)
+        self.assertEqual(str(cm.exception), 'bad time')
+
+    def test_codes_parsing(self):
+        self.assertEqual(self.codes, {'404.19', '403.501', '403.502'})
+        self.assertEqual(b.refused_codes(''), frozenset())
+        self.assertEqual(b.refused_codes(' 404.19 , ,403.501'), {'404.19', '403.501'})
+        for bad in ('404', '404.x', '40.19', '404.19;403.501'):
+            with self.assertRaises(ValueError):
+                b.refused_codes(bad)
+
+    def test_file_counts_and_offset_past_refused_lines(self):
+        text = (F_WWW02 + '\r\n' + www02() + '\r\n' + www02(status='404', substatus='19') + '\r\n'
+                + www02(status='403', substatus='501') + '\r\n')
+        fd, path = tempfile.mkstemp(suffix='.log')
+        with os.fdopen(fd, 'wb') as f:
+            f.write(text.encode('utf-8'))
+        self.addCleanup(os.remove, path)
+        rej = io.StringIO()
+        r = b.parse_file(path, 1, b.file_sink(io.BytesIO()), rej, refused=self.codes)
+        self.assertEqual(r.rows, 1)
+        self.assertEqual(dict(r.refused), {'404.19': 1, '403.501': 1})
+        self.assertEqual(sum(r.rejects.values()), 0)
+        self.assertEqual(rej.getvalue(), '')                       # refused lines are not written as rejects
+        self.assertEqual(r.next_offset, len(text.encode()))       # the offset moves past them: never re-read
+
+    def test_cli_default_and_override(self):
+        import contextlib
+        out = tempfile.mkdtemp()
+        fd, path = tempfile.mkstemp(suffix='.log')
+        with os.fdopen(fd, 'wb') as f:
+            f.write((F_WWW02 + '\r\n' + www02(status='404', substatus='19') + '\r\n').encode())
+        self.addCleanup(os.remove, path)
+        for argv, expect in ((['parse', path, '--out', out], 'refused       : 1 refused (404.19 1)'),
+                             (['parse', path, '--out', out, '--refused', ''], 'refused       : 0 refused')):
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                b.main(argv)
+            self.assertIn(expect, buf.getvalue())
 
 
 if __name__ == '__main__':
