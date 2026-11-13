@@ -1,8 +1,11 @@
 # bcpweblog: deployment runbook for lumberjack
 
-DRAFT 2026-10-30, in progress since 2026-11-13: sections 1-3 done on lumberjack 2026-11-13 (pre-flight passed as
-`sdss\mssql`; files installed with `VERSION.txt`; schema objects created). Every fact under "Verified" was read on
-2026-10-30 (reads only: metadata, `LogSource`, msdb, file listings).
+**DEPLOYED on lumberjack 2026-11-13** (sections 1-5): pre-flight passed as `sdss\mssql`; files installed with
+`VERSION.txt`; schema objects created; sources 3001-3003 inserted in `LogSource` and `saveLogSource` (see 4.1); catch-up in
+13 capped runs, 14,615,463 rows for 2026-11-12 and 2026-11-13 up to ~18:26 UTC, 0 rejects, per-day counts = `LoadRun`
+totals, closed files' offsets = file sizes; job step added with `add_job_step.sql` (new step 2) at 18:27 UTC. The first
+catch-up run failed on the `saveLogSource` foreign key and rolled back cleanly (run 1). Every fact under "Verified" was
+read on 2026-10-30 (reads only: metadata, `LogSource`, msdb, file listings).
 
 Order matters: the new loader is installed and running **before** any more sources are given to it. The old job step
 (`spCopyWebLogs` -> `BcpWeblogNew.exe`) keeps running untouched; it only reads `method = 'XCOPY'` rows, the new loader only
@@ -99,6 +102,20 @@ INSERT INTO dbo.LogSource (logID,location,service,instance,uri,framework,product
  (<id2>,'JHU','SKYSERVER','W2','skyserver.sdss.org','ASP+','DRx','TAIL','\\idieswww02\LogFiles\W3SVC2\',GETUTCDATE(),1,'ACTIVE'),
  (<id3>,'JHU','SKYSERVER','W3','skyserver.sdss.org','ASP+','DRx','TAIL','\\idieswww03\LogFiles\W3SVC2\',GETUTCDATE(),1,'ACTIVE');
 ```
+
+**Also copy them into `dbo.saveLogSource`** (found 2026-11-13, when the first catch-up run failed with error 547):
+`weblogAll`'s foreign keys on `logID` (two identical ones, created at the 2025-10-21 table swap) reference the 2004 table
+`saveLogSource`, not `LogSource`. No procedure reads `saveLogSource`; it is only the FK target, and 24 `LogSource` rows are
+missing from it. The failed run rolled back cleanly (run `failed`, staged rows deleted, offsets unchanged).
+
+```sql
+INSERT dbo.saveLogSource (logID,location,service,instance,uri,framework,product,method,pathname,tstamp,isvisible,status)
+SELECT logID,location,service,instance,uri,framework,product,method,pathname,tstamp,isvisible,status
+FROM dbo.LogSource WHERE logID IN (<id1>,<id2>,<id3>);
+```
+
+Open question for the owner: point the FK at `LogSource` instead (and drop the duplicate), so this step goes away.
+Done on lumberjack 2026-11-13 with ids 3001-3003 (both tables).
 
 4.2 Dry run (reads and parses, loads nothing; as yourself, so it also proves your own access):
 
